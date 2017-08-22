@@ -1,0 +1,28 @@
+{
+    "name": "CSIS-iLab/aerospace_wp",
+    "description": "WordPress theme for the Aerospace site",
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org"
+        }
+    ],
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "wp-coding-standards/wpcs": "*"
+    },
+    "require": {
+        "wpackagist-plugin/akismet": "*",
+        "wpackagist-plugin/co-authors-plus": "*",
+        "wpackagist-plugin/disable-comments": "*",
+        "wpackagist-plugin/disable-emojis": "*",
+        "wpackagist-plugin/easy-footnotes": "*",
+        "wpackagist-plugin/google-authenticator": "*",
+        "wpackagist-plugin/tinymce-advanced": "*",
+        "wpackagist-plugin/wordpress-seo": "*",
+        "wpackagist-plugin/jetpack": "*",
+        "wpackagist-plugin/search-by-algolia-instant-relevant-results": "*",
+        "wpackagist-plugin/regenerate-thumbnails": "*",
+        "wpackagist-plugin/search-filter": "*"
+    }
+}
