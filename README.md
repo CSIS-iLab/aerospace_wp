@@ -5,6 +5,9 @@ WordPress site for the Aerospace site.
 
 ### Composer
 This project uses [Composer](https://getcomposer.org/) to manage WordPress plugin dependencies.
+
+To install, run `composer install`.
+
 To update dependencies, run `composer update`.
 
 #### Required Plugins
@@ -26,6 +29,7 @@ This project uses [PHP_CodeSniffer](https://github.com/DealerDirect/phpcodesniff
 To check files, run `./vendor/bin/phpcs wp-content/themes/aerospace/`.
 
 To fix files, run `./vendor/bin/phpcbf wp-content/themes/aerospace/`.
+
 
 ## Compass
 This project uses [Compass](http://compass-style.org/) to compile the SASS files. To run the compiler:
