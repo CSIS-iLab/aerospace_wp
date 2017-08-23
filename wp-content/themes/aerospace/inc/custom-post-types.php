@@ -8,9 +8,8 @@
 /*----------  Podcasts  ----------*/
 require get_template_directory() . '/inc/cpts/aerospace101.php';
 /*----------  Data  ----------*/
-/*
-require get_template_directory() . '/inc/cpts/cpt-data.php';
-*/
+require get_template_directory() . '/inc/cpts/data.php';
+
 
 /*----------  Events  ----------*/
 /*
