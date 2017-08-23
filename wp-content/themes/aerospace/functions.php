@@ -15,7 +15,7 @@ if (! function_exists('aerospace_setup') ) :
      * runs before the init hook. The init hook is too late for some features, such
      * as indicating support for post thumbnails.
      */
-    function aerospace_setup() 
+    function aerospace_setup()
     {
         /*
         * Make theme available for translation.
@@ -47,7 +47,7 @@ if (! function_exists('aerospace_setup') ) :
         register_nav_menus(
             array(
             'menu-1' => esc_html__('Primary', 'aerospace'),
-            ) 
+            )
         );
 
         /*
@@ -61,7 +61,7 @@ if (! function_exists('aerospace_setup') ) :
             'comment-list',
             'gallery',
             'caption',
-            ) 
+            )
         );
 
         // Set up the WordPress core custom background feature.
@@ -70,8 +70,8 @@ if (! function_exists('aerospace_setup') ) :
                 'aerospace_custom_background_args', array(
                 'default-color' => 'ffffff',
                 'default-image' => '',
-                ) 
-            ) 
+                )
+            )
         );
 
         // Add theme support for selective refresh for widgets.
@@ -88,7 +88,7 @@ if (! function_exists('aerospace_setup') ) :
             'width'       => 250,
             'flex-width'  => true,
             'flex-height' => true,
-            ) 
+            )
         );
     }
 endif;
@@ -101,7 +101,7 @@ add_action('after_setup_theme', 'aerospace_setup');
  *
  * @global int $content_width
  */
-function aerospace_content_width() 
+function aerospace_content_width()
 {
     $GLOBALS['content_width'] = apply_filters('aerospace_content_width', 640);
 }
@@ -112,7 +112,7 @@ add_action('after_setup_theme', 'aerospace_content_width', 0);
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-function aerospace_widgets_init() 
+function aerospace_widgets_init()
 {
     register_sidebar(
         array(
@@ -123,7 +123,7 @@ function aerospace_widgets_init()
         'after_widget'  => '</section>',
         'before_title'  => '<h2 class="widget-title">',
         'after_title'   => '</h2>',
-        ) 
+        )
     );
 }
 add_action('widgets_init', 'aerospace_widgets_init');
@@ -131,7 +131,7 @@ add_action('widgets_init', 'aerospace_widgets_init');
 /**
  * Enqueue scripts and styles.
  */
-function aerospace_scripts() 
+function aerospace_scripts()
 {
     wp_enqueue_style('aerospace-style', get_stylesheet_uri());
 
@@ -164,6 +164,19 @@ require get_template_directory() . '/inc/template-functions.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Register Custom Post Meta Boxes for posts
+ */
+/*
+require get_template_directory() . '/inc/custom-post-meta.php';
+*/
+
+
+/**
+ * Register Custom Post Types
+ */
+require get_template_directory() . '/inc/custom-post-types.php';
 
 /**
  * Load Jetpack compatibility file.
