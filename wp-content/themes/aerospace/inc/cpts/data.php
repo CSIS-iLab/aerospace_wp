@@ -1,6 +1,6 @@
 <?php
 /**
-*Custom Post Types: Aerospace 101
+*Custom Post Types: Data
 *
 *@package aerospace
 */
