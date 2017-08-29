@@ -114,11 +114,7 @@ function aerospace101_save_meta_box_data( $post_id ){
 		return;
 	}
 	// Store custom fields values
-<<<<<<< HEAD
 	// Sources
-=======
-	// URL
->>>>>>> 05f651693aa802f0bec67450de58dfe4c051f4f3
 	if ( isset( $_REQUEST['sources'] ) ) {
 		update_post_meta( $post_id, '_post_sources', sanitize_text_field( $_POST['sources'] ) );
 	}
