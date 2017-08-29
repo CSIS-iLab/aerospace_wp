@@ -86,7 +86,7 @@ function aerospace101_build_meta_box( $post ){
     ?>
 
 	<div class='inside'>
-		<h3><?php _e( 'Sources', 'chinapower' ); ?></h3>
+		<h3><?php _e( 'Sources', 'aerospace' ); ?></h3>
 		<p>
 			<textarea name="sources" class="large-text"><?php echo $current_sources; ?></textarea>
 		</p>

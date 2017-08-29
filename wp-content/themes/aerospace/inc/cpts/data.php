@@ -1,6 +1,6 @@
 <?php
 /**
-*Custom Post Types: Aerospace 101
+*Custom Post Types: Data
 *
 *@package aerospace
 */
@@ -60,3 +60,66 @@ function aerospace_cpt_data() {
 
 }
 add_action( 'init', 'aerospace_cpt_data', 0 );
+
+/*----------  Custom Meta Fields  ----------*/
+/**
+ * Add meta box
+ *
+ * @param post $post The post object
+ * @link https://codex.wordpress.org/Plugin_API/Action_Reference/add_meta_boxes
+ */
+function data_add_meta_boxes( $post ){
+	add_meta_box( 'data_meta_box', __( 'Data Information', 'aerospace' ), 'data_build_meta_box', 'data', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes_data', 'data_add_meta_boxes' );
+/**
+ * Build custom field meta box
+ *
+ * @param post $post The post object
+ */
+function data_build_meta_box( $post ){
+	// make sure the form request comes from WordPress
+	wp_nonce_field( basename( __FILE__ ), 'data_meta_box_nonce' );
+	// Retrieve current value of fields
+	$current_viewURL = get_post_meta( $post->ID, '_data_viewURL', true );
+	$current_downloadURL = get_post_meta( $post->ID, '_data_downloadURL', true );
+	$current_viewIsPDF = get_post_meta( $post->ID, '_data_viewIsPDF', true );
+	?>
+	<div class='inside'>
+		<?php
+			for($i = 1; $i <= 3; $i++) {
+				$current_stat = get_post_meta( $post->ID, '_data_stat'.$i, true );
+		?>
+			<h3><?php _e( 'Featured Stat #'.$i, 'aerospace' ); ?></h3>
+			<?php wp_editor(
+				$current_stat,
+				"data_stat".$i,
+				array(
+					'textarea_rows' => 3,
+					'media_buttons' => false,
+					'textarea_name' => 'data_stat'.$i,
+					'quicktags' => false,
+					'tinymce' => array(
+						'menubar' => false,
+						'toolbar1' => 'stats',
+						'toolbar2' => false
+					)
+				)
+			); ?>
+		<?php } ?>
+		<h3><?php _e( 'View URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="viewURL" value="<?php echo $current_viewURL; ?>" />
+		</p>
+		<p>
+			<input type="checkbox" name="viewIsPDF" value="1" <?php checked( $current_viewIsPDF, '1' ); ?> /> Link is a PDF?
+		</p>
+
+		<h3><?php _e( 'Download URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="downloadURL" value="<?php echo $current_downloadURL; ?>" />
+		</p>
+
+	</div>
+	<?php
+}
