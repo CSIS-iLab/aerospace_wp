@@ -61,3 +61,80 @@ function aerospace_cpt_events() {
 
 }
 add_action( 'init', 'aerospace_cpt_events', 0 );
+
+/*----------  Custom Meta Fields  ----------*/
+/**
+ * Add meta box
+ *
+ * @param post $post The post object
+ * @link https://codex.wordpress.org/Plugin_API/Action_Reference/add_meta_boxes
+ */
+function events_add_meta_boxes( $post ){
+	add_meta_box( 'events_meta_box', __( 'Events Information', 'aerospace' ), 'events_build_meta_box', 'events', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes_events', 'events_add_meta_boxes' );
+/**
+ * Build custom field meta box
+ *
+ * @param post $post The post object
+ */
+function events_build_meta_box( $post ){
+	// make sure the form request comes from WordPress
+	wp_nonce_field( basename( __FILE__ ), 'events_meta_box_nonce' );
+	// Retrieve current value of fields
+	$current_aerospace_sponsored = get_post_meta( $post->ID, '_events_aerospace_sponsored', true );
+	$current_location = get_post_meta( $post->ID, '_events_location', true );
+	$current_register_url = get_post_meta( $post->ID, '_events_register_url', true );
+	?>
+	<div class='inside'>
+		<h3><?php _e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
+		<p>
+			<textarea name="aerospace_sponsored" class="large-text"><?php echo $current_aerospace_sponsored; ?></textarea>
+		</p>
+
+		<h3><?php _e( 'Location', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="location" value="<?php echo $current_location; ?>" />
+		</p>
+
+		<h3><?php _e( 'Register URL', 'aerospace' ); ?></h3>
+		<p>
+			<textarea name="url" class="large-text"><?php echo $current_register_url; ?></textarea>
+		</p>
+	</div>
+<?php
+}
+/**
+ * Store custom field meta box data
+ *
+ * @param int $post_id The post ID.
+ * @link https://codex.wordpress.org/Plugin_API/Action_Reference/save_post
+ */
+function events_save_meta_box_data( $post_id ){
+	// verify meta box nonce
+	if ( !isset( $_POST['events_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['events_meta_box_nonce'], basename( __FILE__ ) ) ){
+		return;
+	}
+	// return if autosave
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+		return;
+	}
+    // Check the user's permissions.
+	if ( ! current_user_can( 'edit_post', $post_id ) ){
+		return;
+	}
+	// Store custom fields values
+	// Source
+	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) {
+		update_post_meta( $post_id, '_events_aerospace_sponsored', sanitize_text_field( $_POST['aerospace_sponsored'] ) );
+	}
+	// Width
+	if ( isset( $_REQUEST['location'] ) ) {
+		update_post_meta( $post_id, '_events_location', sanitize_text_field( $_POST['location'] ) );
+	}
+	// URL
+	if ( isset( $_REQUEST['url'] ) ) {
+		update_post_meta( $post_id, '_events_register_url', esc_url( $_POST['url'] ) );
+	}
+}
+add_action( 'save_post_events', 'events_save_meta_box_data' );
