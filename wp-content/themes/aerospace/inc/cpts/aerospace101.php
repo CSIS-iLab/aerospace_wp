@@ -60,3 +60,67 @@ function aerospace_cpt_aerospace101() {
 
 }
 add_action( 'init', 'aerospace_cpt_aerospace101', 0 );
+
+/**
+ * Add meta box
+ *
+ * @param post $post The post object
+ * @link https://codex.wordpress.org/Plugin_API/Action_Reference/add_meta_boxes
+ */
+function aerospace101_add_meta_boxes( $post ){
+	add_meta_box( 'aerospace101_meta_box', __( 'Aerospace 101 Information', 'aerospace' ), 'aerospace101_build_meta_box', 'aerospace101', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes_aerospace101', 'aerospace101_add_meta_boxes' );
+
+/**
+ * Build custom field meta box
+ *
+ * @param post $post The post object
+ */
+function aerospace101_build_meta_box( $post ){
+    wp_nonce_field( basename(__FILE__), 'aerospace101_meta_box_nonce' );
+
+    // Retrieve current value of fields
+    $current_sources = get_post_meta( $post->ID, '_post_sources', true );
+
+    ?>
+
+	<div class='inside'>
+		<h3><?php _e( 'Sources', 'aerospace' ); ?></h3>
+		<p>
+			<textarea name="sources" class="large-text"><?php echo $current_sources; ?></textarea>
+		</p>
+
+	</div>
+	<?php
+}
+/**
+ * Store custom field meta box data
+ *
+ * @param int $post_id The post ID.
+ * @link https://codex.wordpress.org/Plugin_API/Action_Reference/save_post
+ */
+function aerospace101_save_meta_box_data( $post_id ){
+	// verify meta box nonce
+	if ( !isset( $_POST['aerospace101_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['aerospace101_meta_box_nonce'], basename( __FILE__ ) ) ){
+		return;
+	}
+	// return if autosave
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+		return;
+	}
+    // Check the user's permissions.
+	if ( ! current_user_can( 'edit_post', $post_id ) ){
+		return;
+	}
+	// Store custom fields values
+<<<<<<< HEAD
+	// Sources
+=======
+	// URL
+>>>>>>> 05f651693aa802f0bec67450de58dfe4c051f4f3
+	if ( isset( $_REQUEST['sources'] ) ) {
+		update_post_meta( $post_id, '_post_sources', sanitize_text_field( $_POST['sources'] ) );
+	}
+}
+add_action( 'save_post_aerospace101', 'aerospace101_save_meta_box_data' );
