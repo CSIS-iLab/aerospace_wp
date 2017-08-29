@@ -81,6 +81,7 @@ function data_build_meta_box( $post ){
 	// make sure the form request comes from WordPress
 	wp_nonce_field( basename( __FILE__ ), 'data_meta_box_nonce' );
 	// Retrieve current value of fields
+<<<<<<< HEAD
 	$current_source = get_post_meta( $post->ID, '_data_source', true );
 	$current_url = get_post_meta( $post->ID, '_data_url', true );
 	$current_width = get_post_meta( $post->ID, '_data_width', true );
@@ -215,3 +216,47 @@ function aerospace_data_column( $colname, $cptid ) {
           echo '<a href="#" class="button button-small" onclick="prompt(\'Shortcode to include featured interactive in posts and pages:\', \''.$shortcode_html.'\'); return false;">Get Embed Code</a>';
 }
 add_action('manage_data_posts_custom_column', 'aerospace_data_column', 10, 2);
+=======
+	$current_viewURL = get_post_meta( $post->ID, '_data_viewURL', true );
+	$current_downloadURL = get_post_meta( $post->ID, '_data_downloadURL', true );
+	$current_viewIsPDF = get_post_meta( $post->ID, '_data_viewIsPDF', true );
+	?>
+	<div class='inside'>
+		<?php
+			for($i = 1; $i <= 3; $i++) {
+				$current_stat = get_post_meta( $post->ID, '_data_stat'.$i, true );
+		?>
+			<h3><?php _e( 'Featured Stat #'.$i, 'aerospace' ); ?></h3>
+			<?php wp_editor(
+				$current_stat,
+				"data_stat".$i,
+				array(
+					'textarea_rows' => 3,
+					'media_buttons' => false,
+					'textarea_name' => 'data_stat'.$i,
+					'quicktags' => false,
+					'tinymce' => array(
+						'menubar' => false,
+						'toolbar1' => 'stats',
+						'toolbar2' => false
+					)
+				)
+			); ?>
+		<?php } ?>
+		<h3><?php _e( 'View URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="viewURL" value="<?php echo $current_viewURL; ?>" />
+		</p>
+		<p>
+			<input type="checkbox" name="viewIsPDF" value="1" <?php checked( $current_viewIsPDF, '1' ); ?> /> Link is a PDF?
+		</p>
+
+		<h3><?php _e( 'Download URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="downloadURL" value="<?php echo $current_downloadURL; ?>" />
+		</p>
+
+	</div>
+	<?php
+}
+>>>>>>> 05f651693aa802f0bec67450de58dfe4c051f4f3
