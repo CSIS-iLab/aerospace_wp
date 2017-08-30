@@ -55,7 +55,7 @@ function post_build_meta_box( $post ){
 
      		<br />
 
-        <h3><?php _e( 'sources', 'aerospace' ); ?></h3>
+        <h3><?php _e( 'Sources', 'aerospace' ); ?></h3>
 		<p>
 			<?php wp_editor(
 				$current_sources,
