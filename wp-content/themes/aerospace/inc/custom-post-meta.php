@@ -2,7 +2,7 @@
 /**
  * Custom Post Meta Boxes
  *
- * Add custom meta boxes to the post screen. Meta boxes are for data sources, further reading, and related content.
+ * Add custom meta boxes to the post screen. Meta boxes are for article highlights, sources, post format, download report url, and view report url.
  *
  * @package aerospace
  */
@@ -25,87 +25,98 @@ function post_build_meta_box( $post ){
 	// make sure the form request comes from WordPress
 	wp_nonce_field( basename( __FILE__ ), 'post_meta_box_nonce' );
 	// Retrieve current value of fields
-	$current_articleHighlights = get_post_meta( $post->ID, '_post_highlights', true );
-	$current_Sources = get_post_meta( $post->ID, '_post_sources', true );
-    $current_postFormat = get_post_meta( $post->ID, '_post_post_format', true );
-	$current_downloadURL = get_post_meta( $post->ID, '_post_download_url', true );
-    $current_viewURL = get_post_meta( $post->ID, '_post_view_url', true );
-    $current_viewIsPDF = get_post_meta( $post->ID, '_post_view_is_pdf', true );
+	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
+	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
+    $current_post_format = get_post_meta( $post->ID, '_post_post_format', true );
+	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
+    $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+    $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
 
+    // Set default value for post format.
+	if ( empty( $current_post_format ) ) {
+		$current_post_format = 'analysis';
+	}
+	if ( 'analysis' === $current_post_format ) {
+		$analysis_class = 'aerospace_meta meta-is-active';
+		$report_class = 'aerospace_meta';
+	} else {
+		$analysis_class = 'aerospace_meta';
+		$report_class = 'aerospace_meta meta-is-active';
+	}
 	?>
 	<div class='inside'>
-
         <h3><?php _e( 'Article Highlights', 'aerospace' ); ?></h3>
-		<p>
-			<?php wp_editor(
-				$current_articleHighlights,
-				"post_Highlights",
-				array(
-					'media_buttons' => false,
-					'textarea_name' => 'articleHighlights',
-					'teeny' => false,
-					'tinymce' => array(
-						'menubar' => false,
-						'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink,view',
-						'toolbar2' => false
-					)
-				)
-			); ?>
-		</p>
-		<br />
-
-        <h3><?php _e( 'Sources', 'aerospace' ); ?></h3>
-		<p>
-			<?php wp_editor(
-				$current_Sources,
-				"post_Sources",
-				array(
-					'media_buttons' => false,
-					'textarea_name' => 'Sources',
-					'teeny' => false,
-					'tinymce' => array(
-						'menubar' => false,
-						'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink,view',
-						'toolbar2' => false
-					)
-				)
-			); ?>
-		</p>
-		<br />
-
-		<h3><?php _e( 'Post Format', 'aerospace' ); ?></h3>
-		<p>
-			<?php wp_editor(
-				$current_postFormat,
-				"post_postFormat",
-				array(
-					'media_buttons' => false,
-					'textarea_name' => 'postFormat',
-					'teeny' => false,
-					'tinymce' => array(
-						'menubar' => false,
-						'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink',
-						'toolbar2' => false
-					)
-				)
-			); ?>
-		</p>
-
-        <h3><?php _e( 'Download Report URL', 'aerospace' ); ?></h3>
-		<p>
-			<input type="text" class="large-text" name="downloadURL" value="<?php echo $current_downloadURL; ?>" />
-		</p>
-
-        <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
         <p>
-            <input type="text" class="large-text" name="viewURL" value="<?php echo $current_viewURL; ?>" />
+             <?php wp_editor(
+                 $current_highlights,
+                 "post_highlights",
+                 array(
+                     'media_buttons' => false,
+                     'textarea_name' => 'highlights',
+                     'teeny' => false,
+                     'tinymce' => array(
+                         'menubar' => false,
+                         'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink,view',
+                         'toolbar2' => false
+                     )
+                 )
+             ); ?>
         </p>
-        <p>
-            <input type="checkbox" name="viewIsPDF" value="1" <?php checked( $current_viewIsPDF, '1' ); ?> /> Link is a PDF?
-        </p>
+
+
+		<h3>Post Format:</h3>
+		<p>
+			<input type="radio" name="post_format" value="analysis" <?php checked( $current_post_format, 'analysis' ); ?> /> Analysis &nbsp;&nbsp;
+			<input type="radio" name="post_format" value="report" <?php checked( $current_post_format, 'report' ); ?> /> Report
+		</p>
+		<div class="<?php echo esc_html( $analysis_class ); ?>">
+			<h3><?php esc_html_e( 'Sources:', 'aerospace' ); ?></h3>
+			<p>
+				<?php
+					wp_editor(
+						$current_sources,
+						'sources',
+						array(
+							'media_buttons' => false,
+							'textarea_name' => 'sources',
+							'textarea_rows' => 5,
+							'teeny' => true,
+						)
+					);
+				?>
+			</p>
+		</div>
+		<div class="<?php echo esc_html( $report_class ); ?>">
+			<h3><?php esc_html_e( 'View URL:', 'aerospace' ); ?></h3>
+			<p>
+				<input type="text" class="large-text" name="view_url" value="<?php echo esc_textarea( $current_view_url ); ?>" />
+			</p>
+            <p>
+                <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
+            </p>
+			<h3><?php esc_html_e( 'Download URL:', 'aerospace' ); ?></h3>
+			<p>
+				<input type="text" class="large-text" name="download_url" value="<?php echo esc_textarea( $current_download_url ); ?>" />
+			</p>
+		</div>
 	</div>
+
+	<style>
+		.aerospace_meta {display: none;}
+		.meta-is-active {display: block;}
+	</style>
+
+	<script type="text/javascript">
+		( function( $ ) {
+			$('input[type=radio][name=post_format]').change(function() {
+				$(".aerospace_meta").toggleClass("meta-is-active");
+			});
+		} )( jQuery );
+	</script>
 	<?php
 }
+
+
 /**
  * Store custom field meta box data
  *
@@ -127,28 +138,28 @@ function post_save_meta_box_data( $post_id ){
 	}
 	// Store custom fields values
 	// Article Highlights
-	if ( isset( $_REQUEST['articleHighlights'] ) ) {
-		update_post_meta( $post_id, '_post_highlights', wp_kses_post( $_POST['articleHighlights'] ) );
+	if ( isset( $_REQUEST['highlights'] ) ) {
+		update_post_meta( $post_id, '_post_highlights', wp_kses_post( $_POST['highlights'] ) );
 	}
 	// Sources
-	if ( isset( $_REQUEST['Sources'] ) ) {
-		update_post_meta( $post_id, '_post_sources', wp_kses_post( $_POST['Sources'] ) );
+	if ( isset( $_REQUEST['sources'] ) ) {
+		update_post_meta( $post_id, '_post_sources', wp_kses_post( $_POST['sources'] ) );
 	}
     // Post Format
-    if ( isset( $_REQUEST['postFormat'] ) ) {
-        update_post_meta( $post_id, '_post_post_format', wp_kses_post( $_POST['postFormat'] ) );
-    }
+	if ( isset( $_REQUEST['post_format'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_post_post_format', sanitize_text_field( wp_unslash( $_POST['post_format'] ) ) ); // Input var okay.
+	}
     // Download URL
-    if ( isset( $_REQUEST['downloadURL'] ) ) {
-        update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['downloadURL'] ) );
+    if ( isset( $_REQUEST['download_url'] ) ) {
+        update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
     }
     // View URL
-    if ( isset( $_REQUEST['viewURL'] ) ) {
-        update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['viewURL'] ) );
+    if ( isset( $_REQUEST['view_url'] ) ) {
+        update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
     }
 	// View URL is a PDF
-	if ( isset( $_REQUEST['viewIsPDF'] ) ) {
-		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['viewIsPDF'] ) );
+	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
+		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
 	}
 	else {
 		update_post_meta( $post_id, '_data_view_is_pdf', '' );
