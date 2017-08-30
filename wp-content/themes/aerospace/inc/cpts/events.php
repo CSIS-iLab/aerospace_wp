@@ -89,7 +89,7 @@ function events_build_meta_box( $post ){
 	<div class='inside'>
 		<h3><?php _e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
 		<p>
-			<textarea name="aerospace_sponsored" class="large-text"><?php echo $current_aerospace_sponsored; ?></textarea>
+			<input type="checkbox" name="aerospace_sponsored" value="1" <?php checked( $current_aerospace_sponsored, '1' ); ?> /> Aerospace Sponsored
 		</p>
 
 		<h3><?php _e( 'Location', 'aerospace' ); ?></h3>
@@ -99,7 +99,7 @@ function events_build_meta_box( $post ){
 
 		<h3><?php _e( 'Register URL', 'aerospace' ); ?></h3>
 		<p>
-			<textarea name="url" class="large-text"><?php echo $current_register_url; ?></textarea>
+			<input type="text" class="large-text" name="url" value="<?php echo $current_register_url; ?>" />
 		</p>
 	</div>
 <?php
