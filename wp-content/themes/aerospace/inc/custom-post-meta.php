@@ -32,19 +32,9 @@ function post_build_meta_box( $post ){
     $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
     $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
 
-    // Set default value for post format.
-	if ( empty( $current_post_format ) ) {
-		$current_post_format = 'analysis';
-	}
-	if ( 'analysis' === $current_post_format ) {
-		$analysis_class = 'aerospace_meta meta-is-active';
-		$report_class = 'aerospace_meta';
-	} else {
-		$analysis_class = 'aerospace_meta';
-		$report_class = 'aerospace_meta meta-is-active';
-	}
-	?>
+    ?>
 	<div class='inside'>
+
         <h3><?php _e( 'Article Highlights', 'aerospace' ); ?></h3>
         <p>
              <?php wp_editor(
@@ -63,59 +53,48 @@ function post_build_meta_box( $post ){
              ); ?>
         </p>
 
+     		<br />
 
-		<h3>Post Format:</h3>
+        <h3><?php _e( 'sources', 'aerospace' ); ?></h3>
+		<p>
+			<?php wp_editor(
+				$current_sources,
+				"post_sources",
+				array(
+					'media_buttons' => false,
+					'textarea_name' => 'sources',
+					'teeny' => false,
+					'tinymce' => array(
+						'menubar' => false,
+						'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink,view',
+						'toolbar2' => false
+					)
+				)
+			); ?>
+		</p>
+		<br />
+
+       <h3><?php _e( 'Post Format', 'aerospace' ); ?></h3>
 		<p>
 			<input type="radio" name="post_format" value="analysis" <?php checked( $current_post_format, 'analysis' ); ?> /> Analysis &nbsp;&nbsp;
 			<input type="radio" name="post_format" value="report" <?php checked( $current_post_format, 'report' ); ?> /> Report
 		</p>
-		<div class="<?php echo esc_html( $analysis_class ); ?>">
-			<h3><?php esc_html_e( 'Sources:', 'aerospace' ); ?></h3>
-			<p>
-				<?php
-					wp_editor(
-						$current_sources,
-						'sources',
-						array(
-							'media_buttons' => false,
-							'textarea_name' => 'sources',
-							'textarea_rows' => 5,
-							'teeny' => true,
-						)
-					);
-				?>
-			</p>
-		</div>
-		<div class="<?php echo esc_html( $report_class ); ?>">
-			<h3><?php esc_html_e( 'View URL:', 'aerospace' ); ?></h3>
-			<p>
-				<input type="text" class="large-text" name="view_url" value="<?php echo esc_textarea( $current_view_url ); ?>" />
-			</p>
-            <p>
-                <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
-            </p>
-			<h3><?php esc_html_e( 'Download URL:', 'aerospace' ); ?></h3>
-			<p>
-				<input type="text" class="large-text" name="download_url" value="<?php echo esc_textarea( $current_download_url ); ?>" />
-			</p>
-		</div>
+
+        <h3><?php _e( 'Download Report URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="download_url" value="<?php echo $current_download_url; ?>" />
+		</p>
+
+        <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
+        <p>
+            <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
+        </p>
+        <p>
+            <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
+        </p>
 	</div>
-
-	<style>
-		.aerospace_meta {display: none;}
-		.meta-is-active {display: block;}
-	</style>
-
-	<script type="text/javascript">
-		( function( $ ) {
-			$('input[type=radio][name=post_format]').change(function() {
-				$(".aerospace_meta").toggleClass("meta-is-active");
-			});
-		} )( jQuery );
-	</script>
 	<?php
 }
-
 
 /**
  * Store custom field meta box data
