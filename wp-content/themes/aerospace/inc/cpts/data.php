@@ -85,18 +85,18 @@ function data_build_meta_box( $post ){
 	$current_url = get_post_meta( $post->ID, '_data_url', true );
 	$current_width = get_post_meta( $post->ID, '_data_width', true );
 	$current_height = get_post_meta( $post->ID, '_data_height', true );
-	$current_iframeResizeDisabled = get_post_meta( $post->ID, '_data_iframeResizeDisabled', true );
-	$current_fallbackImgDisabled = get_post_meta( $post->ID, '_data_fallbackImgDisabled', true );
+	$current_iframe_resize_disabled = get_post_meta( $post->ID, '_data_iframe_resize_disabled', true );
+	$current_fallback_img_disabled = get_post_meta( $post->ID, '_data_fallback_img_disabled', true );
 	?>
 	<div class='inside'>
 		<h3><?php _e( 'Source', 'aerospace' ); ?></h3>
 		<p>
-			<textarea name="source" class="large-text"><?php echo $current_source; ?></textarea>
+			<input type="text" class="large-text" name="source" value="<?php echo $current_source; ?>" />
 		</p>
 
 		<h3><?php _e( 'Interactive URL', 'aerospace' ); ?></h3>
 		<p>
-			<textarea name="url" class="large-text"><?php echo $current_url; ?></textarea>
+			<input type="text" class="large-text" name="url" value="<?php echo $current_url; ?>" />
 		</p>
 
 		<h3><?php _e( 'Interactive Width', 'aerospace' ); ?></h3>
@@ -109,12 +109,12 @@ function data_build_meta_box( $post ){
 			<input type="text" class="large-text" name="height" value="<?php echo $current_height; ?>" />
 		</p>
 		<p>
-			<input type="checkbox" name="iframeResizeDisabled" value="1" <?php checked( $current_iframeResizeDisabled, '1' ); ?> /> iFrame Resize Disabled
+			<input type="checkbox" name="iframe_resize_disabled" value="1" <?php checked( $current_iframe_resize_disabled, '1' ); ?> /> iFrame Resize Disabled
 		</p>
 
 		<h3><?php _e( 'Fallback Image', 'aerospace' ); ?></h3>
 		<p>
-			<input type="checkbox" name="fallbackImgDisabled" value="1" <?php checked( $current_fallbackImgDisabled, '1' ); ?> /> Fallback Image Disabled
+			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
 		</p>
 
 	</div>
@@ -157,18 +157,18 @@ function data_save_meta_box_data( $post_id ){
 		update_post_meta( $post_id, '_data_height', sanitize_text_field( $_POST['height'] ) );
 	}
 	// Disable iFrame Resizing
-	if ( isset( $_REQUEST['iframeResizeDisabled'] ) ) {
-		update_post_meta( $post_id, '_data_iframeResizeDisabled', sanitize_text_field( $_POST['iframeResizeDisabled'] ) );
+	if ( isset( $_REQUEST['iframe_resize_disabled'] ) ) {
+		update_post_meta( $post_id, '_data_iframe_resize_disabled', sanitize_text_field( $_POST['iframe_resize_disabled'] ) );
 	}
 	else {
-		update_post_meta( $post_id, '_data_iframeResizeDisabled', '');
+		update_post_meta( $post_id, '_data_iframe_resize_disabled', '');
 	}
 	// Disable Fallback Image
-	if ( isset( $_REQUEST['fallbackImgDisabled'] ) ) {
-		update_post_meta( $post_id, '_data_fallbackImgDisabled', sanitize_text_field( $_POST['fallbackImgDisabled'] ) );
+	if ( isset( $_REQUEST['fallback_img_disabled'] ) ) {
+		update_post_meta( $post_id, '_data_fallback_img_disabled', sanitize_text_field( $_POST['fallback_img_disabled'] ) );
 	}
 	else {
-		update_post_meta( $post_id, '_data_fallbackImgDisabled', '');
+		update_post_meta( $post_id, '_data_fallback_img_disabled', '');
 	}
 }
 add_action( 'save_post_data', 'data_save_meta_box_data' );
@@ -180,10 +180,10 @@ add_action( 'save_post_data', 'data_save_meta_box_data' );
  * @param  String  $width                Width of the iframe, can be in px or %
  * @param  String  $height               Height of the iframe, can be in px or %
  * @param  String  $fallbackImg          Featured image thumbnail img tag string
- * @param  boolean $iframeResizeDisabled Indicate if iframe should automatically resize based on content height
+ * @param  boolean $iframe_resize_disabled Indicate if iframe should automatically resize based on content height
  * @return String                        HTML of the iframe
  */
-function aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg = null, $iframeResizeDisabled = false) {
+function aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg = null, $iframe_resize_disabled = false) {
 	if(empty($width)) {
 		$width = "100%";
 	}
@@ -193,7 +193,7 @@ function aerospace_data_display_iframe($interactiveURL, $width, $height, $fallba
 	if($fallbackImg) {
 		$fallbackImg = '<div class="interactive-fallbackImg">'.$fallbackImg.'<p>For best experience, please view on a desktop computer.</p></div>';
 	}
-	if($iframeResizeDisabled) {
+	if($iframe_resize_disabled) {
 		$enabledClass = "";
 	}
 	else {
