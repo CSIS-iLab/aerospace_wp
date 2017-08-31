@@ -12,7 +12,7 @@
  * @param post $post The post object
  * @link https://codex.wordpress.org/Plugin_API/Action_Reference/add_meta_boxes
  */
-function post_add_meta_boxes( $post ){
+function post_add_meta_boxes( $post ) {
 	add_meta_box( 'post_meta_box', __( 'Additional Post Information', 'aerospace' ), 'post_build_meta_box', 'post', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes', 'post_add_meta_boxes' );
@@ -30,7 +30,6 @@ function post_build_meta_box( $post ){
     $current_post_format = get_post_meta( $post->ID, '_post_post_format', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
     $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
-    $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
 
     ?>
 	<div class='inside'>
@@ -74,7 +73,7 @@ function post_build_meta_box( $post ){
 		</p>
 		<br />
 
-       <h3><?php _e( 'Post Format', 'aerospace' ); ?></h3>
+		<h3><?php _e( 'Post Format', 'aerospace' ); ?></h3>
 		<p>
 			<input type="radio" name="post_format" value="analysis" <?php checked( $current_post_format, 'analysis' ); ?> /> Analysis &nbsp;&nbsp;
 			<input type="radio" name="post_format" value="report" <?php checked( $current_post_format, 'report' ); ?> /> Report
@@ -88,9 +87,6 @@ function post_build_meta_box( $post ){
         <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
         <p>
             <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
-        </p>
-        <p>
-            <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
         </p>
 	</div>
 	<?php
@@ -136,13 +132,6 @@ function post_save_meta_box_data( $post_id ){
     if ( isset( $_REQUEST['view_url'] ) ) {
         update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
     }
-	// View URL is a PDF
-	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
-		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
-	}
-	else {
-		update_post_meta( $post_id, '_data_view_is_pdf', '' );
-	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );
 /* @Recreate the default filters on the_content so we can pull formated content with get_post_meta
