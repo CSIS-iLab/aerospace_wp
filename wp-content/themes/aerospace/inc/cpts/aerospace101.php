@@ -82,6 +82,7 @@ function aerospace101_build_meta_box( $post ){
 
     // Retrieve current value of fields
     $current_sources = get_post_meta( $post->ID, '_post_sources', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 
     ?>
 
@@ -91,6 +92,10 @@ function aerospace101_build_meta_box( $post ){
 			<textarea name="sources" class="large-text"><?php echo $current_sources; ?></textarea>
 		</p>
 
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
 	</div>
 	<?php
 }
@@ -117,6 +122,10 @@ function aerospace101_save_meta_box_data( $post_id ){
 	// Sources
 	if ( isset( $_REQUEST['sources'] ) ) {
 		update_post_meta( $post_id, '_post_sources', sanitize_text_field( $_POST['sources'] ) );
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', '' );
 	}
 }
 add_action( 'save_post_aerospace101', 'aerospace101_save_meta_box_data' );
