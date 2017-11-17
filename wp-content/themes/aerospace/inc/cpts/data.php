@@ -91,6 +91,13 @@ function data_build_meta_box( $post ) {
 	$current_height = get_post_meta( $post->ID, '_data_height', true );
 	$current_iframe_resize_disabled = get_post_meta( $post->ID, '_data_iframe_resize_disabled', true );
 	$current_fallback_img_disabled = get_post_meta( $post->ID, '_data_fallback_img_disabled', true );
+	$current_title = get_post_meta( $post->ID, '_data_title', true );
+	$current_img_url = get_post_meta( $post->ID, '_data_img_url', true );
+	$current_content_placement = get_post_meta( $post->ID, '_data_content_placement', true );
+	$current_source_url = get_post_meta( $post->ID, '_data_source_url', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+	$current_twitter_pic_url = get_post_meta( $post->ID, '_data_twitter_pic_url', true );
+
 	?>
 	<div class='inside'>
 		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
@@ -121,6 +128,36 @@ function data_build_meta_box( $post ) {
 			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
 		</p>
 
+		<h3><?php _e( 'Interactive Title', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="title" value="<?php echo $current_title; ?>" />
+		</p>
+
+		<h3><?php _e( 'Interactive Image URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="img_url" value="<?php echo $current_img_url; ?>" />
+		</p>
+
+		<h3><?php _e( 'Content Placement', 'aerospace' ); ?></h3>
+		<p>
+			<input type="radio" name="above" value="above" <?php checked( $current_content_placement, 'above' ); ?> /> Above <br>
+			<input type="radio" name="below" value="below" <?php checked( $current_content_placement, 'below' ); ?> /> Below
+		</p>
+
+		<h3><?php _e( 'Source URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="source_url" value="<?php echo $current_source_url; ?>" />
+		</p>
+
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
+
+		<h3><?php _e( 'Twitter Pic', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="twitter_pic_url" value="<?php echo $current_twitter_pic_url; ?>" />
+		</p>
 	</div>
 <?php
 }
@@ -171,6 +208,30 @@ function data_save_meta_box_data( $post_id ){
 		update_post_meta( $post_id, '_data_fallback_img_disabled', intval( wp_unslash( $_POST['fallback_img_disabled'] ) ) ); // Input var okay.
 	} else {
 		update_post_meta( $post_id, '_data_fallback_img_disabled', '' );
+	}
+	// Title
+	if ( isset( $_REQUEST['title'] ) ) {
+		update_post_meta( $post_id, '_data_title', sanitize_text_field( $_POST['title'] ) );
+	}
+	// Image URL
+	if ( isset( $_REQUEST['img_url'] ) ) {
+		update_post_meta( $post_id, '_data_img_url', esc_url( $_POST['img_url'] ) );
+	}
+	// Content Placement
+	if ( isset( $_REQUEST['content_placement'] ) ) {
+		update_post_meta( $post_id, '_data_content_placement', sanitize_text_field( $_POST['content_placement'] ) );
+	}
+	// Source URL
+	if ( isset( $_REQUEST['source_url'] ) ) {
+		update_post_meta( $post_id, '_data_source_url', esc_url( $_POST['source_url'] ) );
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', '' );
+	}
+	// Twitter Pic
+	if ( isset( $_REQUEST['twitter_pic_url'] ) ) {
+		update_post_meta( $post_id, '_data_twitter_pic_url', esc_url( $_POST['twitter_pic_url'] ) );
 	}
 }
 add_action( 'save_post_data', 'data_save_meta_box_data' );

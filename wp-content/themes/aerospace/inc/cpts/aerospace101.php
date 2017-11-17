@@ -84,8 +84,11 @@ add_action( 'add_meta_boxes_aerospace101', 'aerospace101_add_meta_boxes' );
 function aerospace101_build_meta_box( $post ) {
 	wp_nonce_field( basename( __FILE__ ), 'aerospace101_meta_box_nonce' );
 
-	// Retrieve current value of fields.
-	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
+
+  // Retrieve current value of fields
+  $current_sources = get_post_meta( $post->ID, '_post_sources', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+
 
 	?>
 
@@ -110,6 +113,10 @@ function aerospace101_build_meta_box( $post ) {
 			?>
 		</p>
 
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
 	</div>
 	<?php
 }
@@ -136,6 +143,10 @@ function aerospace101_save_meta_box_data( $post_id ) {
 	// Sources.
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', '' );
 	}
 }
 add_action( 'save_post_aerospace101', 'aerospace101_save_meta_box_data' );

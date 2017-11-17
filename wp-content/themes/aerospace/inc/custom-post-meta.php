@@ -2,7 +2,7 @@
 /**
  * Custom Post Meta Boxes
  *
- * Add custom meta boxes to the post screen. Meta boxes are for article highlights, sources, post format, download report url, and view report url.
+ * Add custom meta boxes to the post screen. Meta boxes are for article highlights, sources, download report url, view report url, and is featured.
  *
  * @package aerospace
  */
@@ -28,9 +28,11 @@ function post_build_meta_box( $post ) {
 	// Retrieve current value of fields.
 	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
-	$current_post_format = get_post_meta( $post->ID, '_post_post_format', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
-	$current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+  $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+  $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
+	$current_view_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+
 
 	?>
 	<div class='inside'>
@@ -54,6 +56,8 @@ function post_build_meta_box( $post ) {
 				);
 			?>
 		</p>
+		<br />
+
 		<h3><?php esc_html_e( 'Sources', 'aerospace' ); ?></h3>
 		<p>
 			<?php
@@ -83,10 +87,18 @@ function post_build_meta_box( $post ) {
 		<p>
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
 		</p>
-
-		<h3><?php esc_html_e( 'View Report URL', 'aerospace' ); ?></h3>
+    
+    <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
+    <p>
+        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
+    </p>
+    <p>
+        <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
+    </p>
+    
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="view_url" value="<?php echo esc_attr( $current_view_url ); ?>" />
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
 		</p>
 	</div>
 	<?php
@@ -120,17 +132,25 @@ function post_save_meta_box_data( $post_id ) {
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
 	}
-	// Post Format.
-	if ( isset( $_REQUEST['post_format'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_post_post_format', sanitize_text_field( wp_unslash( $_POST['post_format'] ) ) ); // Input var okay.
-	}
-	// Download URL.
-	if ( isset( $_REQUEST['download_url'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_post_download_url', esc_url_raw( wp_unslash( $_POST['download_url'] ) ) ); // Input var okay.
+  // Download URL
+  if ( isset( $_REQUEST['download_url'] ) ) {
+      update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
+  }
+  // View URL
+  if ( isset( $_REQUEST['view_url'] ) ) {
+      update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
+  }
+	// View URL is a PDF
+	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
+		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
 	}
 	// View URL.
 	if ( isset( $_REQUEST['view_url'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_view_url', esc_url_raw( wp_unslash( $_POST['view_url'] ) ) ); // Input var okay.
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', '' );
 	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );
