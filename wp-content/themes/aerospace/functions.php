@@ -176,6 +176,11 @@ require get_template_directory() . '/inc/custom-post-meta.php';
 require get_template_directory() . '/inc/custom-post-types.php';
 
 /**
+ * Register Custom Post Types
+ */
+require get_template_directory() . '/inc/custom-taxonomies.php';
+
+/**
  * Load Jetpack compatibility file.
  */
 if (defined('JETPACK__VERSION') ) {
