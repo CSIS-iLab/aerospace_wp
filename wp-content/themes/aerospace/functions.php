@@ -166,6 +166,11 @@ require get_template_directory() . '/inc/template-functions.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
+ * Register Custom Settings
+ */
+require get_template_directory() . '/inc/custom-settings.php';
+
+/**
  * Register Custom Post Meta Boxes for posts
  */
 require get_template_directory() . '/inc/custom-post-meta.php';
