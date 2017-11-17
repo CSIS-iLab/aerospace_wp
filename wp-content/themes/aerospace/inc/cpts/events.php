@@ -1,12 +1,13 @@
 <?php
 /**
-*Custom Post Types: Events
-*
-*@package aerospace
-*/
+ * Custom Post Types: Events
+ *
+ * @package aerospace
+ */
 
-/*----------  Register Custom Post Type  ----------*/
-// Register Custom Post Type
+/**
+ * Register custom post type
+ */
 function aerospace_cpt_events() {
 
 	$labels = array(
@@ -42,13 +43,14 @@ function aerospace_cpt_events() {
 		'label'                 => __( 'Event', 'aerospace' ),
 		'description'           => __( 'Events', 'aerospace' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail', ),
+		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
 		'taxonomies'            => array( 'post_tag' ),
 		'hierarchical'          => false,
 		'public'                => true,
 		'show_ui'               => true,
 		'show_in_menu'          => true,
 		'menu_position'         => 5,
+		'menu_icon'             => 'dashicons-calendar-alt',
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
 		'can_export'            => true,
@@ -66,40 +68,42 @@ add_action( 'init', 'aerospace_cpt_events', 0 );
 /**
  * Add meta box
  *
- * @param post $post The post object
+ * @param post $post The post object.
  * @link https://codex.wordpress.org/Plugin_API/Action_Reference/add_meta_boxes
  */
-function events_add_meta_boxes( $post ){
+function events_add_meta_boxes( $post ) {
 	add_meta_box( 'events_meta_box', __( 'Events Information', 'aerospace' ), 'events_build_meta_box', 'events', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes_events', 'events_add_meta_boxes' );
+
 /**
  * Build custom field meta box
  *
- * @param post $post The post object
+ * @param post $post The post object.
  */
-function events_build_meta_box( $post ){
-	// make sure the form request comes from WordPress
+function events_build_meta_box( $post ) {
+	// Make sure the form request comes from WordPress.
 	wp_nonce_field( basename( __FILE__ ), 'events_meta_box_nonce' );
-	// Retrieve current value of fields
+
+	// Retrieve current value of fields.
 	$current_aerospace_sponsored = get_post_meta( $post->ID, '_events_aerospace_sponsored', true );
 	$current_location = get_post_meta( $post->ID, '_events_location', true );
 	$current_register_url = get_post_meta( $post->ID, '_events_register_url', true );
 	?>
 	<div class='inside'>
-		<h3><?php _e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="aerospace_sponsored" value="1" <?php checked( $current_aerospace_sponsored, '1' ); ?> /> Aerospace Sponsored
 		</p>
 
-		<h3><?php _e( 'Location', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Location', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="location" value="<?php echo $current_location; ?>" />
+			<input type="text" class="large-text" name="location" value="<?php echo esc_attr( $current_location ); ?>" />
 		</p>
 
-		<h3><?php _e( 'Register URL', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Register URL', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="url" value="<?php echo $current_register_url; ?>" />
+			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_register_url ); ?>" />
 		</p>
 	</div>
 <?php
@@ -110,31 +114,33 @@ function events_build_meta_box( $post ){
  * @param int $post_id The post ID.
  * @link https://codex.wordpress.org/Plugin_API/Action_Reference/save_post
  */
-function events_save_meta_box_data( $post_id ){
-	// verify meta box nonce
-	if ( !isset( $_POST['events_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['events_meta_box_nonce'], basename( __FILE__ ) ) ){
+function events_save_meta_box_data( $post_id ) {
+	// Verify meta box nonce.
+	if ( ! isset( $_POST['events_meta_box_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['events_meta_box_nonce'] ) ), basename( __FILE__ ) ) ) { // Input var okay.
 		return;
 	}
-	// return if autosave
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+	// Return if autosave.
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
-    // Check the user's permissions.
-	if ( ! current_user_can( 'edit_post', $post_id ) ){
+	// Check the user's permissions.
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	// Store custom fields values
-	// Source
-	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) {
-		update_post_meta( $post_id, '_events_aerospace_sponsored', sanitize_text_field( $_POST['aerospace_sponsored'] ) );
+
+	// Source.
+	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_events_aerospace_sponsored', intval( wp_unslash( $_POST['aerospace_sponsored'] ) ) ); // Input var okay.
+	} else {
+		update_post_meta( $post_id, '_events_aerospace_sponsored', '' );
 	}
-	// Width
-	if ( isset( $_REQUEST['location'] ) ) {
-		update_post_meta( $post_id, '_events_location', sanitize_text_field( $_POST['location'] ) );
+	// Width.
+	if ( isset( $_REQUEST['location'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_events_location', sanitize_text_field( wp_unslash( $_POST['location'] ) ) );  // Input var okay.
 	}
-	// URL
-	if ( isset( $_REQUEST['url'] ) ) {
-		update_post_meta( $post_id, '_events_register_url', esc_url( $_POST['url'] ) );
+	// URL.
+	if ( isset( $_REQUEST['url'] ) ) {  // Input var okay.
+		update_post_meta( $post_id, '_events_register_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) );  // Input var okay.
 	}
 }
 add_action( 'save_post_events', 'events_save_meta_box_data' );
