@@ -29,8 +29,8 @@ function post_build_meta_box( $post ) {
 	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
-  $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
-  $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
+    $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+    $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
 	$current_view_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 
 
@@ -87,7 +87,7 @@ function post_build_meta_box( $post ) {
 		<p>
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
 		</p>
-    
+
     <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
     <p>
         <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
@@ -95,7 +95,7 @@ function post_build_meta_box( $post ) {
     <p>
         <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
     </p>
-    
+
 		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
@@ -132,14 +132,14 @@ function post_save_meta_box_data( $post_id ) {
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
 	}
-  // Download URL
-  if ( isset( $_REQUEST['download_url'] ) ) {
-      update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
-  }
-  // View URL
-  if ( isset( $_REQUEST['view_url'] ) ) {
-      update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
-  }
+	// Download URL
+	if ( isset( $_REQUEST['download_url'] ) ) {
+	  update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
+	}
+	// View URL
+	if ( isset( $_REQUEST['view_url'] ) ) {
+	  update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
+	}
 	// View URL is a PDF
 	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
 		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
@@ -150,7 +150,7 @@ function post_save_meta_box_data( $post_id ) {
 	}
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', '' );
+		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
 	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );
