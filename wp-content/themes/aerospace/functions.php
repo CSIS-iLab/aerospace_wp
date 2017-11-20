@@ -191,3 +191,8 @@ require get_template_directory() . '/inc/custom-taxonomies.php';
 if (defined('JETPACK__VERSION') ) {
     include get_template_directory() . '/inc/jetpack.php';
 }
+
+/**
+ * shortcodes
+ */
+require get_template_directory() . '/inc/shortcodes.php';
