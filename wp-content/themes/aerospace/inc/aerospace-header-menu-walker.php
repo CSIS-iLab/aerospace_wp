@@ -20,13 +20,22 @@ class Aerospace_Menu extends Walker_Nav_Menu {
     function end_lvl( &$output, $depth = 0, $args = array() ) {
         global $menu_featured_post, $menu_featured_post_description;
 
-        print_r($menu_featured_post);
+        if ( isset ( $menu_featured_post ) ) {
+
+            $post = $menu_featured_post;
+            $title = get_the_title($post->ID);
+            $permalink = get_the_permalink($post->ID);
+            $thumbnail = get_the_post_thumbnail($post->ID);
+
+            $featured_post_html = '<div class="row"><div class="col-xs-12 col-md-3 submenu-featured-post-thumbnail">' . $thumbnail . '</div><div class="col-xs-12 col-md-9 submenu-featured-post-content"><h2><a href="' . esc_url ( $permalink ) . '">' . $title . '</a></h2></div></div>';  
+        }
 
         $indent = str_repeat("\t", $depth);
         $output .= "$indent</ul>\n
             </div>\n
             <div class='col-xs-12 col-md-6 submenu-featured-post'>
-                " . $menu_featured_post_description . "
+                <p class='submenu-featured-post-desc'>" . $menu_featured_post_description . "</p>
+                " . $featured_post_html . "
             </div>\n
         </div>\n
         </div>\n";

@@ -30,13 +30,15 @@ function post_build_meta_box( $post ) {
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
     $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
-    $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
-	$current_view_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 
 
 	?>
 	<div class='inside'>
-
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
 		<h3><?php esc_html_e( 'Article Highlights', 'aerospace' ); ?></h3>
 		<p>
 			<?php
@@ -77,29 +79,15 @@ function post_build_meta_box( $post ) {
 				);
 			?>
 		</p>
-		<h3><?php esc_html_e( 'Post Format', 'aerospace' ); ?></h3>
-		<p>
-			<input type="radio" name="post_format" value="analysis" <?php checked( $current_post_format, 'analysis' ); ?> /> Analysis &nbsp;&nbsp;
-			<input type="radio" name="post_format" value="report" <?php checked( $current_post_format, 'report' ); ?> /> Report
-		</p>
-
 		<h3><?php esc_html_e( 'Download Report URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
 		</p>
 
-    <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
-    <p>
-        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
-    </p>
-    <p>
-        <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
-    </p>
-
-		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
-		</p>
+	    <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
+	    <p>
+	        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
+	    </p>
 	</div>
 	<?php
 }
@@ -139,14 +127,6 @@ function post_save_meta_box_data( $post_id ) {
 	// View URL
 	if ( isset( $_REQUEST['view_url'] ) ) {
 	  update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
-	}
-	// View URL is a PDF
-	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
-		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
-	}
-	// View URL.
-	if ( isset( $_REQUEST['view_url'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_post_view_url', esc_url_raw( wp_unslash( $_POST['view_url'] ) ) ); // Input var okay.
 	}
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
