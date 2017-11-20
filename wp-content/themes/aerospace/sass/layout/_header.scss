@@ -3,6 +3,13 @@
 ==============================*/
 
 .main-navigation {
+
+    .menu-toggle {
+        @include breakpoint("medium") {
+            display: none;
+        }
+    }
+
     ul {
         display: flex;
         list-style: none;
