@@ -89,6 +89,14 @@ function events_build_meta_box( $post ) {
 	$current_aerospace_sponsored = get_post_meta( $post->ID, '_events_aerospace_sponsored', true );
 	$current_location = get_post_meta( $post->ID, '_events_location', true );
 	$current_register_url = get_post_meta( $post->ID, '_events_register_url', true );
+	$current_hosted_by = get_post_meta( $post->ID, '_events_hosted_by', true );
+	$current_start_date = get_post_meta( $post->ID, '_events_start_date', true );
+	$current_end_date = get_post_meta( $post->ID, '_events_end_date', true );
+	$current_time = get_post_meta( $post->ID, '_events_time', true );
+	$current_address = get_post_meta( $post->ID, '_events_address', true );
+	$current_video_url = get_post_meta( $post->ID, '_events_video_url', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+
 	?>
 	<div class='inside'>
 		<h3><?php esc_html_e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
@@ -105,6 +113,37 @@ function events_build_meta_box( $post ) {
 		<p>
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_register_url ); ?>" />
 		</p>
+		<h3><?php esc_html_e( 'Sponsored By', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="hosted_by" value="<?php echo esc_attr( $current_hosted_by ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Event Dates', 'aerospace' ); ?></h3>
+		<p>
+			<label for="start_date"><?php esc_html_e( 'Start Date:', 'aerospace' ); ?></label> <input type="date" class="medium-text" name="start_date" value="<?php echo esc_attr( $current_start_date ); ?>" /><br />
+			<label for="end_date"><?php esc_html_e( 'End Date:', 'aerospace' ); ?></label> <input type="date" class="medium-text" name="end_date" value="<?php echo esc_attr( $current_end_date ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Time', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="medium-text" name="time" value="<?php echo esc_attr( $current_time ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Address', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="address" value="<?php echo esc_attr( $current_address ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Event Video URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="video_url" value="<?php echo esc_url( $current_video_url ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
+
 	</div>
 <?php
 }
@@ -127,7 +166,6 @@ function events_save_meta_box_data( $post_id ) {
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-
 	// Source.
 	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_events_aerospace_sponsored', intval( wp_unslash( $_POST['aerospace_sponsored'] ) ) ); // Input var okay.
@@ -142,5 +180,42 @@ function events_save_meta_box_data( $post_id ) {
 	if ( isset( $_REQUEST['url'] ) ) {  // Input var okay.
 		update_post_meta( $post_id, '_events_register_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) );  // Input var okay.
 	}
+	// Sponsored By
+	if ( isset( $_REQUEST['hosted_by'] ) ) {
+		update_post_meta( $post_id, '_events_hosted_by', sanitize_text_field( $_POST['hosted_by'] ) );
+	}
+	// Start Date
+	if ( isset( $_REQUEST['start_date'] ) ) { // Input var okay.
+		$start_date = sanitize_text_field( wp_unslash( $_POST['start_date'] ) ); // Input var okay.
+		$date = explode( '-', $start_date );
+		if ( wp_checkdate( $date[1], $date[2], $date[0], $start_date ) || empty( $start_date ) ) {
+			update_post_meta( $post_id, '_events_start_date', $start_date ); // Input var okay.
+		}
+	}
+	// End Date
+	if ( isset( $_REQUEST['end_date'] ) ) { // Input var okay.
+		$end_date = sanitize_text_field( wp_unslash( $_POST['end_date'] ) ); // Input var okay.
+		$date = explode( '-', $end_date );
+		if ( wp_checkdate( $date[1], $date[2], $date[0], $end_date ) || empty( $end_date ) ) {
+			update_post_meta( $post_id, '_events_end_date', $end_date ); // Input var okay.
+		}
+	}
+	// Time
+	if ( isset( $_REQUEST['time'] ) ) {
+		update_post_meta( $post_id, '_events_time', sanitize_text_field( $_POST['time'] ) );
+	}
+	// Address
+	if ( isset( $_REQUEST['address'] ) ) {
+		update_post_meta( $post_id, '_events_address', sanitize_text_field( $_POST['address'] ) );
+	}
+	// Event Video URL
+	if ( isset( $_REQUEST['video_url'] ) ) {
+		update_post_meta( $post_id, '_events_video_url', esc_url( $_POST['video_url'] ) );
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+	}
+
 }
 add_action( 'save_post_events', 'events_save_meta_box_data' );
