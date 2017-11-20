@@ -89,7 +89,7 @@ function events_build_meta_box( $post ) {
 	$current_aerospace_sponsored = get_post_meta( $post->ID, '_events_aerospace_sponsored', true );
 	$current_location = get_post_meta( $post->ID, '_events_location', true );
 	$current_register_url = get_post_meta( $post->ID, '_events_register_url', true );
-	$current_sponsored_by = get_post_meta( $post->ID, '_events_sponsored_by', true );
+	$current_hosted_by = get_post_meta( $post->ID, '_events_hosted_by', true );
 	$current_start_date = get_post_meta( $post->ID, '_events_start_date', true );
 	$current_end_date = get_post_meta( $post->ID, '_events_end_date', true );
 	$current_time = get_post_meta( $post->ID, '_events_time', true );
@@ -115,7 +115,7 @@ function events_build_meta_box( $post ) {
 		</p>
 		<h3><?php esc_html_e( 'Sponsored By', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="sponsored_by" value="<?php echo esc_attr( $current_sponsored_by ); ?>" />
+			<input type="text" class="large-text" name="hosted_by" value="<?php echo esc_attr( $current_hosted_by ); ?>" />
 		</p>
 
 		<h3><?php esc_html_e( 'Event Dates', 'aerospace' ); ?></h3>
@@ -181,8 +181,8 @@ function events_save_meta_box_data( $post_id ) {
 		update_post_meta( $post_id, '_events_register_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) );  // Input var okay.
 	}
 	// Sponsored By
-	if ( isset( $_REQUEST['sponsored_by'] ) ) {
-		update_post_meta( $post_id, '_events_sponsored_by', sanitize_text_field( $_POST['sponsored_by'] ) );
+	if ( isset( $_REQUEST['hosted_by'] ) ) {
+		update_post_meta( $post_id, '_events_hosted_by', sanitize_text_field( $_POST['hosted_by'] ) );
 	}
 	// Start Date
 	if ( isset( $_REQUEST['start_date'] ) ) { // Input var okay.
