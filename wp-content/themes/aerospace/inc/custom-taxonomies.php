@@ -5,7 +5,7 @@
  * @package aerospace
  */
 
-// Custom Type Taxonomy for Aerospace 101 posts.
+// Custom Type Taxonomy for posts.
 function aerospace_post_types() {
 
 	$labels = array(
