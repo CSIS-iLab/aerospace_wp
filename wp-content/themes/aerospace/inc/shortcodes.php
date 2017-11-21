@@ -36,4 +36,29 @@ add_shortcode( 'first', 'shortcode_first' );
 	 return "<div class='view-post'><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $post_title ) . "</a></div>";
 }
 add_shortcode( 'view', 'shortcode_view' );
+
+/**
+ * Shortcode for displaying enclosed content at the full width of the browser
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Full width embedded content
+ */
+function shortcode_fullWidth( $atts , $content = null ) {
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'width' => '' // Max Width of the container
+		),
+		$atts,
+		'fullWidth'
+	);
+	if($atts['width']) {
+		$mod_content = '<div class="fullWidthInner" style="max-width:'.$atts['width'].';">'.do_shortcode($content).'</div>';
+	}
+	else {
+		$mod_content = do_shortcode($content);
+	}
+	return "<div class='fullWidthFeatureContent'>".$mod_content."</div>";
+}
+add_shortcode( 'fullWidth', 'shortcode_fullWidth' );
  ?>
