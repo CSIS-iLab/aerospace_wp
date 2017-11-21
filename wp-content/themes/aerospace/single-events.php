@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying single posts.
+ * The template for displaying single events.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
@@ -15,21 +15,24 @@ get_header(); ?>
     		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top col-xs-12">
-			    		Post Format
-			    		Categories
+			    		Post Type
 			    	</div>
 			    	<div class="title-container col-xs-12">
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+				    	Hosted By
 				    	<div class="entry-meta-bottom">
-				        	<?php aerospace_posted_on(); ?>
-				        	Authors
+				        	Start Date
+				        	General Location
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
 
 			    <div class="entry-content">
-			    	Featured Image
-			    	Highlights
+			    	<div class="event-details">
+			    		Register Button
+			    		Time
+			    		Address
+			    	</div>
 			    <?php
 			    the_content(
 			        sprintf(
@@ -50,10 +53,13 @@ get_header(); ?>
 
 			    <footer class="entry-footer">
 			    	<section class="footer-top row">
-			    		<div class="entry-citation col-xs-12 col-md-9">
-			    			Citation
+			    		<div class="entry-register col-xs-12 col-md-4">
+			    			Register Button
 			    		</div>
-			    		<div class="entry-share col-xs-12 col-md-3">
+			    		<div class="entry-calendar col-xs-12 col-md-4">
+			    			Add to Calendar
+			    		</div>
+			    		<div class="entry-share col-xs-12 col-md-4">
 			    			<?php get_template_part( 'share-inline' ); ?>
 			    		</div>
 			    	</section>
