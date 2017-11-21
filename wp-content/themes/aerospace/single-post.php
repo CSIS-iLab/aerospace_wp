@@ -16,7 +16,7 @@ get_header(); ?>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top col-xs-12">
 			    		Post Format
-			    		Categories
+			    		<?php aerospace_entry_categories(); ?>
 			    	</div>
 			    	<div class="title-container col-xs-12">
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
@@ -54,7 +54,7 @@ get_header(); ?>
 			    			Citation
 			    		</div>
 			    		<div class="entry-share col-xs-12 col-md-3">
-			    			<?php get_template_part( 'share-inline' ); ?>
+			    			<?php get_template_part( 'components/share-inline' ); ?>
 			    		</div>
 			    	</section>
 			    	<section class="footer-middle row">
@@ -69,11 +69,7 @@ get_header(); ?>
 			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>
 			    		<?php aerospace_authors_list_extended() ?>
 			    	</section>
-			    	<div class="explore-more-container row">
-			    		<?php esc_html_e( 'Explore More', 'aerospace' ); ?>
-			    		Tags<br />
-			    		Related Posts
-			    	</section>
+			    	<?php get_template_part( 'components/explore-more' ); ?>
 			    </footer><!-- .entry-footer -->
 			</article><!-- #post-<?php the_ID(); ?> -->
 

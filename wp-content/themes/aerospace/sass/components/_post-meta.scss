@@ -60,16 +60,6 @@
   }
 }
 
-.single .nextgen {
-	display: block;
-	margin: 0;
-
-	&::before {
-		content: none;
-		margin: 0;
-	}
-}
-
 /*----------  Authors List  ----------*/
 .authors-list {
 	@include breakpoint("medium") {
@@ -237,35 +227,14 @@
 		display: inline;
 		margin-left: 0.2rem;
 		margin-bottom: 0;
-
-		@include breakpoint("medium") {
-			display: block;
-			margin-left: 0.5rem;
-		}
 	}
 
 	li {
 		@extend %post-meta;
 		display: inline;
 
-		@include breakpoint("medium") {
-			display: block;
-			margin-bottom: 0.25rem;
-		}
-
-		&::before {
-			@include breakpoint("medium") {
-				content: "\2014";
-				color: $secondary-blue;
-			}
-		}
-
 		&::after {
 			content: ", ";
-
-			@include breakpoint("medium") {
-				content: none;
-			}
 		}
 
 		&:last-of-type::after { content: none; }
@@ -276,81 +245,11 @@
 			&:hover { color: $secondary-blue; }
 		}
 	}
-
-	.article-card & {
-		.meta-label { display: inline; }
-		ul {
-			padding: 0;
-			list-style-type: none;
-			display: inline;
-			margin-bottom: 0;
-			margin-left: 0;
-		}
-
-		li {
-			display: inline;
-
-			&::before {
-				content: none;
-				margin: 0;
-			}
-
-			&:not(:last-of-type)::after {
-				content: ", ";
-				color: $black;
-			}
-
-			&:last-of-type::after {
-				content: none;
-			}
-		}
-	}
 }
 
 /*----------  Tags  ----------*/
 .post-tags-container {
-	@extend %archive-content-type;
-
-	@include breakpoint("medium") {
-		padding-top: 3rem;
-	}
-
-	ul {
-		list-style: none;
-		padding: 0;
-		margin-top: 0.5rem;
-	}
-
-	li {
-		margin-bottom: 0.5rem;
-		width: -moz-fit-content;
-		width: fit-content;
-		display: inline-block;
-		margin-right: 0.5rem;
-
-		@include breakpoint("medium") {
-			display: block;
-			margin-right: 0;
-		}
-	}
-
-	a {
-		display: block;
-		background-color: $yellow;
-		color: $black;
-		box-shadow: none;
-		text-transform: none;
-		padding: 0 0.5rem;
-		font-family: $font__ptsans;
-		font-weight: normal;
-		line-height: 1.59;
-		letter-spacing: 0.5px;
-
-		&:hover {
-			background-color: $dark-yellow;
-			color: $white;
-		}
-	}
+	
 }
 
 /*----------  PONI Sponsored  ----------*/

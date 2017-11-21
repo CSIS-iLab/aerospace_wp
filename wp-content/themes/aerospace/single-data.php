@@ -16,12 +16,12 @@ get_header(); ?>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top col-xs-12">
 			    		Post Type
-			    		Categories
+			    		<?php aerospace_entry_categories(); ?>
 			    	</div>
 			    	<div class="title-container col-xs-12">
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 				    	<div class="entry-meta-bottom">
-				        	Last Updated
+				        	<?php aerospace_last_updated() ?>
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
@@ -53,14 +53,10 @@ get_header(); ?>
 			    			Data Source
 			    		</div>
 			    		<div class="entry-share col-xs-12 col-md-3">
-			    			<?php get_template_part( 'share-inline' ); ?>
+			    			<?php get_template_part( 'components/share-inline' ); ?>
 			    		</div>
 			    	</section>
-			    	<div class="explore-more-container row">
-			    		<?php esc_html_e( 'Explore More', 'aerospace' ); ?>
-			    		Tags<br />
-			    		Related Posts
-			    	</section>
+			    	<?php get_template_part( 'components/explore-more' ); ?>
 			    </footer><!-- .entry-footer -->
 			</article><!-- #post-<?php the_ID(); ?> -->
 

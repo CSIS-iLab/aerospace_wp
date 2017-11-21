@@ -50,7 +50,7 @@
                 </nav><!-- #site-navigation -->
             </div>
             <div class="col-xs-12 col-md-6 search-container">
-                <?php get_template_part( 'search-inline' ); ?>
+                <?php get_template_part( 'components/search-inline' ); ?>
             </div>
         </div><!-- .site-branding -->
     </header><!-- #masthead -->

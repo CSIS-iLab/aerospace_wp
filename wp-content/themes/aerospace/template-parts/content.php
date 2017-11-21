@@ -35,7 +35,7 @@ if ( 1 == $is_featured ) {
             ?>
             <div class="entry-meta">
                 <?php aerospace_authors_list(); ?>
-                Published
+                <?php aerospace_posted_on(); ?>
             </div><!-- .entry-meta -->
         </header><!-- .entry-header -->
 
@@ -45,7 +45,7 @@ if ( 1 == $is_featured ) {
 
         <footer class="entry-footer">
             Post Format
-            Categories
+            <?php aerospace_entry_categories(); ?>
         </footer><!-- .entry-footer -->
     </div>
 </article><!-- #post-<?php the_ID(); ?> -->

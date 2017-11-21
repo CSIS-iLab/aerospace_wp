@@ -60,7 +60,7 @@ get_header(); ?>
 			    			Add to Calendar
 			    		</div>
 			    		<div class="entry-share col-xs-12 col-md-4">
-			    			<?php get_template_part( 'share-inline' ); ?>
+			    			<?php get_template_part( 'components/share-inline' ); ?>
 			    		</div>
 			    	</section>
 			    </footer><!-- .entry-footer -->
