@@ -29,12 +29,12 @@ if ( 1 == $is_featured ) {
     ?>
     <div class="col-xs-12 col-md card-main">
         <header class="entry-header">
-            Featured Post
+            <?php aerospace_post_is_featured ( $id ) ?>
             <?php
             the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
             ?>
             <div class="entry-meta">
-                Authors
+                <?php aerospace_authors_list(); ?>
                 Published
             </div><!-- .entry-meta -->
         </header><!-- .entry-header -->

@@ -110,7 +110,7 @@ if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
 	 *
 	 * @param int $id Post ID.
 	 */
-	function aerospace_post_is_featured( $id ) {
+	function aerospace_post_is_featured ( $id ) {
 		$post_type = get_post_type();
 		if ( in_array( $post_type, array( 'aerospace101', 'data', 'events', 'post' ), true ) ) {
 			$is_featured = get_post_meta( $id, '_post_is_featured', true );
@@ -135,6 +135,31 @@ if ( ! function_exists( 'aerospace_authors_list' ) ) :
 		} else {
 			$authors = the_author_posts_link();
 		}
-		echo '<div class="authors-list">' . $authors . '</div>';
+		echo '<div class="authors-list"><span class="meta-label">By</span> ' . $authors . '</div>';
 	}
+endif;
+
+if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
+    /**
+     * Prints HTML with short author list.
+     */
+    function aerospace_authors_list_extended() {
+        if ( function_exists( 'coauthors_posts_links' ) ) {
+            $authors = '';
+            foreach ( get_coauthors() as $coauthor ) :
+                $authors .= '<div class="entry-author row">
+                <div class="author-img col-xs-12 col-md-3">
+                ' . coauthors_get_avatar( $coauthor, 150 ) . '
+                </div>
+                <div class="author-bio col-xs-12 col-md">
+                    <p> ' . $coauthor->description . '</p>
+                    <div class="author-read-more">' . esc_html_x('More articles by', 'aerospace') . ' <a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $coauthor->display_name . '</a>
+                    </div>
+                </div></div>';
+            endforeach;
+        } else {
+            $authors = the_author_posts_link();
+        }
+        echo '<div class="authors-list-extended">' . $authors . '</div>';
+    }
 endif;

@@ -65,9 +65,9 @@ get_header(); ?>
 			    			Sources
 			    		</div>
 			    	</section>
-			    	<section class="authors-container row">
+			    	<section class="authors-container">
 			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>
-			    		Authors
+			    		<?php aerospace_authors_list_extended() ?>
 			    	</section>
 			    	<div class="explore-more-container row">
 			    		<?php esc_html_e( 'Explore More', 'aerospace' ); ?>

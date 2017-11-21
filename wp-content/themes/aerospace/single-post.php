@@ -22,7 +22,7 @@ get_header(); ?>
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 				    	<div class="entry-meta-bottom">
 				        	<?php aerospace_posted_on(); ?>
-				        	Authors
+				        	<?php aerospace_authors_list(); ?>
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
@@ -65,9 +65,9 @@ get_header(); ?>
 			    			Sources
 			    		</div>
 			    	</section>
-			    	<section class="authors-container row">
+			    	<section class="authors-container">
 			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>
-			    		Authors
+			    		<?php aerospace_authors_list_extended() ?>
 			    	</section>
 			    	<div class="explore-more-container row">
 			    		<?php esc_html_e( 'Explore More', 'aerospace' ); ?>
