@@ -30,6 +30,8 @@ get_header(); ?>
 			    <div class="entry-content">
 			    	Featured Image
 			    	Highlights
+			    	<?php aerospace_post_highlighted_info( $post->ID ); ?>
+
 			    <?php
 			    the_content(
 			        sprintf(

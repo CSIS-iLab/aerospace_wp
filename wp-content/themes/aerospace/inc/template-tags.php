@@ -184,3 +184,65 @@ if ( ! function_exists( 'aerospace_citation' ) ) :
         printf( '<p class="entry-citation">' . esc_html( '%1$s. "%2$s," Aerospace Security, %3$s. %4$s Accessed %5$s. %6$s', 'aerospace' ) . '</p>', $authors, get_the_title(), get_the_date(), $modified_date, current_time('F j, Y'), get_the_permalink() ); // WPCS: XSS OK.
     }
 endif;
+
+if ( ! function_exists( 'aerospace_post_highlights' ) ) :
+    /**
+     * Returns HTML with post citation.
+     *
+     * @param int $id Post ID.
+     */
+    function aerospace_post_highlighted_info( $id ) {
+        if ( 'post' === get_post_type() && has_term( 'Report', 'post_types' ) ) {
+            get_template_part( 'components/highlights-reports' );
+        } elseif ( 'post' === get_post_type() ) {
+            aerospace_show_highlights( $id );
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_show_highlights' ) ) :
+    /**
+     * Returns HTML with entry highlights, unless they have been disabled. If no highlights are given, default to the post excerpt.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_show_highlights( $id ) {
+        $post_type = get_post_type();
+        if ( 'post' === $post_type ) {
+            $highlights = get_post_meta( $id, '_post_highlights', true );
+            $excerpt = get_the_excerpt();
+            $disable_highlights = get_post_meta( $id, '_post_disable_highlights', true );
+            
+            if ( $disable_highlights ) {
+                return;
+            }
+
+            if ( '' !== $highlights ) {
+                printf( '<div class="entry-highlights">%1$s</div>', $highlights); // WPCS: XSS OK.
+            } else {
+                printf( '<div class="entry-highlights">%1$s</div>', $excerpt); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_report_download' ) ) :
+    /**
+     * Returns HTML with download & view report links.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_report_download( $id ) {
+        if ( 'post' === get_post_type() && has_term( 'Report', 'post_types' ) ) {
+            $download_url = get_post_meta( $id, '_post_download_url', true );
+            $view_url = get_post_meta( $id, '_post_view_url', true );
+            if ( '' !== $download_url ) {
+                $download = '<p><a href="' . esc_url( $download_url ) . '" download="PONIReport"><i class="icon-download"></i>' . esc_html( 'Download', 'aerospace' ) . '</a></p>';
+            }
+            if ( '' !== $view_url ) {
+                $view = '<p><a href="' . esc_url( $view_url ) . '" target="_blank"><i class="icon-file-pdf"></i>' . esc_html( 'View', 'aerospace' ) . '</a></p>';
+            }
+            printf( '<div class="post-report">%1$s%2$s</div>', $download, $view ); // WPCS: XSS OK.
+        }
+    }
+endif;
