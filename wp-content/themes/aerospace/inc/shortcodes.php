@@ -61,4 +61,38 @@ function shortcode_fullWidth( $atts , $content = null ) {
 	return "<div class='fullWidthFeatureContent'>".$mod_content."</div>";
 }
 add_shortcode( 'fullWidth', 'shortcode_fullWidth' );
+
+/**
+ * Shortcode for displaying embedded interactive
+ * @param  array $atts    Modifying arguments
+ * @return string          Embedded interactive
+ */
+function aerospace_shortcode_interactive( $atts ) {
+	// Attributes
+	$atts = shortcode_atts(
+		array(
+			'id' => '', // ID of Interactive Post
+			'width' => '', // Width of Interactive
+			'height' => '', // Height of Interactive,
+		),
+		$atts,
+		'interactive'
+	);
+	$interactiveURL = get_post_meta( $atts['id'], '_data_url', true );
+	$width = get_post_meta( $atts['id'], '_data_width', true );
+	$height = get_post_meta( $atts['id'], '_data_height', true );
+	$iframeResizeDisabled = get_post_meta( $atts['id'], '_data_iframeResizeDisabled', true );
+	// Fallback Image
+	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallbackImgDisabled', true );
+	if(!$fallbackImgDisabled) {
+		$fallbackImg = get_the_post_thumbnail($atts['id'], 'full');
+	}
+	$title = get_the_title($atts['id']);
+	$sanitizedTitle = sanitize_title($title);
+	$URL = get_permalink()."#".$sanitizedTitle;
+	$heading = '<h2 class="interactive-heading" id="'.$sanitizedTitle.'">'.$title.'</h2>';
+	return $heading.aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg, $iframeResizeDisabled);
+}
+add_shortcode( 'interactive', 'aerospace_shortcode_interactive' );
+
  ?>
