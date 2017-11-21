@@ -19,16 +19,24 @@ get_header(); ?>
 			    	</div>
 			    	<div class="title-container col-xs-12">
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-				    	Hosted By
+				    	<?php aerospace_event_hosted_by( $post->ID ); ?>
 				    	<div class="entry-meta-bottom">
 				        	<?php aerospace_event_dates( $post->ID, true ); ?>
 				        	<?php aerospace_event_location( $post->ID ); ?>
+				        	<?php aerospace_event_google_map( $post->ID ); ?>
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
 
 			    <div class="entry-content">
 			    	<?php aerospace_post_highlighted_info( $post->ID ); ?>
+
+			    	<?php
+			    		if ( aerospace_event_is_past( $post->ID ) ) {
+			    			esc_html_e( 'This event has already taken place.', 'aerospace' );
+			    		}
+			    	?>
+			    	<?php aerospace_event_watch( $post->ID ); ?>
 			    <?php
 			    the_content(
 			        sprintf(
@@ -48,9 +56,12 @@ get_header(); ?>
 			    </div><!-- .entry-content -->
 
 			    <footer class="entry-footer">
+			    	<?php
+				    if ( aerospace_event_is_past( $post->ID ) == false ) {
+				    ?>
 			    	<section class="footer-top row">
 			    		<div class="entry-register col-xs-12 col-md-4">
-			    			Register Button
+			    			<?php aerospace_event_register( $post->ID ); ?>
 			    		</div>
 			    		<div class="entry-calendar col-xs-12 col-md-4">
 			    			Add to Calendar
@@ -59,6 +70,8 @@ get_header(); ?>
 			    			<?php get_template_part( 'components/share-inline' ); ?>
 			    		</div>
 			    	</section>
+			    	<?php get_template_part( 'components/explore-more' ); ?>
+			    	<?php } ?>
 			    </footer><!-- .entry-footer -->
 			</article><!-- #post-<?php the_ID(); ?> -->
 

@@ -7,7 +7,7 @@
  * @package Aerospace
  */
 
-$is_featured = get_post_meta( $id, '_post_is_featured', true );
+$is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 if ( 1 == $is_featured ) {
     $classes = 'row featured card-format';
 } else {
@@ -26,6 +26,7 @@ if ( 1 == $is_featured ) {
             <?php
             the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
             ?>
+            <?php aerospace_event_hosted_by( $post->ID ); ?>
         </header><!-- .entry-header -->
 
         <div class="entry-content">

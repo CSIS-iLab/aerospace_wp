@@ -268,6 +268,27 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'aerospace_event_is_past' ) ) :
+    /**
+     * Checks the event end date to determine if the event has past or not.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_is_past( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $current_date = date( 'Y-m-d' );
+            $end_date = get_post_meta( $id, '_events_end_date', true );
+
+            if ( $current_date > $end_date ) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    }
+endif;
+
 if ( ! function_exists( 'aerospace_event_dates' ) ) :
     /**
      * Returns HTML with event dates.
@@ -320,7 +341,14 @@ if ( ! function_exists( 'aerospace_posted_on_calendar' ) ) :
             esc_attr( $month ),
             esc_html( $day )
         );
-        echo '<div class="calendar-container"><a href="' . esc_url( get_permalink() ) . '">' . $date_string . '</a></div>'; // WPCS: XSS OK.
+
+        if ( aerospace_event_is_past( $id ) ) {
+            $class = ' past';
+        } else {
+            $class = null;
+        }
+
+        echo '<div class="calendar-container' . $class . '"><a href="' . esc_url( get_permalink() ) . '">' . $date_string . '</a></div>'; // WPCS: XSS OK.
     }
 endif;
 
@@ -389,6 +417,59 @@ if ( ! function_exists( 'aerospace_event_google_map' ) ) :
             if ( '' !== $address ) {
                 $url = esc_url( 'https://www.google.com/maps/search/?api=1&query=' . urlencode( $address ) );
                 printf( '<a href="%1$s" class="btn btn-map" target="_blank" rel="nofollow">' . esc_html( 'Map', 'aerospace') . '</a>', $url); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_hosted_by' ) ) :
+    /**
+     * Returns HTML with the host of the event.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_hosted_by( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $host = get_post_meta( $id, '_events_hosted_by', true );
+
+            if ( '' !== $host ) {
+                printf( '<div class="entry-host"><span class="meta-label">' . esc_html( 'Hosted By', 'aerospace') . '</span>%1$s</div>', $host); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_register' ) ) :
+    /**
+     * Returns HTML with the Register for the event link.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_register( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $url = get_post_meta( $id, '_events_register_url', true );
+
+            if ( '' !== $url ) {
+                $url = esc_url( $url );
+                printf( '<a href="%1$s" class="btn btn-register" target="_blank" rel="nofollow">' . esc_html( 'Register', 'aerospace') . '</a>', $url); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_watch' ) ) :
+    /**
+     * Returns HTML with the Watch event block.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_watch( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $url = get_post_meta( $id, '_events_video_url', true );
+
+            if ( '' !== $url ) {
+                $url = esc_url( $url );
+                printf( '<a href="%1$s" class="btn btn-watch" target="_blank" rel="nofollow">' . esc_html( 'Watch the event', 'aerospace') . '</a>', $url); // WPCS: XSS OK.
             }
         }
     }

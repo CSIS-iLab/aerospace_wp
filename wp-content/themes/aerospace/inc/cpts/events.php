@@ -43,7 +43,7 @@ function aerospace_cpt_events() {
 		'label'                 => __( 'Event', 'aerospace' ),
 		'description'           => __( 'Events', 'aerospace' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+		'supports'              => array( 'title', 'editor', 'excerpt' ),
 		'taxonomies'            => array( 'post_tag' ),
 		'hierarchical'          => false,
 		'public'                => true,
@@ -86,7 +86,6 @@ function events_build_meta_box( $post ) {
 	wp_nonce_field( basename( __FILE__ ), 'events_meta_box_nonce' );
 
 	// Retrieve current value of fields.
-	$current_aerospace_sponsored = get_post_meta( $post->ID, '_events_aerospace_sponsored', true );
 	$current_location = get_post_meta( $post->ID, '_events_location', true );
 	$current_register_url = get_post_meta( $post->ID, '_events_register_url', true );
 	$current_hosted_by = get_post_meta( $post->ID, '_events_hosted_by', true );
@@ -105,10 +104,11 @@ function events_build_meta_box( $post ) {
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
 		</p>
 
-		<h3><?php esc_html_e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Hosted By', 'aerospace' ); ?></h3>
 		<p>
-			<input type="checkbox" name="aerospace_sponsored" value="1" <?php checked( $current_aerospace_sponsored, '1' ); ?> /> Aerospace Sponsored
+			<input type="text" class="large-text" name="hosted_by" value="<?php echo esc_attr( $current_hosted_by ); ?>" />
 		</p>
+		<p class="howto">Only fill out if the event is not hosted by CSIS</p>
 
 		<h3><?php esc_html_e( 'Location', 'aerospace' ); ?></h3>
 		<p>
@@ -118,10 +118,6 @@ function events_build_meta_box( $post ) {
 		<h3><?php esc_html_e( 'Register URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_register_url ); ?>" />
-		</p>
-		<h3><?php esc_html_e( 'Sponsored By', 'aerospace' ); ?></h3>
-		<p>
-			<input type="text" class="large-text" name="hosted_by" value="<?php echo esc_attr( $current_hosted_by ); ?>" />
 		</p>
 
 		<h3><?php esc_html_e( 'Event Dates', 'aerospace' ); ?></h3>
@@ -173,13 +169,8 @@ function events_save_meta_box_data( $post_id ) {
 	} else {
 		update_post_meta( $post_id, '_post_is_featured', '' );
 	}
-	// Source.
-	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_events_aerospace_sponsored', intval( wp_unslash( $_POST['aerospace_sponsored'] ) ) ); // Input var okay.
-	} else {
-		update_post_meta( $post_id, '_events_aerospace_sponsored', '' );
-	}
-	// Width.
+
+	// Location.
 	if ( isset( $_REQUEST['location'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_events_location', sanitize_text_field( wp_unslash( $_POST['location'] ) ) );  // Input var okay.
 	}
@@ -187,7 +178,7 @@ function events_save_meta_box_data( $post_id ) {
 	if ( isset( $_REQUEST['url'] ) ) {  // Input var okay.
 		update_post_meta( $post_id, '_events_register_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) );  // Input var okay.
 	}
-	// Sponsored By
+	// Hosted By.
 	if ( isset( $_REQUEST['hosted_by'] ) ) {
 		update_post_meta( $post_id, '_events_hosted_by', sanitize_text_field( $_POST['hosted_by'] ) );
 	}
