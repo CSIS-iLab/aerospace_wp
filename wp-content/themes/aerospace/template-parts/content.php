@@ -44,7 +44,7 @@ if ( 1 == $is_featured ) {
         </div><!-- .entry-content -->
 
         <footer class="entry-footer">
-            Post Format
+            <?php aerospace_post_format( $post->ID ); ?>
             <?php aerospace_entry_categories(); ?>
         </footer><!-- .entry-footer -->
     </div>

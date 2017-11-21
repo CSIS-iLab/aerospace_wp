@@ -15,7 +15,7 @@ get_header(); ?>
     		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top col-xs-12">
-			    		Post Type
+			    		<?php aerospace_post_format( $post->ID ); ?>
 			    		<?php aerospace_entry_categories(); ?>
 			    	</div>
 			    	<div class="title-container col-xs-12">
@@ -51,7 +51,7 @@ get_header(); ?>
 			    <footer class="entry-footer">
 			    	<section class="footer-top row">
 			    		<div class="entry-citation col-xs-12 col-md-9">
-			    			Citation
+			    			<?php aerospace_citation(); ?>
 			    		</div>
 			    		<div class="entry-share col-xs-12 col-md-3">
 			    			<?php get_template_part( 'components/share-inline' ); ?>

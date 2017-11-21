@@ -138,3 +138,49 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
         echo '<div class="authors-list-extended">' . $authors . '</div>';
     }
 endif;
+
+if ( ! function_exists( 'aerospace_post_format' ) ) :
+    /**
+     * Returns HTML with post format.
+     *
+     * @param int $id Post ID.
+     */
+    function aerospace_post_format( $id ) {
+        $post_type = get_post_type();
+        if ( in_array( $post_type, array( 'post', 'events', 'aerospace101', 'data' ), true ) ) {
+            
+            if ( 'post' === $post_type ) {
+                $post_types = get_the_terms( $id, 'post_types' );
+                if ( ! empty( $post_types ) && ! is_wp_error( $post_types ) ) {
+                    $post_types = wp_list_pluck( $post_types, 'name' );
+                    $post_format = $post_types[0];
+                }
+            }
+
+            if ( ! $post_format ) {
+                $obj = get_post_type_object( $post_type );
+                $post_format = $obj->labels->name;
+            }
+            if ( $post_format ) {
+                printf( '<p class="post-format">' . esc_html( '%2$s' ) . esc_html( '%1$s' ) . esc_html( '%3$s' ) . '</p>', $post_format, $is_featured, $is_nextgen ); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_citation' ) ) :
+    /**
+     * Returns HTML with post citation.
+     *
+     * @param int $id Post ID.
+     */
+    function aerospace_citation() {
+        if ( get_the_modified_date() ) {
+            $modified_date = 'Updated ' . get_the_modified_date() . '. ';
+        }
+
+        $authors = coauthors( ',', null, null, null, false );
+
+        printf( '<p class="entry-citation">' . esc_html( '%1$s. "%2$s," Aerospace Security, %3$s. %4$s Accessed %5$s. %6$s', 'aerospace' ) . '</p>', $authors, get_the_title(), get_the_date(), $modified_date, current_time('F j, Y'), get_the_permalink() ); // WPCS: XSS OK.
+    }
+endif;
