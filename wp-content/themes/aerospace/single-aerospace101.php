@@ -61,9 +61,7 @@ get_header(); ?>
 			    		<div class="entry-footnotes col-xs-12 col-md-6">
 			    			Footnotes
 			    		</div>
-			    		<div class="entry-sources col-xs-12 col-md-6">
-			    			Sources
-			    		</div>
+			    		<?php aerospace_post_sources( $post->ID ); ?>
 			    	</section>
 			    	<section class="authors-container">
 			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>

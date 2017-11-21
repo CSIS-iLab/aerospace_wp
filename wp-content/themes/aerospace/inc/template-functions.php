@@ -48,3 +48,18 @@ function aerospace_custom_sort_posts( $query ) {
 	}
 }
 add_action( 'pre_get_posts', 'aerospace_custom_sort_posts' );
+
+/**
+ * Check a given date to ensure it is valid.
+ *
+ * @param  string $date Date string in YYYY-MM-DD format.
+ * @return [type]       [description]
+ */
+function aerospace_check_date( $date ) {
+    $date_array = explode( '-', $date );
+    if ( wp_checkdate( $date_array[1], $date_array[2], $date_array[0], $date ) ) {
+        return $date_array;
+    } else {
+        return false;
+    }
+}

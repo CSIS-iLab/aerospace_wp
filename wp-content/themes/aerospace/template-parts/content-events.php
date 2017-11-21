@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts
+ * Template part for events.
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
@@ -10,33 +10,22 @@
 $is_featured = get_post_meta( $id, '_post_is_featured', true );
 if ( 1 == $is_featured ) {
     $classes = 'row featured card-format';
-    $thumbnail_size = 6;
 } else {
     $classes = 'row card-format';
-    $thumbnail_size = 4;
 }
 
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
-
-    <?php
-    if ( has_post_thumbnail() ) {
-        echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
-        the_post_thumbnail( 'medium_large' );
-        echo '</a></div>';
-    }
-    ?>
+    <div class="col-xs-12 col-md-2">
+        <?php aerospace_posted_on_calendar( $post->ID ) ?>
+    </div>
     <div class="col-xs-12 col-md card-main">
         <header class="entry-header">
             <?php aerospace_post_is_featured ( $post->ID ) ?>
             <?php
             the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
             ?>
-            <div class="entry-meta">
-                <?php aerospace_authors_list(); ?>
-                <?php aerospace_posted_on(); ?>
-            </div><!-- .entry-meta -->
         </header><!-- .entry-header -->
 
         <div class="entry-content">
@@ -44,8 +33,8 @@ if ( 1 == $is_featured ) {
         </div><!-- .entry-content -->
 
         <footer class="entry-footer">
-            <?php aerospace_post_format( $post->ID ); ?>
-            <?php aerospace_entry_categories(); ?>
+            <?php aerospace_event_time( $post->ID ); ?>
+            <?php aerospace_event_location( $post->ID ); ?>
         </footer><!-- .entry-footer -->
     </div>
 </article><!-- #post-<?php the_ID(); ?> -->

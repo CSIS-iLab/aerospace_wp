@@ -137,7 +137,7 @@ function events_build_meta_box( $post ) {
 
 		<h3><?php esc_html_e( 'Address', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="address" value="<?php echo esc_attr( $current_address ); ?>" />
+			<textarea rows="5" name="address" style="width: 100%;"><?php echo esc_textarea( $current_address ); ?></textarea>
 		</p>
 
 		<h3><?php esc_html_e( 'Event Video URL', 'aerospace' ); ?></h3>
@@ -213,7 +213,7 @@ function events_save_meta_box_data( $post_id ) {
 	}
 	// Address
 	if ( isset( $_REQUEST['address'] ) ) {
-		update_post_meta( $post_id, '_events_address', sanitize_text_field( $_POST['address'] ) );
+		update_post_meta( $post_id, '_events_address', sanitize_textarea_field( $_POST['address'] ) );
 	}
 	// Event Video URL
 	if ( isset( $_REQUEST['video_url'] ) ) {

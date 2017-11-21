@@ -29,7 +29,6 @@ get_header(); ?>
 
 			    <div class="entry-content">
 			    	Featured Image
-			    	Highlights
 			    	<?php aerospace_post_highlighted_info( $post->ID ); ?>
 
 			    <?php
@@ -63,9 +62,7 @@ get_header(); ?>
 			    		<div class="entry-footnotes col-xs-12 col-md-6">
 			    			Footnotes
 			    		</div>
-			    		<div class="entry-sources col-xs-12 col-md-6">
-			    			Sources
-			    		</div>
+			    		<?php aerospace_post_sources( $post->ID ); ?>
 			    	</section>
 			    	<section class="authors-container">
 			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>

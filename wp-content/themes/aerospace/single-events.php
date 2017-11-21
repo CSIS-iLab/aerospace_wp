@@ -21,18 +21,14 @@ get_header(); ?>
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 				    	Hosted By
 				    	<div class="entry-meta-bottom">
-				        	Start Date
-				        	General Location
+				        	<?php aerospace_event_dates( $post->ID, true ); ?>
+				        	<?php aerospace_event_location( $post->ID ); ?>
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
 
 			    <div class="entry-content">
-			    	<div class="event-details">
-			    		Register Button
-			    		Time
-			    		Address
-			    	</div>
+			    	<?php aerospace_post_highlighted_info( $post->ID ); ?>
 			    <?php
 			    the_content(
 			        sprintf(

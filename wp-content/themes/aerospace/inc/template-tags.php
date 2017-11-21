@@ -196,6 +196,8 @@ if ( ! function_exists( 'aerospace_post_highlights' ) ) :
             get_template_part( 'components/highlights-reports' );
         } elseif ( 'post' === get_post_type() ) {
             aerospace_show_highlights( $id );
+        } elseif ( 'events' === get_post_type() ) {
+            get_template_part( 'components/highlights-events' );
         }
     }
 endif;
@@ -226,6 +228,25 @@ if ( ! function_exists( 'aerospace_show_highlights' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'aerospace_post_sources' ) ) :
+    /**
+     * Returns HTML with source info if it exists.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_post_sources( $id ) {
+        $post_type = get_post_type();
+        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) ) {
+            $sources = get_post_meta( $id, '_post_sources', true );
+
+            if ( '' !== $sources ) {
+                $sources = apply_filters('meta_content', $sources);
+                printf( '<div class="entry-sources col-xs-12 col-md"><h4>' . esc_html( 'Sources', 'aerospace') . '</h4>%1$s</div>', $sources); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
 if ( ! function_exists( 'aerospace_report_download' ) ) :
     /**
      * Returns HTML with download & view report links.
@@ -243,6 +264,132 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
                 $view = '<p><a href="' . esc_url( $view_url ) . '" target="_blank"><i class="icon-file-pdf"></i>' . esc_html( 'View', 'aerospace' ) . '</a></p>';
             }
             printf( '<div class="post-report">%1$s%2$s</div>', $download, $view ); // WPCS: XSS OK.
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_dates' ) ) :
+    /**
+     * Returns HTML with event dates.
+     *
+     * @param  int $id Post ID.
+     * @param  bool $start_only Whether to only show the start date.
+     */
+    function aerospace_event_dates( $id, $start_only = false ) {
+        if ( 'events' === get_post_type() && null !== get_post_meta( $id, '_events_start_date', true ) ) {
+            $start_date = get_post_meta( $id, '_events_start_date', true );
+            $start_date_array = aerospace_check_date( $start_date );
+            if ( $start_date_array ) {
+                $start_date = date( get_option( 'date_format' ), mktime( 0, 0, 0, $start_date_array[1], $start_date_array[2], $start_date_array[0] ) );
+            }
+            $end_date = get_post_meta( $id, '_events_end_date', true );
+
+            if ( $start_only ) {
+                $label = 'Date';
+                $end_date = null;
+            } elseif ( $end_date ) {
+                $label = 'Dates';
+                $end_date_array = aerospace_check_date( $end_date );
+                if ( $end_date_array ) {
+                    $end_date = ' - ' . date( get_option( 'date_format' ), mktime( 0, 0, 0, $end_date_array[1], $end_date_array[2], $end_date_array[0] ) );
+                }
+            }
+
+            printf( '<div class="post-event-dates"><span class="meta-label">' . esc_html_x( '%1$s:', 'aerospace' ) . '</span> %2$s%3$s</div>', $label, $start_date, $end_date ); // WPCS: XSS OK.
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_posted_on_calendar' ) ) :
+    /**
+     * Prints HTML of posted on date in calendar form.
+     */
+    function aerospace_posted_on_calendar( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $start_date = get_post_meta( $id, '_events_start_date', true );
+            $start_date_array = aerospace_check_date( $start_date );
+            $month_time = mktime(0, 0, 0, $start_date_array[1], 1);
+            $month = date( 'M', $month_time );
+            $day = $start_date_array[2];
+        } else {
+            $month = get_the_date( 'M' );
+            $day = get_the_date( 'j' );
+        }
+        $date_string = '<div class="month">%1$s</div><div class="day">%2$s</div>';
+        $date_string = sprintf( $date_string,
+            esc_attr( $month ),
+            esc_html( $day )
+        );
+        echo '<div class="calendar-container"><a href="' . esc_url( get_permalink() ) . '">' . $date_string . '</a></div>'; // WPCS: XSS OK.
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_time' ) ) :
+    /**
+     * Returns HTML with the time of the event.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_time( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $time = get_post_meta( $id, '_events_time', true );
+
+            if ( '' !== $time ) {
+                printf( '<div class="entry-time"><span class="meta-label">' . esc_html( 'Time', 'aerospace') . '</span>%1$s</div>', $time); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_location' ) ) :
+    /**
+     * Returns HTML with the location of the event.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_location( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $location = get_post_meta( $id, '_events_location', true );
+
+            if ( '' !== $location ) {
+                printf( '<div class="entry-location"><span class="meta-label">' . esc_html( 'Location', 'aerospace') . '</span>%1$s</div>', $location); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_address' ) ) :
+    /**
+     * Returns HTML with the address of the event.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_address( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $address = get_post_meta( $id, '_events_address', true );
+
+            if ( '' !== $address ) {
+                $address = nl2br( $address );
+                printf( '<div class="entry-address"><span class="meta-label">' . esc_html( 'Address', 'aerospace') . '</span>%1$s</div>', $address); // WPCS: XSS OK.
+            }
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_event_google_map' ) ) :
+    /**
+     * Returns HTML with Google Map button based on address.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_event_google_map( $id ) {
+        if ( 'events' === get_post_type() ) {
+            $address = get_post_meta( $id, '_events_address', true );
+
+            if ( '' !== $address ) {
+                $url = esc_url( 'https://www.google.com/maps/search/?api=1&query=' . urlencode( $address ) );
+                printf( '<a href="%1$s" class="btn btn-map" target="_blank" rel="nofollow">' . esc_html( 'Map', 'aerospace') . '</a>', $url); // WPCS: XSS OK.
+            }
         }
     }
 endif;
