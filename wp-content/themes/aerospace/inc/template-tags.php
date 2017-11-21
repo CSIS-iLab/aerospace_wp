@@ -474,3 +474,16 @@ if ( ! function_exists( 'aerospace_event_watch' ) ) :
         }
     }
 endif;
+
+if ( ! function_exists( 'aerospace_post_num' ) ) :
+    /**
+     * Returns HTML with total # of posts returned and the current page the user is on.
+     */
+    function aerospace_post_num() {
+        global $wp_query;
+        // Current page.
+        $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
+        /* translators: 1: number of pages. */
+        printf( '<div class="pagination-totals">' . esc_html_x( '%2$s/%3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
+    }
+endif;

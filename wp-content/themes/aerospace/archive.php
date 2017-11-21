@@ -19,7 +19,9 @@ get_header(); ?>
                 ?>
                 <div class="archive-pages-top row">
                     <?php if (have_posts() ) : ?>
-                    <div class="col-xs-12 col-md-6">Page Numbers</div>
+                    <div class="col-xs-12 col-md-6">
+                        <?php aerospace_post_num(); ?>
+                    </div>
                     <?php endif; ?>
                     <div class="col-xs-12 col-md-6 text-right">Sort</div>
                 </div>
@@ -41,8 +43,10 @@ get_header(); ?>
         endwhile;
         ?>
         <div class="archive-pages-top row">
-            <div class="col-xs-12 col-md-6 left-side">Page Numbers</div>
-            <div class="col-xs-12 col-md-6 text-right">Pagination</div>
+            <div class="col-xs-12 col-md-6 left-side"><?php aerospace_post_num(); ?></div>
+            <div class="col-xs-12 col-md-6 text-right">
+                <?php the_posts_pagination(); ?>
+            </div>
         </div>
         <?php
         else :
