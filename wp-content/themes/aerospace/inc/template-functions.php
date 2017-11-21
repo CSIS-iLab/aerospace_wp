@@ -32,3 +32,19 @@ function aerospace_pingback_header()
     }
 }
 add_action('wp_head', 'aerospace_pingback_header');
+
+/**
+ * Change the default post query to show featured posts first.
+ *
+ * @param  array $query Query object.
+ */
+function aerospace_custom_sort_posts( $query ) {
+	if ( ( ( is_home() && get_option( 'page_for_posts' ) ) || is_category() || is_archive()) && $query->is_main_query() ) {
+		$query->set( 'meta_key', '_post_is_featured' );
+		$query->set( 'orderby', array(
+			'meta_value_num' => 'DESC',
+			'post_date' => 'DESC',
+		) );
+	}
+}
+add_action( 'pre_get_posts', 'aerospace_custom_sort_posts' );
