@@ -103,3 +103,20 @@ if (! function_exists('aerospace_entry_footer') ) :
         );
     }
 endif;
+
+if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
+	/**
+	 * Returns HTML with post format.
+	 *
+	 * @param int $id Post ID.
+	 */
+	function aerospace_post_is_featured( $id ) {
+		$post_type = get_post_type();
+		if ( in_array( $post_type, array( 'aerospace101', 'data', 'events', 'post' ), true ) ) {
+			$is_featured = get_post_meta( $id, '_post_is_featured', true );
+			if ( 1 == $is_featured ) {
+				printf( '<p class="post-is-featured">' . esc_html( 'Featured', 'aerospace' ) . '</p>');
+			}
+        }
+	}
+endif;

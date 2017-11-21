@@ -99,6 +99,12 @@ function events_build_meta_box( $post ) {
 
 	?>
 	<div class='inside'>
+
+		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
+
 		<h3><?php esc_html_e( 'Aerospace Sponsored', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="aerospace_sponsored" value="1" <?php checked( $current_aerospace_sponsored, '1' ); ?> /> Aerospace Sponsored
@@ -139,11 +145,6 @@ function events_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="video_url" value="<?php echo esc_url( $current_video_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
-		</p>
-
 	</div>
 <?php
 }
@@ -165,6 +166,12 @@ function events_save_meta_box_data( $post_id ) {
 	// Check the user's permissions.
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
+	}
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_is_featured', '' );
 	}
 	// Source.
 	if ( isset( $_REQUEST['aerospace_sponsored'] ) ) { // Input var okay.
@@ -211,10 +218,6 @@ function events_save_meta_box_data( $post_id ) {
 	// Event Video URL
 	if ( isset( $_REQUEST['video_url'] ) ) {
 		update_post_meta( $post_id, '_events_video_url', esc_url( $_POST['video_url'] ) );
-	}
-	// Is Featured?
-	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
 	}
 
 }
