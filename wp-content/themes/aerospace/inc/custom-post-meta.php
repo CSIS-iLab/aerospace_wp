@@ -37,10 +37,12 @@ function post_build_meta_box( $post ) {
 
 	?>
 	<div class='inside'>
-		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+
+		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Yes, this post is featured
 		</p>
+
 		<h3><?php esc_html_e( 'Article Highlights', 'aerospace' ); ?></h3>
 		<p>
 			<?php
@@ -86,15 +88,15 @@ function post_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
 		</p>
 
-	    <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
+	    <h3><?php esc_html_e( 'View Report URL', 'aerospace' ); ?></h3>
 	    <p>
 	        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
 	    </p>
-	    <h3><?php _e( 'Disable Excerpt & Highlights', 'aerospace' ); ?></h3>
+	    <h3><?php esc_html_e( 'Disable Excerpt & Highlights', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="disable_highlights" value="1" <?php checked( $current_disable_highlights, '1' ); ?> /> Yes, disable the excerpt and highlights
 		</p>
-		<h3><?php _e( 'Disable Feature Image', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Disable Feature Image', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="disable_feature_img" value="1" <?php checked( $current_disable_feature_img, '1' ); ?> /> Yes, disable the feature image
 		</p>

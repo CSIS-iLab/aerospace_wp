@@ -103,3 +103,38 @@ if (! function_exists('aerospace_entry_footer') ) :
         );
     }
 endif;
+
+if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
+	/**
+	 * Check to see if post is featured.
+	 *
+	 * @param int $id Post ID.
+	 */
+	function aerospace_post_is_featured( $id ) {
+		$post_type = get_post_type();
+		if ( in_array( $post_type, array( 'aerospace101', 'data', 'events', 'post' ), true ) ) {
+			$is_featured = get_post_meta( $id, '_post_is_featured', true );
+			if ( 1 == $is_featured ) {
+				printf( '<p class="post-is-featured">' . esc_html( 'Featured', 'aerospace' ) . '</p>');
+			}
+        }
+	}
+endif;
+
+if ( ! function_exists( 'aerospace_authors_list' ) ) :
+	/**
+	 * Return short list of authors, separated by a comma.
+	 */
+	function aerospace_authors_list() {
+		if ( function_exists( 'coauthors_posts_links' ) ) {
+			$prefix = $authors = '';
+			foreach ( get_coauthors() as $coauthor ) :
+				$authors .= '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $prefix . $coauthor->display_name . '</a>';
+                $prefix = ', ';
+			endforeach;
+		} else {
+			$authors = the_author_posts_link();
+		}
+		echo '<div class="authors-list">' . $authors . '</div>';
+	}
+endif;
