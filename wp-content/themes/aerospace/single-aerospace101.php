@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying single events.
+ * The template for displaying single Aerospace 101 posts.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
@@ -11,28 +11,24 @@ get_header(); ?>
 
     <div id="primary" class="content-area">
         <main id="main" class="site-main content-wrapper">
-
+        	Return to Archive Link
     		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top col-xs-12">
 			    		Post Type
+			    		Categories
 			    	</div>
 			    	<div class="title-container col-xs-12">
 				    	<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-				    	Hosted By
 				    	<div class="entry-meta-bottom">
-				        	Start Date
-				        	General Location
+				        	Published
+				        	Last Updated
 				        </div>
 				    </div>
 			    </header><!-- .entry-header -->
 
 			    <div class="entry-content">
-			    	<div class="event-details">
-			    		Register Button
-			    		Time
-			    		Address
-			    	</div>
+			    	Featured Image
 			    <?php
 			    the_content(
 			        sprintf(
@@ -49,19 +45,34 @@ get_header(); ?>
 			        ) 
 			    );
 			    ?>
+			    Return to Archive
 			    </div><!-- .entry-content -->
 
 			    <footer class="entry-footer">
 			    	<section class="footer-top row">
-			    		<div class="entry-register col-xs-12 col-md-4">
-			    			Register Button
+			    		<div class="entry-citation col-xs-12 col-md-9">
+			    			Citation
 			    		</div>
-			    		<div class="entry-calendar col-xs-12 col-md-4">
-			    			Add to Calendar
-			    		</div>
-			    		<div class="entry-share col-xs-12 col-md-4">
+			    		<div class="entry-share col-xs-12 col-md-3">
 			    			<?php get_template_part( 'share-inline' ); ?>
 			    		</div>
+			    	</section>
+			    	<section class="footer-middle row">
+			    		<div class="entry-footnotes col-xs-12 col-md-6">
+			    			Footnotes
+			    		</div>
+			    		<div class="entry-sources col-xs-12 col-md-6">
+			    			Sources
+			    		</div>
+			    	</section>
+			    	<section class="authors-container row">
+			    		<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>
+			    		Authors
+			    	</section>
+			    	<div class="explore-more-container row">
+			    		<?php esc_html_e( 'Explore More', 'aerospace' ); ?>
+			    		Tags<br />
+			    		Related Posts
 			    	</section>
 			    </footer><!-- .entry-footer -->
 			</article><!-- #post-<?php the_ID(); ?> -->
