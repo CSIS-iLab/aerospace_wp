@@ -120,3 +120,21 @@ if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
         }
 	}
 endif;
+
+if ( ! function_exists( 'aerospace_authors_list' ) ) :
+	/**
+	 * Return short list of authors, separated by a comma.
+	 */
+	function aerospace_authors_list() {
+		if ( function_exists( 'coauthors_posts_links' ) ) {
+			$prefix = $authors = '';
+			foreach ( get_coauthors() as $coauthor ) :
+				$authors .= '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $prefix . $coauthor->display_name . '</a>';
+                $prefix = ', ';
+			endforeach;
+		} else {
+			$authors = the_author_posts_link();
+		}
+		echo '<div class="authors-list">' . $authors . '</div>';
+	}
+endif;
