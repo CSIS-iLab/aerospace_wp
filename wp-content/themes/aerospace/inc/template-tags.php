@@ -106,7 +106,7 @@ endif;
 
 if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
 	/**
-	 * Returns HTML with post format.
+	 * Check to see if post is featured.
 	 *
 	 * @param int $id Post ID.
 	 */
