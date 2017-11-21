@@ -2,7 +2,7 @@
 /**
  * Custom Post Types: Events
  *
- * @package aerospace
+ * @package Aerospace
  */
 
 /**

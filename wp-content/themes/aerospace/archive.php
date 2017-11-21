@@ -10,18 +10,23 @@
 get_header(); ?>
 
     <div id="primary" class="content-area">
-        <main id="main" class="site-main">
+        <main id="main" class="site-main content-wrapper">
+
+            <header class="page-header">
+                <?php
+                the_archive_title('<h1 class="page-title">', '</h1>');
+                the_archive_description('<div class="archive-description">', '</div>');
+                ?>
+                <div class="archive-pages-top row">
+                    <?php if (have_posts() ) : ?>
+                    <div class="col-xs-12 col-md-6">Page Numbers</div>
+                    <?php endif; ?>
+                    <div class="col-xs-12 col-md-6 text-right">Sort</div>
+                </div>
+            </header><!-- .page-header -->
 
     <?php
     if (have_posts() ) : ?>
-
-     <header class="page-header">
-        <?php
-        the_archive_title('<h1 class="page-title">', '</h1>');
-        the_archive_description('<div class="archive-description">', '</div>');
-        ?>
-     </header><!-- .page-header -->
-
         <?php
         /* Start the Loop */
         while ( have_posts() ) : the_post();
@@ -34,9 +39,12 @@ get_header(); ?>
             get_template_part('template-parts/content', get_post_format());
 
         endwhile;
-
-        the_posts_navigation();
-
+        ?>
+        <div class="archive-pages-top row">
+            <div class="col-xs-12 col-md-6 left-side">Page Numbers</div>
+            <div class="col-xs-12 col-md-6 text-right">Pagination</div>
+        </div>
+        <?php
         else :
 
             get_template_part('template-parts/content', 'none');
@@ -47,5 +55,4 @@ get_header(); ?>
     </div><!-- #primary -->
 
 <?php
-get_sidebar();
 get_footer();
