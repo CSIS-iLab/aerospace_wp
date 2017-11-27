@@ -90,6 +90,8 @@ function aerospace_shortcode_interactive( $atts ) {
 			'id' => '', // ID of Interactive Post
 			'width' => '', // Width of Interactive
 			'height' => '', // Height of Interactive,
+			'sharing' => true, // Include share component
+
 		),
 		$atts,
 		'interactive'
@@ -100,16 +102,46 @@ function aerospace_shortcode_interactive( $atts ) {
 	$iframeResizeDisabled = get_post_meta( $atts['id'], '_data_iframeResizeDisabled', true );
 	// Fallback Image
 	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallbackImgDisabled', true );
+
 	if(!$fallbackImgDisabled) {
 		$fallbackImg = get_the_post_thumbnail($atts['id'], 'full');
 	}
+
 	$title = get_the_title($atts['id']);
 	$sanitizedTitle = sanitize_title($title);
 	$URL = get_permalink()."#".$sanitizedTitle;
 	$heading = '<h2 class="interactive-heading" id="'.$sanitizedTitle.'">'.$title.'</h2>';
-	return $heading.aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg, $iframeResizeDisabled);
+
+	if($atts['sharing'] === true || $atts['sharing'] == 'true') {
+		$sharing = aerospace_social_share($title, $URL);
+	}
+
+	return $heading.aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg, $iframeResizeDisabled).$sharing;
 }
 add_shortcode( 'interactive', 'aerospace_shortcode_interactive' );
 
-
+/**
+ * Adds inline social sharing component to podcasts, stats, and interactives embedded in posts via shortcode
+ * @param  string $title Title to be used by social media
+ * @param  string $URL   URL to be used by social media
+ * @return string        HTML of share button
+ */
+function aerospace_social_share($title = "", $URL = "") {
+	$shareArgs = array(
+		'linkname' => $title,
+		'linkurl' => $URL
+	);
+	$output = '<div class="sharing-inline">';
+	$output .= '<button class="btn btn-gray sharing-openShareBtn">Share <i class="icon icon-share"></i></button>';
+	$output .= '<div class="sharing-shareBtns">';
+	$output .= '<div class="post-title">'.$title.'</div>';
+	ob_start();
+    ADDTOANY_SHARE_SAVE_KIT($shareArgs);
+    $output .= ob_get_contents();
+    ob_end_clean();
+    $output .= '<i class="icon icon-close-x"></i>';
+    $output .= '</div>';
+    $output .= '</div>';
+    return $output;
+}
  ?>

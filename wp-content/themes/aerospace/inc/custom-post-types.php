@@ -5,7 +5,7 @@
 *@package aerospace
 */
 
-/*----------  Podcasts  ----------*/
+/*----------  Aerospace101  ----------*/
 require get_template_directory() . '/inc/cpts/aerospace101.php';
 
 /*----------  Data  ----------*/

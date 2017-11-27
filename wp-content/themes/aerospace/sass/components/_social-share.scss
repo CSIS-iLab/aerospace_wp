@@ -4,90 +4,51 @@
 
 .addtoany_list {
 	line-height: inherit !important;
-	display: flex;
-	flex-grow: 1;
-
-	@include breakpoint("medium") {
-		display: block;
-		width: 100%;
-		border-top: 1px solid $gray;
-		padding-top: 0.5rem;
-		margin-top: 1.5rem;
-	}
 
 	a {
-		text-align: center;
-		flex-grow: 1;
-		box-shadow: none;
-
-		@include breakpoint("medium") {
-			width: unset;
-			text-align: left;
-			margin-right: 1rem;
-		}
-
-		&:hover .a2a_svg:before { 
-			color: $white;
-
-			@include breakpoint("medium") {
-				color: $secondary-blue;
-				@include transition(color .3s ease-in-out);
-			}
-		}
-
-		// Background Colors
-		&.a2a_button_facebook { background-color: $color__facebook; }
-		&.a2a_button_twitter { background-color: $color__twitter; }
-		&.a2a_button_linkedin { background-color: $color__linkedin; }
-		&.a2a_button_email { background-color: $color__email; }
-
-		@include breakpoint("medium") {
-			&.a2a_button_facebook,
-			&.a2a_button_twitter,
-			&.a2a_button_linkedin,
-			&.a2a_button_email {
-				background-color: transparent;
-			}
-		}
-	}
-
-	.a2a_button_copy_link {
-		display: none;
-
-		@include breakpoint("medium") {
-			display: inline;
-		}
+		margin-right: 0.75rem;
 	}
 
 	.a2a_svg {
 		background-color: transparent !important;
 
 		&:before {
-			font-family: 'poni';
+			font-family: 'aerospace';
 			color: $white;
 			line-height: 1;
 			display: inline-block;
-			vertical-align: bottom;
-
-			@include breakpoint("medium") {
-				color: $black;
-				vertical-align: middle;
-			}
+			vertical-align: middle;
 		}
 
 		/* Facebook */
 		&.a2a_s_facebook:before {
-			content: "\f30c";
+			content: "\f09a";
 		}
 
 		/* Twitter */
 		&.a2a_s_twitter:before {
-			content: "\f309";
+			content: "\f099";
 		}
 
 		/* LinkedIn */
 		&.a2a_s_linkedin:before {
-			content: "\f318";
+			content: "\f0e1";
+		}
+
+		/* Weibo */
+		&.a2a_s_sina_weibo:before {
+			content: "\e810";
+		}
+
+		/* WeChat */
+		&.a2a_s_wechat:before {
+			content: "\e80c";
+		}
+
+		/* Print */
+		&.a2a_s_print:before,
+		&.a2a_s_printfriendly:before {
+			content: "\e809";
 		}
 
 		/* Email */
@@ -109,103 +70,204 @@
 		line-height: inherit !important;
 		display: inline-block;
 		vertical-align: middle;
-		@include fontSize(19px);
-	}
-}
-
-/*----------  Share Container  ----------*/
-.share-container {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 50;
-	height: 36px;
-	@include box-shadow( 0, 2px, 4px, 0, rgba($black, 0.5));
-
-	@include breakpoint("medium") {
-		position: static;
-		height: unset;
-		box-shadow: none;
-	}
-
-	i {
-		color: $white;
 		@include fontSize(20px);
 	}
 
-	button {
-		padding: 0;
-		margin: 0;
-		line-height: 1.5;
-		text-transform: uppercase;
-		color: $off-white;
+	/* Divider between Email & Social */
+	.a2a_button_email {
+
+		&:before {
+			content: "|";
+			color: $color__background-share-divider;
+			margin-left: 0.75rem;
+			margin-right: 1.5rem;
+		}
+	}
+}
+
+.sharing-inline {
+	text-align: center;
+	margin: 0.5rem 0 2rem 0;
+
+	&.overlay-isActive {
+		position: absolute;
+		background-color: $dark-blue;
+		opacity: 0.95;
+		height: 0px;
+		left: 50%;
+		right: 50%;
+		margin-left: -50vw !important;
+		margin-right: -50vw !important;
+		padding-top: 3rem;
+
 	}
 
-	.share-open-container {
-		background-color: $primary-blue;
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
-		height: 100%;
-		left: 0;
-		opacity: 1;
-		visibility: visible;
-		position: static;
+	.sharing-openShareBtn {
+		margin: 0 auto;
 
-		@include breakpoint("medium") {
+		.icon {
+			color: $gray;
+			@include fontSize(10px);
+			margin-left: -2px;
+			margin-bottom: 2px !important;
+			vertical-align: middle;
+		}
+
+		&.isHidden {
 			display: none;
 		}
 	}
 
-	.to-top {
-		display: inline-block;
-		float: right;
-
-		&:hover { background-color: $primary-blue; }
-	}
-
-	.share-close-container {
-		opacity: 0;
+	.sharing-shareBtns {
+		background-color: $off-white;
+		text-align: left;
+		padding: 0.2rem 0.5rem;
+		border-radius: 2px;
+		width: 0;
 		visibility: hidden;
+		opacity: 0;
 		position: absolute;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background-color: $secondary-blue;
-		text-align: center;
 
-		@include breakpoint("medium") {
-			opacity: 1;
+		&.isVisible {
+			width: 100%;
 			visibility: visible;
-			position: static;
+			opacity: 1;
+			position: relative;
 			background-color: transparent;
-			text-align: left;
-		}
-
-		.share-close {
-			flex-grow: 1;
-			max-width: 20%;
+			@include transition(visibility 0s, position 0s);
 
 			@include breakpoint("medium") {
-				display: none;
+				width: 100%;
+				position: static;
+				@include transition(visibility 0s, position 0s, opacity 0.5s linear, width 0.2s ease-in);
+				background-color: $off-white;
 			}
 		}
-	}
 
-	.is-active {
-		display: flex;
-		opacity: 1;
-		visibility: visible;
-		left: 0;
-		transition-delay: 2s;
-		@include transition(visibility 0s, opacity 0.2s linear, left 0.3s ease-in);
-	}
+		.overlay-isActive & {
+			.post-title {
+				display: block;
+				@extend %post-title;
+				color: $white;
+				margin-bottom: 1rem;
+				text-align: center;
+				margin-bottom: 2rem;
+				padding: 0 2rem;
+			}
 
-	.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-		position: absolute;
-		left: -100%;
-		@include transition(visibility 0s, position 0s, opacity 0.5s linear, left 0.2s ease-in);
+			.icon-close-x {display: inline-block;}
+			.addtoany_list {
+				text-align: center;
+				box-sizing: border-box;
+			    display: -webkit-box;
+			    display: -ms-flexbox;
+			    display: flex;
+			    -webkit-box-flex: 0;
+			    -ms-flex: 0 1 auto;
+			    flex: 0 1 auto;
+			    -webkit-box-orient: horizontal;
+			    -webkit-box-direction: normal;
+			    -ms-flex-direction: row;
+			    flex-direction: row;
+			    -ms-flex-wrap: wrap;
+			    flex-wrap: wrap;
+			    position: relative;
+
+				a {
+					display: inline-block;
+					flex: 33%;
+					margin-bottom: 2rem;
+					margin-right: 0;
+
+					& > span {
+						@include fontSize(32px);
+
+						&:before {color: $white;}
+
+					}
+
+					&:hover {
+						box-shadow: none;
+					}
+
+					&:nth-of-type(5) {
+						flex: 66%;
+
+						span {
+							margin-left: calc(100% / -2);
+						}
+					}
+
+					&.a2a_button_email:before {
+						content: " ";
+						border-top: 1px solid $primary-blue;
+						position: absolute;
+						left: 1.5rem;
+						right: 0.5rem;
+						top: calc(100% / 1.7);
+					}
+
+					%label {
+						clip: unset;
+						color: $light-blue;
+						font-family: $font__Hind;
+						@include fontSize(14px);
+						line-height: 2.07;
+						bottom: 1rem;
+					}
+
+					&.a2a_button_email .a2a_label {
+						@extend %label;
+						left: calc(100% / 8);
+					}
+
+					&.a2a_button_print .a2a_label,
+					&.a2a_button_printfriendly .a2a_label
+					{
+						@extend %label;
+						left: calc(100% / 2.15);
+					}
+
+					&.a2a_button_copy_link .a2a_label {
+						@extend %label;
+						left: calc(100% / 1.32);
+					}
+				}
+			}
+		}
+		@include breakpoint("medium") {
+			.post-title {display: none;}
+			.addtoany_list {
+				display: inline-block;
+			}
+
+			.addtoany_list a > span {
+				@include fontSize(16px);
+			}
+
+			.addtoany_list a:hover {
+				box-shadow: none;
+			}
+
+			.a2a_svg:before {
+				color: $dark-gray;
+			}
+
+			.a2a_svg:hover:before {
+				color: red;
+			}
+
+			.icon-close-x {
+				float: right;
+				margin-top: 3px;
+				margin-left: 0;
+				margin-right: 5px;
+				color: $primary-blue;
+			    width: 16px;
+			    height: 16px;
+			    line-height: 16px;
+			    vertical-align: text-top;
+			}
+		}
 	}
 }
