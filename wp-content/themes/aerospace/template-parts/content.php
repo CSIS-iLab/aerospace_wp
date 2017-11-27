@@ -40,14 +40,14 @@
                     )
             ),
             get_the_title()
-        ) 
+        )
     );
 
     wp_link_pages(
         array(
                 'before' => '<div class="page-links">' . esc_html__('Pages:', 'aerospace'),
                 'after'  => '</div>',
-        ) 
+        )
     );
     ?>
     </div><!-- .entry-content -->
