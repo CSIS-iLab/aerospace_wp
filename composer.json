@@ -23,7 +23,6 @@
         "wpackagist-plugin/wordpress-seo": "*",
         "wpackagist-plugin/jetpack": "*",
         "wpackagist-plugin/search-by-algolia-instant-relevant-results": "*",
-        "wpackagist-plugin/regenerate-thumbnails": "*",
-        "wpackagist-plugin/search-filter": "*"
+        "wpackagist-plugin/regenerate-thumbnails": "*"
     }
 }
