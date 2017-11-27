@@ -2,6 +2,12 @@
 =            Footnotes            =
 =================================*/
 
+.entry-content {
+  .easy-footnotes-wrapper {
+    display: none;
+  }
+}
+
 .easy-footnotes-wrapper {
   counter-reset: item;
   margin: 0;
@@ -29,7 +35,7 @@
 
     a::after {
       content: counter(item);
-      counter-increment: item;   
+      counter-increment: item;
       @include fontSize(11px);
       line-height: 2.49;
       color: $secondary-blue;
