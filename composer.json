@@ -12,6 +12,7 @@
         "wp-coding-standards/wpcs": "*"
     },
     "require": {
+        "wpackagist-plugin/add-to-any": "*",
         "wpackagist-plugin/akismet": "*",
         "wpackagist-plugin/co-authors-plus": "*",
         "wpackagist-plugin/disable-comments": "*",
@@ -22,7 +23,6 @@
         "wpackagist-plugin/wordpress-seo": "*",
         "wpackagist-plugin/jetpack": "*",
         "wpackagist-plugin/search-by-algolia-instant-relevant-results": "*",
-        "wpackagist-plugin/regenerate-thumbnails": "*",
-        "wpackagist-plugin/search-filter": "*"
+        "wpackagist-plugin/regenerate-thumbnails": "*"
     }
 }

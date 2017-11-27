@@ -29,13 +29,19 @@ function post_build_meta_box( $post ) {
 	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
-  $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
-  $current_view_is_pdf = get_post_meta( $post->ID, '_post_view_is_pdf', true );
-	$current_view_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+    $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
+	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
 
 
 	?>
 	<div class='inside'>
+
+		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Yes, this post is featured
+		</p>
 
 		<h3><?php esc_html_e( 'Article Highlights', 'aerospace' ); ?></h3>
 		<p>
@@ -77,28 +83,22 @@ function post_build_meta_box( $post ) {
 				);
 			?>
 		</p>
-		<h3><?php esc_html_e( 'Post Format', 'aerospace' ); ?></h3>
-		<p>
-			<input type="radio" name="post_format" value="analysis" <?php checked( $current_post_format, 'analysis' ); ?> /> Analysis &nbsp;&nbsp;
-			<input type="radio" name="post_format" value="report" <?php checked( $current_post_format, 'report' ); ?> /> Report
-		</p>
-
 		<h3><?php esc_html_e( 'Download Report URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
 		</p>
-    
-    <h3><?php _e( 'View Report URL', 'aerospace' ); ?></h3>
-    <p>
-        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
-    </p>
-    <p>
-        <input type="checkbox" name="view_is_pdf" value="1" <?php checked( $current_view_is_pdf, '1' ); ?> /> Link is a PDF?
-    </p>
-    
-		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+
+	    <h3><?php esc_html_e( 'View Report URL', 'aerospace' ); ?></h3>
+	    <p>
+	        <input type="text" class="large-text" name="view_url" value="<?php echo $current_view_url; ?>" />
+	    </p>
+	    <h3><?php esc_html_e( 'Disable Excerpt & Highlights', 'aerospace' ); ?></h3>
 		<p>
-			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+			<input type="checkbox" name="disable_highlights" value="1" <?php checked( $current_disable_highlights, '1' ); ?> /> Yes, disable the excerpt and highlights
+		</p>
+		<h3><?php esc_html_e( 'Disable Feature Image', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="disable_feature_img" value="1" <?php checked( $current_disable_feature_img, '1' ); ?> /> Yes, disable the feature image
 		</p>
 	</div>
 	<?php
@@ -132,25 +132,31 @@ function post_save_meta_box_data( $post_id ) {
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
 	}
-  // Download URL
-  if ( isset( $_REQUEST['download_url'] ) ) {
-      update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
-  }
-  // View URL
-  if ( isset( $_REQUEST['view_url'] ) ) {
-      update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
-  }
-	// View URL is a PDF
-	if ( isset( $_REQUEST['view_is_pdf'] ) ) {
-		update_post_meta( $post_id, '_post_view_is_pdf', sanitize_text_field( $_POST['view_is_pdf'] ) );
+	// Download URL
+	if ( isset( $_REQUEST['download_url'] ) ) {
+	  update_post_meta( $post_id, '_post_download_url', esc_url( $_POST['download_url'] ) );
 	}
-	// View URL.
-	if ( isset( $_REQUEST['view_url'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_post_view_url', esc_url_raw( wp_unslash( $_POST['view_url'] ) ) ); // Input var okay.
+	// View URL
+	if ( isset( $_REQUEST['view_url'] ) ) {
+	  update_post_meta( $post_id, '_post_view_url', esc_url( $_POST['view_url'] ) );
 	}
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+	} else {
 		update_post_meta( $post_id, '_post_is_featured', '' );
+	}
+	// Disable Highlights.
+	if ( isset( $_REQUEST['disable_highlights'] ) ) {
+		update_post_meta( $post_id, '_post_disable_highlights', sanitize_text_field( $_POST['disable_highlights'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_disable_highlights', '' );
+	}
+	// Disable Feature Image.
+	if ( isset( $_REQUEST['disable_feature_img'] ) ) {
+		update_post_meta( $post_id, '_post_disable_feature_img', sanitize_text_field( $_POST['disable_feature_img'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_disable_feature_img', '' );
 	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );

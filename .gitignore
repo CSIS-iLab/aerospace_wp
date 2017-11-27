@@ -104,6 +104,8 @@ Thumbs.db
 # track these mu-plugins, plugins, and themes
 # add your own entries here
 !wp-content/plugins/aerospace-google-analytics.php
+!wp-content/plugins/aerospace-menu-item-custom-fields.php
+!wp-content/plugins/search-filter-pro
 !wp-content/themes/aerospace
 
 wp-content/themes/aerospace/.sass-cache

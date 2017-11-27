@@ -11,6 +11,7 @@ To install, run `composer install`.
 To update dependencies, run `composer update`.
 
 #### Required Plugins
+- Add to Any Share
 - Akismet
 - Disable Comments
 - Disable Emojis

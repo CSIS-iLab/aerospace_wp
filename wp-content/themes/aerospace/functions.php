@@ -153,6 +153,11 @@ add_action('wp_enqueue_scripts', 'aerospace_scripts');
 require get_template_directory() . '/inc/custom-header.php';
 
 /**
+ * Custom Nav Walker for Primary Menu
+ */
+require get_template_directory() . '/inc/aerospace-header-menu-walker.php';
+
+/**
  * Custom template tags for this theme.
  */
 require get_template_directory() . '/inc/template-tags.php';

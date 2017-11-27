@@ -93,6 +93,11 @@ function aerospace101_build_meta_box( $post ) {
 	?>
 
 	<div class='inside'>
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
+
 		<h3><?php esc_html_e( 'Sources', 'aerospace' ); ?></h3>
 		<p>
 			<?php
@@ -113,10 +118,7 @@ function aerospace101_build_meta_box( $post ) {
 			?>
 		</p>
 
-		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
-		</p>
+
 	</div>
 	<?php
 }
@@ -139,14 +141,17 @@ function aerospace101_save_meta_box_data( $post_id ) {
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-
+	
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_is_featured', '' );
+	}
 	// Sources.
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
 	}
-	// Is Featured?
-	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', '' );
-	}
+
 }
 add_action( 'save_post_aerospace101', 'aerospace101_save_meta_box_data' );
