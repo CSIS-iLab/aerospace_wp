@@ -24,6 +24,7 @@ add_shortcode( 'first', 'shortcode_first' );
  * @return string        HTML of share button
  */
  function shortcode_view( $atts ) {
+	 // Attributes
 	 $atts = shortcode_atts(
 		 	array(
 			 	'id' => null,
@@ -33,7 +34,22 @@ add_shortcode( 'first', 'shortcode_first' );
 	 );
 	 $post_title = get_the_title($atts['id']);
 	 $post_url = get_the_permalink($atts['id']);
-	 return "<div class='view-post'><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $post_title ) . "</a></div>";
+	 $post_type = ucwords(get_post_type($atts['id']));
+
+	 if (empty($post_title)) {
+	 	if ($post_type == 'Post') {
+	 		$post_title = '"Read"';
+	 	} elseif ($post_type == 'Data') {
+	 		$post_title = '"Learn"';
+	 	} elseif ($post_type == 'Aerospace101') {
+	 		$post_title = '"Interact"';
+	 	} elseif ($post_type == 'Events') {
+			$post_title = '"Watch"';
+		}
+	 }
+
+	 return "<div class='view-post' title='" . esc_attr( $post_title ) . "'><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $post_type ) . ": " . esc_attr( $post_title ) . "</a></div>";
+
 }
 add_shortcode( 'view', 'shortcode_view' );
 
@@ -94,5 +110,6 @@ function aerospace_shortcode_interactive( $atts ) {
 	return $heading.aerospace_data_display_iframe($interactiveURL, $width, $height, $fallbackImg, $iframeResizeDisabled);
 }
 add_shortcode( 'interactive', 'aerospace_shortcode_interactive' );
+
 
  ?>
