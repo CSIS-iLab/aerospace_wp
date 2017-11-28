@@ -10,26 +10,41 @@
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
-function aerospace_customize_register( $wp_customize ) 
+function aerospace_customize_register( $wp_customize )
 {
-    $wp_customize->get_setting('blogname')->transport         = 'postMessage';
-    $wp_customize->get_setting('blogdescription')->transport  = 'postMessage';
-    $wp_customize->get_setting('header_textcolor')->transport = 'postMessage';
+		$wp_customize->get_setting('blogname')->transport         = 'postMessage';
+		$wp_customize->get_setting('blogdescription')->transport  = 'postMessage';
+		$wp_customize->get_setting('header_textcolor')->transport = 'postMessage';
 
-    if (isset($wp_customize->selective_refresh) ) {
-        $wp_customize->selective_refresh->add_partial(
-            'blogname', array(
-            'selector'        => '.site-title a',
-            'render_callback' => 'aerospace_customize_partial_blogname',
-            ) 
-        );
-        $wp_customize->selective_refresh->add_partial(
-            'blogdescription', array(
-            'selector'        => '.site-description',
-            'render_callback' => 'aerospace_customize_partial_blogdescription',
-            ) 
-        );
-    }
+		// Home: Data Repo Description
+		$wp_customize->add_setting( 'hp-data' , array(
+			'transport' => 'postMessage',
+		) );
+		$wp_customize->add_control(
+			'hp-data',
+			array(
+				'label'    => __( 'Home: Data Repository Desc', 'aerospace' ),
+				'section'  => 'aerospace-theme-settings',
+				'settings' => 'hp-data',
+				'type'     => 'textarea'
+			)
+		);
+
+
+		if (isset($wp_customize->selective_refresh) ) {
+				$wp_customize->selective_refresh->add_partial(
+						'blogname', array(
+						'selector'        => '.site-title a',
+						'render_callback' => 'aerospace_customize_partial_blogname',
+						)
+				);
+				$wp_customize->selective_refresh->add_partial(
+						'blogdescription', array(
+						'selector'        => '.site-description',
+						'render_callback' => 'aerospace_customize_partial_blogdescription',
+						)
+				);
+		}
 }
 add_action('customize_register', 'aerospace_customize_register');
 
@@ -38,9 +53,9 @@ add_action('customize_register', 'aerospace_customize_register');
  *
  * @return void
  */
-function aerospace_customize_partial_blogname() 
+function aerospace_customize_partial_blogname()
 {
-    bloginfo('name');
+		bloginfo('name');
 }
 
 /**
@@ -48,16 +63,16 @@ function aerospace_customize_partial_blogname()
  *
  * @return void
  */
-function aerospace_customize_partial_blogdescription() 
+function aerospace_customize_partial_blogdescription()
 {
-    bloginfo('description');
+		bloginfo('description');
 }
 
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
-function aerospace_customize_preview_js() 
+function aerospace_customize_preview_js()
 {
-    wp_enqueue_script('aerospace-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), '20151215', true);
+		wp_enqueue_script('aerospace-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), '20151215', true);
 }
 add_action('customize_preview_init', 'aerospace_customize_preview_js');

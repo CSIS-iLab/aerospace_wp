@@ -15,7 +15,7 @@ if (! function_exists('aerospace_posted_on') ) :
     function aerospace_posted_on()
     {
         $time_string = '<span class="meta-label">Published</span><time class="entry-date published" datetime="%1$s">%2$s</time>';
-        
+
         $time_string = sprintf( $time_string,
             esc_attr( get_the_date( 'c' ) ),
             esc_html( get_the_date() )
@@ -32,7 +32,7 @@ if (! function_exists('aerospace_last_updated') ) :
     function aerospace_last_updated()
     {
         $time_string = '<span class="meta-label">Last Updated</span><time class="entry-date updated" datetime="%1$s">%2$s</time>';
-        
+
         $time_string = sprintf( $time_string,
             esc_attr( get_the_modified_date( 'c' ) ),
             esc_html( get_the_modified_date() )
@@ -148,7 +148,7 @@ if ( ! function_exists( 'aerospace_post_format' ) ) :
     function aerospace_post_format( $id ) {
         $post_type = get_post_type();
         if ( in_array( $post_type, array( 'post', 'events', 'aerospace101', 'data' ), true ) ) {
-            
+
             if ( 'post' === $post_type ) {
                 $post_types = get_the_terms( $id, 'post_types' );
                 if ( ! empty( $post_types ) && ! is_wp_error( $post_types ) ) {
@@ -210,7 +210,7 @@ if ( ! function_exists( 'aerospace_show_highlights' ) ) :
         $post_type = get_post_type();
         if ( 'post' === $post_type ) {
             $disable_highlights = get_post_meta( $id, '_post_disable_highlights', true );
-            
+
             if ( $disable_highlights ) {
                 return;
             }
@@ -549,7 +549,7 @@ if ( ! function_exists( 'aerospace_post_num' ) ) :
         // Current page.
         $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
         /* translators: 1: number of pages. */
-        printf( '<div class="pagination-totals">' . esc_html_x( '%2$s/%3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
+        printf( '<div class="pagination-totals">' . esc_html_x( 'Page %2$s/%3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
     }
 endif;
 
