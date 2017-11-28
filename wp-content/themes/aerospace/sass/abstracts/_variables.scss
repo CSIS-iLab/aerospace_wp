@@ -88,5 +88,15 @@ $size__header-bottom-height: 50px;
 $size__header-bottom-height-mobile: 60px;
 $size__homepage-block-height: 15rem;
 $size__homepage-block-height-2x: 31rem;
-$size__homepage-block-height-mobile: 10.3rem; 
+$size__homepage-block-height-mobile: 10.3rem;
+
+$size__header-height: 270px; 
 $size__footer-height: 314px;
+
+/*==============================
+=            Assets            =
+==============================*/
+
+$theme_folder: '/wp-content/themes/aerospace/';
+$img__header-bg: $theme_folder + 'img/header-background.png';
+
