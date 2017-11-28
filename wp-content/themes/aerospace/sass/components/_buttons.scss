@@ -5,7 +5,7 @@ input[type="submit"],
 .btn
 {
 	background-color: $color__background-button-blue;
-	font-family: $font__lato;
+	font-family: $font__abel;
 	@include fontSize(16px);
 	line-height: 1;
 	letter-spacing: 1px;

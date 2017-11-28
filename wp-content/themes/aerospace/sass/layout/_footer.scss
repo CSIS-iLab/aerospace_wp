@@ -20,7 +20,7 @@ footer.site-footer {
 			}
 
 			a {
-				color: $light-blue;
+				color: $white;
 				text-decoration: underline;
 
 				&:hover { color: $white; }
@@ -40,7 +40,7 @@ footer.site-footer {
 			}
 
 			a {
-				color: $light-blue;
+				color: $white;
 
 				&:hover { color: $white; }
 			}
@@ -54,7 +54,7 @@ footer.site-footer {
 				margin-right: 0.5rem;
 
 				a {
-					background-color: $yellow;
+					background-color: $orange;
 					border-radius: 50%;
 					text-align: center;
 			    padding: 1rem;
@@ -64,7 +64,7 @@ footer.site-footer {
 			    position: relative;
 			    color: $dark-blue;
 
-			    &:hover { background-color: $dark-yellow; }
+			    &:hover { background-color: $dark-orange; }
 				}
 
 				i {
@@ -84,20 +84,19 @@ footer.site-footer {
 		}
 
 		.section-title {
-			@extend %archive-content-type;
 			color: $white;
 			margin: 0 0 0.5rem 0;
 		}
 
 		.footer-subtitle {
 			@extend %footer-text;
-			color: $yellow;
+			color: $orange;
 			margin: 0;
 		}
 
 		p {
 			@extend %footer-text;
-			color: $light-blue;
+			color: $secondary-blue;
 			margin-bottom: 1.5rem;
 		}
 

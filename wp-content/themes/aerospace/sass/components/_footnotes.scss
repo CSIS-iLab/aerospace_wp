@@ -9,7 +9,7 @@
   list-style:none;
 
   li {
-    font-family: $font__ptsans;
+    font-family: $font__source;
     @include fontSize(16px);
     line-height: 1.71;
     color: $dark-gray;

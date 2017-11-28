@@ -2,31 +2,28 @@
 =            Colors            =
 ==============================*/
 $black: #000;
-$off-black: #333;
+$dark-gray: #4a4a4a;
 $white: #fff;
-$off-white: #f5f5f2;
-$primary-blue: #235d94;
-$secondary-blue: #3873ab;
-$dark-blue: #163553;
-$medium-blue: #6e9dca;
-$light-blue: #cbdce5;
-$dark-gray: #6d6d6d;
-$gray: #c7c6c4;
-$light-gray: #dedede;
-$yellow: #f1c161;
-$dark-yellow: #d19827;
+$off-white: #f2f2f2;
+$dark-blue: #18384f;
+$secondary-blue: #196c94;
+$primary-blue: #185271;
 $orange: #d66e42;
+$dark-orange: #b25b36;
+$gray: #8c8c8c;
+$blue-gray: #b5bdc1;
+$dark-blue-gray: #5b6d76;
 
 $color__background-body: $white;
 $color__background-screen: $white;
-$color__background-hr: $light-gray;
+$color__background-hr: $blue-gray;
 $color__background-hr-stat-home: #dbd9d7;
 $color__navigation-border: #dfdfdf;
 $color__background-button-gray: #d6d6d6;
 $color__background-button-blue: $primary-blue;
-$color__background-button-blue-hover: $medium-blue;
-$color__background-button-yellow: $yellow;
-$color__background-button-yellow-hover: $dark-yellow;
+$color__background-button-blue-hover: $primary-blue;
+$color__background-button-yellow: $orange;
+$color__background-button-yellow-hover: $dark-orange;
 $color__background-pre: #eee;
 $color__background-ins: #fff9c0;
 $color__background-tooltip: rgba(0,0,0,0.8);
@@ -58,24 +55,21 @@ $color__border-abbr: #666;
 $color__facebook: #3b5998;
 $color__twitter: #00aced;
 $color__linkedin: #0077b5;
-$color__email: $yellow;
+$color__email: $orange;
 
 /*==================================
 =            Typography            =
 ==================================*/
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700|PT+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600,600i,700,700i|Abel');
 
-$font__Roboto: 'Roboto', sans-serif;
-$font__Hind: 'Hind', sans-serif;
-
-$font__lato: 'Lato', sans-serif;
-$font__ptsans: 'PT Sans', sans-serif;
+$font__abel: 'Abel', sans-serif;
+$font__source: "Source Sans Pro", sans-serif;
 
 
-$font__main: $font__ptsans;
+$font__main: $font__source;
 $font__code: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
 $font__pre: "Courier 10 Pitch", Courier, monospace;
-$font__line-height-body: 1.5;
+$font__line-height-body: 1.67;
 $font__line-height-pre: 1.6;
 
 

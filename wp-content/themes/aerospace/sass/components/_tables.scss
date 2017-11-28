@@ -3,7 +3,7 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 	overflow-x: scroll;
-	font-family: $font__lato;
+	font-family: $font__abel;
 
 	thead {
 		border: 1px solid $dark-blue;
@@ -47,9 +47,9 @@ table {
 	}
 
 	td {
-		border: 1px solid $light-gray;
+		border: 1px solid $blue-gray;
 		letter-spacing: 0.5px;
-		font-family: $font__lato;
+		font-family: $font__abel;
 		@include fontSize(16px);
 	}
 
