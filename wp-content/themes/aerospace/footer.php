@@ -21,7 +21,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
 
     <footer id="colophon" class="site-footer">
         <div class="site-info content-wrapper row">
-            <div class="footer-info col-xs-12 col-md-9">
+            <div class="footer-info col-xs-12 col-md-8">
                 CSIS Logo
                 <?php
                 if ( $description ) {
@@ -39,7 +39,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                     ?>
                 </ul>
             </div>
-            <div class="footer-newsletters col-xs-12 col-md-3">
+            <div class="footer-newsletters col-xs-12 col-md-4">
                 <?php
                 if ( $newsletter_url && $newsletter_desc ) {
                     echo '<h6 class="section-title">' .  esc_html( 'Subscribe', 'nuclearnetwork' ) . '</h6>';

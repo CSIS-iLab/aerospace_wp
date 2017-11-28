@@ -4,22 +4,32 @@ input[type="reset"],
 input[type="submit"],
 .btn
 {
+	display: inline-block;
 	background-color: $color__background-button-blue;
 	font-family: $font__abel;
 	@include fontSize(16px);
 	line-height: 1;
-	letter-spacing: 1px;
-	padding: 0.4rem 0.5rem;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
+	padding: 0.5rem 1rem;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	border: 0;
 	color: $white;
-	box-shadow: none !important;
 
 	&:hover { background-color: $color__background-button-blue-hover; }
 }
 
 .btn {
+	&.btn-sm {
+		@include fontSize(14px);
+		letter-spacing: 0.5px;
+	}
+
+	&.btn-lg {
+		@include fontSize(18px);
+	}
+
 	&.btn-blue {
 		background-color: $color__background-button-blue;
 
@@ -28,10 +38,14 @@ input[type="submit"],
 		}
 	}
 
-	&.btn-yellow {
-		background-color: $color__background-button-yellow;
+	&.btn-orange {
+		background-color: $color__background-button-orange;
+		color: $white;
 
-		&:hover { background-color: $color__background-button-yellow-hover; }
+		&:hover {
+			background-color: $color__background-button-orange-hover;
+			color: $white; 
+		}
 	}
 
 	&.btn-transparent {
@@ -39,5 +53,15 @@ input[type="submit"],
 		margin: 0;
 
 		&:hover { background-color: transparent; }
+	}
+
+	&.btn-gray {
+		background-color: $color__background-button-gray;
+		color: $black;
+
+		&:hover {
+			background-color: $color__background-button-gray-hover;
+			color: $white;
+		}
 	}
 }
