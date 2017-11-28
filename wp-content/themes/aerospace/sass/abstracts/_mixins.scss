@@ -122,24 +122,10 @@ $breakpoint-xsmall: 25em;
 
 
 //Header Animation 
-@mixin animation($name, $direction) {
-    
-    transform-origin: 50% 50%;
-    animation: $name .5s ease-in 0s both 1 $direction;
-    @-moz-document url-prefix() {
-        transform-origin: 50px 50px;
-    }
-    -webkit-transform-origin: 50px 50px;
-   
-}
-
-@mixin animationrev($name, $direction) {
-
-    transform-origin: 50% 50%;
-    animation: $name .5s ease-out .3s both 1 $direction;
-    @-moz-document url-prefix() {
-        transform-origin: 50px 50px;
-    }
-      -webkit-transform-origin: 50px 50px;
-  
+@function multiple-box-shadow ($n) {
+  $value: "#{random(2000)}px #{random(2000)}px #eee";
+  @for $i from 2 through $n {
+    $value: "#{$value} , #{random(2000)}px #{random(2000)}px #eee";
+  }
+  @return unquote($value);
 }

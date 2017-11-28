@@ -26,7 +26,7 @@ body {
 	@include box-shadow(0, 4px, 2px, -2px, rgba($black, 0.5));
 
 	@include breakpoint("medium") {
-		margin-top: $size__header-top-height + $size__header-bottom-height;
+		margin-top: $size__header-height;
 		overflow-x: hidden;
 	}
 

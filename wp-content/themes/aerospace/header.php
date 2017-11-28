@@ -25,6 +25,9 @@
     <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'aerospace'); ?></a>
 
     <header id="masthead" class="site-header">
+        <div class="stars1"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
         <div class="content-wrapper row">
             <div class="col-xs-12 site-branding">
                 <?php the_custom_logo(); ?>

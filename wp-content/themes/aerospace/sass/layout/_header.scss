@@ -8,6 +8,11 @@
     top: 0;
     left: 0;
     right: 0;
+    height: $size__header-height;
+    background-image: url($img__header-bg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
     background-color: $dark-blue;
 
     /*----------  Branding  ----------*/
@@ -16,14 +21,74 @@
         text-align: center;
 
         img {
-            max-width: 540px;
+            max-height: 110px;
         }
 
         .site-description {
             @extend .body-small;
             color: $light-gray;
-            margin: 1rem 0 0;
+            margin: 0.5rem 0 0;
         }
+    }
+
+    /*----------  Stars  ----------*/
+    $stars1: multiple-box-shadow(500);
+    $stars2: multiple-box-shadow(400);
+    $stars3: multiple-box-shadow(300);
+
+    .stars1 {
+      width: 1px;
+      height: 1px;
+      background: transparent;
+      box-shadow: $stars1;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: animStar1 750s linear infinite;
+    }
+    .stars2 {
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      box-shadow: $stars2;
+      border-radius: 50%;
+      animation: animStar2 750s linear infinite;
+      opacity: 0.5;
+    }
+    .stars3 {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: $stars3;
+      opacity: 0.5;
+      animation: animStar3 650s linear infinite;
+    }
+
+    @keyframes animStar1 {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2000px);
+      }
+    }
+
+    @keyframes animStar2 {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2000px);
+      }
+    }
+
+    @keyframes animStar3 {
+      from {
+        transform: translateY(0px) translateX(0px);
+      }
+      to {
+        transform: translateY(-2000px) translateX(2000px);
+      }
     }
 }
 
@@ -69,7 +134,7 @@
         left: 0;
         right: 0;
         background-color: $secondary-blue;
-        margin-top: 0.75rem;
+        margin-top: 0.7rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
 
@@ -140,5 +205,13 @@
                 margin: 0 0 0 1.5rem;
             }
         }
+    }
+}
+
+.admin-bar .site-header {
+    top: 46px;
+
+    @include breakpoint("medium") {
+        top: 32px;
     }
 }
