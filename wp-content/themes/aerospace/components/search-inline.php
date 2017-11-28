@@ -7,6 +7,7 @@
 
 ?>
 <form role="search" method="get" class="header-search-form" action="<?php echo esc_attr( home_url( '/' ) ); ?>">
+	<div class="search-overlay is-hidden"></div>
 	<input type="search" class="search-field is-hidden" id="header-search"
 		placeholder="<?php echo esc_attr_x( 'Search …', 'placeholder' ); ?>"
 		value="<?php echo get_search_query(); ?>" name="s"
@@ -14,6 +15,6 @@
 	<label for="header-search">
 		<span class="screen-reader-text"><?php echo esc_attr_x( 'Search for:', 'label' ); ?></span>
 		<span class="search-label"><i class="icon-search"></i></span>
-		<span class="search-label search-close is-hidden"><i class="icon-close"></i></span>
+		<span class="search-label search-close is-hidden"><i class="icon-close"></i>Close</span>
 	</label>
 </form>

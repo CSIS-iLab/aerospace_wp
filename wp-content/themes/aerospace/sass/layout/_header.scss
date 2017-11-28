@@ -16,13 +16,13 @@
     background-color: $dark-blue;
     @include transition(height .25s linear);
 
-    & > .row {
-        height: 100%;
+    .header-bottom {
+        position: relative;
     }
 
     /*----------  Branding  ----------*/
     .site-branding {
-        margin: 3rem auto 2rem auto;
+        margin: 3rem auto 1.5rem auto;
         text-align: center;
 
         img {
@@ -39,11 +39,9 @@
             display: none;
             a {
                 display: block;
-                padding-bottom: 0.5rem;
             }
-
             img {
-                max-height: 20px;
+                display: block;
             }
         }
     }
@@ -84,17 +82,23 @@
     &.is-minimal {
         height: $size__header-sm-height;
         background-image: none;
-        padding-top: 1rem;
         @include transition(height .25s linear);
 
-        .site-branding,
-        .header-social-container,
+        .header-top,
         .stars {
             display: none;
         }
 
+        .header-bottom {
+            height: 100%;
+        }
+
         .site-branding-minimal {
             display: inline-block;
+        }
+
+        .main-navigation .nav-menu {
+            justify-content: space-around;
         }
     }
 
@@ -178,7 +182,6 @@
     .nav-menu li {
         position: relative;
         margin-bottom: 0;
-        padding-bottom: 1rem;
 
         & > a {
             font-family: $font__source;
@@ -191,6 +194,7 @@
         }
 
         &:hover {
+            margin-bottom: -1rem;
             .submenu-container { display: flex; }
         }
     }
@@ -274,6 +278,9 @@
         }
     }
 }
+
+/*----------  Search  ----------*/
+@import 'components/header-search';
 
 .admin-bar .site-header {
     top: 46px;
