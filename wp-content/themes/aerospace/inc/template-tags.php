@@ -247,6 +247,21 @@ if ( ! function_exists( 'aerospace_post_sources' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'aerospace_post_footnotes' ) ) :
+    /**
+     * Returns HTML with post footnotes if they exist.
+     *
+     */
+    function aerospace_post_footnotes() {
+        global $footnoteCopy;
+        $post_type = get_post_type();
+        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && $footnoteCopy != '' ) {
+            
+            printf( '<div class="entry-footnotes col-xs-12 col-md"><h4>' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
+        }
+    }
+endif;
+
 if ( ! function_exists( 'aerospace_report_download' ) ) :
     /**
      * Returns HTML with download & view report links.
