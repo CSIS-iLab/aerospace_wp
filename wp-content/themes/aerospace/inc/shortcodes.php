@@ -109,8 +109,8 @@ function aerospace_shortcode_interactive( $atts ) {
 		$fallbackImg = get_the_post_thumbnail($atts['id'], 'full');
 	}
 
-	$post = get_post($atts['id']);
-	$title = $post->post_title;
+	$post = get_post_meta($atts['id']);
+	$title = $post['_data_title'][0];
 	$sanitizedTitle = sanitize_title($title);
 	$URL = get_permalink()."#".$sanitizedTitle;
 	$heading = '<h2 class="interactive-heading" id="'.$sanitizedTitle.'">'.$title.'</h2>';
