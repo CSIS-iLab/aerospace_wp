@@ -21,11 +21,35 @@ if ( 1 == $is_featured ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
 
     <?php
+
+    the_content(
+        sprintf(
+            wp_kses(
+                /* translators: %s: Name of current post. Only visible to screen readers */
+                    __('Continue reading<span class="screen-reader-text"> "%s"</span>', 'aerospace'),
+                array(
+                        'span' => array(
+                            'class' => array(),
+                        ),
+                    )
+            ),
+            get_the_title()
+        )
+    );
+
+    wp_link_pages(
+        array(
+                'before' => '<div class="page-links">' . esc_html__('Pages:', 'aerospace'),
+                'after'  => '</div>',
+        )
+    );
+
     if ( has_post_thumbnail() ) {
         echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
         the_post_thumbnail( 'medium_large' );
         echo '</a></div>';
     }
+  
     ?>
     <div class="col-xs-12 col-md card-main">
         <header class="entry-header">

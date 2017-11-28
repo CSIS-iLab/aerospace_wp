@@ -181,7 +181,7 @@ function data_save_meta_box_data( $post_id ){
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	
+
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
 		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
@@ -293,3 +293,33 @@ function aerospace_data_column( $colname, $cptid ) {
 	}
 }
 add_action( 'manage_data_posts_custom_column', 'aerospace_data_column', 10, 2 );
+
+
+/*----------  Display iFrame  ----------*/
+/**
+ * Displays the specified interactive in an iframe
+ * @param  String  $interactiveURL       URL to the interactive
+ * @param  String  $width                Width of the iframe, can be in px or %
+ * @param  String  $height               Height of the iframe, can be in px or %
+ * @param  String  $fallbackImg          Featured image thumbnail img tag string
+ * @param  boolean $iframeResizeDisabled Indicate if iframe should automatically resize based on content height
+ * @return String                        HTML of the iframe
+ */
+function aerospace_interactive_display_iframe($interactiveURL, $width, $height, $fallbackImg = null, $iframeResizeDisabled = false) {
+	if(empty($width)) {
+		$width = "100%";
+	}
+	if($height) {
+		$heightValue = 'height="'.$height.'"';
+	}
+	if($fallbackImg) {
+		$fallbackImg = '<div class="interactive-fallbackImg">'.$fallbackImg.'<p>For best experience, please view on a desktop computer.</p></div>';
+	}
+	if($iframeResizeDisabled) {
+		$enabledClass = "";
+	}
+	else {
+		$enabledClass = " js-iframeResizeEnabled";
+	}
+	return $fallbackImg.'<iframe class="interactive-iframe'.$enabledClass.'" width="'.$width.'" '.$heightValue.' scrolling="no" frameborder="no" src="'.$interactiveURL.'"></iframe>';
+}
