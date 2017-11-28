@@ -8,12 +8,17 @@
     top: 0;
     left: 0;
     right: 0;
-    height: $size__header-height;
+    height: $size__header-lg-height;
     background-image: url($img__header-bg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
     background-color: $dark-blue;
+    @include transition(height .25s linear);
+
+    & > .row {
+        height: 100%;
+    }
 
     /*----------  Branding  ----------*/
     .site-branding {
@@ -28,6 +33,18 @@
             @extend .body-small;
             color: $light-gray;
             margin: 0.5rem 0 0;
+        }
+
+        &-minimal {
+            display: none;
+            a {
+                display: block;
+                padding-bottom: 0.5rem;
+            }
+
+            img {
+                max-height: 20px;
+            }
         }
     }
 
@@ -60,6 +77,24 @@
             text-transform: uppercase;
             color: $blue-gray;
             &:hover { color: $white; }
+        }
+    }
+
+    /*----------  Minimal  ----------*/
+    &.is-minimal {
+        height: $size__header-sm-height;
+        background-image: none;
+        padding-top: 1rem;
+        @include transition(height .25s linear);
+
+        .site-branding,
+        .header-social-container,
+        .stars {
+            display: none;
+        }
+
+        .site-branding-minimal {
+            display: inline-block;
         }
     }
 
@@ -166,7 +201,7 @@
         left: 0;
         right: 0;
         background-color: $secondary-blue;
-        margin-top: 0.7rem;
+        margin-top: 0.5rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
 
