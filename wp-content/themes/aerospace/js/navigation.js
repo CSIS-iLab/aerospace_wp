@@ -5,7 +5,7 @@
  * navigation support for dropdown menus.
  */
 ( function () {
-    var container, button, menu, links, i, len;
+    var container, button, menu, overlay, links, i, len;
 
     container = document.getElementById('site-navigation');
     if (! container ) {
@@ -18,6 +18,11 @@
     }
 
     menu = container.getElementsByTagName('ul')[0];
+
+    overlay = document.getElementById('site-overlay');
+    if (! overlay ) {
+        return;
+    }
 
     // Hide menu toggle button if menu is empty and return early.
     if ('undefined' === typeof menu ) {
@@ -33,10 +38,14 @@
     button.onclick = function () {
         if (-1 !== container.className.indexOf('toggled') ) {
             container.className = container.className.replace(' toggled', '');
+            document.body.className = document.body.className.replace(' toggled', '');
+            overlay.className = overlay.className.replace(' toggled', '');
             button.setAttribute('aria-expanded', 'false');
             menu.setAttribute('aria-expanded', 'false');
         } else {
             container.className += ' toggled';
+            overlay.className += ' toggled';
+            document.body.className += ' toggled';
             button.setAttribute('aria-expanded', 'true');
             menu.setAttribute('aria-expanded', 'true');
         }

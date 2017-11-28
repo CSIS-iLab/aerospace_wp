@@ -11,8 +11,20 @@ html {
 body {
 	background: $color__background-body; /* Fallback for when there is no custom background color defined. */
 
-	@include breakpoint("xsmall") {
-		&.toggled { position: fixed; }
+	&.toggled {
+		& > .site {
+			left: 80vw;
+
+			@include breakpoint("medium") {
+				left: unset;
+			}
+		}
+	}
+
+	.site {
+		position: relative;
+		left: 0;
+		@include transition(left 0.5s ease-in);
 	}
 }
 
@@ -20,7 +32,7 @@ body {
 	position: relative;
 	z-index: 1;
 	overflow-x: hidden;
-	margin-top: $size__header-bottom-height-mobile;
+	margin-top: $size__header-mobile-height;
 	margin-bottom: $size__footer-height;
 	background: $color__background-body;
 	@include box-shadow(0, 4px, 2px, -2px, rgba($black, 0.5));
@@ -58,5 +70,27 @@ body {
 		&.row {
 			margin: 0 auto;
 		}
+	}
+}
+
+#site-overlay {
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: -20vw;
+	z-index: 5;
+	width: 120vw;
+	height: 100vh;
+	background-color: $black;
+	opacity: 0;
+	@include transition(visibility 0s, opacity 0.5s ease-in);
+
+	@include breakpoint("medium") {
+		display: none;
+	}
+
+	&.toggled {
+		visibility: visible;
+		opacity: 0.5;
 	}
 }

@@ -17,15 +17,15 @@ class Aerospace_Menu extends Walker_Nav_Menu {
             $permalink = get_the_permalink($post->ID);
             $thumbnail = get_the_post_thumbnail($post->ID);
 
-            $featured_post_html = '<div class="row"><div class="col-xs-12 col-md-4 post-thumbnail"><a href="' . esc_url ( $permalink ) . '">' . $thumbnail . '</a></div><div class="col-xs-12 col-md-8"><p class="post-desc">' . $menu_featured_post_description . '</p><a href="' . esc_url ( $permalink ) . '" class="post-title">' . $title . '</a></div></div>';  
+            $featured_post_html = '<div class="row"><div class="col-md-4 post-thumbnail"><a href="' . esc_url ( $permalink ) . '">' . $thumbnail . '</a></div><div class="col-md-8"><p class="post-desc">' . $menu_featured_post_description . '</p><a href="' . esc_url ( $permalink ) . '" class="post-title">' . $title . '</a></div></div>';  
         }
 
         $indent = str_repeat("\t", $depth);
         $output .= "\n$indent<div class='submenu-container row'>
-            <div class='col-xs-12 col-md-4 submenu-parent'>
+            <div class='hidden-xs col-md-4 submenu-parent'>
             " . $args->parent_title . "
             </div>\n
-            <div class='col-xs-12 col-md-4 submenu-featured-post'>
+            <div class='hidden-xs col-md-4 submenu-featured-post'>
                 " . $featured_post_html . "
             </div>\n
             <div class='col-xs-12 col-md-4 submenu-children'>\n
@@ -60,7 +60,7 @@ class Aerospace_Menu extends Walker_Nav_Menu {
         $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
         $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
         $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
-        $output .= $indent . '<li>';
+        $output .= $indent . '<li' . $id . $class_names . '>';
         $attributes  = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
         $attributes .= ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
         $attributes .= ! empty( $item->xfn )        ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
