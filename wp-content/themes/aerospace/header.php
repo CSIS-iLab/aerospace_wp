@@ -29,10 +29,10 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
     <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'aerospace'); ?></a>
 
     <header id="masthead" class="site-header">
-        <div class="stars1"></div>
-        <div class="stars2"></div>
-        <div class="stars3"></div>
-        <div class="content-wrapper row">
+        <div class="stars stars1"></div>
+        <div class="stars stars2"></div>
+        <div class="stars stars3"></div>
+        <div class="content-wrapper row flex-center__y">
             <div class="col-xs-12 header-social-container">
                 <ul class="header-social">
                     <?php
@@ -49,7 +49,6 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 </ul>
             </div>
             <div class="col-xs-12 site-branding">
-                <?php the_custom_logo(); ?>
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/logo-large-dark.svg" alt="<?php bloginfo('name'); ?>" title="<?php bloginfo('name'); ?>" />
                 </a>
@@ -59,7 +58,12 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
                 <?php endif; ?>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2 site-branding-minimal">
+                <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                    <img src="<?php echo get_template_directory_uri(); ?>/img/logo-small-dark.svg" alt="<?php bloginfo('name'); ?>" title="<?php bloginfo('name'); ?>" />
+                </a>
+            </div>
+            <div class="col-xs-12 col-md">
                 <nav id="site-navigation" class="main-navigation">
                     <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Primary Menu', 'aerospace'); ?></button>
                     <?php
