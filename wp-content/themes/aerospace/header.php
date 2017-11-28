@@ -9,6 +9,10 @@
  * @package Aerospace
  */
 
+$email = get_option( 'aerospace_email' );
+$twitter = get_option( 'aerospace_twitter' );
+$newsletter_url = get_option( 'aerospace_newsletter_url' );
+
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -29,6 +33,21 @@
         <div class="stars2"></div>
         <div class="stars3"></div>
         <div class="content-wrapper row">
+            <div class="col-xs-12 header-social-container">
+                <ul class="header-social">
+                    <?php
+                    if ( $twitter ) {
+                        echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
+                    }
+                    if ( $email ) {
+                        echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Email</a></li>';
+                    }
+                    if ( $newsletter_url ) {
+                        echo '<li><a href="' . esc_attr( $newsletter_url ) . '" class="header-subscribe">' . esc_html( 'Subscribe', 'nuclearnetwork' ) . '</a></li>';
+                    }
+                    ?>
+                </ul>
+            </div>
             <div class="col-xs-12 site-branding">
                 <?php the_custom_logo(); ?>
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
