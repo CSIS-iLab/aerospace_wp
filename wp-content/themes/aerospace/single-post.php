@@ -59,10 +59,7 @@ get_header(); ?>
 							</div>
 						</section>
 						<section class="footer-middle row">
-							<div class="entry-footnotes col-xs-12 col-md-6">
-								Footnotes
-								<?php echo '<div class="easy-footnote-title"><h4>'.esc_html($efLabel).'</h4></div><ol class="easy-footnotes-wrapper">'.$footnoteCopy.'</ol>' ?>
-							</div>
+							<?php aerospace_post_footnotes(); ?>
 							<?php aerospace_post_sources( $post->ID ); ?>
 						</section>
 						<section class="authors-container">
