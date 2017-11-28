@@ -28,8 +28,6 @@
         $(parent).children(".search-overlay").toggleClass("is-hidden");
         $(parent).find(".search-label").toggleClass("is-hidden");
         $(parent).toggleClass("is-active");
-        $(".main-navigation .apply").toggleClass("is-shifted");
-        $("body").toggleClass("toggled");
 
         // Focus
         // $(parent).children(".search-field").focus();
@@ -37,18 +35,4 @@
             $(parent).children(".search-field").focus();
         });
     });
-
-    $(".menu-toggle").on("click", function() {
-        if ($(".header-search-form").hasClass("is-active")) {
-            $(".header-search-form").removeClass("is-active");
-            $(".header-search-form .search-field").addClass("is-hidden");
-            $(".main-navigation .apply").removeClass("is-shifted");
-        }
-    });
-
-
-
-
-
-
 })(jQuery);
