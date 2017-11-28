@@ -33,12 +33,12 @@ body {
 	z-index: 1;
 	overflow-x: hidden;
 	margin-top: $size__header-mobile-height;
-	margin-bottom: $size__footer-height;
 	background: $color__background-body;
-	@include box-shadow(0, 4px, 2px, -2px, rgba($black, 0.5));
+	@include box-shadow(0, 5px, 8px, -1px, rgba($black, 0.5));
 
 	@include breakpoint("medium") {
 		margin-top: $size__header-lg-height;
+		margin-bottom: $size__footer-height;
 		overflow-x: hidden;
 	}
 

@@ -21,8 +21,10 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
 
     <footer id="colophon" class="site-footer">
         <div class="site-info content-wrapper row">
+            <div class="footer-logo col-xs-12">
+                <a href="https://csis.org" target="_blank"><img src="<?php echo get_template_directory_uri(); ?>/img/CSIS-footer-logo.svg" alt="Center for Strategic and International Studies" title="Center for Strategic and International Studies" /></a>
+            </div>
             <div class="footer-info col-xs-12 col-md-8">
-                CSIS Logo
                 <?php
                 if ( $description ) {
                     echo '<p>' . wp_kses_post( $description ) . '</p>';
@@ -31,10 +33,10 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <ul class="footer-social">
                     <?php
                     if ( $twitter ) {
-                        echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i> @' . esc_attr( $twitter ) . '</a></li>';
+                        echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i>@' . esc_attr( $twitter ) . '</a></li>';
                     }
                     if ( $email ) {
-                        echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">' . esc_html( $email ) . '</a></li>';
+                        echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '"><i class="icon-mail"></i>' . esc_html( $email ) . '</a></li>';
                     }
                     ?>
                 </ul>

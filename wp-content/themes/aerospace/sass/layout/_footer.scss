@@ -2,19 +2,38 @@
 =            Footer            =
 ==============================*/
 
-footer.site-footer {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
+.site-footer {
+	position: relative;
 	z-index: -1;
-	height: $size__footer-height;
+	background-image: url($img__footer-bg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
 	background-color: $dark-blue;
-	margin-top: 3rem;
+
+	@include breakpoint("medium") {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: $size__footer-height;
+	}
 
 	.site-info {
-		padding: 2rem 0.5rem 0;
+		padding: 3rem 0.5rem 0;
 		color: $white;
+	}
+
+	// CSIS Logo
+	.footer-logo {
+		margin-bottom: 1rem;
+		img {
+			display: block;
+
+			@include breakpoint("medium") {
+				max-width: 45%;
+			}
+		}
 	}
 
 	// Description & Disclaimer
@@ -23,13 +42,15 @@ footer.site-footer {
 			padding-right: 3rem;
 		}
 
-		img {
-			margin-bottom: 1.5rem;
+		a {
+			color: $blue-gray;
+			&:hover { color: $white; }
 		}
 
-		a {
-			color: $gray;
-			&:hover { color: $white; }
+		p {
+			@include fontSize(16px);
+			line-height: 1.5;
+			margin-bottom: 1rem;
 		}
 	}
 
@@ -39,28 +60,13 @@ footer.site-footer {
 		padding: 0;
 	}
 	.footer-social li {
-		display: inline-block;
-		margin-right: 0.5rem;
-
-		a {
-			background-color: $orange;
-			border-radius: 50%;
-			text-align: center;
-		    padding: 1rem;
-		    position: relative;
-		    display: inline-block;
-		    vertical-align: middle;
-		    position: relative;
-		    color: $dark-blue;
-
-	    	&:hover { background-color: $dark-orange; }
-		}
+		margin-bottom: 0.25rem;
 
 		i {
-			position: absolute;
-		    left: 50%;
-		    top: 50%;
-		    transform: translate(-50%, -50%);
+			@include fontSize(20px);
+			margin-right: 0.75rem;
+			vertical-align: middle;
+			color: $white;
 		}
 	}
 
@@ -80,6 +86,11 @@ footer.site-footer {
 	.newsletter-desc {
 		@extend %body-small-gray;
 		margin-bottom: 0;
+	}
+
+	.btn {
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
 	}
 
 	.footer-copyright {
