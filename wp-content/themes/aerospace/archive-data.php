@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying archive pages
+ * Archive: Data
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
