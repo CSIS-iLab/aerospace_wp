@@ -60,26 +60,41 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
             </div>
         </div>
         <div class="content-wrapper row flex-center__y header-bottom">
-            <div class="col-xs-12 col-md-2 site-branding-minimal">
+            <div class="col-xs-8 col-md-2 site-branding-minimal">
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/logo-small-dark.svg" alt="<?php bloginfo('name'); ?>" title="<?php bloginfo('name'); ?>" />
                 </a>
             </div>
-            <div class="col-xs-12 col-md nav-container">
+            <div class="col-xs-2 col-md nav-container">
                 <nav id="site-navigation" class="main-navigation">
-                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Primary Menu', 'aerospace'); ?></button>
-                    <?php
-                        wp_nav_menu(
-                            array(
-                            'theme_location' => 'menu-1',
-                            'menu_id'        => 'primary-menu',
-                            'walker' => new Aerospace_Menu()
-                            ) 
-                        );
-                    ?>
+                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Menu', 'aerospace'); ?></button>
+                    <div class="nav-items-container">
+                        <?php
+                            wp_nav_menu(
+                                array(
+                                'theme_location' => 'menu-1',
+                                'menu_id'        => 'primary-menu',
+                                'walker' => new Aerospace_Menu()
+                                ) 
+                            );
+                        ?>
+                        <ul class="header-social">
+                            <?php
+                            if ( $twitter ) {
+                                echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
+                            }
+                            if ( $email ) {
+                                echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Email</a></li>';
+                            }
+                            if ( $newsletter_url ) {
+                                echo '<li><a href="' . esc_attr( $newsletter_url ) . '" class="header-subscribe">' . esc_html( 'Subscribe', 'nuclearnetwork' ) . '</a></li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
                 </nav><!-- #site-navigation -->
             </div>
-            <div class="col-xs-12 col-md-6 search-container">
+            <div class="col-xs-2 col-md-6 search-container">
                 <?php get_template_part( 'components/search-inline' ); ?>
             </div>
         </div><!-- .site-branding -->

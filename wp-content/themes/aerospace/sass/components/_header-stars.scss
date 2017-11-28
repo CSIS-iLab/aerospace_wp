@@ -1,0 +1,71 @@
+/*=====================================
+=            Header: Stars            =
+=====================================*/
+
+.site-header {
+	$stars1: multiple-box-shadow(500);
+    $stars2: multiple-box-shadow(400);
+    $stars3: multiple-box-shadow(300);
+
+    .stars {
+    	display: none;
+    	@include breakpoint("medium") {
+    		display: block;
+    	}
+    }
+
+    .stars1 {
+      width: 1px;
+      height: 1px;
+      background: transparent;
+      box-shadow: $stars1;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: animStar1 750s linear infinite;
+    }
+    .stars2 {
+      width: 2px;
+      height: 2px;
+      background: transparent;
+      box-shadow: $stars2;
+      border-radius: 50%;
+      animation: animStar2 750s linear infinite;
+      opacity: 0.5;
+    }
+    .stars3 {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: $stars3;
+      opacity: 0.5;
+      animation: animStar3 650s linear infinite;
+    }
+
+    @keyframes animStar1 {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2000px);
+      }
+    }
+
+    @keyframes animStar2 {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2000px);
+      }
+    }
+
+    @keyframes animStar3 {
+      from {
+        transform: translateY(0px) translateX(0px);
+      }
+      to {
+        transform: translateY(-2000px) translateX(2000px);
+      }
+    }
+}

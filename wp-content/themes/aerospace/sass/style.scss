@@ -53,6 +53,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 # Layout
 	## Header
 	## Footer
+  ## Navigation
 	## Posts and Pages
 	## Widgets
 # Pages
@@ -109,6 +110,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 @import
   'layout/header',
   'layout/footer',
+  'layout/navigation',
   'layout/widgets';
 
 /*----------  Pages  ----------*/

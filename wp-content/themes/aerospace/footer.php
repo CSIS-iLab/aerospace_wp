@@ -53,6 +53,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
             </div>
         </div><!-- .site-info -->
     </footer><!-- #colophon -->
+    <div id="site-overlay"></div>
 </div><!-- #page -->
 
 <?php wp_footer(); ?>
