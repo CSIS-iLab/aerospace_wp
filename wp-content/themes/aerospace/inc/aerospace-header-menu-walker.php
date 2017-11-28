@@ -17,19 +17,18 @@ class Aerospace_Menu extends Walker_Nav_Menu {
             $permalink = get_the_permalink($post->ID);
             $thumbnail = get_the_post_thumbnail($post->ID);
 
-            $featured_post_html = '<div class="row"><div class="col-xs-12 col-md-3 submenu-featured-post-thumbnail">' . $thumbnail . '</div><div class="col-xs-12 col-md-9 submenu-featured-post-content"><h2><a href="' . esc_url ( $permalink ) . '">' . $title . '</a></h2></div></div>';  
+            $featured_post_html = '<div class="row"><div class="col-xs-12 col-md-4 post-thumbnail"><a href="' . esc_url ( $permalink ) . '">' . $thumbnail . '</a></div><div class="col-xs-12 col-md-8"><p class="post-desc">' . $menu_featured_post_description . '</p><a href="' . esc_url ( $permalink ) . '" class="post-title">' . $title . '</a></div></div>';  
         }
 
         $indent = str_repeat("\t", $depth);
         $output .= "\n$indent<div class='submenu-container row'>
-            <div class='col-xs-12 col-md-3 submenu-parent'>
+            <div class='col-xs-12 col-md-4 submenu-parent'>
             " . $args->parent_title . "
             </div>\n
-            <div class='col-xs-12 col-md-6 submenu-featured-post'>
-                <p class='submenu-featured-post-desc'>" . $menu_featured_post_description . "</p>
+            <div class='col-xs-12 col-md-4 submenu-featured-post'>
                 " . $featured_post_html . "
             </div>\n
-            <div class='col-xs-12 col-md-3 submenu-children'>\n
+            <div class='col-xs-12 col-md-4 submenu-children'>\n
                 <ul class='sub-menu'>\n";
     }
 

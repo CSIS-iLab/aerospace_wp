@@ -2,6 +2,31 @@
 =            Header            =
 ==============================*/
 
+.site-header {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $dark-blue;
+
+    /*----------  Branding  ----------*/
+    .site-branding {
+        margin: 3rem auto 2rem auto;
+        text-align: center;
+
+        img {
+            max-width: 540px;
+        }
+
+        .site-description {
+            @extend .body-small;
+            color: $light-gray;
+            margin: 1rem 0 0;
+        }
+    }
+}
+
 .main-navigation {
 
     .menu-toggle {
@@ -10,20 +35,110 @@
         }
     }
 
-    ul {
+    .nav-menu {
         display: flex;
         list-style: none;
         margin: 0;
         padding: 0;
+        justify-content: space-between;
     }
 
-    li {
+    .nav-menu li {
+        position: relative;
+        margin-bottom: 0;
+        padding-bottom: 1rem;
+
+        & > a {
+            font-family: $font__source;
+            @include fontSize(18px);
+            line-height: 1;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: $white;
+        }
+
         &:hover {
-            .submenu-container { display: block; }
+            .submenu-container { display: flex; }
         }
     }
 
     .submenu-container {
         display: none;
+        position: fixed;
+        left: 0;
+        right: 0;
+        background-color: $secondary-blue;
+        margin-top: 0.75rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        .submenu-parent,
+        .submenu-featured-post,
+        .submenu-children {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .submenu-parent {
+            font-family: $font__source;
+            @include fontSize(30px);
+            line-height: 1;
+            color: $white;
+            text-transform: uppercase;
+            border-right: 1px solid $blue-gray;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .submenu-featured-post {
+            order: 3;
+
+            .post-desc {
+                font-family: $font__abel;
+                @include fontSize(16px);
+                line-height: 1;
+                color: $blue-gray;
+                margin: 0 0 0.5rem 0;
+
+                &::after {
+                    content: " \02014"
+                }
+            }
+
+            .post-title {
+                font-family: $font__source;
+                @include fontSize(22px);
+                line-height: 1;
+                color: $white;
+            }
+        }
+
+        .submenu-children {
+            order: 2;
+
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            li {
+                margin-bottom: 1.5rem;
+                &:hover {
+                    .submenu-desc { color: $white; }
+                }
+            }
+
+            a {
+                text-transform: none;
+            }
+
+            .submenu-desc {
+                @include fontSize(16px);
+                color: $blue-gray;
+                margin: 0 0 0 1.5rem;
+            }
+        }
     }
 }

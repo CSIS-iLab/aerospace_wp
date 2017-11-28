@@ -28,7 +28,9 @@
         <div class="content-wrapper row">
             <div class="col-xs-12 site-branding">
                 <?php the_custom_logo(); ?>
-                <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a>
+                <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                    <img src="<?php echo get_template_directory_uri(); ?>/img/logo-large-dark.svg" alt="<?php bloginfo('name'); ?>" title="<?php bloginfo('name'); ?>" />
+                </a>
                 <?php
                 $description = get_bloginfo('description', 'display');
                 if ($description || is_customize_preview() ) : ?>
@@ -50,7 +52,7 @@
                 </nav><!-- #site-navigation -->
             </div>
             <div class="col-xs-12 col-md-6 search-container">
-                <?php get_template_part( 'components/search-inline' ); ?>
+                <?php get_template_part( 'search-inline' ); ?>
             </div>
         </div><!-- .site-branding -->
     </header><!-- #masthead -->
