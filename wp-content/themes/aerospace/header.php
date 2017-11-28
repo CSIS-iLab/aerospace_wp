@@ -40,7 +40,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                         echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
                     }
                     if ( $email ) {
-                        echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Email</a></li>';
+                        echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '"><i class="icon-mail"></i></a></li>';
                     }
                     if ( $newsletter_url ) {
                         echo '<li><a href="' . esc_attr( $newsletter_url ) . '" class="header-subscribe">' . esc_html( 'Subscribe', 'nuclearnetwork' ) . '</a></li>';
@@ -84,7 +84,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                                 echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
                             }
                             if ( $email ) {
-                                echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Email</a></li>';
+                                echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '"><i class="icon-mail"></i></a></li>';
                             }
                             if ( $newsletter_url ) {
                                 echo '<li><a href="' . esc_attr( $newsletter_url ) . '" class="header-subscribe">' . esc_html( 'Subscribe', 'nuclearnetwork' ) . '</a></li>';

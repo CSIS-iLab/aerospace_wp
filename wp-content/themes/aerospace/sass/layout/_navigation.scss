@@ -116,7 +116,7 @@
         	pointer-events: none;
 
         	@include breakpoint("medium") {
-        		pointer-events: normal;
+        		pointer-events: auto;
         	}
         }
     }
@@ -220,6 +220,7 @@
             .submenu-desc {
             	display: none;
             	@include breakpoint("medium") {
+                    display: block;
 	                @include fontSize(16px);
 	                color: $blue-gray;
 	                margin: 0 0 0 1.5rem;
