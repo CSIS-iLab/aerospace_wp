@@ -28,27 +28,29 @@ add_shortcode( 'first', 'shortcode_first' );
 	 $atts = shortcode_atts(
 		 	array(
 			 	'id' => null,
+				'title' => null,
 		 	),
 			$atts,
 			'view'
 	 );
+	 $title = $atts['title'];
 	 $post_title = get_the_title($atts['id']);
 	 $post_url = get_the_permalink($atts['id']);
 	 $post_type = ucwords(get_post_type($atts['id']));
 
-	 if (empty($post_title)) {
+	 if (empty($title)) {
 	 	if ($post_type == 'Post') {
-	 		$post_title = '"Read"';
+	 		$title = 'Read';
 	 	} elseif ($post_type == 'Data') {
-	 		$post_title = '"Learn"';
+	 		$title = 'Learn';
 	 	} elseif ($post_type == 'Aerospace101') {
-	 		$post_title = '"Interact"';
+	 		$title = 'Interact';
 	 	} elseif ($post_type == 'Events') {
-			$post_title = '"Watch"';
+			$title = 'Watch';
 		}
 	 }
 
-	 return "<div class='view-post' title='" . esc_attr( $post_title ) . "'><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $post_type ) . ": " . esc_attr( $post_title ) . "</a></div>";
+	 return "<div class='view-post' ><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $title ) . " " . esc_attr( $post_title ) . "</a></div>";
 
 }
 add_shortcode( 'view', 'shortcode_view' );
@@ -107,7 +109,8 @@ function aerospace_shortcode_interactive( $atts ) {
 		$fallbackImg = get_the_post_thumbnail($atts['id'], 'full');
 	}
 
-	$title = get_the_title($atts['id']);
+	$post = get_post($atts['id']);
+	$title = $post->post_title;
 	$sanitizedTitle = sanitize_title($title);
 	$URL = get_permalink()."#".$sanitizedTitle;
 	$heading = '<h2 class="interactive-heading" id="'.$sanitizedTitle.'">'.$title.'</h2>';
