@@ -1,0 +1,74 @@
+/*=====================================
+=            Header Search            =
+=====================================*/
+
+.site-header .search-container {
+    text-align: right;
+
+    .search-overlay {
+        position: absolute;
+        z-index: 10;
+        background-color: $primary-blue;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: calc(100% + 0.7rem);
+        visibility: visible;
+    	@include transition(visibility 0s, opacity .5s cubic-bezier(.33,0,.2,1));
+
+        &::before,
+        &::after {
+        	content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 100vw;
+            height: 100%;
+            background-color: $primary-blue;
+        }
+
+        &::before {
+            right: calc(100% - 1px);
+        }
+
+        &::after {
+		    left: calc(100% - 1px);
+        }
+    }
+
+    .search-field {
+    	position: absolute;
+    	left: 0;
+    	z-index: 20;
+    	margin: 0.4rem 0 0 0;
+    	background-color: transparent;
+    	border: 0;
+    	color: $white;
+    	width: 80%;
+    	opacity: 1;
+    	visibility: visible;
+    	@include transition(visibility 0s, opacity .5s cubic-bezier(.33,0,.2,1));
+    }
+
+    .search-label {
+    	position: relative;
+    	z-index: 20;
+    }
+
+    .search-close {
+    	display: inline-block;
+    	&.is-hidden {
+    		display: none;
+    	}
+    }
+
+    .is-hidden {
+    	visibility: hidden;
+    	opacity: 0;
+    	@include transition(visibility 0s, opacity .5s cubic-bezier(.33,0,.2,1));
+    }
+}
+
+.is-minimal .search-container .search-overlay {
+	height: 100%;
+}
