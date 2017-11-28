@@ -10,12 +10,17 @@
         position: absolute;
         z-index: 10;
         background-color: $primary-blue;
-        top: 0;
+        top: $size__header-mobile-height;
         left: 0;
         right: 0;
-        height: calc(100% + 0.7rem);
+        height: 100%;
         visibility: visible;
     	@include transition(visibility 0s, opacity .5s cubic-bezier(.33,0,.2,1));
+
+        @include breakpoint("medium") {
+            top: 0;
+            height: calc(100% + 0.7rem);
+        }
 
         &::before,
         &::after {
@@ -39,7 +44,8 @@
 
     .search-field {
     	position: absolute;
-    	left: 0;
+        top: $size__header-mobile-height;
+    	left: 1rem;
     	z-index: 20;
     	margin: 0.4rem 0 0 0;
     	background-color: transparent;
@@ -49,15 +55,38 @@
     	opacity: 1;
     	visibility: visible;
     	@include transition(visibility 0s, opacity .5s cubic-bezier(.33,0,.2,1));
+
+        @include breakpoint("medium") {
+            top: unset;
+            right: unset;
+        }
     }
 
     .search-label {
     	position: relative;
     	z-index: 20;
+
+        &.is-hidden {
+            visibility: visible;
+            opacity: 1;
+            @include breakpoint("medium") {
+                display: none;
+            }
+        }
     }
 
     .search-close {
     	display: inline-block;
+        position: absolute;
+        top: $size__header-mobile-height;
+        right: 1rem;
+
+        @include breakpoint("medium") {
+            position: relative;
+            top: unset;
+            right: unset;
+        }
+
     	&.is-hidden {
     		display: none;
     	}

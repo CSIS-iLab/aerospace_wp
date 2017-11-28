@@ -51,6 +51,16 @@
         }
     };
 
+    overlay.onclick = function() {
+        if ( container.className.indexOf('toggled') ) {
+            container.className = container.className.replace(' toggled', '');
+            document.body.className = document.body.className.replace(' toggled', '');
+            overlay.className = overlay.className.replace(' toggled', '');
+            button.setAttribute('aria-expanded', 'false');
+            menu.setAttribute('aria-expanded', 'false');
+        }
+    }
+
     // Get all the link elements within the menu.
     links    = menu.getElementsByTagName('a');
 
