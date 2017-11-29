@@ -43,7 +43,7 @@ if ( ! function_exists( 'aerospace_register_buttons' ) ) {
 	 * @return Array          Updated buttons array.
 	 */
 	function aerospace_register_buttons( $buttons ) {
-        array_push( $buttons, 'first', 'fullWidth' );
+        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view' );
         return $buttons;
 	}
 }
