@@ -3,6 +3,109 @@
 =============================*/
 
 .single {
+    .site-content {
+        background-color: $off-white;
+        &.is-minimal {
+            margin-top: 0;
+        }
+    }
+
+    .site-main {
+        background-color: $white;
+        padding: 1.5rem;
+
+        @include breakpoint("medium") {
+            margin-top: 1rem;
+            padding: 3rem;
+        }
+    }
+
+    .entry-meta-top,
+    .title-container {
+        border-bottom: 3px solid $dark-blue;
+        padding-left: 0;
+        padding-right: 0;
+
+        @include breakpoint("small") {
+            @include contentWidth($size__content-max-width-sm, 2rem);
+        }
+
+        @include breakpoint("medium") {
+            @include contentWidth($size__content-max-width-md, 2rem);
+        }
+
+        @include breakpoint("large") {
+            @include contentWidth($size__content-max-width-lg, 4rem);
+        }
+    }
+
+    .entry-meta-top {
+        position: relative;
+        flex-wrap: nowrap;
+        margin: 0;
+
+        @include breakpoint("medium") {
+            &::after {
+                content: "";
+                position: absolute;
+                top: -1rem;
+                right: 33%;
+                height: 100%;
+                width: 3px;
+                background-color: $blue-gray;
+            }
+        }
+    }
+
+    .title-container {
+        margin-bottom: 2rem;
+
+        .entry-title {
+            @extend %post-title;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+
+            @include breakpoint("small") {
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                padding-left: 0rem;
+                padding-right: 0rem;
+            }
+        }
+
+        .entry-meta-bottom {
+            border-top: 2px solid $blue-gray;
+            padding: 0.2rem 0.5rem;
+
+            @include breakpoint("small") {
+                padding-left: 0rem;
+                padding-right: 0rem;
+            }
+        }
+    }
+
+    .post-format-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        background-color: $dark-blue;
+        color: $white;
+        flex: 1 0 auto;
+        max-width: fit-content;
+        margin-right: 1rem;
+
+        .post-format {
+            padding: 0.2rem 1.5rem 0;
+            color: $white;
+        }
+    }
+
+    .posted-on {
+        margin-right: 2rem;
+    }
 
 }
 

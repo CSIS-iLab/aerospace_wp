@@ -49,9 +49,14 @@ textarea {
 
 %post-title {
 	font-family: $font__abel;
-	@include fontSize(40px);
-	line-height: 1.2;
+	@include fontSize(30px);
+	line-height: 1.27;
 	color: $black;
+
+	@include breakpoint("medium") {
+		@include fontSize(40px);
+		line-height: 1.2;
+	}
 }
 
 %subheading-lg {
@@ -90,24 +95,22 @@ textarea {
 %content-type {
 	font-family: $font__abel;
 	@include fontSize(16px);
-	font-weight: bold;
-	line-height: 1.5;
-	letter-spacing: 1.1px;
+	line-height: 1.59;
+	letter-spacing: 1px;
 	color: $primary-blue;
-
-	@include breakpoint("medium") {
-		line-height: 1.9;
-	}
 }
 
-%post-meta {
-	font-family: $font__source;
+%post-meta-label {
+	font-family: $font__abel;
 	@include fontSize(14px);
-	line-height: 1.33;
+	line-height: 1.81;
+	letter-spacing: 0.9px;
+}
 
-	@include breakpoint("medium") {
-		@include fontSize(15px);
-	}
+%post-meta-content {
+	font-family: $font__source;
+	@include fontSize(16px);
+	line-height: 1.65;
 }
 
 %form-label {

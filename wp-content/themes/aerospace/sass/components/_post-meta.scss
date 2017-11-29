@@ -4,76 +4,33 @@
 
 /*----------  Meta Labels  ----------*/
 .meta-label {
-  @extend %post-meta;
-  font-style: italic;
-  color: $dark-gray;
+  @extend %post-meta-label;
+  text-transform: uppercase;
+  color: $gray;
+  display: inline-block;
+  margin-right: 0.5rem;
 }
 
 .meta-content {
-	@extend %post-meta;
+	@extend %post-meta-content;
+	color: $black;
 }
 
 /*----------  Post Format/Content Type  ----------*/
 .post-format {
   @extend %content-type;
   text-transform: uppercase;
-  margin-bottom: 1rem;
-
-  @include breakpoint("medium") {
-  	margin-bottom: 1.5rem;
-  }
-
-  .featured {
-  	display: inline-block;
-  	margin-right: 1rem;
-  	color: $primary-blue;
-  	font-weight: bold;
-  	text-transform: uppercase;
-  	letter-spacing: 1.1;
-  }
-
-  .nextgen {
-  	position: relative;
-  	z-index: 5;
-  	display: block;
-  	color: $primary-blue;
-  	font-weight: bold;
-  	text-transform: none;
-  	letter-spacing: 0.5px;
-
-  	@include breakpoint("medium") {
-	  	display: inline-block;
-	  	margin-left: 0.5rem;
-
-	  	&::before {
-	  		content: "/";
-	  		margin-right: 0.5rem;
-	  	}
-	}
-  }
-
-  .article-card & {
-  	font-weight: 300;
-  	line-height: 1.34;
-  	letter-spacing: 1.6px;
-  	color: $black;
-  }
 }
 
 /*----------  Authors List  ----------*/
 .authors-list {
-	@include breakpoint("medium") {
-		margin-bottom: 1rem;
-	}
+	display: inline-block;
+	margin: 0;
 
 	a {
 		color: $black;
 
 		&:hover { color: $secondary-blue; }
-	}
-
-	.article-card & {
-		margin-bottom: 0;
 	}
 
 	.entry-author {
@@ -85,7 +42,7 @@
 		}
 
 		.author-title {
-			@extend %post-meta;
+			@extend %post-meta-label;
 		  font-style: italic;
 		  color: $dark-gray;
 			display: none;
@@ -171,52 +128,9 @@
 
 /*----------  Posted On  ----------*/
 .posted-on {
-	@extend %post-meta;
+	@extend .meta-content;
+	display: inline-block;
 	margin-bottom: 0;
-
-	@include breakpoint("medium") {
-		margin-bottom: 1rem;
-	}
-
-	.meta-label { 
-		display: inline-block;
-		margin-right: 0.5rem;
-
-		@include breakpoint("medium") {
-			display: block;
-			margin-right: 0;
-		} 
-	}
-
-	time:first-of-type::after {
-			content: "";
-			display: block;
-			height: 1;
-
-			@include breakpoint("medium") {
-				display: none;
-			}
-	}
-
-	span:nth-of-type(2) {
-
-		@include breakpoint("medium") {
-			margin-top: 1rem;
-		}
-	}
-
-	.article-card & {
-		margin-bottom: 0;
-		.meta-label {
-			display: inline-block;
-			margin-right: 0.5rem;
-		}
-
-		span:nth-of-type(2),
-		time:nth-of-type(2) {
-			display: none;
-		}
-	}
 }
 
 /*----------  Categories  ----------*/
@@ -230,7 +144,7 @@
 	}
 
 	li {
-		@extend %post-meta;
+		@extend %content-type;
 		display: inline;
 
 		&::after {
@@ -272,7 +186,7 @@
 
 /*----------  Location  ----------*/
 .post-location {
-	@extend %post-meta;
+	@extend %post-meta-label;
 	margin-bottom: 0;
 
 	@include breakpoint("medium") {
@@ -291,7 +205,7 @@
 .post-opportunity-deadline,
 .post-publication-date,
 .resource-authors {
-	@extend %post-meta;
+	@extend %post-meta-label;
 	margin-bottom: 0;
 
 	@include breakpoint("medium") {
@@ -322,7 +236,7 @@
 /*----------  Report  ----------*/
 .post-report {
 	margin-bottom: 1.5rem;
-	@extend %post-meta;
+	@extend %post-meta-label;
 
 	p {
 		margin-bottom: 0;

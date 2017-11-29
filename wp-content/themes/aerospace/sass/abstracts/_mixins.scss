@@ -32,8 +32,8 @@ $browser-context: 16px;
 // Breakpoints
 $breakpoint-xlarge: 90em;
 $breakpoint-large: 62em;
-$breakpoing-medium: 48em;
-$breakpoing-small: 36em;
+$breakpoint-medium: 48em;
+$breakpoint-small: 36em;
 $breakpoint-xsmall: 25em;
 
 @mixin breakpoint($break) {
@@ -48,12 +48,12 @@ $breakpoint-xsmall: 25em;
         }
     }
     @else if $break==medium {
-        @media screen and (min-width: $breakpoing-medium) {
+        @media screen and (min-width: $breakpoint-medium) {
             @content;
         }
     }
     @else if $break==small {
-        @media screen and (min-width: $breakpoing-small) {
+        @media screen and (min-width: $breakpoint-small) {
             @content;
         }
     }
@@ -128,4 +128,13 @@ $breakpoint-xsmall: 25em;
     $value: "#{$value} , #{random(2000)}px #{random(2000)}px #eee";
   }
   @return unquote($value);
+}
+
+// Maximum content width & padding
+@mixin contentWidth($width, $padding) {
+    $half-padding: calc(#{$padding} / 2);
+    padding-left: $half-padding;
+    padding-right: $half-padding;
+    max-width: calc(#{$width} + #{$padding});
+    margin: 0 auto;
 }

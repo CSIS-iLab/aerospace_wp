@@ -162,7 +162,7 @@ if ( ! function_exists( 'aerospace_post_format' ) ) :
                 $post_format = $obj->labels->name;
             }
             if ( $post_format ) {
-                printf( '<p class="post-format">' . esc_html( '%2$s' ) . esc_html( '%1$s' ) . esc_html( '%3$s' ) . '</p>', $post_format, $is_featured, $is_nextgen ); // WPCS: XSS OK.
+                printf( '<div class="post-format">' . esc_html( '%2$s' ) . esc_html( '%1$s' ) . esc_html( '%3$s' ) . '</div>', $post_format, $is_featured, $is_nextgen ); // WPCS: XSS OK.
             }
         }
     }
