@@ -12,11 +12,11 @@
 
     .site-main {
         background-color: $white;
-        padding: 1.5rem;
+        padding: 1.5rem 1.5rem 0 1.5rem;
 
         @include breakpoint("medium") {
             margin-top: 1rem;
-            padding: 3rem;
+            padding: 3rem 3rem 0 3rem;
         }
     }
 

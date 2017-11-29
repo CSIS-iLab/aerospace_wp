@@ -190,3 +190,25 @@ $breakpoint-xsmall: 25em;
         margin-#{$margin}: calc(-#{$size__post-body-padding-lg} / 2);
     }
 }
+
+// Extend Background to full width of window
+@mixin fullWidthBackground ( $background ) {
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100%;
+        background-color: $background;
+    }
+
+    &::before {
+        right: calc(100% - 1px);
+    }
+
+    &::after {
+        left: calc(100% - 1px);
+    }
+}

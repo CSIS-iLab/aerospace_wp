@@ -2,20 +2,52 @@
 =            Related Content            =
 =======================================*/
 
-.post-related-container {
-	background-color: $off-white;
+.explore-more-container {
+	position: relative;
+	background-color: $dark-blue;
 	margin-top: 3rem;
 	padding-top: 2rem;
 	padding-bottom: 2rem;
+
+	@include fullWidthBackground($dark-blue);
 
 	@include breakpoint("medium") {
 		padding-top: 3rem;
 		padding-bottom: 3rem;
 	}
 
-	.related-header {
+	.subheading-lg {
+		@extend %subheading-lg;
+		color: $white;
 		text-transform: uppercase;
 		margin: 0 0 1.5rem;
+	}
+
+	.post-tags-container {
+		@extend %subheading;
+		color: $blue-gray;
+		display: inline;
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			max-width: -moz-fit-content;
+			max-width: fit-content;
+			display: inline-flex;
+			justify-content: space-between;
+		}
+
+		li {
+			max-width: -moz-fit-content;
+			max-width: fit-content;
+			padding: 0.2rem 0.5rem;
+			background-color: $color__background-keywords;
+		}
+
+		a {
+			color: $white;
+		}
 	}
 
 	.related-post {

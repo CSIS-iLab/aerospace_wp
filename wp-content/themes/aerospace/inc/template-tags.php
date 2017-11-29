@@ -70,7 +70,7 @@ if ( ! function_exists( 'aerospace_entry_tags' ) ) :
             $tags_list = get_the_tag_list( '<ul><li>','</li><li>','</li></ul>' );
             if ( $tags_list ) {
                 /* translators: 1: list of tags. */
-                printf( '<div class="post-tags-container col-xs-12">' . esc_html__( 'Related Topics %1$s', 'aerospace' ) . '</div>', $tags_list ); // WPCS: XSS OK.
+                printf( '<div class="post-tags-container col-xs-12">' . esc_html__( 'Related Keywords %1$s', 'aerospace' ) . '</div>', $tags_list ); // WPCS: XSS OK.
             }
         }
     }
