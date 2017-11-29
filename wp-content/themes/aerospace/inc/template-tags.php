@@ -123,10 +123,10 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
             $authors = '';
             foreach ( get_coauthors() as $coauthor ) :
                 $authors .= '<div class="entry-author row">
-                <div class="author-img col-xs-12 col-md-3">
+                <div class="author-img col-xs-4 col-sm-3 col-md-2">
                 ' . coauthors_get_avatar( $coauthor, 150 ) . '
                 </div>
-                <div class="author-bio col-xs-12 col-md">
+                <div class="author-bio col-xs">
                     <p> ' . $coauthor->description . '</p>
                     <div class="author-read-more">' . esc_html_x('More articles by', 'aerospace') . ' <a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $coauthor->display_name . '</a>
                     </div>

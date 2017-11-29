@@ -89,39 +89,41 @@
 	}
 }
 
-.authors-list-extended {
-	margin-bottom: 2rem;
-
-	@include breakpoint("medium") {
-		margin-bottom: 0;
+.authors-container {
+	.subheading-lg {
+		@extend %subheading-lg;
+		text-transform: uppercase;
+		margin: 0;
 	}
+}
+.authors-list-extended {
+	margin-top: 2rem;
+
 
 	.entry-author {
-		margin-bottom: 1.5rem;
+		margin-bottom: 2rem;
 	}
 
-	.section-header { 
-		text-transform: uppercase;
-		margin: 0 0 0.5rem 0; 
+	.author-read-more {
+		text-align: right;
+		font-family: $font__abel;
+		border-top: 1px solid $blue-gray;
+		margin-top: 1rem;
+		padding-top: 0.75rem;
+
+		@include breakpoint("medium") {
+			max-width: 60%;
+			margin-left: auto;
+			margin-right: 0;
+		}
 	}
 
 	a {
 		text-transform: none;
-		color: $secondary-blue;
-		font-weight: normal;
-	}
-
-	.author-title {
-		display: inline;
-		color: $dark-gray;
-
-		@include breakpoint("medium") {
-			display: none;
-		}
+		color: $orange;
 	}
 
 	p {
-		@extend .body-small;
 		margin-bottom: 0;
 	}
 }
