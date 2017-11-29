@@ -199,3 +199,8 @@ if (defined('JETPACK__VERSION') ) {
  * shortcodes
  */
 require get_template_directory() . '/inc/shortcodes.php';
+
+/**
+ * Register Custom TinyMCE Buttons
+ */
+require get_template_directory() . '/inc/custom-tinymce-buttons.php';
