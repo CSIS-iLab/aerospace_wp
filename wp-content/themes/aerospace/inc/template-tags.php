@@ -228,6 +228,27 @@ if ( ! function_exists( 'aerospace_show_highlights' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'aerospace_show_featured_img' ) ) :
+    /**
+     * Returns HTML with featured image and caption.
+     *
+     * @param  int $id Post ID.
+     */
+    function aerospace_show_featured_img() {
+        $post_type = get_post_type();
+        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() ) {
+            $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
+            if ( $caption ) {
+                $caption = '<figcaption class="caption">' . $caption . '</figcaption>';
+            }
+
+            printf( '<figure class="entry-thumbnail">
+            %1$s%2$s
+            </figure>', get_the_post_thumbnail(), $caption); // WPCS: XSS OK.
+        }
+    }
+endif;
+
 if ( ! function_exists( 'aerospace_post_sources' ) ) :
     /**
      * Returns HTML with source info if it exists.

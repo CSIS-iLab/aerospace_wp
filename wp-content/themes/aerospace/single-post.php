@@ -33,25 +33,26 @@ get_header(); ?>
 					</header><!-- .entry-header -->
 
 					<div class="entry-content">
-						Featured Image
+						<?php aerospace_show_featured_img(); ?>
 						<?php aerospace_post_highlighted_info( $post->ID ); ?>
-
-					<?php
-					the_content(
-							sprintf(
-									wp_kses(
-											/* translators: %s: Name of current post. Only visible to screen readers */
-													__('Continue reading<span class="screen-reader-text"> "%s"</span>', 'aerospace'),
-											array(
-															'span' => array(
-																	'class' => array(),
-															),
-													)
-									),
-									get_the_title()
-							)
-					);
-					?>
+						<div class="entry-content-post-body">
+							<?php
+							the_content(
+									sprintf(
+											wp_kses(
+													/* translators: %s: Name of current post. Only visible to screen readers */
+															__('Continue reading<span class="screen-reader-text"> "%s"</span>', 'aerospace'),
+													array(
+																	'span' => array(
+																			'class' => array(),
+																	),
+															)
+											),
+											get_the_title()
+									)
+							);
+							?>
+						</div>
 					</div><!-- .entry-content -->
 
 					<footer class="entry-footer">
