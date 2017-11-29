@@ -18,29 +18,20 @@ if ( 1 == $is_featured ) {
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
-				<?php
-				if ( has_post_thumbnail() ) {
-						echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
-						the_post_thumbnail( 'medium_large' );
-						echo '</a></div>';
-				}
-				?>
-					<header class="entry-header">
-							<?php aerospace_post_is_featured ( $post->ID ) ?>
-							<?php
-							the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
-							?>
-							<div class="entry-meta">
-									<?php aerospace_last_updated(); ?>
-									<?php aerospace_entry_data_categories(); ?>
-									<?php aerospace_entry_data_tags(); ?>
-							</div><!-- .entry-meta -->
-					</header><!-- .entry-header -->
-
-					<div class="entry-content">
-					<?php the_excerpt(); ?>
-					</div><!-- .entry-content -->
+<tr id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<td><?php
+					if ( has_post_thumbnail() ) {
+							echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
+							the_post_thumbnail( 'medium_large' );
+							echo '</a></div>';
+					}
+			?>
+	</td>
+	<td><?php the_title( '<span class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></span>'); ?></td>
+	<td><?php aerospace_last_updated(); ?></td>
+	<td><?php aerospace_entry_data_categories(); ?></td>
+	<td><?php aerospace_entry_data_tags(); ?></td>
+</tr>
 
 					<footer class="entry-footer">
 							<?php aerospace_post_format( $post->ID ); ?>

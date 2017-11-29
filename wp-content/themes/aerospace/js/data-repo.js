@@ -7,7 +7,7 @@
     	"info": false,
     	"lengthChange": false
     });
-    
+
     // Sort
     $(".tableSort").click(function() {
     	var col = $(this).attr("data-sortCol");

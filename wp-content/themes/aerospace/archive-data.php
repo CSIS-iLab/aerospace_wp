@@ -22,7 +22,6 @@ get_header(); ?>
 										<div class="col-xs-12 col-md-6">
 												<?php aerospace_post_num(); ?>
 										</div>
-										<?php endif; ?>
 										<div class="col-xs-12 col-md-6 text-right">Sort By:
 											<button class="btn btn-gray btn-red-hover tableSort active" data-sortCol="0" aria-label="Sort by Date">Date</button>
 											<button class="btn btn-gray btn-red-hover tableSort" data-sortCol="1" aria-label="Sort by Title">Title</button>
@@ -53,24 +52,38 @@ get_header(); ?>
 										<option>E</option>
 									</select>
 							</div>
+							<div class="filter-search col-xs-12 col-md-5">
+</div>
 						</div>
 					</div>
 	<div class="col-xs-12 col-md-8">
-		<?php
-		if (have_posts() ) : ?>
-				<?php
-				/* Start the Loop */
-				while ( have_posts() ) : the_post();
 
-						/*
-						* Include the Post-Format-specific template for the content.
-						* If you want to override this in a child theme, then include a file
-						* called content-___.php (where ___ is the Post Format name) and that will be used instead.
-						*/
-						get_template_part('template-parts/content-data', get_post_type());
+		<table id="dataRepo" class="cards">
+								<thead style="display: none;">
+									<tr>
+	<th>Title</th>
+	<th>Topic</th>
+	<th>Source</th>
+	<th style="width:23%;">View</th>
+	<th class="cardCol">Card</th>
+</tr>
+								</thead>
+								<tbody>
+								<?php
+								/* Start the Loop */
+								while ( have_posts() ) : the_post();
 
-				endwhile;
-		?>
+									get_template_part( 'template-parts/content-data' );
+
+								endwhile;
+
+				else :
+
+								get_template_part( 'template-parts/content', 'none' );
+
+				endif; ?>
+								</tbody>
+							</table>
 	</div>
 				<div class="archive-pages-top row">
 						<div class="col-xs-12 col-md-6 left-side"><?php aerospace_post_num(); ?></div>
@@ -78,13 +91,6 @@ get_header(); ?>
 								<?php the_posts_pagination(); ?>
 						</div>
 				</div>
-				<?php
-				else :
-
-						get_template_part('template-parts/content', 'none');
-
-				endif; ?>
-
 				</main><!-- #main -->
 		</div><!-- #primary -->
 
