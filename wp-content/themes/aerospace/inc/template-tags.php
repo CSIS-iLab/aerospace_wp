@@ -182,7 +182,7 @@ if ( ! function_exists( 'aerospace_post_format' ) ) :
 		 */
 		function aerospace_post_format( $id ) {
 				$post_type = get_post_type();
-				if ( in_array( $post_type, array( 'post', 'events', 'aerospace101', 'data' ), true ) ) {
+				if ( in_array( $post_type, array( 'post', 'events', 'aerospace101' ), true ) ) {
 
 						if ( 'post' === $post_type ) {
 								$post_types = get_the_terms( $id, 'post_types' );
