@@ -2,17 +2,40 @@
 	display: inline;
 	float: left;
 	margin-right: 1.5em;
+
+	&.wp-caption {
+		@include imgNegMargin('left');
+	}
 }
 
 .alignright {
 	display: inline;
 	float: right;
 	margin-left: 1.5em;
+
+	&.wp-caption {
+		@include imgNegMargin('right');
+	}
 }
 
 .aligncenter {
 	clear: both;
 	@include center-block;
+}
+
+.alignleft,
+.alignright {
+	&.wp-caption {
+		display: block;
+
+		@include breakpoint("small") {
+			max-width: 300px;
+		}
+
+		@include breakpoint("large") {
+			max-width: 375px;
+		}
+	}
 }
 
 .text-center {

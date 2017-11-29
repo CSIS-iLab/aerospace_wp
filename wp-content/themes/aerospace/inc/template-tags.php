@@ -239,10 +239,10 @@ if ( ! function_exists( 'aerospace_show_featured_img' ) ) :
         if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() ) {
             $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
             if ( $caption ) {
-                $caption = '<figcaption class="caption">' . $caption . '</figcaption>';
+                $caption = '<figcaption class="wp-caption-text">' . $caption . '</figcaption>';
             }
 
-            printf( '<figure class="entry-thumbnail">
+            printf( '<figure class="entry-thumbnail wp-caption">
             %1$s%2$s
             </figure>', get_the_post_thumbnail(), $caption); // WPCS: XSS OK.
         }

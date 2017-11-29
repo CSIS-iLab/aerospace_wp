@@ -160,3 +160,33 @@ $breakpoint-xsmall: 25em;
         margin: 0 auto;
     }
 }
+
+// Post Body Max width
+@mixin postBodyMaxWidth() {
+    @include breakpoint("small") {
+        max-width: calc(100% - #{$size__post-body-padding-sm});
+    }
+
+    @include breakpoint("medium") {
+        max-width: calc(100% - #{$size__post-body-padding-md});
+    }
+
+    @include breakpoint("large") {
+        max-width: calc(100% - #{$size__post-body-padding-lg});
+    }
+}
+
+// Negative margins for images in the post body
+@mixin imgNegMargin( $margin ) {
+    @include breakpoint("small") {
+        margin-#{$margin}: calc(-#{$size__post-body-padding-sm} / 2);
+    }
+
+    @include breakpoint("medium") {
+        margin-#{$margin}: calc(-#{$size__post-body-padding-md} / 2);
+    }
+
+    @include breakpoint("large") {
+        margin-#{$margin}: calc(-#{$size__post-body-padding-lg} / 2);
+    }
+}

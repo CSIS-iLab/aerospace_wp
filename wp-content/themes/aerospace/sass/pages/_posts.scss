@@ -31,17 +31,24 @@
     .entry-meta-top {
         position: relative;
         flex-wrap: nowrap;
-        margin: 0;
+
+        @include breakpoint("xsmall") {
+            margin: 0;
+        }
 
         @include breakpoint("medium") {
             &::after {
                 content: "";
                 position: absolute;
                 top: -1rem;
-                right: $size__highlights-max-width;
+                right: calc(#{$size__highlights-max-width} + 0.55rem);
                 height: 100%;
                 width: 3px;
                 background-color: $blue-gray;
+
+                @include breakpoint("large") {
+                    right: calc(#{$size__highlights-max-width} + 1rem);
+                }
             }
         }
     }
@@ -100,8 +107,8 @@
         @include contentWidth(2rem, 2rem, 4rem);
 
         &-post-body {
-            max-width: $size__post-body-max-width-lg;
             margin: 0 auto;
+            @include postBodyMaxWidth();
         }
     }
 
@@ -114,12 +121,7 @@
 
         img {
             max-height: 400px;
-        }
-
-        .caption {
-            @extend %caption;
-            border-left: 3px solid $blue-gray;
-            padding-left: 0.5rem;
+            display: block;
         }
     }
 
