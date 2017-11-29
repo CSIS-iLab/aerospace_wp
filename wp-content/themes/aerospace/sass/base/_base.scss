@@ -42,7 +42,9 @@ body {
 		overflow-x: hidden;
 	}
 
-	&.is-minimal { margin-top: $size__header-bottom-height-mobile; }
+	&.is-minimal {
+		margin-top: $size__header-bottom-height-mobile;
+	}
 }
 
 .content-wrapper {
