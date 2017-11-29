@@ -29,7 +29,33 @@ get_header(); ?>
 										</div>
 								</div>
 						</header><!-- .page-header -->
-
+					<div class="col-xs-12 col-md-4">
+						<div id="select">
+							<div class="select">
+								<label class="label" for="category">FILTER BY CATEGORY</label>
+									<select class="select" id="characters" name="characters">
+										<option disabled selected>Choose a category</option>
+										<option>A</option>
+										<option>B</option>
+										<option>C</option>
+										<option>D</option>
+										<option>E</option>
+									</select>
+							</div>
+							<div class="select">
+								<label class="label" for="tag">FILTER BY TAG</label>
+									<select class="select" id="characters" name="characters">
+										<option disabled selected>Choose a tag</option>
+										<option>A</option>
+										<option>B</option>
+										<option>C</option>
+										<option>D</option>
+										<option>E</option>
+									</select>
+							</div>
+						</div>
+					</div>
+	<div class="col-xs-12 col-md-8">
 		<?php
 		if (have_posts() ) : ?>
 				<?php
@@ -44,7 +70,8 @@ get_header(); ?>
 						get_template_part('template-parts/content-data', get_post_type());
 
 				endwhile;
-				?>
+		?>
+	</div>
 				<div class="archive-pages-top row">
 						<div class="col-xs-12 col-md-6 left-side"><?php aerospace_post_num(); ?></div>
 						<div class="col-xs-12 col-md-6 text-right">

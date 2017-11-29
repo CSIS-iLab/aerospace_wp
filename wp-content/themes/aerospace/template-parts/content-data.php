@@ -19,34 +19,30 @@ if ( 1 == $is_featured ) {
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
+				<?php
+				if ( has_post_thumbnail() ) {
+						echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
+						the_post_thumbnail( 'medium_large' );
+						echo '</a></div>';
+				}
+				?>
+					<header class="entry-header">
+							<?php aerospace_post_is_featured ( $post->ID ) ?>
+							<?php
+							the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
+							?>
+							<div class="entry-meta">
+									<?php aerospace_last_updated(); ?>
+									<?php aerospace_entry_data_categories(); ?>
+									<?php aerospace_entry_data_tags(); ?>
+							</div><!-- .entry-meta -->
+					</header><!-- .entry-header -->
 
-		<?php
-		if ( has_post_thumbnail() ) {
-				echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
-				the_post_thumbnail( 'medium_large' );
-				echo '</a></div>';
-		}
-		?>
-		<div class="col-xs-12 col-md card-main">
-				<header class="entry-header">
-						<?php aerospace_post_is_featured ( $post->ID ) ?>
-						<?php
-						the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
-						echo 'You may fire when ready.';
-						?>
-						<div class="entry-meta">
-								<?php aerospace_authors_list(); ?>
-								<?php aerospace_posted_on(); ?>
-						</div><!-- .entry-meta -->
-				</header><!-- .entry-header -->
+					<div class="entry-content">
+					<?php the_excerpt(); ?>
+					</div><!-- .entry-content -->
 
-				<div class="entry-content">
-				<?php the_excerpt(); ?>
-				</div><!-- .entry-content -->
-
-				<footer class="entry-footer">
-						<?php aerospace_post_format( $post->ID ); ?>
-						<?php aerospace_entry_categories(); ?>
-				</footer><!-- .entry-footer -->
-		</div>
+					<footer class="entry-footer">
+							<?php aerospace_post_format( $post->ID ); ?>
+					</footer><!-- .entry-footer -->
 </article><!-- #post-<?php the_ID(); ?> -->

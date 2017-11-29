@@ -111,17 +111,17 @@ function data_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="source" value="<?php echo esc_attr( $current_source ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive URL', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'data URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Width', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'data Width', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Height', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'data Height', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
 		</p>
@@ -134,12 +134,12 @@ function data_build_meta_box( $post ) {
 			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Title', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'data Title', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="title" value="<?php echo esc_url( $current_title ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Image URL', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'data Image URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="img_url" value="<?php echo esc_url( $current_img_url ); ?>" />
 		</p>
@@ -181,7 +181,7 @@ function data_save_meta_box_data( $post_id ){
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	
+
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
 		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
@@ -241,16 +241,16 @@ add_action( 'save_post_data', 'data_save_meta_box_data' );
 
 /*----------  Display iFrame  ----------*/
 /**
- * Displays the specified interactive in an iframe
+ * Displays the specified data in an iframe
  *
- * @param  String  $interactive_url       URL to the interactive.
+ * @param  String  $data_url       URL to the data.
  * @param  String  $width                Width of the iframe, can be in px or %.
  * @param  String  $height               Height of the iframe, can be in px or %.
  * @param  String  $fallback_img          Featured image thumbnail img tag string.
  * @param  boolean $iframe_resize_disabled Indicate if iframe should automatically resize based on content height.
  * @return String                        HTML of the iframe.
  */
-function aerospace_data_display_iframe( $interactive_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false ) {
+function aerospace_data_display_iframe( $data_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false ) {
 	if ( empty( $width ) ) {
 		$width = '100%';
 	}
@@ -258,13 +258,13 @@ function aerospace_data_display_iframe( $interactive_url, $width, $height, $fall
 		$height_value = 'height="' . $height . '"';
 	}
 	if ( $fallback_img ) {
-		$fallback_img = '<div class="interactive-fallbackImg">' . $fallback_img . '<p>For best experience, please view on a desktop computer.</p></div>';
+		$fallback_img = '<div class="data-fallbackImg">' . $fallback_img . '<p>For best experience, please view on a desktop computer.</p></div>';
 	}
 	if ( ! $iframe_resize_disabled ) {
 		$enabled_class = ' js-iframeResizeEnabled';
 	}
 
-	return $fallback_img . '<iframe class="interactive-iframe' . $enabled_class . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $interactive_url . '"></iframe>';
+	return $fallback_img . '<iframe class="data-iframe' . $enabled_class . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $data_url . '"></iframe>';
 }
 
 /*----------  Display Generate Shortcode Button  ----------*/
@@ -287,9 +287,9 @@ add_filter( 'manage_edit-data_columns', 'aerospace_data_columns' );
  * @param  int    $cptid   Column ID number.
  */
 function aerospace_data_column( $colname, $cptid ) {
-	$shortcode_html = "[interactive id=\'" . $cptid . "\']";
+	$shortcode_html = "[data id=\'" . $cptid . "\']";
 	if ( 'shortcode' === $colname ) {
-		echo '<a href="#" class="button button-small" onclick="prompt(\'Shortcode to include featured interactive in posts and pages:\', \'' . esc_html( $shortcode_html ) . '\'); return false;">Get Embed Code</a>';
+		echo '<a href="#" class="button button-small" onclick="prompt(\'Shortcode to include featured data in posts and pages:\', \'' . esc_html( $shortcode_html ) . '\'); return false;">Get Embed Code</a>';
 	}
 }
 add_action( 'manage_data_posts_custom_column', 'aerospace_data_column', 10, 2 );
