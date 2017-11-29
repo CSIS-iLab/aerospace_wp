@@ -14,7 +14,7 @@ get_header(); ?>
 
 				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<header class="entry-header row">
-						<div class="entry-meta-top col-xs-12 row">
+						<div class="entry-meta-top content-padding col-xs-12 row">
 							<div class="post-format-container">
 								<?php aerospace_post_format( $post->ID ); ?>
 							</div>
@@ -22,7 +22,7 @@ get_header(); ?>
 								<?php aerospace_entry_categories(); ?>
 							</div>
 						</div>
-						<div class="title-container col-xs-12">
+						<div class="title-container content-padding col-xs-12">
 							<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 
 							<div class="entry-meta-bottom">
@@ -32,7 +32,7 @@ get_header(); ?>
 						</div>
 					</header><!-- .entry-header -->
 
-					<div class="entry-content">
+					<div class="entry-content content-padding">
 						<?php aerospace_show_featured_img(); ?>
 						<?php aerospace_post_highlighted_info( $post->ID ); ?>
 						<div class="entry-content-post-body">
@@ -56,7 +56,7 @@ get_header(); ?>
 					</div><!-- .entry-content -->
 
 					<footer class="entry-footer">
-						<section class="footer-top row">
+						<section class="footer-top content-padding row">
 							<div class="entry-citation col-xs-12 col-md-9">
 								<?php aerospace_citation(); ?>
 							</div>
@@ -64,11 +64,11 @@ get_header(); ?>
 								<?php get_template_part( 'components/share-inline' ); ?>
 							</div>
 						</section>
-						<section class="footer-middle row">
+						<section class="footer-middle content-padding row">
 							<?php aerospace_post_footnotes(); ?>
 							<?php aerospace_post_sources( $post->ID ); ?>
 						</section>
-						<section class="authors-container">
+						<section class="authors-container content-padding">
 							<?php esc_html_e( 'About the Authors', 'aerospace' ); ?>
 							<?php aerospace_authors_list_extended() ?>
 						</section>

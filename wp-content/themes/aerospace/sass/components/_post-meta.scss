@@ -166,21 +166,12 @@
 	
 }
 
-/*----------  PONI Sponsored  ----------*/
-.poni-sponsored {
-	@include breakpoint("medium") {
-		margin-top: -1.5rem;
-		margin-bottom: 1.5rem;
-	}
+/*----------  Citation  ----------*/
+.entry-citation {
+	@extend %post-meta-content;
 
-	i {
+	p {
 		margin: 0;
-		@include fontSize(14px);
-		color: $orange;
-
-		&::before {
-			margin: 0;
-		}
 	}
 }
 

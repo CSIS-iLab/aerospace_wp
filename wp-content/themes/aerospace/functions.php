@@ -139,7 +139,18 @@ function aerospace_scripts()
 
     wp_enqueue_script('aerospace-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true);
 
-    // wp_enqueue_script('aerospace-header', get_template_directory_uri() . '/js/header.js', array('jquery'), '20171128', true);
+    wp_enqueue_script('aerospace-header', get_template_directory_uri() . '/js/header.js', array('jquery'), '20171128', true);
+
+    // wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
+    // wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
+    
+    wp_enqueue_script('aerospace-clipboard', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js', array(), '20171129', true );
+    wp_add_inline_script('aerospace-clipboard', "var clipboard = new Clipboard('#btn-copy');
+        clipboard.on('success', function(e) {
+            var d = document.getElementById('btn-copy');
+            d.className += ' tooltipped';
+        });
+    ");
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');
 
@@ -199,3 +210,8 @@ if (defined('JETPACK__VERSION') ) {
  * shortcodes
  */
 require get_template_directory() . '/inc/shortcodes.php';
+
+/**
+ * Remove AddToAny Default CSS
+ */
+add_action( 'wp_enqueue_scripts', function() { wp_dequeue_style( 'addtoany' ); }, 21 );

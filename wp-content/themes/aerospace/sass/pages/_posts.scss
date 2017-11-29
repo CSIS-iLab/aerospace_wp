@@ -20,12 +20,16 @@
         }
     }
 
-    .entry-meta-top,
-    .title-container {
-        border-bottom: 3px solid $dark-blue;
+    .content-padding {
+        @include contentWidth(2rem, 2rem, 4rem);
         padding-left: 0;
         padding-right: 0;
-        @include contentWidth(2rem, 2rem, 4rem);
+    }
+
+    .entry-meta-top,
+    .title-container,
+    .footer-top {
+        border-bottom: 3px solid $dark-blue;
     }
 
     .entry-meta-top {
@@ -104,7 +108,7 @@
     }
 
     .entry-content {
-        @include contentWidth(2rem, 2rem, 4rem);
+        margin-bottom: 3rem;
 
         &-post-body {
             margin: 0 auto;
@@ -137,6 +141,100 @@
         ul {
             margin: 0;
             padding: 0;
+        }
+    }
+
+    .footer-top {
+
+        @include breakpoint("medium") {
+            > div:not(:first-child) {
+                border-left: 3px solid $blue-gray;
+            }
+        }
+
+        .entry-citation {
+            order: 2;
+
+            @include breakpoint("medium") {
+                order: 1;
+                padding-right: 2rem;
+            }
+
+            .btn {
+                display: inline-block;
+                @include fontSize(12px);
+                margin: 0 0 0 0.5rem;
+                padding: 0.3rem 0.5rem;
+            }
+        }
+
+        .entry-citation,
+        .entry-share {
+            padding-bottom: 0.75rem;
+        }
+
+        .entry-share {
+            order: 1;
+            margin-bottom: 0.75rem;
+
+            @include breakpoint("medium") {
+                order: 2;
+                margin-bottom: 0;
+            }
+        }
+
+        .share-container {
+            max-width: -moz-fit-content;
+            max-width: fit-content;
+            
+            @include breakpoint("medium") {
+                padding-left: 1rem;
+            }
+        }
+
+        .meta-label {
+            display: block;
+
+            @include breakpoint("medium") {
+                margin-top: -2rem;
+            }
+        }
+    }
+
+    .footer-middle {
+        $spacing: 2rem;
+
+        .entry-footnotes,
+        .entry-sources {
+            background-color: $off-white;
+            padding: $spacing;
+            @extend %list;
+
+            .subheading {
+                @extend %subheading;
+                margin: 0 0 1rem 0;
+            }
+
+            p {
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        .entry-footnotes {
+            margin-top: $spacing;
+            @include breakpoint("medium") {
+                margin-bottom: $spacing;
+            }
+        }
+
+        .entry-sources {
+            margin-bottom: $spacing;
+            padding-top: 0;
+
+            @include breakpoint("medium") {
+                padding-top: $spacing;
+                margin-top: $spacing;
+            }
         }
     }
 

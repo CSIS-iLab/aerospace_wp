@@ -15,7 +15,9 @@ input[type="submit"],
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	border: 0;
+	border-radius: 0;
 	color: $white;
+	@include transition(all 0.3s ease-in-out);
 
 	&:hover { background-color: $color__background-button-blue-hover; }
 }

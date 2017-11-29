@@ -15,10 +15,7 @@
   list-style:none;
 
   li {
-    font-family: $font__source;
-    @include fontSize(16px);
-    line-height: 1.71;
-    color: $dark-gray;
+    @extend %list;
     position: relative;
 
     .easy-footnote-margin-adjust {
@@ -34,14 +31,14 @@
     }
 
     a::after {
+      font-family: inherit;
       content: counter(item);
       counter-increment: item;
-      @include fontSize(11px);
+      @include fontSize(10px);
       line-height: 2.49;
-      color: $secondary-blue;
       content: counter(item);
       position: absolute;
-      top: -7px;
+      top: -2px;
     }
   }
 }

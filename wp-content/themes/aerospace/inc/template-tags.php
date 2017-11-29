@@ -176,12 +176,12 @@ if ( ! function_exists( 'aerospace_citation' ) ) :
      */
     function aerospace_citation() {
         if ( get_the_modified_date() ) {
-            $modified_date = 'Updated ' . get_the_modified_date() . '. ';
+            $modified_date = ' Updated ' . get_the_modified_date() . '. ';
         }
 
         $authors = coauthors( ',', null, null, null, false );
 
-        printf( '<p class="entry-citation">' . esc_html( '%1$s. "%2$s," Aerospace Security, %3$s. %4$s Accessed %5$s. %6$s', 'aerospace' ) . '</p>', $authors, get_the_title(), get_the_date(), $modified_date, current_time('F j, Y'), get_the_permalink() ); // WPCS: XSS OK.
+        printf( '<span class="meta-label">Cite this Page</span><p class="citation">' . esc_html( '%1$s. "%2$s," Aerospace Security, %3$s.%4$s Accessed %5$s. %6$s', 'aerospace' ) . ' <button id="btn-copy" class="btn btn-gray" data-clipboard-target=".citation" aria-label="Copied!">Copy</button></p>', $authors, get_the_title(), get_the_date(), $modified_date, current_time('F j, Y'), get_the_permalink() ); // WPCS: XSS OK.
     }
 endif;
 
@@ -262,7 +262,7 @@ if ( ! function_exists( 'aerospace_post_sources' ) ) :
 
             if ( '' !== $sources ) {
                 $sources = apply_filters('meta_content', $sources);
-                printf( '<div class="entry-sources col-xs-12 col-md"><h4>' . esc_html( 'Sources', 'aerospace') . '</h4>%1$s</div>', $sources); // WPCS: XSS OK.
+                printf( '<div class="entry-sources col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Sources', 'aerospace') . '</h4>%1$s</div>', $sources); // WPCS: XSS OK.
             }
         }
     }
@@ -278,7 +278,7 @@ if ( ! function_exists( 'aerospace_post_footnotes' ) ) :
         $post_type = get_post_type();
         if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && $footnoteCopy != '' ) {
             
-            printf( '<div class="entry-footnotes col-xs-12 col-md"><h4>' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
+            printf( '<div class="entry-footnotes col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
         }
     }
 endif;
