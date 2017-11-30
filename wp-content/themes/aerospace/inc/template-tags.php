@@ -104,7 +104,7 @@ if ( ! function_exists( 'aerospace_authors_list' ) ) :
 		if ( function_exists( 'coauthors_posts_links' ) ) {
 			$prefix = $authors = '';
 			foreach ( get_coauthors() as $coauthor ) :
-				$authors .= '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $prefix . $coauthor->display_name . '</a>';
+				$authors .= $prefix . '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $coauthor->display_name . '</a>';
                 $prefix = ', ';
 			endforeach;
 		} else {

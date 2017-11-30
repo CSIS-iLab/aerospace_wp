@@ -29,9 +29,8 @@
 	@extend %post-meta-content;
 
 	a {
+		@extend %box-shadow-link;
 		color: $black;
-
-		&:hover { color: $secondary-blue; }
 	}
 }
 

@@ -327,6 +327,20 @@ big {
 /*=============================
 =            Links            =
 =============================*/
+
+%box-shadow-link {
+	@include box-shadow(0,-2px,0,0, $blue-gray, true);
+
+	&:visited {
+		color: $secondary-blue;
+	}
+
+	&:hover {
+		color: $orange;
+		box-shadow: none;
+	}
+}
+
 a {
 	color: inherit;
 	text-decoration: none;
@@ -350,15 +364,6 @@ a {
 	}
 
 	.entry-content & {
-		@include box-shadow(0,-2px,0,0, $blue-gray, true);
-
-		&:visited {
-			color: $secondary-blue;
-		}
-
-		&:hover {
-			color: $orange;
-			box-shadow: none;
-		}
+		@extend %box-shadow-link;
 	}
 }
