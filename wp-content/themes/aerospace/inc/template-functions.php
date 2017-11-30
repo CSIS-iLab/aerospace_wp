@@ -93,3 +93,18 @@ function aerospace_img_caption_shortcode_filter($val, $attr, $content = null)
     . 'class="wp-caption-text">' . $caption . '</figcaption></figure>';
 }
 add_filter('img_caption_shortcode', 'aerospace_img_caption_shortcode_filter',10,3);
+
+/**
+ * Add Aerospace logo shortcode to end of posts.
+ *
+ * @param  string $content The post content.
+ * @return string          The modified post content.
+ */
+function aerospace_add_logo_to_post_content( $content ) {
+    global $post;
+    if ( $post->post_type == 'post' ) {
+        $content .= do_shortcode('[aircraft]');
+    }
+    return $content;
+}
+add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);

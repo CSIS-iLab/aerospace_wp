@@ -147,4 +147,14 @@ function aerospace_social_share($title = "", $URL = "") {
     $output .= '</div>';
     return $output;
 }
- ?>
+
+/**
+ * Shortcode for displaying Aerospace logo
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Logo
+ */
+function shortcode_aircraft( $atts ) {
+	return '<img src="' . get_template_directory_uri() . '/img/aircraft-icon.svg" class="img-aircraft" alt="Aerospace" title="Aerospace" />';
+}
+add_shortcode( 'aircraft', 'shortcode_aircraft' );

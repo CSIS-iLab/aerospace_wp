@@ -34,7 +34,7 @@ get_header(); ?>
 
 					<div class="entry-content content-padding">
 						<?php aerospace_post_highlighted_info( $post->ID ); ?>
-						<?php aerospace_show_featured_img(); ?>
+						<?php aerospace_show_featured_img( $post->ID ); ?>
 						<div class="entry-content-post-body">
 							<?php
 							the_content(

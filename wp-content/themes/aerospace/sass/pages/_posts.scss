@@ -191,6 +191,10 @@
                 padding-left: 1.2rem;
             }
         }
+
+        & + .entry-content-post-body {
+            margin-top: 1.5rem;
+        }
     }
 
     .footer-top {
@@ -335,4 +339,10 @@
             margin-right: auto;
         }
     }
+}
+
+/*----------  Subsection comment block  ----------*/
+.img-aircraft {
+    max-width: 7px;
+    margin-left: 5px;
 }

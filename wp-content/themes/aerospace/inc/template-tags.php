@@ -234,9 +234,10 @@ if ( ! function_exists( 'aerospace_show_featured_img' ) ) :
      *
      * @param  int $id Post ID.
      */
-    function aerospace_show_featured_img() {
+    function aerospace_show_featured_img( $id ) {
         $post_type = get_post_type();
-        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() ) {
+        $disable_feature_img = get_post_meta( $id, '_post_disable_feature_img', true );
+        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() && ! $disable_feature_img ) {
             $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
             if ( $caption ) {
                 $caption = '<figcaption class="wp-caption-text">' . $caption . '</figcaption>';
