@@ -151,6 +151,8 @@ function aerospace_scripts()
             d.className += ' tooltipped';
         });
     ");
+
+    wp_enqueue_script('aerospace-posts', get_template_directory_uri() . '/js/posts.js', array('jquery'), '20171129', true);
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');
 

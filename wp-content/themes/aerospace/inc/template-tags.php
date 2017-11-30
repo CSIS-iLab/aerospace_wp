@@ -220,9 +220,9 @@ if ( ! function_exists( 'aerospace_show_highlights' ) ) :
             }
 
             if ( '' !== $highlights ) {
-                printf( '<div class="entry-highlights">%1$s</div>', $highlights); // WPCS: XSS OK.
+                printf( '<div class="entry-highlights"><div class="entry-highlights-title"><i class="icon-arrow-right"></i> ' . esc_html__( 'Highlights', 'aerospace' ) . '</div><div class="entry-highlights-content">%1$s</div></div>', $highlights); // WPCS: XSS OK.
             } else {
-                printf( '<div class="entry-highlights">%1$s</div>', $excerpt); // WPCS: XSS OK.
+                printf( '<div class="entry-highlights"><div class="entry-highlights-title"><i class="icon-arrow-right"></i> ' . esc_html__( 'Highlights', 'aerospace' ) . '</div><div class="entry-highlights-content">%1$s</div></div>', $excerpt); // WPCS: XSS OK.
             }
         }
     }

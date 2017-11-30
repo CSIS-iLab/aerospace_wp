@@ -33,8 +33,8 @@ get_header(); ?>
 					</header><!-- .entry-header -->
 
 					<div class="entry-content content-padding">
-						<?php aerospace_show_featured_img(); ?>
 						<?php aerospace_post_highlighted_info( $post->ID ); ?>
+						<?php aerospace_show_featured_img(); ?>
 						<div class="entry-content-post-body">
 							<?php
 							the_content(
