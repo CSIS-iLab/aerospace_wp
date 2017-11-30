@@ -69,11 +69,6 @@ get_header(); ?>
 							<?php aerospace_post_sources( $post->ID ); ?>
 						</section>
 						<section class="authors-container content-padding">
-							<?php
-							echo '<h3 class="subheading-lg">';
-							esc_html_e( 'About the Authors', 'aerospace' );
-							echo '</h3>';
-							?>
 							<?php aerospace_authors_list_extended() ?>
 						</section>
 						<?php get_template_part( 'components/explore-more' ); ?>

@@ -129,6 +129,22 @@
             margin-bottom: $size__highlights-margin-bottom;
             display: inline-block;
             max-width: calc(100% - #{$size__highlights-max-width} - #{$size__highlights-margin-left});
+
+            &:first-child {
+                max-width: 100%;
+                display: block;
+
+                img {
+                    margin: 0 auto;
+                    width: auto;
+                }
+
+                .wp-caption-text {
+                    @include postBodyMaxWidth();
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
         }
 
         img {

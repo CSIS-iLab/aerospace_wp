@@ -120,7 +120,7 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
      */
     function aerospace_authors_list_extended() {
         if ( function_exists( 'coauthors_posts_links' ) ) {
-            $authors = '';
+            $authors = '<h3 class="subheading-lg">' . esc_html__( 'About the Authors' , 'aerospace' ) . '</h3>';
             foreach ( get_coauthors() as $coauthor ) :
                 $authors .= '<div class="entry-author row">
                 <div class="author-img col-xs-4 col-sm-3 col-md-2">
@@ -238,7 +238,7 @@ if ( ! function_exists( 'aerospace_show_featured_img' ) ) :
 
             printf( '<figure class="entry-thumbnail wp-caption">
             %1$s%2$s
-            </figure>', get_the_post_thumbnail(), $caption); // WPCS: XSS OK.
+            </figure>', get_the_post_thumbnail(null, 'full'), $caption); // WPCS: XSS OK.
         }
     }
 endif;

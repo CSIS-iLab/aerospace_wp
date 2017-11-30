@@ -124,3 +124,18 @@ function get_template_part_extended( $slug, $name = null, $params = array() ) {
     }
     get_template_part( $slug, $name );
 }
+
+/**
+ * Fixes empty <p> and <br> tags showing before and after shortcodes in the
+ * output content.
+ */
+function aerospace_the_content_shortcode_fix($content) {
+    $array = array(
+        '<p>['    => '[',
+        ']</p>'   => ']',
+        ']<br />' => ']',
+        ']<br>'   => ']'
+    );
+    return strtr($content, $array);
+}
+add_filter('the_content', 'aerospace_the_content_shortcode_fix');

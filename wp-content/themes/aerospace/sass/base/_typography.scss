@@ -138,6 +138,7 @@ textarea {
 	font-family: $font__source;
 	@include fontSize(18px);
 	line-height: 1.28;
+	font-weight: normal;
 	color: $black;
 }
 
