@@ -34,7 +34,8 @@ $breakpoint-xlarge: 90em;
 $breakpoint-large: 62em;
 $breakpoint-medium: 48em;
 $breakpoint-small: 36em;
-$breakpoint-xsmall: 25em;
+// $breakpoint-xsmall: 25em;
+$breakpoint-xsmall: 36em;
 
 @mixin breakpoint($break) {
     @if $break==xlarge {

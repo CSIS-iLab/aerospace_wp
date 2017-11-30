@@ -1,7 +1,10 @@
 .alignleft {
 	display: inline;
 	float: left;
-	margin-right: 1.5em;
+
+	@include breakpoint("small") {
+		margin-right: 1.5em;
+	}
 
 	&.wp-caption {
 		@include imgNegMargin('left');
@@ -11,7 +14,10 @@
 .alignright {
 	display: inline;
 	float: right;
-	margin-left: 1.5em;
+
+	@include breakpoint("small") {
+		margin-left: 1.5em;
+	}
 
 	&.wp-caption {
 		@include imgNegMargin('right');

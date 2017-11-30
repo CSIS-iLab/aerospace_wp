@@ -58,7 +58,11 @@
     }
 
     .title-container {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+
+        @include breakpoint("medium") {
+            margin-bottom: 2rem;
+        }
 
         .entry-title {
             @extend %post-title;
@@ -117,11 +121,15 @@
     }
 
     .entry-thumbnail {
-        display: inline-block;
-        max-width: calc(100% - #{$size__highlights-max-width} - #{$size__highlights-margin-left});
-        margin: 0 0 $size__highlights-margin-bottom 0;
+        margin: 0 0 1.5rem 0;
         padding-top: $size__highlights-padding-top;
         text-align: left;
+
+        @include breakpoint("medium") {
+            margin-bottom: $size__highlights-margin-bottom;
+            display: inline-block;
+            max-width: calc(100% - #{$size__highlights-max-width} - #{$size__highlights-margin-left});
+        }
 
         img {
             max-height: 400px;
@@ -147,18 +155,21 @@
             @extend %subheading;
             text-transform: uppercase;
 
-            @include breakpoint("medium") {
-                display: none;
+            i {
+                @include breakpoint("medium") {
+                    display: none;
+                }
+
+                &::before {
+                    transform: none;
+                    @include transition( transform 400ms ease-in-out );
+                }
+
+                &.rotated::before {
+                    transform: rotate(90deg);
+                }
             }
 
-            i::before {
-                transform: none;
-                @include transition( transform 400ms ease-in-out );
-            }
-
-            i.rotated::before {
-                transform: rotate(90deg);
-            }
         }
 
         &-content {
@@ -167,7 +178,6 @@
 
             @include breakpoint("medium") {
                 display: block;
-                padding-top: 0;
             }
         }
 
@@ -175,9 +185,10 @@
         ul {
             margin: 0;
             padding: 0 0 0 1.5rem;
+            line-height: 1.5;
 
             @include breakpoint("medium") {
-                padding-left: 0;
+                padding-left: 1.2rem;
             }
         }
     }
