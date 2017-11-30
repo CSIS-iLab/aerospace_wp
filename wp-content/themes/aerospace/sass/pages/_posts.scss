@@ -144,7 +144,7 @@
         @include breakpoint("medium") {
             background-color: transparent;
             float: right;
-            max-width: $size__highlights-max-width;
+            width: $size__highlights-max-width;
             height: 100%;
             margin: 0 0 $size__highlights-margin-bottom $size__highlights-margin-left;
             padding: $size__highlights-padding-top 2rem;
