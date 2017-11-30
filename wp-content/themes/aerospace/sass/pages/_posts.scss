@@ -138,9 +138,6 @@
     }
 
     .entry-highlights {
-        background-color: $off-white;
-        padding: 0.5rem;
-
         @include breakpoint("medium") {
             background-color: transparent;
             float: right;
@@ -154,6 +151,13 @@
         &-title {
             @extend %subheading;
             text-transform: uppercase;
+            background-color: $off-white;
+            padding: 0.5rem;
+
+            @include breakpoint("medium") {
+                background-color: transparent;
+                padding: 0 0 0.5rem 0;
+            }
 
             i {
                 @include breakpoint("medium") {
@@ -174,10 +178,13 @@
 
         &-content {
             display: none;
-            padding-top: 1rem;
+            padding: 0.5rem 0.9rem;
+            background-color: $off-white;
 
             @include breakpoint("medium") {
                 display: block;
+                background-color: transparent;
+                padding: 0;
             }
         }
 

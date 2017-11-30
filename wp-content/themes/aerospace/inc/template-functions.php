@@ -108,3 +108,19 @@ function aerospace_add_logo_to_post_content( $content ) {
     return $content;
 }
 add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
+
+/**
+ * Load a template part into a template
+ *
+ * @param string $slug The slug name for the generic template.
+ * @param string $name The name of the specialised template.
+ * @param array $params Any extra params to be passed to the template part.
+ */
+function get_template_part_extended( $slug, $name = null, $params = array() ) {
+    if ( ! empty( $params ) ) {
+        foreach ( (array) $params as $key => $param ) {
+            set_query_var( $key, $param );
+        }
+    }
+    get_template_part( $slug, $name );
+}

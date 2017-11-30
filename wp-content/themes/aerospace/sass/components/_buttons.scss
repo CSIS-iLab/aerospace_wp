@@ -66,4 +66,29 @@ input[type="submit"],
 			color: $white;
 		}
 	}
+
+	/*----------  Icons  ----------*/
+	i {
+		color: inherit;
+
+		&:hover {
+			color: inherit;
+		}
+	}
+
+	&.btn-download {
+		margin: 0 0 0.5rem;
+		width: 100%;
+		text-align: center;
+		box-shadow: none;
+
+		@include breakpoint("medium") {
+			margin-bottom: 1rem;
+		}
+
+		i {
+			@include fontSize(12px);
+			margin-right: 0.3rem;
+		}
+	}
 }

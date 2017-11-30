@@ -211,19 +211,12 @@ if ( ! function_exists( 'aerospace_show_highlights' ) ) :
     function aerospace_show_highlights( $id ) {
         $post_type = get_post_type();
         if ( 'post' === $post_type ) {
-            $highlights = get_post_meta( $id, '_post_highlights', true );
-            $excerpt = get_the_excerpt();
             $disable_highlights = get_post_meta( $id, '_post_disable_highlights', true );
             
             if ( $disable_highlights ) {
                 return;
             }
-
-            if ( '' !== $highlights ) {
-                printf( '<div class="entry-highlights"><div class="entry-highlights-title"><i class="icon-arrow-right"></i> ' . esc_html__( 'Highlights', 'aerospace' ) . '</div><div class="entry-highlights-content">%1$s</div></div>', $highlights); // WPCS: XSS OK.
-            } else {
-                printf( '<div class="entry-highlights"><div class="entry-highlights-title"><i class="icon-arrow-right"></i> ' . esc_html__( 'Highlights', 'aerospace' ) . '</div><div class="entry-highlights-content">%1$s</div></div>', $excerpt); // WPCS: XSS OK.
-            }
+            get_template_part( 'components/highlights-post' );
         }
     }
 endif;
@@ -324,11 +317,11 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
      * @param  int $id Post ID.
      */
     function aerospace_report_download( $id ) {
-        if ( 'post' === get_post_type() && has_term( 'Report', 'post_types' ) ) {
+        if ( 'post' === get_post_type() ) {
             $download_url = get_post_meta( $id, '_post_download_url', true );
             $view_url = get_post_meta( $id, '_post_view_url', true );
             if ( '' !== $download_url ) {
-                $download = '<p><a href="' . esc_url( $download_url ) . '" download="PONIReport"><i class="icon-download"></i>' . esc_html( 'Download', 'aerospace' ) . '</a></p>';
+                $download = '<a href="' . esc_url( $download_url ) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i>' . esc_html( 'Download PDF', 'aerospace' ) . '</a>';
             }
             if ( '' !== $view_url ) {
                 $view = '<p><a href="' . esc_url( $view_url ) . '" target="_blank"><i class="icon-file-pdf"></i>' . esc_html( 'View', 'aerospace' ) . '</a></p>';

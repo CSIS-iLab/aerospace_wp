@@ -10,6 +10,19 @@ html {
 
 body {
 	background: $color__background-body; /* Fallback for when there is no custom background color defined. */
+	--breakpoint: "xsmall";
+
+	@include breakpoint("small") {
+		--breakpoint: "small";
+	}
+
+	@include breakpoint("medium") {
+		--breakpoint: "medium";
+	}
+
+	@include breakpoint("large") {
+		--breakpoint: "large";
+	}
 
 	&.toggled {
 		& > .site {
