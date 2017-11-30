@@ -6,6 +6,16 @@
   .easy-footnotes-wrapper {
     display: none;
   }
+
+  .easy-footnote {
+    color: $orange;
+    font-weight: 600;
+    text-transform: uppercase;
+    @include fontSize(11px);
+    vertical-align: super;
+
+    a { box-shadow: none; }
+  }
 }
 
 .easy-footnotes-wrapper {

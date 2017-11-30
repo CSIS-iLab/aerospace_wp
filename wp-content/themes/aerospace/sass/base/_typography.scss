@@ -168,6 +168,7 @@ textarea {
 	@include fontSize(28px);
 	line-height: 1.43;
 	color: $black;
+	margin-bottom: 0;
 }
 
 %h4 {
@@ -176,6 +177,7 @@ textarea {
 	line-height: 1;
 	font-weight: 600;
 	color: $black;
+	margin-bottom: 0;
 }
 
 %h5 {
@@ -184,6 +186,7 @@ textarea {
 	line-height: 1.2;
 	font-weight: normal;
 	color: $black;
+	margin-bottom: 0;
 }
 
 %h6 {}
@@ -246,16 +249,15 @@ sub, sup {
 }
 
 blockquote {
-	font-family: $font__abel;
-	@include fontSize(26px);
-	line-height: 1.4;
-	color: $black;
-
-	margin: 2rem auto;
-	padding: 0rem;
+	float: left;
+	max-width: 300px;
+	padding: 1rem;
+	border-top: 2px solid $orange;
+	border-bottom: 2px solid $orange;
+	@include imgNegMargin('left');
 
 	@include breakpoint("medium") {
-		width: 66%;
+		max-width: 350px;
 	}
 
 	p {
@@ -269,8 +271,9 @@ blockquote {
 
 blockquote, blockquote p {
 	font-family: $font__abel;
-	@include fontSize(20px);
-	line-height: 1.5;
+	@include fontSize(26px);
+	line-height: 1.4;
+	color: $black;
 }
 
 blockquote, q {
@@ -316,12 +319,16 @@ big {
 	font-size: 125%;
 }
 
+.post-first-sentence {
+	font-weight: 600;
+	text-transform: uppercase;
+}
 
 /*=============================
 =            Links            =
 =============================*/
 a {
-	color: $color__link;
+	color: inherit;
 	text-decoration: none;
 	@include transition(all .3s ease-in-out);
 
@@ -342,10 +349,16 @@ a {
 		outline: 0;
 	}
 
-	.post-content & {
-		@include box-shadow(0,-1px,0,0, $secondary-blue, true);
+	.entry-content & {
+		@include box-shadow(0,-2px,0,0, $blue-gray, true);
 
-		&:vsited { @include box-shadow(0,-1px,0,0, $secondary-blue, true); }
-		&:hover { box-shadow: none; }
+		&:visited {
+			color: $secondary-blue;
+		}
+
+		&:hover {
+			color: $orange;
+			box-shadow: none;
+		}
 	}
 }
