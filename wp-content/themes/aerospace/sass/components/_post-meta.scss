@@ -26,66 +26,12 @@
 .authors-list {
 	display: inline-block;
 	margin: 0;
+	@extend %post-meta-content;
 
 	a {
 		color: $black;
 
 		&:hover { color: $secondary-blue; }
-	}
-
-	.entry-author {
-		display: inline;
-
-		@include breakpoint("medium") {
-			display: block;
-			margin-bottom: 1rem;
-		}
-
-		.author-title {
-			@extend %post-meta-label;
-		  font-style: italic;
-		  color: $dark-gray;
-			display: none;
-
-			@include breakpoint("medium") {
-				display: block;
-				text-transform: lowercase;
-			}
-		}
-
-		&:not(:first-child) {
-			.meta-label { 
-				display: none;
-
-				@include breakpoint("medium") {
-					display: inline;
-				}
-			}
-			&::before {
-				content: ", ";
-				margin-left: -5px;
-
-				@include breakpoint("medium") {
-					content: none;
-				}
-			}
-		}
-
-		.article-card & {
-			display: inline;
-
-			.author-title { display: none; }
-
-			&:not(:first-child) {
-				.meta-label { 
-					display: none;
-				}
-				&::before {
-					content: ", ";
-					margin-left: -5px;
-				}
-			}
-		}
 	}
 }
 

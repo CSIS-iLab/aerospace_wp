@@ -70,7 +70,7 @@ if ( ! function_exists( 'aerospace_entry_tags' ) ) :
             $tags_list = get_the_tag_list( '<ul><li>','</li><li>','</li></ul>' );
             if ( $tags_list ) {
                 /* translators: 1: list of tags. */
-                printf( '<div class="post-tags-container col-xs-12">' . esc_html__( 'Related Keywords %1$s', 'aerospace' ) . '</div>', $tags_list ); // WPCS: XSS OK.
+                printf( '<div class="post-tags-container col-xs-12"><h3 class="subheading-lg">' . esc_html__( 'Explore More', 'aerospace' ) . '</h3><span class="subheading">' . esc_html__( 'Related Keywords', 'aerospace' ) . '</span>%1$s</div>', $tags_list ); // WPCS: XSS OK.
             }
         }
     }
@@ -279,6 +279,39 @@ if ( ! function_exists( 'aerospace_post_footnotes' ) ) :
         if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && $footnoteCopy != '' ) {
             
             printf( '<div class="entry-footnotes col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
+        }
+    }
+endif;
+
+if ( ! function_exists( 'aerospace_related_content' ) ) :
+    /**
+     * Displays related content to the current post
+     * @param  Array $rel Array of related posts
+     * @return String      HTML of related posts
+     */
+    function aerospace_related_content(){
+        global $related;
+        $rel = $related->show( get_the_ID(), true );
+        // Display the title and excerpt of each related post
+        if( is_array( $rel ) && count( $rel ) > 0 ) {
+            global $post;
+            echo '<div class="related-posts col-xs-12 row">';
+            foreach( $rel as $post ) : setup_postdata($post);
+                if ($post->post_status != 'trash') {
+                    echo '<div class="related-post col-xs-12 col-md">';
+                    echo '<div class="related-post-img"><a href="'.get_permalink().'">';
+                    the_post_thumbnail('medium-large');
+                    echo '</a></div><div class="related-post-content">';
+                    echo '<a href="'.get_permalink().'" class="related-post-title">';
+                    the_title();
+                    echo '</a>';
+                    aerospace_authors_list();
+                    aerospace_posted_on();
+                    echo '</div></div>';
+                }
+            endforeach;
+            wp_reset_postdata();
+            echo '</div>';
         }
     }
 endif;
