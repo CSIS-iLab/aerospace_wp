@@ -35,16 +35,14 @@
 }
 
 .authors-container {
+
 	.subheading-lg {
 		@extend %subheading-lg;
 		text-transform: uppercase;
-		margin: 0;
+		margin: 2rem 0;
 	}
 }
 .authors-list-extended {
-	margin-top: 2rem;
-
-
 	.entry-author {
 		margin-bottom: 2rem;
 	}

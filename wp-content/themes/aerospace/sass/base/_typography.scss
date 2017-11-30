@@ -325,6 +325,24 @@ big {
 	text-transform: uppercase;
 }
 
+.return-to-archive {
+	font-family: $font__abel;
+	@include fontSize(16px);
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+
+	a,
+	a:hover,
+	a:visited {
+		color: $orange;
+		box-shadow: none !important;
+	}
+
+	a:hover {
+		color: $secondary-blue;
+	}
+}
+
 /*=============================
 =            Links            =
 =============================*/

@@ -11,7 +11,7 @@ get_header(); ?>
 
     <div id="primary" class="content-area">
         <main id="main" class="site-main content-wrapper">
-        	Return to Archive Link
+			<?php aerospace_return_to_archive(); ?>
     		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			    <header class="entry-header row">
 			    	<div class="entry-meta-top content-padding col-xs-12 row">
@@ -51,7 +51,7 @@ get_header(); ?>
 					    );
 					    ?>
 					</div>
-			    	Return to Archive
+			    	<?php aerospace_return_to_archive(); ?>
 			    </div><!-- .entry-content -->
 
 			    <footer class="entry-footer">

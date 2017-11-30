@@ -550,3 +550,17 @@ if ( ! function_exists( 'aerospace_post_num' ) ) :
         printf( '<div class="pagination-totals">' . esc_html_x( '%2$s/%3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
     }
 endif;
+
+if ( ! function_exists( 'aerospace_return_to_archive' ) ) :
+    /**
+     * Returns HTML with link to return to archive of the current post.
+     */
+    function aerospace_return_to_archive() {
+        $post_type = get_post_type();
+        $url = get_post_type_archive_link( $post_type );
+        $post_type_obj = get_post_type_object( $post_type );
+        $title = apply_filters('post_type_archive_title', $post_type_obj->labels->name );        
+        /* translators: 1: number of pages. */
+        printf( '<div class="return-to-archive"><i class="icon-long-arrow-left"></i> ' . esc_html_x( 'Return to the ', 'aerospace' ) . '<a href="%2$s">%1$s Archive</a></div>', $title, $url ); // WPCS: XSS OK.
+    }
+endif;
