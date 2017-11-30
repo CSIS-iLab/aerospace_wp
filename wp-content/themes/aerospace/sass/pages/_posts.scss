@@ -87,6 +87,10 @@
                 padding-left: 0rem;
                 padding-right: 0rem;
             }
+
+            > :not(:last-child) {
+                margin-right: 2rem;
+            }
         }
     }
 
@@ -105,10 +109,6 @@
             padding: 0.2rem 1.5rem 0;
             color: $white;
         }
-    }
-
-    .posted-on {
-        margin-right: 2rem;
     }
 
     .entry-content {
@@ -172,7 +172,7 @@
 
             @include breakpoint("medium") {
                 background-color: transparent;
-                padding: 0 0 0.5rem 0;
+                padding: 0 0 1rem 0;
             }
 
             i {

@@ -2,26 +2,146 @@
 =            Events            =
 ==============================*/
 
-.archive .events,
-.search .events {
-	.poni-sponsored {
+.events {
+
+	/*----------  Title & Hosted By  ----------*/
+	.entry-host {
 		margin-bottom: 1rem;
-		margin-top: 1rem;
-	}
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		@include fontSize(20px);
+		line-height: 1.32;
 
-	.post-location { margin-top: 1rem; }
-
-	.post-location,
-	.post-event-dates {
-		margin-bottom: 0rem;
-		line-height: 1.5rem;
-
-		.meta-label {
-			display: inline;
+		@include breakpoint("medium") {
+			margin-top: -1rem;
+			margin-bottom: 2rem;
+			padding: 0;
 		}
 	}
 
-	.entry-content {
-		margin-top: 1rem;
+	/*----------  Top Meta  ----------*/
+	.entry-meta-bottom {
+		.post-event-dates,
+		.entry-location {
+			@extend .meta-content;
+			display: inline-block;
+		}
+
+		.btn-map {
+			margin: 0 0 0 0.5rem;
+		}
 	}
+
+	/*----------  Highlights  ----------*/
+	.entry-highlights-content {
+		.meta-label {
+			@include breakpoint("medium") {
+				display: block;
+			}
+		}
+
+		& > :not(:last-child) {
+			margin-bottom: 0.5rem;
+
+			@include breakpoint("medium") {
+				margin-bottom: 1rem;
+			}
+		}
+
+		.entry-address br {
+			content: " ";
+
+			@include breakpoint("medium") {
+				content: none;
+				display: block;
+			}
+		}
+
+		.btn-map {
+			margin: 0 0 0 0.5rem;
+
+			@include breakpoint("medium") {
+				display: block;
+				max-width: -moz-fit-content;
+				max-width: fit-content;
+				margin: 0.5rem 0 0 0;
+			}
+		}
+	}
+
+	/*----------  Past Event  ----------*/
+	.past-event {
+		@extend %subheading;
+		text-transform: none;
+		text-align: center;
+	}
+
+	/*----------  Buttons  ----------*/
+	.btn-register {
+		width: 100%;
+		text-align: center;
+		margin: 0 0 1rem 0;
+	}
+
+	.btn-watch {
+		position: relative;
+		text-transform: none;
+		padding: 0;
+		height: 45px;
+		width: 250px;
+
+		@include breakpoint("small") {
+			width: 280px;
+		}
+
+		.icon-play {
+			background-color: $dark-blue;
+			color: $white;
+			position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 25%;
+		    height: 100%;
+		    padding-top: 0.7rem;
+		}
+
+		span {
+			margin-left: 25%;
+		    margin-top: 0.7rem;
+		    display: inline-block;
+		}
+
+		.icon-external-open {
+			@include fontSize(16px);
+		}
+	}
+
+	/*----------  Footer Top  ----------*/
+	.entry-register {
+		order: 2;
+		margin-bottom: 1rem;
+
+		@include breakpoint("medium") {
+			order: 1;
+			padding-right: 2rem;
+			margin-bottom: 0;
+		}
+
+		.btn-register {
+			margin-top: 0.5rem;
+			margin-bottom: 0;
+		}
+	}
+
+	.entry-calendar {
+		order: 3;
+		margin-bottom: 1rem;
+
+		@include breakpoint("medium") {
+			order: 2;
+			padding: 0 2rem;
+			margin-bottom: 0;
+		}
+	}
+	
 }

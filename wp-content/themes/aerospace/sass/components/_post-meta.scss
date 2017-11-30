@@ -114,19 +114,3 @@
 		margin: 0;
 	}
 }
-
-/*----------  Location  ----------*/
-.post-location {
-	@extend %post-meta-label;
-	margin-bottom: 0;
-
-	@include breakpoint("medium") {
-		margin-bottom: 1.5rem;
-	}
-
-	.meta-label {
-		@include breakpoint("medium") {
-			display: block;
-		}
-	}
-}
