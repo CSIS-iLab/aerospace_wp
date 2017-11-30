@@ -249,12 +249,12 @@ sub, sup {
 }
 
 blockquote {
-	float: left;
+	float: right;
 	max-width: 300px;
 	padding: 1rem;
 	border-top: 2px solid $orange;
 	border-bottom: 2px solid $orange;
-	@include imgNegMargin('left');
+	@include imgNegMargin('right');
 
 	@include breakpoint("medium") {
 		max-width: 350px;
