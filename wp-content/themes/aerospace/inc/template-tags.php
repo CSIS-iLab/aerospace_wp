@@ -192,9 +192,7 @@ if ( ! function_exists( 'aerospace_post_highlights' ) ) :
      * @param int $id Post ID.
      */
     function aerospace_post_highlighted_info( $id ) {
-        if ( 'post' === get_post_type() && has_term( 'Report', 'post_types' ) ) {
-            get_template_part( 'components/highlights-reports' );
-        } elseif ( 'post' === get_post_type() ) {
+        if ( 'post' === get_post_type() ) {
             aerospace_show_highlights( $id );
         } elseif ( 'events' === get_post_type() ) {
             get_template_part( 'components/highlights-events' );
@@ -230,7 +228,7 @@ if ( ! function_exists( 'aerospace_show_featured_img' ) ) :
     function aerospace_show_featured_img( $id ) {
         $post_type = get_post_type();
         $disable_feature_img = get_post_meta( $id, '_post_disable_feature_img', true );
-        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() && ! $disable_feature_img ) {
+        if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && has_post_thumbnail() && ! $disable_feature_img && ! has_term( 'Report', 'post_types' ) ) {
             $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
             if ( $caption ) {
                 $caption = '<figcaption class="wp-caption-text">' . $caption . '</figcaption>';
@@ -275,6 +273,7 @@ if ( ! function_exists( 'aerospace_post_footnotes' ) ) :
             printf( '<div class="entry-footnotes col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
         }
     }
+
 endif;
 
 if ( ! function_exists( 'aerospace_related_content' ) ) :
@@ -320,13 +319,16 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
         if ( 'post' === get_post_type() ) {
             $download_url = get_post_meta( $id, '_post_download_url', true );
             $view_url = get_post_meta( $id, '_post_view_url', true );
+
             if ( '' !== $download_url ) {
                 $download = '<a href="' . esc_url( $download_url ) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i>' . esc_html( 'Download PDF', 'aerospace' ) . '</a>';
             }
-            if ( '' !== $view_url ) {
-                $view = '<p><a href="' . esc_url( $view_url ) . '" target="_blank"><i class="icon-file-pdf"></i>' . esc_html( 'View', 'aerospace' ) . '</a></p>';
+
+            if ( '' !== $view_url && has_term( 'Report', 'post_types' ) && has_post_thumbnail() ) {
+
+                $view = '<div class="entry-report-thumbnail"><a href="' . esc_url( $view_url ) . '" target="_blank"> ' . get_the_post_thumbnail( null, 'full', array( 'title' => 'View the Report' ) ) . '</a></div>';
             }
-            printf( '<div class="post-report">%1$s%2$s</div>', $download, $view ); // WPCS: XSS OK.
+            printf( '<div class="post-report">%1$s%2$s</div>', $view, $download ); // WPCS: XSS OK.
         }
     }
 endif;
