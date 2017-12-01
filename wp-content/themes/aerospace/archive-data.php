@@ -41,7 +41,7 @@ get_header(); ?>
 										?>
 							</div>
 							<div class="select">
-								<label class="label" for="category">FILTER BY TAG</label>
+								<label class="label" for="tag">FILTER BY TAG</label>
 										<?php
 											$taglist = wp_dropdown_categories('taxonomy=post_tag&show_option_none=Select A Tag&show_count=1&orderby=name&echo=0');
 											$taglist = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $taglist);
