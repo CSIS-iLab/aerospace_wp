@@ -2,7 +2,8 @@
 =            Archives            =
 ================================*/
 
-.archive {
+.archive,
+.blog {
 	$archive-content-padding: 1.5rem;
 	$archive-content-padding-md: 4rem;
 
@@ -15,6 +16,10 @@
 
     .content-padding {
     	@extend .content-padding;
+    }
+
+    .title-container {
+    	width: 100%;
     }
 
     .page-header {
@@ -36,6 +41,7 @@
     			text-transform: uppercase;
     			color: $blue-gray;
     		}
+
     	}
 
     	.archive-description {
@@ -60,7 +66,7 @@
 
     .archive-pages-top {
     	@include breakpoint("medium") {
-	        width: calc(100% - 4rem);
+	        width: calc(100% - #{$archive-content-padding-md});
 			margin: 0 auto;
 		}
 
@@ -112,5 +118,35 @@
             padding: $archive-content-padding-md;
             padding-bottom: 0;
         }
+    }
+
+    /*----------  Page > 1 Styles  ----------*/
+    &.paged {
+    	.page-header {
+    		margin-top: 0;
+    	}
+
+    	.page-title {
+			@include fontSize(28px);
+			line-height: 1.71;
+			text-align: left;
+			margin: 0 auto;
+			padding-bottom: 0;
+			
+			@include breakpoint("medium") {
+				padding-left: 1rem;
+			    padding-right: 1rem;
+			    width: calc(100% - 2rem);
+			}
+		}
+
+		.archive-description { display: none; }
+
+		.archive-pages-top {
+			@include breakpoint("medium") {
+		        width: calc(100% - #{$archive-content-padding-md});
+				margin: 0 auto;
+			}
+		}
     }
 }

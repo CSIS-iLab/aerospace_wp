@@ -173,6 +173,8 @@ add_filter('image_send_to_editor','aerospace_switch_to_relative_url',10,8);
 function aerospace_archive_titles( $title ) {
     if( is_category() ) {
         $title = single_cat_title( '<span class="archive-label">Topic:</span> ', false );
+    } elseif( is_tag() ) {
+        $title = single_tag_title( '<span class="archive-label">Keyword:</span> ', false );
     }
     return $title;
 }
