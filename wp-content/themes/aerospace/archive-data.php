@@ -32,15 +32,21 @@ get_header(); ?>
 						<div id="select">
 							<div class="select">
 								<label class="label" for="category">FILTER BY CATEGORY</label>
-									<select class="select-cat" id="category" name="category">
-										<option disabled selected>Choose a category</option>
-										<option>Rockets</option>
 										<?php
-											// echo '<option>';
-											// echo wp_dropdown_categories();
-											// echo '</option>';
+										$first_field = array(
+											'show_option_all' => '',
+											'show_option_none' => 'Select A Category'
+										);
+										wp_dropdown_categories($first_field);
 										?>
-									</select>
+							</div>
+							<div class="select">
+								<label class="label" for="category">FILTER BY TAG</label>
+										<?php
+											$taglist = wp_dropdown_categories('taxonomy=post_tag&show_option_none=Select A Tag&show_count=1&orderby=name&echo=0');
+											$taglist = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $taglist);
+											echo $taglist;
+										?>
 							</div>
 							<div class="filter-search col-xs-12 col-md-5"></div>
 						</div>
