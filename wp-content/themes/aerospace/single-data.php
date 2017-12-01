@@ -7,10 +7,20 @@
  * @package Aerospace
  */
 
-$ID = get_the_id();
+$id = get_the_id();
 
-$content_placement = get_post_meta( $ID, '_data_content_placement', true );
-$width = get_post_meta( $ID, '_data_width', true );
+$content_placement = get_post_meta( $id, '_data_content_placement', true );
+$full_width = get_post_meta( $id, '_data_full_width', true );
+
+echo $full_width;
+
+if ( $full_width ) {
+	$interactive = do_shortcode( '[fullWidth width="' . $full_width . '%"][data id="' . $id . '"][/fullWidth]');
+} else {
+	$interactive = do_shortcode( '[data id="' . $id . '"]' );
+}
+
+
 
 get_header(); ?>
 
@@ -38,7 +48,7 @@ get_header(); ?>
 			<div class="entry-content content-padding">
 				<?php
 				if ( 'below' === $content_placement ) {
-					echo do_shortcode( '[data id="' . $ID . '"]' );
+					echo $interactive;
 				}
 				?>
 				<div class="entry-content-post-body">
@@ -61,7 +71,7 @@ get_header(); ?>
 				</div>
 				<?php
 					if ( 'above' === $content_placement ) {
-						echo do_shortcode( '[data id="' . $ID . '"]' );
+						echo $interactive;
 					}
 				?>
 			</div><!-- .entry-content -->

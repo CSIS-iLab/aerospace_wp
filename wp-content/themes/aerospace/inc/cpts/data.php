@@ -88,6 +88,7 @@ function data_build_meta_box( $post ) {
 	$current_source = get_post_meta( $post->ID, '_data_source', true );
 	$current_url = get_post_meta( $post->ID, '_data_url', true );
 	$current_width = get_post_meta( $post->ID, '_data_width', true );
+	$current_full_width = get_post_meta( $post->ID, '_data_full_width', true );
 	$current_height = get_post_meta( $post->ID, '_data_height', true );
 	$current_iframe_resize_disabled = get_post_meta( $post->ID, '_data_iframe_resize_disabled', true );
 	$current_fallback_img_disabled = get_post_meta( $post->ID, '_data_fallback_img_disabled', true );
@@ -126,15 +127,23 @@ function data_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Width', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Width (% of Content)', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />
+			<input type="number" min="0" max="100" class="small-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />%
 		</p>
+		<p class="howto">If left blank, defaults to 100%</p>
+
+		<h3><?php esc_html_e( 'Interactive Width (% of Screen)', 'aerospace' ); ?></h3>
+		<p>
+			<input type="number" min="0" max="100" class="small-text" name="full_width" value="<?php echo esc_attr( $current_full_width ); ?>" />%
+		</p>
+		<p class="howto">Only fill out if the interactive needs to be wider than the content area.</p>
 
 		<h3><?php esc_html_e( 'Interactive Height', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
+			<input type="number" min="0" max="100" class="small-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
 		</p>
+		<p class="howto">If left blank, interactive will be automatically sized to fit its content. You must specify units (%, px, etc.)</p>
 		<p>
 			<input type="checkbox" name="iframe_resize_disabled" value="1" <?php checked( $current_iframe_resize_disabled, '1' ); ?> /> iFrame Resize Disabled
 		</p>
@@ -203,6 +212,10 @@ function data_save_meta_box_data( $post_id ){
 	// Width
 	if ( isset( $_REQUEST['width'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_data_width', sanitize_text_field( wp_unslash( $_POST['width'] ) ) ); // Input var okay.
+	}
+	// Full Width
+	if ( isset( $_REQUEST['full_width'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_data_full_width', sanitize_text_field( wp_unslash( $_POST['full_width'] ) ) ); // Input var okay.
 	}
 	// Height
 	if ( isset( $_REQUEST['height'] ) ) { // Input var okay.
