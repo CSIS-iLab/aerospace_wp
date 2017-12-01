@@ -22,12 +22,12 @@ if ( 1 == $is_featured ) {
 
     <?php
     if ( has_post_thumbnail() ) {
-        echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' post-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
+        echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' entry-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
         the_post_thumbnail( 'medium_large' );
         echo '</a></div>';
     }
     ?>
-    <div class="col-xs-12 col-md card-main">
+    <div class="col-xs-12 col-md entry-main">
         <header class="entry-header">
             <?php aerospace_post_is_featured ( $post->ID ) ?>
             <?php

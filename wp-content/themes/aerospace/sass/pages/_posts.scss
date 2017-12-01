@@ -353,8 +353,162 @@
 }
 
 // Card Format for archives & search results.
-.article-card {
+.card-format {
+    /*----------  Featured  ----------*/
+    &.featured {
+        .entry-thumbnail {
+            @include breakpoint("medium") {
+                order: 2;
+                padding-right: 0;
+            }
 
+            img {
+                max-height: 350px;
+            }
+        }
+
+        .entry-main {
+            @include breakpoint("medium") {
+                order: 1;
+                padding-right: 2rem;
+                padding-left: 0;
+            }
+        }
+
+        .entry-title {
+            @extend %archive-post-title-lg;
+        }
+
+        .entry-content {
+            p {
+                @include fontSize(18px);
+                line-height: 1.67;
+            }
+        }
+    }
+
+    /*----------  Regular  ----------*/
+    .entry-thumbnail {
+        margin-bottom: 1rem;
+
+        @include breakpoint("medium") {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        a {
+            display: block;
+        }
+
+        img {
+            display: block;
+            max-height: 227px;
+        }
+    }
+
+    .entry-main {
+        @include breakpoint("medium") {
+            padding-left: 1rem;
+            padding-right: 0;
+        }
+    }
+
+    .entry-header {
+        .entry-title {
+            @extend %archive-post-title-md;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .entry-meta {
+            .meta-label {
+                margin-right: 0.25rem;
+            }
+
+            .authors-list,
+            .posted-on {
+                display: block;
+                @include fontSize(14px);
+                @include breakpoint("small") {
+                    display: inline-block;
+                }
+            }
+
+            .authors-list a {
+                box-shadow: none;
+            }
+
+            .posted-on {
+                &::before {
+                    @include breakpoint("small") {
+                        content: "/";
+                        font-family: $font__abel;
+                        @include fontSize(14px);
+                        color: $gray;
+                        margin: 0 0.4rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .entry-content {
+        margin: 0.75rem 0 1.25rem 0;
+
+        p {
+            @extend %list;
+            color: $black;
+            margin-bottom: 0;
+        }
+    }
+
+    .entry-footer {
+        border-top: 1px solid $blue-gray;
+
+        .post-format,
+        .cat-links {
+            @include breakpoint("small") {
+                display: inline-block;
+            }
+        }
+
+        .post-format {
+            padding-right: 0.5rem;
+            @include fontSize(14px);
+            line-height: 1.81;
+        }
+
+        .cat-links {
+            position: relative;
+
+            @include breakpoint("small") {
+                padding-left: 0.5rem;
+            }
+
+            &::before {
+                @include breakpoint("small") {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    left: 0rem;
+                    top: 0px;
+                    width: 1px;
+                    height: 100%;
+                    background-color: $blue-gray;
+                }
+            }
+
+            ul {
+                margin-left: 0;
+            }
+
+            li {
+                font-family: $font__source;
+                @include fontSize(14px);
+                line-height: 1.43;
+                letter-spacing: 0;
+            }
+        }
+    }
 }
 
 /*----------  Subsection comment block  ----------*/

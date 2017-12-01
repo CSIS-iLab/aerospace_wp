@@ -52,8 +52,9 @@ if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
 		$post_type = get_post_type();
 		if ( in_array( $post_type, array( 'aerospace101', 'data', 'events', 'post' ), true ) ) {
 			$is_featured = get_post_meta( $id, '_post_is_featured', true );
+			$svg = '<svg id="asp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6.9 17"><path class="st0" d="M1.3 0L0 1.2l2.8 4L.4 8.5l2.4 3.4L0 15.8 1.3 17l5.6-8.5z"/></svg>';
 			if ( 1 == $is_featured ) {
-				printf( '<p class="post-is-featured">' . esc_html( 'Featured', 'aerospace' ) . '</p>');
+				printf( '<p class="post-is-featured">' . esc_html( 'Featured', 'aerospace' ) . '%1$s</p>', $svg );
 			}
 		}
 	}
@@ -669,7 +670,7 @@ if ( ! function_exists( 'aerospace_post_num' ) ) :
 		// Current page.
 		$paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
 		/* translators: 1: number of pages. */
-		printf( '<div class="pagination-totals">' . esc_html_x( 'Page %2$s/%3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
+		printf( '<div class="pagination-totals"><span class="meta-label">' . esc_html_x( 'Page', 'aerospace' ) . '</span>' . esc_html_x( '%2$s / %3$s', 'aerospace' ) . '</div>', $wp_query->found_posts, $paged, $wp_query->max_num_pages ); // WPCS: XSS OK.
 	}
 endif;
 

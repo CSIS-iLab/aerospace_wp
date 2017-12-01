@@ -164,3 +164,16 @@ function aerospace_switch_to_relative_url($html, $id, $caption, $title, $align, 
     return $html;
 }
 add_filter('image_send_to_editor','aerospace_switch_to_relative_url',10,8);
+
+/**
+ * Alter the titles of the archives for categories & tags.
+ * @param  string $title Archive title
+ * @return string        Modified archive title.
+ */
+function aerospace_archive_titles( $title ) {
+    if( is_category() ) {
+        $title = single_cat_title( '<span class="archive-label">Topic:</span> ', false );
+    }
+    return $title;
+}
+add_filter( 'get_the_archive_title', 'aerospace_archive_titles' );

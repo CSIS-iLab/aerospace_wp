@@ -12,18 +12,18 @@ get_header(); ?>
     <div id="primary" class="content-area">
         <main id="main" class="site-main content-wrapper">
 
-            <header class="page-header">
-                <?php
-                the_archive_title('<h1 class="page-title">', '</h1>');
-                the_archive_description('<div class="archive-description">', '</div>');
-                ?>
-                <div class="archive-pages-top row">
-                    <?php if (have_posts() ) : ?>
-                    <div class="col-xs-12 col-md-6">
-                        <?php aerospace_post_num(); ?>
+            <header class="page-header row">
+                <div class="title-container">
+                    <?php the_archive_title('<h1 class="page-title">', '</h1>'); ?>
+                    <?php the_archive_description('<div class="archive-description">', '</div>'); ?>
+                    <div class="archive-pages-top row">
+                        <?php if (have_posts() ) : ?>
+                        <div class="col-xs-12 col-sm archives-meta-left">
+                            <?php aerospace_post_num(); ?>
+                        </div>
+                        <?php endif; ?>
+                        <div class="col-xs-12 col-sm-6 archives-meta-right">Sort</div>
                     </div>
-                    <?php endif; ?>
-                    <div class="col-xs-12 col-md-6 text-right">Sort</div>
                 </div>
             </header><!-- .page-header -->
 
@@ -42,12 +42,15 @@ get_header(); ?>
 
         endwhile;
         ?>
-        <div class="archive-pages-top row">
-            <div class="col-xs-12 col-md-6 left-side"><?php aerospace_post_num(); ?></div>
-            <div class="col-xs-12 col-md-6 text-right">
-                <?php the_posts_pagination(); ?>
+        <footer class="archive-pages-bottom row">
+            <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
+            <div class="col-xs-12 col-sm-6 archives-meta-right">
+                <?php the_posts_pagination( array(
+                    'prev_text' => '<i class="icon-arrow-left"></i>',
+                    'next_text' => '<i class="icon-arrow-right"></i>',
+                )); ?>
             </div>
-        </div>
+        </footer>
         <?php
         else :
 

@@ -3,5 +3,114 @@
 ================================*/
 
 .archive {
+	$archive-content-padding: 1.5rem;
+	$archive-content-padding-md: 4rem;
 
+	.site-content {
+        background-color: $off-white;
+        &.is-minimal {
+            margin-top: 0;
+        }
+    }
+
+    .content-padding {
+    	@extend .content-padding;
+    }
+
+    .page-header {
+    	margin-top: 1.5rem;
+    	padding: 2rem;
+
+    	@include breakpoint("medium") {
+    		margin-top: 3rem;
+    	}
+
+    	.page-title {
+    		@extend %page-title;
+    		text-align: center;
+    		margin: 0 0 2rem 0;
+    		padding-bottom: 1rem;
+    		border-bottom: 3px solid $dark-blue;
+
+    		.archive-label {
+    			text-transform: uppercase;
+    			color: $blue-gray;
+    		}
+    	}
+
+    	.archive-description {
+    		padding-bottom: 2rem;
+    		border-bottom: 2px solid $blue-gray;
+
+    		@include breakpoint("medium") {
+		        width: calc(100% - #{$archive-content-padding-md});
+				margin: 0 auto;
+			}
+
+    		p {
+    			width: calc(100% - (#{$archive-content-padding} * 2));
+    			margin: 0 auto;
+
+    			@include breakpoint("medium") {
+    				width: calc(100% - (#{$archive-content-padding-md} * 2));
+    			}
+    		}
+    	}
+    }
+
+    .archive-pages-top {
+    	@include breakpoint("medium") {
+	        width: calc(100% - 4rem);
+			margin: 0 auto;
+		}
+
+		.archives-meta-left,
+		.archives-meta-right {
+			@include breakpoint("medium") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
+
+	.archives-meta-right {
+		@include breakpoint("small") {
+			text-align: right;
+		}
+	}
+
+	.archive-pages-bottom {
+		position: relative;
+		background-color: $white;
+		padding: $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: $archive-content-padding-md;
+        }
+
+        &::before {
+        	content: "";
+        	display: block;
+        	position: absolute;
+        	top: calc(#{$archive-content-padding} - 1px);
+        	width: calc(100% - (#{$archive-content-padding} * 2));
+        	height: 2px;
+        	background-color: $blue-gray;
+
+        	@include breakpoint("medium") {
+        		top: calc(#{$archive-content-padding-md} - 1px);
+        		width: calc(100% - (#{$archive-content-padding-md} * 2));
+        	}
+        }
+	}
+
+    .hentry {
+    	background-color: $white;
+        padding: calc(#{$archive-content-padding} + 0.5rem) $archive-content-padding calc(#{$archive-content-padding} - 0.5rem) $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: $archive-content-padding-md;
+            padding-bottom: 0;
+        }
+    }
 }
