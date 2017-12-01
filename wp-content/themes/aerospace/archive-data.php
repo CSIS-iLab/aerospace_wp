@@ -32,43 +32,32 @@ get_header(); ?>
 						<div id="select">
 							<div class="select">
 								<label class="label" for="category">FILTER BY CATEGORY</label>
-									<select class="select" id="characters" name="characters">
+									<select class="select-cat" id="category" name="category">
 										<option disabled selected>Choose a category</option>
-										<option>A</option>
-										<option>B</option>
-										<option>C</option>
-										<option>D</option>
-										<option>E</option>
+										<option>Rockets</option>
+										<?php
+											// echo '<option>';
+											// echo wp_dropdown_categories();
+											// echo '</option>';
+										?>
 									</select>
 							</div>
-							<div class="select">
-								<label class="label" for="tag">FILTER BY TAG</label>
-									<select class="select" id="characters" name="characters">
-										<option disabled selected>Choose a tag</option>
-										<option>A</option>
-										<option>B</option>
-										<option>C</option>
-										<option>D</option>
-										<option>E</option>
-									</select>
-							</div>
-							<div class="filter-search col-xs-12 col-md-5">
-</div>
+							<div class="filter-search col-xs-12 col-md-5"></div>
 						</div>
 					</div>
 	<div class="col-xs-12 col-md-8">
 
 		<table id="dataRepo" class="cards">
-								<thead style="display: none;">
-									<tr>
-	<th>Title</th>
-	<th>Topic</th>
-	<th>Source</th>
-	<th style="width:23%;">View</th>
-	<th class="cardCol">Card</th>
-</tr>
-								</thead>
-								<tbody>
+			<thead style="display: none;">
+				<tr>
+					<th>Title</th>
+					<th>Topic</th>
+					<th>Date</th>
+					<th style="width:23%;">category</th>
+					<th class="cardCol">Tag</th>
+				</tr>
+			</thead>
+		<tbody>
 								<?php
 								/* Start the Loop */
 								while ( have_posts() ) : the_post();
@@ -95,6 +84,6 @@ get_header(); ?>
 		</div><!-- #primary -->
 
 <?php
-wp_enqueue_script('aerospace-datatables', '//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js', array(), '20171128', true );
+wp_enqueue_script('aerospace-datatables', '//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', array(), '20171128', true );
 wp_enqueue_script('aerospace-datarepo', get_template_directory_uri() . '/js/data-repo.js', array(), '20171128', true );
 get_footer();

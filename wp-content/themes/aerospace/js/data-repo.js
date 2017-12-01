@@ -3,36 +3,46 @@
  */
 
 ( function( $ ) {
-    var table = $('#dataRepo').DataTable({
-    	"info": false,
-    	"lengthChange": false
-    });
+		var table = $('#dataRepo').DataTable({
+			"info": false,
+			"lengthChange": false
+		});
 
-    // Sort
-    $(".tableSort").click(function() {
-    	var col = $(this).attr("data-sortCol");
-    	table.order([col, 'asc']).draw();
-    	$(".tableSort").not(this).removeClass("active");
-    	$(this).addClass("active");
-    });
+		// Sort
+		$(".tableSort").click(function() {
+			var col = $(this).attr("data-sortCol");
+			table.order([col, 'asc']).draw();
+			$(".tableSort").not(this).removeClass("active");
+			$(this).addClass("active");
+		});
 
-    // Search
-    $('#dataSearch').on( 'keyup click', function () {
-        table.search(
-	        $('#dataSearch').val()
-	    ).draw();
-    } );
+		// Select
+		$(".select-cat").on( 'change', function () {
+			var val = $.fn.dataTable.util.escapeRegex(
+				$(this).val()
+			);
+			table
+				.search( val ? val : '', true, false )
+				.draw();
+		} );
 
-    // View
-    $(".filter-view .cards").click(function() {
+		// Search
+		$('#dataSearch').on( 'keyup click', function () {
+				table.search(
+					$('#dataSearch').val()
+			).draw();
+		} );
+
+		// View
+		$(".filter-view .cards").click(function() {
 		$("#dataRepo").addClass("cards").removeClass("striped");
 		$(".filter-view .icon.active").removeClass("active");
 		$(this).addClass("active");
-    });
-    $(".filter-view .table").click(function() {
+		});
+		$(".filter-view .table").click(function() {
 		$("#dataRepo").removeClass("cards").addClass("striped");
 		$(".filter-view .icon.active").removeClass("active");
 		$(this).addClass("active");
-    });
+		});
 
 } )( jQuery );

@@ -92,7 +92,21 @@ if (! function_exists('aerospace_setup') ) :
         );
     }
 endif;
+
 add_action('after_setup_theme', 'aerospace_setup');
+
+/**
+ * Set the content width in pixels, based on the theme's design and stylesheet.
+ *
+ * Priority 0 to make it available to lower priority callbacks.
+ *
+ * @global int $content_width
+ */
+function aerospace_content_width()
+{
+    $GLOBALS['content_width'] = apply_filters('aerospace_content_width', 640);
+}
+add_action('after_setup_theme', 'aerospace_content_width', 0);
 
 /**
  * Register widget area.
@@ -128,9 +142,9 @@ function aerospace_scripts()
 
     wp_enqueue_script('aerospace-header', get_template_directory_uri() . '/js/header.js', array('jquery'), '20171128', true);
 
-    wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
-    wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
-    
+    // wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
+    // wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
+
     wp_enqueue_script('aerospace-clipboard', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js', array(), '20171129', true );
     wp_add_inline_script('aerospace-clipboard', "var clipboard = new Clipboard('#btn-copy');
         clipboard.on('success', function(e) {
