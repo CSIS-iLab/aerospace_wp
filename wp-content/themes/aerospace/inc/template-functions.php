@@ -46,11 +46,20 @@ function aerospace_custom_sort_posts( $query ) {
 			'post_date' => 'DESC',
 		) );
 	}
-    // echo '<pre>';
-    // print_r($query);
-    // echo '</pre>';
 }
 add_action( 'pre_get_posts', 'aerospace_custom_sort_posts' );
+
+/**
+ * Amend tag archives to include custom post types.
+ *
+ * @param  array $query Query object.
+ */
+function aerospace_cpt_tags_archive( $query ) {
+    if ( ( $query->is_tag() ) && $query->is_main_query() ) {
+        $query->set( 'post_type', array( 'post', 'events', 'aerospace101', 'data' ) );
+    }
+}
+add_action( 'pre_get_posts', 'aerospace_cpt_tags_archive' );
 
 /**
  * Check a given date to ensure it is valid.
