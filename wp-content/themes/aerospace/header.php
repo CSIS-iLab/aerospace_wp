@@ -61,6 +61,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <?php endif; ?>
             </div>
         </div>
+        <div class="header-bottom-container">
         <div class="content-wrapper row flex-center__y header-bottom">
             <div class="col-xs-8 col-md-2 site-branding-minimal">
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
@@ -99,7 +100,9 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
             <div class="col-xs-2 col-md-6 search-container">
                 <?php get_template_part( 'components/search-inline' ); ?>
             </div>
+
         </div><!-- .site-branding -->
+              </div>
     </header><!-- #masthead -->
 
     <div id="content" class="site-content">

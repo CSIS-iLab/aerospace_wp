@@ -10,13 +10,17 @@
 
 
         var sBrowser, sUsrAg = navigator.userAgent;
-        if (currentScroll > 0) {
-            $(".site-header").addClass("is-minimal");
-            $(".site-content").addClass("is-minimal");
+        var headerChange = parseInt($(".header-top").css('height'));
 
+        if (currentScroll > headerChange) {
+           // $(".site-header").addClass("is-minimal");
+           // $(".site-content").addClass("is-minimal");
+            $(".header-bottom-container").addClass("is-sticky");
         } else {
-            $(".site-header").removeClass("is-minimal");
-            $(".site-content").removeClass("is-minimal");
+           // $(".site-header").removeClass("is-minimal");
+            //$(".site-content").removeClass("is-minimal");
+            $(".header-bottom-container").removeClass("is-sticky");
+
         }
 
     });
@@ -31,7 +35,7 @@
 
         // Focus
         // $(parent).children(".search-field").focus();
-        setTimeout(function(){
+        setTimeout(function() {
             $(parent).children(".search-field").focus();
         });
     });
