@@ -1,0 +1,61 @@
+/*===========================
+=            Data           =
+===========================*/
+
+.data {
+
+	/*----------  Content  ----------*/
+	.entry-content {
+		> :first-child {
+			margin-bottom: 2rem;
+		}
+
+		> :last-child {
+			margin-bottom: 4rem;
+		}
+
+	}
+
+	/*----------  Data Sources  ----------*/
+	.entry-data-source {
+		order: 2;
+
+		@include breakpoint("medium") {
+			order: 1;
+			padding-right: 2rem;
+		}
+
+		.data-sources {
+
+			p {
+				@extend %post-meta-content;
+				margin-bottom: 0.75rem;
+				overflow-wrap: break-word;
+			}
+
+			&-view {
+				font-family: $font__abel;
+				@include fontSize(16px);
+				letter-spacing: 0.6px;
+				text-transform: uppercase;
+				color: $orange;
+				margin-left: 0.5rem;
+			}
+		}
+	}
+
+	/*----------  Share  ----------*/
+	.footer-top .entry-share {
+		order: 1;
+
+		@include breakpoint("medium") {
+			order: 2;
+		}
+	}
+
+	/*----------  Archive Link  ----------*/
+	.entry-footer .return-to-archive {
+		margin-top: 2rem;
+	}
+	
+}

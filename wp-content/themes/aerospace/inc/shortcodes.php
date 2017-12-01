@@ -18,7 +18,6 @@ function shortcode_first( $atts , $content = null ) {
 add_shortcode( 'first', 'shortcode_first' );
 
 /**
-<<<<<<< HEAD
  * Adds inline social sharing component to podcasts, stats, and interactives embedded in posts via shortcode
  * @param  string $title Title to be used by social media
  * @param  string $URL   URL to be used by social media
@@ -43,9 +42,9 @@ add_shortcode( 'first', 'shortcode_first' );
 	 	if ($post_type == 'Post') {
 	 		$title = 'Read';
 	 	} elseif ($post_type == 'Data') {
-	 		$title = 'Learn';
-	 	} elseif ($post_type == 'Aerospace101') {
 	 		$title = 'Interact';
+	 	} elseif ($post_type == 'Aerospace101') {
+	 		$title = 'Learn';
 	 	} elseif ($post_type == 'Events') {
 			$title = 'Watch';
 		}
@@ -82,8 +81,6 @@ function shortcode_fullWidth( $atts , $content = null ) {
 add_shortcode( 'fullWidth', 'shortcode_fullWidth' );
 
 /**
-=======
->>>>>>> added chart functionality, shortcode for data posts // archive page also factored
  * Shortcode for displaying embedded interactive
  * @param  array $atts    Modifying arguments
  * @return string          Embedded interactive
@@ -130,3 +127,39 @@ function aerospace_shortcode_data( $atts ) {
 
 }
 add_shortcode( 'data', 'aerospace_shortcode_data' );
+
+/**
+ * Adds inline social sharing component to podcasts, stats, and interactives embedded in posts via shortcode
+ * @param  string $title Title to be used by social media
+ * @param  string $URL   URL to be used by social media
+ * @return string        HTML of share button
+ */
+function aerospace_social_share($title = "", $URL = "") {
+	$shareArgs = array(
+		'linkname' => $title,
+		'linkurl' => $URL
+	);
+	$output = '<div class="sharing-inline">';
+	$output .= '<button class="btn btn-gray sharing-openShareBtn">Share <i class="icon icon-share"></i></button>';
+	$output .= '<div class="sharing-shareBtns">';
+	$output .= '<div class="post-title">'.$title.'</div>';
+	ob_start();
+    ADDTOANY_SHARE_SAVE_KIT($shareArgs);
+    $output .= ob_get_contents();
+    ob_end_clean();
+    $output .= '<i class="icon icon-close-x"></i>';
+    $output .= '</div>';
+    $output .= '</div>';
+    return $output;
+}
+
+/**
+ * Shortcode for displaying Aerospace logo
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Logo
+ */
+function shortcode_aircraft( $atts ) {
+	return '<img src="' . get_template_directory_uri() . '/img/aircraft-icon.svg" class="img-aircraft" alt="Aerospace" title="Aerospace" />';
+}
+add_shortcode( 'aircraft', 'shortcode_aircraft' );

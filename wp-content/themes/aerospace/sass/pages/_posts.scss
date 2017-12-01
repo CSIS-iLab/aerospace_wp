@@ -352,52 +352,9 @@
 
 }
 
-.single-post {
-
-}
-
 // Card Format for archives & search results.
 .article-card {
 
-}
-
-// Post Title if Thumbnail on card layout
-.article-card.has-post-thumbnail .post-format {
-  padding: 1rem 1rem 0.5rem 0;
-
-  @include breakpoint("medium") {
-    padding: 0 1rem 0 0;
-  }
-}
-
-//  Full Width Content 
-.fullWidthFeatureContent {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    text-align: center;
-
-    .fullWidthInner {
-        margin: 0 auto;
-        @include breakpoint("small") {
-            max-width: 95% !important;
-        }
-    }
-
-    .overlay-isActive & {
-        position: static;
-    }
-
-    @include breakpoint("medium") {
-        .sharing-shareBtns.isVisible {
-            max-width: $size__content-max-width;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    }
 }
 
 /*----------  Subsection comment block  ----------*/

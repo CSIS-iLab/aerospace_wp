@@ -61,12 +61,8 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   ## Posts
   ## Archives
   ## 404
-  ## News
   ## Events
-  ## Opportunities
-  ## Resources
-  ## Alumni
-  ## Announcements
+  ## Data
 # Vendors
 --------------------------------------------------------------*/
 
@@ -105,7 +101,8 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   'components/sidebar-left',
   'components/icons',
   'components/calendar',
-  'components/table-of-contents';
+  'components/table-of-contents',
+  'components/interactives';
 
 /*----------  Layout  ----------*/
 @import
@@ -120,7 +117,8 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   'pages/posts',
   'pages/archives',
   'pages/404',
-  'pages/events';
+  'pages/events',
+  'pages/data';
 
 /*----------  Vendors  ----------*/
 @import

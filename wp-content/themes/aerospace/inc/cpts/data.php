@@ -98,6 +98,10 @@ function data_build_meta_box( $post ) {
 	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 	$current_twitter_pic_url = get_post_meta( $post->ID, '_data_twitter_pic_url', true );
 
+	if ( ! $current_content_placement ) {
+		$current_content_placement = 'above';
+	}
+
 	?>
 	<div class='inside'>
 
@@ -106,22 +110,28 @@ function data_build_meta_box( $post ) {
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
 		</p>
 
-		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Content Placement', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="source" value="<?php echo esc_attr( $current_source ); ?>" />
+			<input type="radio" name="content_placement" value="above" <?php checked( $current_content_placement, 'above' ); ?> /> Above <br>
+			<input type="radio" name="content_placement" value="below" <?php checked( $current_content_placement, 'below' ); ?> /> Below
 		</p>
 
-		<h3><?php esc_html_e( 'data URL', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Title', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="title" value="<?php echo esc_attr( $current_title ); ?>" />
+		</p>
+
+		<h3><?php esc_html_e( 'Interactive URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'data Width', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Width', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'data Height', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Height', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
 		</p>
@@ -129,33 +139,27 @@ function data_build_meta_box( $post ) {
 			<input type="checkbox" name="iframe_resize_disabled" value="1" <?php checked( $current_iframe_resize_disabled, '1' ); ?> /> iFrame Resize Disabled
 		</p>
 
-		<h3><?php esc_html_e( 'Fallback Image', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
-		</p>
-
-		<h3><?php esc_html_e( 'data Title', 'aerospace' ); ?></h3>
-		<p>
-			<input type="text" class="large-text" name="title" value="<?php echo esc_url( $current_title ); ?>" />
-		</p>
-
-		<h3><?php esc_html_e( 'data Image URL', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Image URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="img_url" value="<?php echo esc_url( $current_img_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Content Placement', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Fallback Image', 'aerospace' ); ?></h3>
 		<p>
-			<input type="radio" name="above" value="above" <?php checked( $current_content_placement, 'above' ); ?> /> Above <br>
-			<input type="radio" name="below" value="below" <?php checked( $current_content_placement, 'below' ); ?> /> Below
+			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
 		</p>
+
+		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
+		<p>
+			<textarea rows="5" name="source" style="width: 100%;"><?php echo esc_textarea( $current_source ); ?></textarea>
+		</p>		
 
 		<h3><?php esc_html_e( 'Source URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="source_url" value="<?php echo esc_url( $current_source_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Twitter Pic', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Twitter Pic URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="twitter_pic_url" value="<?php echo esc_url( $current_twitter_pic_url ); ?>" />
 		</p>
@@ -190,7 +194,7 @@ function data_save_meta_box_data( $post_id ){
 	}
 	// Source.
 	if ( isset( $_REQUEST['source'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_data_source', sanitize_text_field( wp_unslash( $_POST['source'] ) ) ); // Input var okay.
+		update_post_meta( $post_id, '_data_source', sanitize_textarea_field( wp_unslash( $_POST['source'] ) ) ); // Input var okay.
 	}
 	// URL
 	if ( isset( $_REQUEST['url'] ) ) { // Input var okay.
