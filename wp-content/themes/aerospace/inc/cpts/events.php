@@ -165,9 +165,9 @@ function events_save_meta_box_data( $post_id ) {
 	}
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+		update_post_meta( $post_id, '_post_is_featured', intval( wp_unslash( $_POST['is_featured'] ) ) );
 	} else {
-		update_post_meta( $post_id, '_post_is_featured', '' );
+		update_post_meta( $post_id, '_post_is_featured', 0 );
 	}
 
 	// Location.
