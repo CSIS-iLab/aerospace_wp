@@ -398,6 +398,7 @@
 
         a {
             display: block;
+            position: relative;
         }
 
         img {
@@ -417,6 +418,10 @@
         .entry-title {
             @extend %archive-post-title-md;
             margin: 0 0 0.5rem 0;
+
+            a:hover {
+                color: $orange;
+            }
         }
 
         .entry-meta {
@@ -506,6 +511,48 @@
                 @include fontSize(14px);
                 line-height: 1.43;
                 letter-spacing: 0;
+            }
+        }
+    }
+
+    /*----------  Read More  ----------*/
+    .read-article { display: none; }
+    &:hover {
+        .entry-title a { color: $orange; }
+        .read-article {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: $orange;
+            opacity: 0.9;
+            @extend %subheading;
+            color: $white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            i {
+                display: block;
+                @include fontSize(54px);
+            }
+        }
+    }
+
+    // Featured
+    &.featured:hover {
+        .read-article {
+            display: block;
+            top: unset;
+            bottom: 0;
+            text-align: right;
+            padding: 2rem 1rem;
+
+            i {
+                display: inline;
+                @include fontSize(24px);
             }
         }
     }
