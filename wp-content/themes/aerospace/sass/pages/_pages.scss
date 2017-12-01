@@ -1,0 +1,160 @@
+/*=============================
+=            Pages            =
+=============================*/
+
+body.page {
+	.site-content {
+        background-color: $off-white;
+        &.is-minimal {
+            margin-top: 0;
+        }
+    }
+
+    .hentry {
+        background-color: $white;
+        padding: 1.5rem;
+
+        @include breakpoint("medium") {
+            padding: 3rem;
+        }
+    }
+
+    .entry-header {
+    	margin-bottom: 3rem;
+    	border-bottom: 3px solid $dark-blue;
+    	text-align: center;
+
+    	.entry-title {
+    		@extend %page-title;
+    		margin: 0 0 2rem 0;
+    	}
+    }
+
+    .page-description {
+    	@extend %page-description;
+    	border-bottom: 2px solid $blue-gray;
+    	margin-bottom: 2rem;
+    	padding-bottom: 2rem;
+
+    	p {
+    		width: 90%;
+    		margin: 0 auto;
+    	}
+    }
+
+    .entry-content-post-body {
+    	width: 90%;
+    	margin: 0 auto;
+    }
+
+    .narrow-content {
+    	width: 95%;
+    	margin: 0 auto;
+    }
+}
+
+/*----------  About  ----------*/
+.topics-list {
+	margin: 2rem 0 0 0;
+
+	&-number {
+		font-family: $font__abel;
+		@include fontSize(45px);
+		line-height: 1;
+		color: $orange;
+		text-align: center;
+
+		@include breakpoint("small") {
+			@include fontSize(59px);
+		}
+	}
+
+	&-number,
+	&-body {
+		margin-bottom: 1rem;
+	}
+}
+
+h3.about-team {
+	margin: 5rem 0 3rem 0;
+	padding-bottom: 0.5rem;
+	text-align: center;
+	border-bottom: 2px solid $blue-gray;
+}
+
+.about-team {
+
+	&-img,
+	&-bio {
+		margin-bottom: 1rem;
+
+		@include breakpoint("medium") {
+			margin-bottom: 2rem;
+		}
+	}
+
+	&-bio {
+
+		@include breakpoint("medium") {
+			padding-right: 4rem !important;
+		}
+
+		.subheading {
+			@extend %subheading;
+			text-transform: none;
+			margin: 0 0 0.5rem;
+
+			@include breakpoint("small") {
+				margin-bottom: 1rem;
+			}
+		}
+
+		p {
+			margin-bottom: 0.5rem;
+			@include breakpoint("medium") {
+				margin-bottom: 1rem;
+			}
+		}
+
+		&-title,
+		&-team {
+			@include fontSize(14px);
+			line-height: 1.43;
+		}
+
+		&-title {
+			margin-bottom: 0;
+			font-weight: bold;
+		}
+
+		&-team {
+			color: $dark-gray;
+			font-style: italic;
+		}
+	}
+}
+
+.contact-us {
+
+	@include breakpoint("medium") {
+		padding-left: 3rem !important;
+	}
+
+	@extend %list;
+
+	h4 {
+		margin: 0 0 1rem 0;
+	}
+
+	.meta-label {
+		display: block;
+	}
+
+	address {
+		margin: -0.75rem 0 2rem 0;
+
+		@include breakpoint("medium") {
+			margin-bottom: 3rem;
+		}
+	}
+}

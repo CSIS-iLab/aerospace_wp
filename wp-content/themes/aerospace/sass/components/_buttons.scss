@@ -51,6 +51,11 @@ a.btn {
 
 	&.btn-blue {
 		background-color: $color__background-button-blue;
+		color: $white;
+
+		&:visited {
+			color: $white;
+		}
 
 		&:hover {
 			background-color: $color__background-button-blue-hover;
@@ -69,13 +74,6 @@ a.btn {
 			background-color: $color__background-button-orange-hover;
 			color: $white; 
 		}
-	}
-
-	&.btn-transparent {
-		background-color: transparent;
-		margin: 0;
-
-		&:hover { background-color: transparent; }
 	}
 
 	&.btn-gray {

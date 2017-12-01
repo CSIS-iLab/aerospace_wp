@@ -287,6 +287,7 @@ blockquote, q {
 }
 
 address {
+	font-style: normal;
 	margin: 0 0 1rem;
 }
 
@@ -341,6 +342,12 @@ big {
 	a:hover {
 		color: $secondary-blue;
 	}
+}
+
+.callout {
+	background-color: $off-white;
+	padding: 1.5rem;
+	@extend %list;
 }
 
 /*=============================
