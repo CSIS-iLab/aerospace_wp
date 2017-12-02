@@ -59,3 +59,77 @@
 	}
 	
 }
+
+/*----------  Archives  ----------*/
+.post-type-archive-data {
+	.archive-pages-bottom {
+		background-color: transparent;
+		padding-top: 0;
+
+		&::before {
+			top: 0;
+		}
+	}
+
+	.archive-content {
+		padding: 0 $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: 0 $archive-content-padding-md;
+        }
+	}
+
+	/*----------  Data Table  ----------*/
+	.dataTables_filter { display: none; }
+	.dataTable {
+
+		thead { display: none; }
+		td {
+			border: 0;
+		}
+
+		td:not(.display-column) {
+			display: none;
+		}
+
+		.display-column {
+			width: 100%;
+			border-bottom: 1px solid $blue-gray;
+			padding-bottom: 3rem;
+		}
+
+		tr:last-child .display-column {
+			border-bottom: 0;
+			padding-bottom: 4rem;
+		}
+	}
+
+	.card-format {
+
+		&.featured {
+			.entry-main {
+				padding-left: 1rem;
+				padding-right: 0;
+			}
+		}
+
+		.entry-meta .posted-on,
+		.cat-links li,
+		.entry-tags li {
+			@include fontSize(16px);
+			line-height: 2;
+		}
+
+		.posted-on::before {
+			display: none;
+		}
+
+		.cat-links {
+			&::before {
+				content: "Categories";
+				@extend .meta-label;
+			}
+		}
+	}
+}
+

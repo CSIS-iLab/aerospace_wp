@@ -17,7 +17,7 @@
 		});
 
 		// Select
-		$(".select-cat").on( 'change', function () {
+		$(".data-tags").on( 'change', function () {
 			var val = $.fn.dataTable.util.escapeRegex(
 				$(this).val()
 			);

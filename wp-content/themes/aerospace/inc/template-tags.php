@@ -71,23 +71,8 @@ if ( ! function_exists( 'aerospace_entry_tags' ) ) :
 			$tags_list = get_the_tag_list( '<ul class="entry-tags"><li>','</li><li>','</li></ul>' );
 			if ( $tags_list ) {
 				/* translators: 1: list of tags. */
-								printf( '<div class="post-tags-container col-xs-12"><h3 class="subheading-lg">' . esc_html__( 'Explore More', 'aerospace' ) . '</h3><span class="subheading">' . esc_html__( 'Related Keywords', 'aerospace' ) . '</span>%1$s</div>', $tags_list ); // WPCS: XSS OK.
+				printf( '<div class="post-tags-container col-xs-12"><h3 class="subheading-lg">' . esc_html__( 'Explore More', 'aerospace' ) . '</h3><span class="subheading">' . esc_html__( 'Related Keywords', 'aerospace' ) . '</span>%1$s</div>', $tags_list ); // WPCS: XSS OK.
 
-			}
-		}
-	}
-endif;
-
-if ( ! function_exists( 'aerospace_entry_data_tags' ) ) :
-
-		function aerospace_entry_data_tags() {
-		// Hide category and tag text for pages.
-		if ( in_array( get_post_type(), array( 'data' ), true ) ) {
-			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '<span>',',&nbsp;','</span>' );
-			if ( $tags_list ) {
-				/* translators: 1: list of tags. */
-				printf( '<div class="post-tags-container col-xs-12">' . esc_html__( 'Tags %1$s', 'aerospace' ) . '</div>', $tags_list ); // WPCS: XSS OK.
 			}
 		}
 	}

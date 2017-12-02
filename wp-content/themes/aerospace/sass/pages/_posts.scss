@@ -503,53 +503,54 @@
                 }
             }
         }
+    }
 
-        .cat-links,
-        .entry-tags {
-            ul {
-                margin-left: 0;
-            }
-
-            li {
-                font-family: $font__source;
-                @include fontSize(14px);
-                line-height: 1.43;
-                letter-spacing: 0;
-            }
+    /*----------  Categories & Tags  ----------*/
+    .cat-links,
+    .entry-tags {
+        ul {
+            margin-left: 0;
         }
 
-        .post-tags-container {
-            padding-left: 0;
-            padding-right: 0;
+        li {
+            font-family: $font__source;
+            @include fontSize(14px);
+            line-height: 1.43;
+            letter-spacing: 0;
+        }
+    }
 
-            .subheading-lg { display: none; }
-            .subheading {
-                @extend .meta-label;
+    .post-tags-container {
+        padding-left: 0;
+        padding-right: 0;
+
+        .subheading-lg { display: none; }
+        .subheading {
+            @extend .meta-label;
+        }
+
+        ul {
+            display: inline-block;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            margin: 0;
+
+            &::after {
+                content: ", ";
+                margin-right: 0.25rem;
             }
 
-            ul {
-                display: inline-block;
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
+            &:last-of-type::after { content: none; }
 
-            li {
-                display: inline;
-                margin: 0;
+            a {
+                color: $black;
 
-                &::after {
-                    content: ", ";
-                    margin-right: 0.25rem;
-                }
-
-                &:last-of-type::after { content: none; }
-
-                a {
-                    color: $black;
-
-                    &:hover { color: $secondary-blue; }
-                }
+                &:hover { color: $secondary-blue; }
             }
         }
     }
