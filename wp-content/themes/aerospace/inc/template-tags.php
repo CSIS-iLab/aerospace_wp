@@ -711,3 +711,16 @@ if ( ! function_exists( 'aerospace_data_source' ) ) :
 		}
 	}
 endif;
+
+if ( ! function_exists( 'aerospace_sort_filter' ) ) :
+	/**
+	 * Returns HTML with Sort options for archives and search.
+	 */
+	function aerospace_sort_filter() {
+		global $wp;
+		$url = home_url( $wp->request );
+
+		/* translators: 1: Sort direction. */
+		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s?order=DESC">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s?order=ASC">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url ); // WPCS: XSS OK.
+	}
+endif;

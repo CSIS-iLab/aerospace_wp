@@ -41,9 +41,16 @@ add_action('wp_head', 'aerospace_pingback_header');
 function aerospace_custom_sort_posts( $query ) {
 	if ( ! is_admin() && ( ( is_home() && get_option( 'page_for_posts' ) ) || is_category() || is_archive() ) && $query->is_main_query() ) {
 		$query->set( 'meta_key', '_post_is_featured' );
+
+        if ( 'ASC' === get_query_var( 'order' ) ) {
+            $sort_dir = 'ASC';
+        } else {
+            $sort_dir = 'DESC';
+        }
+
 		$query->set( 'orderby', array(
 			'meta_value_num' => 'DESC',
-			'post_date' => 'DESC',
+			'post_date' => $sort_dir,
 		) );
 	}
 }

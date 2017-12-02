@@ -85,6 +85,25 @@
 		}
 	}
 
+	.sort-filter {
+		@include fontSize(16px);
+		line-height: 2.0;
+
+		a {
+			color: $black;
+			box-shadow: none;
+
+			&:hover {
+				color: $orange;
+			}
+		}
+
+		&-divider {
+			color: $blue-gray;
+			margin: 0 0.5rem;
+		}
+	}
+
 	.archive-pages-bottom {
 		position: relative;
 		background-color: $white;
@@ -132,7 +151,7 @@
 			text-align: left;
 			margin: 0 auto;
 			padding-bottom: 0;
-			
+
 			@include breakpoint("medium") {
 				padding-left: 1rem;
 			    padding-right: 1rem;
