@@ -29,10 +29,10 @@ get_header(); ?>
                     <div class="col-xs-12 col-sm archives-meta-left">
                         <?php aerospace_post_num(); ?>
                     </div>
-                    <?php endif; ?>
                     <div class="col-xs-12 col-sm-6 archives-meta-right">
                         <?php aerospace_sort_filter(); ?>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
          </header>

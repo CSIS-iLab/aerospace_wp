@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying archive pages
+ * The template for displaying the Aerospace101 Archive
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
@@ -49,19 +49,30 @@ get_header(); ?>
 
     <?php
     if (have_posts() ) : ?>
-        <?php
-        /* Start the Loop */
-        while ( have_posts() ) : the_post();
+        <div class="archive-content">
+            <?php
+            $count = 0;
+            $last = $wp_query->post_count - 1;
+            /* Start the Loop */
+            while ( have_posts() ) : the_post();
+                if ( $count === 1 ) {
+                    ?>
+                    <div class="archive-content-regular row">
+                        <div class="col-xs-12 col-md-2 filter-sidebar">
+                            Filter by Tag
+                        </div>
+                        <div class="col-xs-12 col-md row archive-content-posts">
+                <?php }
+                            get_template_part('template-parts/content', get_post_type());
 
-            /*
-            * Include the Post-Format-specific template for the content.
-            * If you want to override this in a child theme, then include a file
-            * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-            */
-            get_template_part('template-parts/content', get_post_type());
-
-        endwhile;
-        ?>
+                if ( $count === $last ) { ?>
+                        </div>
+                    </div>
+                <?php }
+                $count++;
+            endwhile;
+            ?>
+        </div>
         <footer class="archive-pages-bottom row">
             <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
             <div class="col-xs-12 col-sm-6 archives-meta-right">

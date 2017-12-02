@@ -68,7 +68,7 @@ if ( ! function_exists( 'aerospace_entry_tags' ) ) :
 		// Hide category and tag text for pages.
 		if ( in_array( get_post_type(), array( 'post', 'events', 'aerospace101', 'data' ), true ) ) {
 			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '<ul><li>','</li><li>','</li></ul>' );
+			$tags_list = get_the_tag_list( '<ul class="entry-tags"><li>','</li><li>','</li></ul>' );
 			if ( $tags_list ) {
 				/* translators: 1: list of tags. */
                 printf( '<div class="post-tags-container col-xs-12"><h3 class="subheading-lg">' . esc_html__( 'Explore More', 'aerospace' ) . '</h3><span class="subheading">' . esc_html__( 'Related Keywords', 'aerospace' ) . '</span>%1$s</div>', $tags_list ); // WPCS: XSS OK.
