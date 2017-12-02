@@ -11,9 +11,12 @@ $is_featured = get_post_meta( $id, '_post_is_featured', true );
 if ( 1 == $is_featured ) {
     $classes = 'row featured card-format';
     $thumbnail_size = 6;
-} else {
+} elseif ( is_post_type_archive( 'aerospace101' ) ) {
     $classes = 'col-xs-12 col-md-6 row card-format';
     $thumbnail_size = 12;
+} else {
+    $classes = 'row card-format';
+    $thumbnail_size = 4;
 }
 
 ?>
