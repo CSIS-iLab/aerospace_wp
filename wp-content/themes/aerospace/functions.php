@@ -140,6 +140,11 @@ function aerospace_scripts()
     ");
 
     wp_enqueue_script('aerospace-posts', get_template_directory_uri() . '/js/posts.js', array('jquery'), '20171129', true);
+
+    // ASP Archive Page
+    if ( is_post_type_archive( 'aerospace101' ) ) {
+        wp_enqueue_script('aerospace-aerospace101-archive', get_template_directory_uri() . '/js/aerospace101-archives.js', array('jquery'), '20171202', true);
+    }
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');
 

@@ -48,6 +48,14 @@ function aerospace_custom_sort_posts( $query ) {
             $sort_dir = 'DESC';
         }
 
+        $tag_id = get_query_var( 'tid' );
+        if ( $tag_id ) {
+            $query->set( 'tag__in', array($tag_id) );
+            add_filter( 'body_class', function( $classes ) {
+                return array_merge( $classes, array( 'archive-filtered-results' ) );
+            } );
+        }
+
 		$query->set( 'orderby', array(
 			'meta_value_num' => 'DESC',
 			'post_date' => $sort_dir,
@@ -129,22 +137,6 @@ function aerospace_add_logo_to_post_content( $content ) {
 add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
 
 /**
- * Load a template part into a template
- *
- * @param string $slug The slug name for the generic template.
- * @param string $name The name of the specialised template.
- * @param array $params Any extra params to be passed to the template part.
- */
-function get_template_part_extended( $slug, $name = null, $params = array() ) {
-    if ( ! empty( $params ) ) {
-        foreach ( (array) $params as $key => $param ) {
-            set_query_var( $key, $param );
-        }
-    }
-    get_template_part( $slug, $name );
-}
-
-/**
  * Fixes empty <p> and <br> tags showing before and after shortcodes in the
  * output content.
  */
@@ -186,3 +178,13 @@ function aerospace_archive_titles( $title ) {
     return $title;
 }
 add_filter( 'get_the_archive_title', 'aerospace_archive_titles' );
+
+/**
+ * Add custom query vars.
+ * @param array $vars Query vars fed into WP_Query.
+ */
+function aerospace_add_query_vars_filter( $vars ){
+  $vars[] = "tid";
+  return $vars;
+}
+add_filter( 'query_vars', 'aerospace_add_query_vars_filter' );

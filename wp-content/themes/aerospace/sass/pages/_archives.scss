@@ -163,8 +163,9 @@
         }
     }
 
-    /*----------  Page > 1 Styles  ----------*/
-    &.paged {
+    /*-----  Page 2+ Styles or Filtered Results  -------*/
+    &.paged,
+    &.archive-filtered-results {
     	.page-header {
     		margin-top: 0;
     	}

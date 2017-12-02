@@ -18,6 +18,11 @@ if ( get_archive_bottom_content() ) {
     $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
 }
 
+$filter_html_start = '<div class="archive-content-regular row">
+                    <div class="col-xs-12 col-md-2 filter-sidebar">';
+$filter_html_end = '</div>
+                    <div class="col-xs-12 col-md row archive-content-posts">';
+
 get_header(); ?>
 
     <div id="primary" class="content-area">
@@ -35,13 +40,6 @@ get_header(); ?>
                         <div class="col-xs-12 col-sm archives-meta-left">
                             <?php aerospace_post_num(); ?>
                         </div>
-                        <div class="col-xs-12 col-sm-6 archives-meta-right">
-                            <?php
-                            if ( ! is_post_type_archive( 'events' ) ) {
-                                aerospace_sort_filter();
-                            }
-                            ?>
-                        </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -52,18 +50,33 @@ get_header(); ?>
         <div class="archive-content">
             <?php
             $count = 0;
-            $last = $wp_query->post_count - 1;
+            $total_count = $wp_query->post_count;
+            $last = $total_count - 1;
+            $show_filter = true;
             /* Start the Loop */
             while ( have_posts() ) : the_post();
-                if ( $count === 1 ) {
-                    ?>
-                    <div class="archive-content-regular row">
-                        <div class="col-xs-12 col-md-2 filter-sidebar">
-                            Filter by Tag
-                        </div>
-                        <div class="col-xs-12 col-md row archive-content-posts">
-                <?php }
-                            get_template_part('template-parts/content', get_post_type());
+                // We only want to show the filtering options once and always after the featured item.
+                $is_featured = get_post_meta( $id, '_post_is_featured', true );
+
+                if ( ( $is_featured ) ) {
+                    get_template_part('template-parts/content', get_post_type());
+
+                    echo $filter_html_start;
+                    get_template_part( 'components/aerospace101-filters');
+                    echo $filter_html_end;
+
+                    $show_filter = false;
+                } elseif ( $show_filter) { 
+                    echo $filter_html_start;
+                    get_template_part( 'components/aerospace101-filters');
+                    echo $filter_html_end;
+
+                    $show_filter = false;
+                    get_template_part('template-parts/content', get_post_type());
+
+                } else {
+                    get_template_part('template-parts/content', get_post_type());
+                }
 
                 if ( $count === $last ) { ?>
                         </div>

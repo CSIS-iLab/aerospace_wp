@@ -724,3 +724,65 @@ if ( ! function_exists( 'aerospace_sort_filter' ) ) :
 		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s?order=DESC">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s?order=ASC">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url ); // WPCS: XSS OK.
 	}
 endif;
+
+/* get terms limited to post type 
+ @ $taxonomies - (string|array) (required) The taxonomies to retrieve terms from. 
+ @ $args  -  (string|array) all Possible Arguments of get_terms http://codex.wordpress.org/Function_Reference/get_terms
+ @ $post_type - (string|array) of post types to limit the terms to
+ @ $fields - (string) What to return (default all) accepts ID,name,all,get_terms. 
+ if you want to use get_terms arguments then $fields must be set to 'get_terms'
+*/
+function get_terms_by_post_type( $taxonomies, $post_type, $fields = 'all' ){
+    $args = array(
+        'post_type' => $post_type,
+        'posts_per_page' => -1
+    );
+    $query = new WP_Query( $args );
+    $terms = array();
+    $terms_ids = array();
+    while ( $query->have_posts() ) {
+        $query->the_post();
+        $current_terms = wp_get_post_terms( $query->post->ID, $taxonomies, array("fields" => $fields ) );
+        foreach ($current_terms as $t){
+		    //avoid duplicates
+		    if ( in_array( $t->term_id, $terms_ids ) ){
+		    	$terms[$t->term_id]->count = $terms[$t->term_id]->count + 1;
+		    } else {
+		        $t->count = 1;
+		        $terms[$t->term_id] = $t;
+		        $terms_ids[] = $t->term_id;
+		    	
+		    }
+
+		}
+    }
+   	wp_reset_postdata();
+
+    //return array of term objects
+    if ($fields == "all")
+        return $terms;
+    //return array of term ID's
+    if ($fields == "ids"){
+        foreach ($terms as $t){
+            $re[] = $t->term_id;
+        }
+        return $re;
+    }
+    //return array of term names
+    if ($fields == "name"){
+        foreach ($terms as $t){
+            $re[] = $t->name;
+        }
+        return $re;
+    }
+    // get terms with get_terms arguments
+    if ($fields == "get_terms"){
+        $terms2 = get_terms( $taxonomies, $args );
+        foreach ($terms as $t){
+            if (in_array($t,$terms2)){
+                $re[] = $t;
+            }
+        }
+        return $re;
+    }
+}
