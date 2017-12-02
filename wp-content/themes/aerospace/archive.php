@@ -7,6 +7,17 @@
  * @package Aerospace
  */
 
+if ( get_archive_top_content() ) {
+    $description = get_archive_top_content();
+} else {
+    $description = get_the_archive_description();
+}
+$description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
+
+if ( get_archive_bottom_content() ) {
+    $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
+}
+
 get_header(); ?>
 
     <div id="primary" class="content-area">
@@ -15,7 +26,10 @@ get_header(); ?>
             <header class="page-header row">
                 <div class="title-container">
                     <?php the_archive_title('<h1 class="page-title">', '</h1>'); ?>
-                    <?php the_archive_description('<div class="archive-description">', '</div>'); ?>
+                    <div class="archive-description row">
+                        <?php echo $description_extra; ?>
+                        <?php echo $description; ?>
+                    </div>
                     <div class="archive-pages-top row">
                         <?php if (have_posts() ) : ?>
                         <div class="col-xs-12 col-sm archives-meta-left">

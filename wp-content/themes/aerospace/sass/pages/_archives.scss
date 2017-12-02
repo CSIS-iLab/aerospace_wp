@@ -45,6 +45,7 @@
     	}
 
     	.archive-description {
+    		@extend %page-description;
     		padding-bottom: 2rem;
     		border-bottom: 2px solid $blue-gray;
 
@@ -53,13 +54,38 @@
 				margin: 0 auto;
 			}
 
-    		p {
-    			width: calc(100% - (#{$archive-content-padding} * 2));
+			&-desc,
+			&-extra {
+				p:last-of-type {
+					margin-bottom: 0;
+				}
+			}
+
+    		&-desc {
+    			order: 1;
     			margin: 0 auto;
 
     			@include breakpoint("medium") {
-    				width: calc(100% - (#{$archive-content-padding-md} * 2));
+    				max-width: calc(100% - (#{$archive-content-padding-md} * 2));
     			}
+    		}
+
+    		&-extra {
+    			order: 2;
+    			margin-top: 1rem;
+
+    			@include breakpoint("medium") {
+    				margin-top: 0;
+    				padding-left: 2rem;
+    				padding-right: 0;
+    			}
+    		}
+
+    		.archive-description-extra + .archive-description-desc {
+    			@include breakpoint("medium") {
+	    			padding-left: 0;
+	    			padding-right: 2rem;
+	    		}
     		}
     	}
     }
