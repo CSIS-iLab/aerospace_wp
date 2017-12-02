@@ -7,20 +7,27 @@
  * @package Aerospace
  */
 
-$is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
-if ( 1 == $is_featured ) {
-    $classes = 'row featured card-format';
+$classes = 'row card-format';
+
+$current_date = date( 'Y-m-d' );
+$start_date = get_post_meta( $post->ID, '_events_start_date', true );
+if ( $current_date > $start_date ) {
+    $heading_class = ' past-event';
+    $heading = '<h3 class="event-heading-dividers">Past Events</h3>';
 } else {
-    $classes = 'row card-format';
+    $heading_class = ' upcoming-event';
+    $heading = '<h2 class="event-heading-dividers">Upcoming Events</h2>';
+
 }
 
 ?>
 
+<?php echo $heading; ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
-    <div class="col-xs-12 col-md-2">
+    <div class="col-xs-4 col-sm-3 col-md-2">
         <?php aerospace_posted_on_calendar( $post->ID ) ?>
     </div>
-    <div class="col-xs-12 col-md card-main">
+    <div class="col-xs col-sm col-md entry-main">
         <header class="entry-header">
             <?php aerospace_post_is_featured ( $post->ID ) ?>
             <?php

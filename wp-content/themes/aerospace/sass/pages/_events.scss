@@ -155,4 +155,65 @@
 			padding: 0.5rem 1.5rem;
 		}
 	}
+
+	.event-heading-dividers {
+		position: relative;
+		@extend .row;
+		background-color: $white;
+		margin-top: 0;
+		margin-bottom: 0;
+		padding: 4rem 4.5rem 0 4.5rem;
+		@extend %subheading-lg;
+
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			bottom: -0.5rem;
+			left: calc(4.5rem / 2);
+			width: calc(100% - 4.5rem);
+			height: 1px;
+			background-color: $blue-gray;
+		}
+
+		& + .hentry {
+			padding-top: 3rem;
+		}
+	}
+
+	.site-main > h2:not(:first-of-type),
+	.site-main > h3:not(:first-of-type) {
+		display: none;
+	}
+
+	.events {
+		.entry-host {
+			position: relative;
+			margin: -0.5rem 0 1rem;
+			padding: 0;
+			@extend %post-meta-content;
+
+			.meta-label {
+				padding-left: 1.25rem;
+			}
+
+			&::before {
+				position: absolute;
+				top: 4px;
+				content: "\e806";
+				font-family: "asp";
+				color: $orange;
+				@include fontSize(12px);
+			}
+		}
+
+		&:hover {
+			.entry-title a { color: $orange; }
+			.calendar-container {
+				@include calendarGradient ( -45deg, transparent, $orange, 28.28427px );
+
+				a { color: $white;}
+			}
+		}
+	}
 }

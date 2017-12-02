@@ -37,7 +37,11 @@ get_header(); ?>
                         </div>
                         <?php endif; ?>
                         <div class="col-xs-12 col-sm-6 archives-meta-right">
-                            <?php aerospace_sort_filter(); ?>
+                            <?php
+                            if ( ! is_post_type_archive( 'events' ) ) {
+                                aerospace_sort_filter();
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>

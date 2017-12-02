@@ -30,7 +30,9 @@ get_header(); ?>
                         <?php aerospace_post_num(); ?>
                     </div>
                     <?php endif; ?>
-                    <div class="col-xs-12 col-sm-6 archives-meta-right">Sort</div>
+                    <div class="col-xs-12 col-sm-6 archives-meta-right">
+                        <?php aerospace_sort_filter(); ?>
+                    </div>
                 </div>
             </div>
          </header>

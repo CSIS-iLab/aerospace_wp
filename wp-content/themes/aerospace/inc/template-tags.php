@@ -506,7 +506,7 @@ if ( ! function_exists( 'aerospace_posted_on_calendar' ) ) :
 				$month = get_the_date( 'M' );
 				$day = get_the_date( 'j' );
 		}
-		$date_string = '<div class="month">%1$s</div><div class="day">%2$s</div>';
+		$date_string = '<span class="month">%1$s</span><span class="day">%2$s</span>';
 		$date_string = sprintf( $date_string,
 				esc_attr( $month ),
 				esc_html( $day )

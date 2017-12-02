@@ -469,20 +469,17 @@
     .entry-footer {
         border-top: 1px solid $blue-gray;
 
-        .post-format,
-        .cat-links {
+        & > * {
+            padding-right: 0.5rem;
+            @include fontSize(14px);
+            line-height: 1.81;
+
             @include breakpoint("small") {
                 display: inline-block;
             }
         }
 
-        .post-format {
-            padding-right: 0.5rem;
-            @include fontSize(14px);
-            line-height: 1.81;
-        }
-
-        .cat-links {
+       & > *:not(:first-child) {
             position: relative;
 
             @include breakpoint("small") {
@@ -495,13 +492,19 @@
                     display: block;
                     position: absolute;
                     left: 0rem;
-                    top: 0px;
+                    top: -2px;
                     width: 1px;
                     height: 100%;
                     background-color: $blue-gray;
+
+                    @include breakpoint("medium") {
+                        top: -4px;
+                    }
                 }
             }
+        }
 
+        .cat-links {
             ul {
                 margin-left: 0;
             }
