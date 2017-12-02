@@ -174,6 +174,8 @@ function aerospace_archive_titles( $title ) {
         $title = single_cat_title( '<span class="archive-label">Topic:</span> ', false );
     } elseif( is_tag() ) {
         $title = single_tag_title( '<span class="archive-label">Keyword:</span> ', false );
+    } elseif( is_author() ) {
+        $title = '<span class="archive-label">Author:</span> ' . get_the_author();
     }
     return $title;
 }

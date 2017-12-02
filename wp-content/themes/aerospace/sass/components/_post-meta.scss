@@ -82,6 +82,10 @@
 	a {
 		text-transform: none;
 		color: $orange;
+
+		&:hover {
+			color: $dark-orange;
+		}
 	}
 
 	p {

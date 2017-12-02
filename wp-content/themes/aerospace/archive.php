@@ -7,11 +7,22 @@
  * @package Aerospace
  */
 
+echo $description;
+
 if ( get_archive_top_content() ) {
     $description = get_archive_top_content();
 } else {
     $description = get_the_archive_description();
 }
+
+// Author Archives
+if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
+    $author = get_queried_object();
+    $img = coauthors_get_avatar( $author, 150 );
+    $bio = $author->description;
+    $description = '<div class="row"><div class="col-xs-3 col-sm-2">' . $img . '</div><div class="col-xs col-sm"><p>' . $bio . '</p></div></div>';
+}
+
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
 
 if ( get_archive_bottom_content() ) {
