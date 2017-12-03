@@ -152,7 +152,7 @@ get_header(); ?>
 				<p class="view-more">Browse the <a href="/data">Data Repository<i class="icon-long-arrow-right"></i></a></p>
 			</section>
 			<section class="feature-final-sidebar col-xs-12 col-md-4">
-				Twitter goes here
+				<?php get_sidebar(); ?>
 			</section>
 		</section>
 	</main><!-- #main -->
