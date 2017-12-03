@@ -72,16 +72,113 @@
 	}
 
 	.archive-content {
+		position: relative;
 		padding: 0 $archive-content-padding;
+		margin-bottom: 2rem;
 
         @include breakpoint("medium") {
             padding: 0 $archive-content-padding-md;
         }
 	}
 
+	/*----------  Filter Options  ----------*/
+	.sort-filter {
+		@include fontSize(16px);
+		line-height: 1.65;
+
+		.btn-sort {
+			background-color: transparent;
+			font-family: $font__source;
+			color: $black;
+			margin: 0;
+			padding: 0;
+			text-transform: none;
+
+			&.active,
+			&:hover {
+				color: $orange;
+			}
+		}
+	}
+	.filter-sidebar {
+		padding-right: 0.5rem;
+
+		@include breakpoint("medium") {
+			padding-right: 4rem;
+		}
+
+		.filter-label {
+			@extend %form-label;
+			display: block;
+		}
+
+		.dropdown-container {
+			width: 100%;
+
+			select.filter-select {
+				width: auto;
+				color: $gray;
+			}
+
+			/* IE Fix */
+			select#data-categories,
+			select#data-tags {
+				width: 100%;
+			}
+
+			select:focus#data-categories,
+			select:focus#data-tags {
+				width: auto\9;
+			}
+		}
+
+		input,
+		select {
+			display: block;
+			margin-bottom: 2rem;
+			font-family: $font__source;
+			@include fontSize(16px);
+			margin: 0 0 2rem 0;
+		}
+
+		.filter-search-container {
+			position: relative;
+
+			&::after {
+				content: '\f2f5';
+				font-family: 'asp';
+				display: block;
+				position: absolute;
+				right: 0.6rem;
+				bottom: 2px;
+			}
+		}
+
+		.filter-input {
+			width: 100%;
+			padding: 0.2rem 0.6rem;
+			line-height: 1.67;
+
+			@include placeholder {
+				color: $gray;
+			}
+		}
+	}
+
 	/*----------  Data Table  ----------*/
+	article.is-hidden,
+	#dataRepo.is-hidden,
+	.archive-pages-bottom .archives-meta-right.is-hidden
+	{
+		display: none;
+	}
+
 	.dataTables_filter { display: none; }
+
 	.dataTable {
+		margin-top: 0;
+
+		&.is-hidden { display: none; }
 
 		thead { display: none; }
 		td {
@@ -105,7 +202,6 @@
 	}
 
 	.card-format {
-
 		&.featured {
 			.entry-main {
 				padding-left: 1rem;
@@ -129,6 +225,36 @@
 				content: "Categories";
 				@extend .meta-label;
 			}
+		}
+	}
+
+	/*----------  Pagination  ----------*/
+	.dataTables_paginate {
+		position: absolute;
+		right: calc(#{$archive-content-padding} + 0.5rem);
+		bottom: -3.9rem;
+		z-index: 10;
+
+		@include breakpoint("medium") {
+			right: calc(#{$archive-content-padding-md} + 0.5rem);
+		}
+
+		.current {
+			padding-top: 3px;
+		}
+
+		span {
+			margin-left: 0;
+			margin-right: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
+
+		.next,
+		.previous {
+			margin: 0;
+			padding-left: 0;
+			padding-right: 0;
 		}
 	}
 }

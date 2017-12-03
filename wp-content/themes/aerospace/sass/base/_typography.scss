@@ -117,6 +117,8 @@ textarea {
 	@include fontSize(14px);
 	line-height: 1.81;
 	letter-spacing: 0.9px;
+	text-transform: uppercase;
+	color: $gray;
 }
 
 %note {

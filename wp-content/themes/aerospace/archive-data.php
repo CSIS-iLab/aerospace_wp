@@ -35,48 +35,29 @@ get_header(); ?>
 					<div class="col-xs-12 col-sm archives-meta-left">
 						<?php aerospace_post_num(); ?>
 					</div>
-					<div class="col-xs-12 col-sm-6 archives-meta-right">Sort By:
-						<button class="btn btn-gray btn-red-hover tableSort active" data-sortCol="0" aria-label="Sort by Date">Date</button>
-						<button class="btn btn-gray btn-red-hover tableSort" data-sortCol="1" aria-label="Sort by Title">Title</button>
+					<div class="col-xs-12 col-sm-6 archives-meta-right">
+						<div class="sort-filter">
+							<span class="meta-label">Sort By:</span>
+							<button class="btn-sort tableSort active" data-sortCol="3" aria-label="Sort by Date">Date</button>
+							<span class="sort-filter-divider">|</span>
+							<button class="btn-sort tableSort" data-sortCol="2" aria-label="Sort by Title">Title</button>
+						</div>
 					</div>
 				<?php endif; ?>
 			</div>
 		</header><!-- .page-header -->
 		<section class="archive-content row">
 			<?php if (have_posts() ) : ?>
-			<div class="col-xs-12 col-md-3">
+			<div class="col-xs-12 col-md-3 filter-sidebar">
 				<?php get_template_part( 'components/filters-data'); ?>
-				<div id="select">
-					<div class="select">
-						<label class="label" for="category">FILTER BY CATEGORY</label>
-						<?php
-						$first_field = array(
-							'show_option_all' => '',
-							'show_option_none' => 'Select A Category'
-						);
-						wp_dropdown_categories($first_field);
-						?>
-					</div>
-					<div class="select">
-						<label class="label" for="tag">FILTER BY TAG</label>
-						<?php
-						$taglist = wp_dropdown_categories('taxonomy=post_tag&show_option_none=Select A Tag&show_count=1&orderby=name&echo=0');
-						$taglist = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $taglist);
-						echo $taglist;
-						?>
-					</div>
-					<div class="filter-search">
-						<label for="dataSearch" class="sortTitle">Search</label>
-						<input id="dataSearch" name="dataSearch" type="text" placeholder="Search the data..." />
-					</div>
-				</div>
 			</div>
 			<div class="col-xs-12 col-md-9">
 
-				<table id="dataRepo" class="cards">
+				<table id="dataRepo" class="cards is-hidden">
 					<thead>
 						<tr>
 							<th>Display</th>
+							<th>Featured</th>
 							<th>Title</th>
 							<th>Last Updated</th>
 							<th>category</th>

@@ -6,7 +6,8 @@
 	@extend %post-meta-content;
 }
 
-.pagination {
+.pagination,
+.dataTables_paginate {
 	text-align: right;
 
 	span, a {
@@ -18,6 +19,7 @@
 		font-weight: 300;
 		box-shadow: none;
 		text-align: center;
+		cursor: pointer;
 	}
 
 	.dots {
