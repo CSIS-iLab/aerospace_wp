@@ -133,13 +133,13 @@ get_header(); ?>
 						$featured_data = get_posts($featuredDataArgs);
 
 						if ( has_post_thumbnail( $featured_data[0] ) ) {
-							echo '<div class="col-xs-3 feature-final-data-thumbnail">';
+							echo '<div class="hidden-xs col-sm-3 feature-final-data-thumbnail">';
 							echo get_the_post_thumbnail( $featured_data[0]->ID, 'medium' );
 							echo '</div>';
 						}
 
 						$data_desc = get_option( 'aerospace_homepage_data_desc' );
-						echo '<div class="col-xs"><p>' . $data_desc . '</p></div>';
+						echo '<div class="col-xs-12 col-sm"><p>' . $data_desc . '</p></div>';
 						echo '</div><div class="row">';
 
 						foreach($featured_data as $post) : setup_postdata($post);

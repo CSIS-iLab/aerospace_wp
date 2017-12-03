@@ -6,7 +6,11 @@
     background-color: $off-white;
 
     .site-main {
-    	margin-top: 3rem;
+    	margin-top: 1rem;
+
+    	@include breakpoint("medium") {
+    		margin-top: 3rem;
+    	}
     }
 
     .section-heading {
@@ -44,11 +48,25 @@
     			line-height: 1.3;
     		}
     	}
+
+    	.entry-thumbnail {
+    		padding-left: 0;
+    		padding-right: 0;
+
+    		@include breakpoint("medium") {
+    			padding-left: 0.5rem;
+    			padding-right: 0.5rem;
+    		}
+    	}
     }
 
     /*----------  Main Feature  ----------*/
     .feature-main {
-    	margin-bottom: 3rem;
+    	margin-bottom: 0;
+
+    	@include breakpoint("medium") {
+    		margin-bottom: 3rem;
+    	}
 
     	.hentry {
     		padding: 0;
@@ -59,8 +77,11 @@
     		}
 
     		.entry-main {
-    			padding: 2rem 3rem;
+    			padding: 1rem;
 
+    			@include breakpoint("medium") {
+    				padding: 2rem 3rem;
+    			}
     		}
     	}
     }
@@ -82,11 +103,28 @@
     			letter-spacing: 0.5px;
     			border-bottom: 1px solid $light-gray;
     			padding: 0 1.5rem 0.5rem;
+    			margin-left: 0.5rem;
+    			margin-right: 0.5rem;
+    			margin-bottom: 1rem;
+
+    			@include breakpoint("medium") {
+    				margin-left: 0;
+    				margin-right: 0;
+    				margin-bottom: 0;
+    			}
     		}
     	}
 
     	.post.hentry {
-    		padding: 2rem;
+    		padding: 0;
+    		margin-left: 0;
+    		margin-right: 0;
+
+    		@include breakpoint("medium") {
+    			padding: 2rem;
+    			margin-left: -0.5rem;
+    			margin-right: -0.5rem;
+    		}
 
     		.entry-header .entry-title {
     			@extend %archive-post-title-md;
@@ -99,6 +137,14 @@
     				&:hover { color: $orange; }
     			}
     		}
+
+    		.entry-main {
+    			padding: 1rem;
+
+    			@include breakpoint("medium") {
+    				padding: 2rem 3rem;
+    			}
+    		}
     	}
 
     	.post + .post {
@@ -107,13 +153,19 @@
 
     	&-posts-more {
     		border-top: 3px solid $dark-blue;
-    		margin: 1rem 1.5rem 3rem;
+    		margin: 1rem 1rem 3rem;
     		text-align: right;
     		font-family: $font__abel;
+
+    		@include breakpoint("medium") {
+    			margin-left: 1.5rem;
+    			margin-right: 1.5rem;
+    		}
     	}
     }
 
     .feature-secondary-sidebar {
+    	padding-bottom: 2rem;
 
     	@include breakpoint("medium") {
     		padding: 0 3rem;
@@ -131,7 +183,11 @@
     	/*----------  Event  ----------*/
     	&-events {
     		margin-top: 3rem;
-    		margin-bottom: 6rem;
+    		margin-bottom: 3rem;
+
+    		@include breakpoint("medium") {
+    			margin-bottom: 6rem;
+    		}
 
     		.calendar-container {
     			padding-top: 0.5rem;
@@ -152,9 +208,13 @@
     			}
 
     			.day {
-    				@include fontSize(46px);
+    				@include fontSize(40px);
     				line-height: 0.87;
     				letter-spacing: 2.8px;
+
+    				@include breakpoint("medium") {
+    					@include fontSize(46px);
+    				}
     			}
     		}
 
@@ -174,6 +234,7 @@
 
 	    		.entry-host {
 	    			margin-top: 0;
+	    			padding-left: 0;
 	    			@include fontSize(14px);
 	    			line-height: 1.43;
 	    		}
@@ -202,6 +263,8 @@
 	    			}
 	    		}
 
+	    		.entry-main { padding: 0 0.5rem; }
+
 	    		.authors-list,
 	    		.posted-on {
 	    			display: block;
@@ -225,15 +288,21 @@
     	@include fullWidthBackground($dark-blue);
 
     	&::after {
-    		background-image: url($img__hp-aerospace101-bg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-    		left: 66%;
+    		@include breakpoint("medium") {
+	    		background-image: url($img__hp-aerospace101-bg);
+	    		background-repeat: no-repeat;
+	    		background-size: contain;
+	    		left: 66%;
+	    	}
     	}
 
     	&-content {
-    		max-width: calc(66% - 6rem);
-    		margin: 0 auto 0 4rem;
+    		margin: 0 1rem;
+
+    		@include breakpoint("medium") {
+    			max-width: calc(66% - 6rem);
+    			margin: 0 auto 0 4rem;
+    		}
     	}
 
     	.section-heading {
@@ -284,8 +353,12 @@
     /*----------  Featured Final  ----------*/
     .feature-final {
     	&-data {
-    		padding: 4rem;
+    		padding: 2rem 1rem;
     		background-color: $white;
+
+    		@include breakpoint("medium") {
+    			padding: 4rem;
+    		}
 
     		&-desc {
     			margin-bottom: 2rem;
@@ -299,13 +372,20 @@
     	.view-more {
     		border-top: 3px solid $dark-blue;
     		text-align: right;
-    		margin-left: -2rem;
-    		margin-right: -2rem;
-    		padding-right: 2rem; 
+
+    		@include breakpoint("medium") {
+    			margin-left: -2rem;
+    			margin-right: -2rem;
+    			padding-right: 2rem; 
+    		}
     	}
 
     	.hentry {
-    		padding: 0 3rem 0.5rem 0.5rem;
+    		padding: 0 1rem 0.5rem;
+
+    		@include breakpoint("medium") {
+    			padding: 0 3rem 0.5rem 0.5rem;
+    		}
 
     		.entry-header .entry-title {
     			@extend %archive-post-title;
@@ -324,9 +404,12 @@
     	}
 
     	.hentry + .hentry {
-    		padding-left: 3rem;
-    		padding-right: 0.5rem;
-    		border-left: 1px solid $blue-gray;
+    		padding-top: 1rem;
+    		@include breakpoint("medium") {
+	    		padding-left: 3rem;
+	    		padding-right: 0.5rem;
+	    		border-left: 1px solid $blue-gray;
+	    	}
     	}
     }
 }

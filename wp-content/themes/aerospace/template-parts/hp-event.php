@@ -10,7 +10,7 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'row' ); ?>>
-    <div class="col-xs-3">
+    <div class="col-xs-4">
         <?php aerospace_posted_on_calendar( $post ) ?>
     </div>
     <div class="col-xs entry-main">
