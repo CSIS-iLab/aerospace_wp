@@ -11,9 +11,6 @@ get_header(); ?>
 
 <section id="primary" class="content-area search-page">
     <main id="main" class="site-main content-wrapper">
-
-    <?php
-    if (have_posts() ) : ?>
         <header class="page-header row">
             <div class="title-container">
                 <h1 class="page-title">
@@ -45,16 +42,21 @@ get_header(); ?>
                 </div>
                 <div class="col-xs-12 col-md row archive-content-posts">
                     <?php
-                    /* Start the Loop */
-                    while ( have_posts() ) : the_post();
+                    if (have_posts() ) :
+                        /* Start the Loop */
+                        while ( have_posts() ) : the_post();
 
-                        get_template_part('template-parts/content', 'search');
+                            get_template_part('template-parts/content', 'search');
 
-                    endwhile;
+                        endwhile;
+                    else :
+                        get_template_part('template-parts/content', 'none');
+                    endif;
                     ?>
                 </div>
             </div>
         </div>
+        <?php if (have_posts() ) : ?>
         <footer class="archive-pages-bottom row">
             <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
             <div class="col-xs-12 col-sm-6 archives-meta-right">
@@ -64,13 +66,7 @@ get_header(); ?>
                 )); ?>
             </div>
         </footer>
-    <?php
-    else :
-
-        get_template_part('template-parts/content', 'none');
-
-    endif; ?>
-
+    <?php endif; ?>
     </main><!-- #main -->
 </section><!-- #primary -->
 

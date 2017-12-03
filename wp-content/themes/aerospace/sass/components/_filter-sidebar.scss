@@ -34,7 +34,8 @@
         }
     }
 
-    input,
+    input[type="text"],
+    input[type="search"],
     select {
         display: block;
         font-family: $font__source;
@@ -65,6 +66,10 @@
         }
     }
 
+    .filter-post-types {
+    	margin-bottom: 2rem;
+    }
+
     .search-form {
     	.search-field {
     		width: 100%;
@@ -72,6 +77,10 @@
     	.search-submit {
 	    	display: none;
 	    }
+    }
+
+    .filter-checkbox {
+    	display: block;
     }
 }
 

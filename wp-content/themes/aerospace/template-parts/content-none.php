@@ -19,13 +19,8 @@ if ( is_post_type_archive( 'events' ) ) {
 
 <section class="no-results not-found">
     <?php if (is_search() ) : ?>
-        <header class="page-header">
-            <h1 class="page-title"><?php esc_html_e('Nothing Found', 'aerospace'); ?></h1>
-        </header><!-- .page-header -->
-        <div class="entry-content">
+            <h3 class="subheading"><?php esc_html_e('Nothing Found', 'aerospace'); ?></h3>
             <p><?php esc_html_e('Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'aerospace'); ?></p>
-            <?php get_search_form(); ?>
-        </div>
         <?php else : ?>
             <div class="entry-content content-padding">
                 <h3 class="subheading"><?php echo esc_html( $heading ); ?></h3>

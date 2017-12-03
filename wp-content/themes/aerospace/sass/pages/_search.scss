@@ -21,6 +21,23 @@
         @include breakpoint("medium") {
             padding: 0 $archive-content-padding-md;
         }
+
+        .no-results {
+            background-color: $white;
+            padding: 3rem;
+            text-align: center;
+
+            .subheading {
+                @extend %subheading;
+                border-bottom: 0;
+                margin: 0 0 1rem 0;
+            }
+
+            p {
+                max-width: 50%;
+                margin: 0 auto;
+            }
+        }
     }
 
     /*----------  Bottom  ----------*/
