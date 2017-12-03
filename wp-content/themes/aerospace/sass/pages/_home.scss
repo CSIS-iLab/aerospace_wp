@@ -11,6 +11,7 @@
 
     .section-heading {
     	@extend %page-title;
+    	font-weight: normal;
     	margin: 0 0 2rem 0;
     }
 
@@ -215,6 +216,7 @@
     	}
     }
 
+    /*----------  Featured Aerospace101  ----------*/
     .feature-aerospace101 {
     	position: relative;
     	background-color: $dark-blue;
@@ -276,6 +278,55 @@
 
     		.meta-label { color: $blue-gray; }
     		.posted-on { color: $white; }
+    	}
+    }
+
+    /*----------  Featured Final  ----------*/
+    .feature-final {
+    	&-data {
+    		padding: 4rem;
+    		background-color: $white;
+
+    		&-desc {
+    			margin-bottom: 2rem;
+    		}
+
+    		&-thumbnail {
+    			padding-right: 1rem;
+    		}
+    	}
+
+    	.view-more {
+    		border-top: 3px solid $dark-blue;
+    		text-align: right;
+    		margin-left: -2rem;
+    		margin-right: -2rem;
+    		padding-right: 2rem; 
+    	}
+
+    	.hentry {
+    		padding: 0 3rem 0.5rem 0.5rem;
+
+    		.entry-header .entry-title {
+    			@extend %archive-post-title;
+    			margin-bottom: 0.5rem;
+
+    			a {
+    				color: $black;
+
+    				&:hover { color: $orange; }
+    			}
+    		}
+    	}
+
+    	.post-is-featured {
+    		@include fontSize(14px);
+    	}
+
+    	.hentry + .hentry {
+    		padding-left: 3rem;
+    		padding-right: 0.5rem;
+    		border-left: 1px solid $blue-gray;
     	}
     }
 }

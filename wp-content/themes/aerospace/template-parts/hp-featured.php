@@ -9,7 +9,7 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'col-xs-12 col-md'); ?>>
     <div class="entry-main">
         <header class="entry-header">
             <div class="post-is-featured">Featured</div>

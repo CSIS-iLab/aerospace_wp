@@ -113,6 +113,48 @@ get_header(); ?>
 				?>
 			</div>
 		</section>
+		<section class="feature-final row">
+			<section class="feature-final-data col-xs-12 col-md-8">
+				<h3 class="section-heading"><?php esc_html_e( 'Visualizing Data', 'aerospace' ); ?></h3>
+				<?php
+					$feature_data1 = get_option( 'aerospace_homepage_featured_data_1' );
+					$feature_data2 = get_option( 'aerospace_homepage_featured_data_2' );
+
+					if( $feature_data1 || $feature_data2 ) {
+						echo '<div class="feature-final-data-desc row">';
+						$featuredDataArgs = array(
+							'post_type' => 'data',
+							'post__in' => array(
+								$feature_data1,
+								$feature_data2
+								),
+							'orderby' => 'post__in'
+						);
+						$featured_data = get_posts($featuredDataArgs);
+
+						if ( has_post_thumbnail( $featured_data[0] ) ) {
+							echo '<div class="col-xs-3 feature-final-data-thumbnail">';
+							echo get_the_post_thumbnail( $featured_data[0]->ID, 'medium' );
+							echo '</div>';
+						}
+
+						$data_desc = get_option( 'aerospace_homepage_data_desc' );
+						echo '<div class="col-xs"><p>' . $data_desc . '</p></div>';
+						echo '</div><div class="row">';
+
+						foreach($featured_data as $post) : setup_postdata($post);
+							get_template_part( 'template-parts/hp-featured' );
+						endforeach;
+						wp_reset_postdata();
+						echo '</div>';
+					}
+				?>
+				<p class="view-more">Browse the <a href="/data">Data Repository<i class="icon-long-arrow-right"></i></a></p>
+			</section>
+			<section class="feature-final-sidebar col-xs-12 col-md-4">
+				Twitter goes here
+			</section>
+		</section>
 	</main><!-- #main -->
 </div><!-- #primary -->
 
