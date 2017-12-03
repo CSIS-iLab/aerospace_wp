@@ -1,0 +1,28 @@
+/*==============================
+=            Search            =
+==============================*/
+
+/*----------  No Results  ----------*/
+.no-results {
+	.entry-content {
+		background-color: $white;
+		text-align: center;
+		padding: $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: $archive-content-padding-md;
+        }
+
+        .subheading {
+        	@extend %subheading;
+        	text-transform: none;
+        	margin-bottom: 1rem;
+        }
+
+        p {
+        	@include fontSize(16px);
+        	max-width: 50%;
+        	margin: 0 auto;
+        }
+	}
+}
