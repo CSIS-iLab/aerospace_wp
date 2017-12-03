@@ -430,7 +430,8 @@
             }
 
             .authors-list,
-            .posted-on {
+            .posted-on,
+            .post-event-dates {
                 display: block;
                 @include fontSize(14px);
                 @include breakpoint("small") {
@@ -441,17 +442,17 @@
             .authors-list a {
                 box-shadow: none;
             }
+        }
+    }
 
-            .posted-on {
-                &::before {
-                    @include breakpoint("small") {
-                        content: "/";
-                        font-family: $font__abel;
-                        @include fontSize(14px);
-                        color: $gray;
-                        margin: 0 0.4rem;
-                    }
-                }
+    &.post .posted-on {
+        &::before {
+            @include breakpoint("small") {
+                content: "/";
+                font-family: $font__abel;
+                @include fontSize(14px);
+                color: $gray;
+                margin: 0 0.4rem;
             }
         }
     }

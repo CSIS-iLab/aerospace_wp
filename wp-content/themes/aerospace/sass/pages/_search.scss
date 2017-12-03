@@ -38,6 +38,32 @@
                 margin: 0 auto;
             }
         }
+
+        .archive-content-posts {
+            margin: 0;
+
+            @include breakpoint("medium") {
+                margin-left: -0.5rem;
+                margin-right: -0.5rem;
+            }
+        }
+
+        .hentry {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        article:last-of-type {
+            padding-bottom: $archive-content-padding;
+
+            @include breakpoint("medium") {
+                padding-bottom: $archive-content-padding-md;
+            }
+        }
+
+        .entry-content p {
+            margin-bottom: 0;
+        }
     }
 
     /*----------  Bottom  ----------*/

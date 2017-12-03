@@ -233,32 +233,34 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
 endif;
 
 if ( ! function_exists( 'aerospace_post_format' ) ) :
-		/**
-		 * Returns HTML with post format.
-		 *
-		 * @param int $id Post ID.
-		 */
-		function aerospace_post_format( $id ) {
-				$post_type = get_post_type();
-				if ( in_array( $post_type, array( 'post', 'events', 'aerospace101', 'data' ), true ) ) {
+	/**
+	 * Returns HTML with post format.
+	 *
+	 * @param int $id Post ID.
+	 */
+	function aerospace_post_format( $id ) {
+		$post_type = get_post_type();
+		if ( in_array( $post_type, array( 'post', 'events', 'aerospace101', 'data', 'page' ), true ) ) {
 
-						if ( 'post' === $post_type ) {
-								$post_types = get_the_terms( $id, 'post_types' );
-								if ( ! empty( $post_types ) && ! is_wp_error( $post_types ) ) {
-										$post_types = wp_list_pluck( $post_types, 'name' );
-										$post_format = $post_types[0];
-								}
-						}
-
-						if ( ! $post_format ) {
-								$obj = get_post_type_object( $post_type );
-								$post_format = $obj->labels->name;
-						}
-						if ( $post_format ) {
-								printf( '<div class="post-format">' . esc_html( '%2$s' ) . esc_html( '%1$s' ) . esc_html( '%3$s' ) . '</div>', $post_format, $is_featured, $is_nextgen ); // WPCS: XSS OK.
-						}
+			if ( 'post' === $post_type ) {
+				$post_types = get_the_terms( $id, 'post_types' );
+				if ( ! empty( $post_types ) && ! is_wp_error( $post_types ) ) {
+					$post_types = wp_list_pluck( $post_types, 'name' );
+					$post_format = $post_types[0];
 				}
+			} elseif ( 'data' === $post_type ) {
+				$post_format = 'Data Repository';
+			}
+
+			if ( ! $post_format ) {
+				$obj = get_post_type_object( $post_type );
+				$post_format = $obj->labels->name;
+			}
+			if ( $post_format ) {
+				printf( '<div class="post-format">' . esc_html( '%2$s' ) . esc_html( '%1$s' ) . esc_html( '%3$s' ) . '</div>', $post_format, $is_featured, $is_nextgen ); // WPCS: XSS OK.
+			}
 		}
+	}
 endif;
 
 if ( ! function_exists( 'aerospace_citation' ) ) :
@@ -703,10 +705,27 @@ if ( ! function_exists( 'aerospace_sort_filter' ) ) :
 	 */
 	function aerospace_sort_filter() {
 		global $wp;
-		$url = home_url( $wp->request );
+		if ( is_search() ) {
+			$search = '?s=' . $wp->query_vars['s'];
+
+			if ( $wp->query_vars['cat'] ) {
+				$cat = '&cat=' . $wp->query_vars['cat'];
+			}
+
+			if ( $wp->query_vars['post_type'] ) {
+				$post_type = implode( '&post_type[]=', $wp->query_vars['post_type'] );
+				$post_type = '&post_type[]=' . $post_type;
+			}
+
+			$url = home_url( $search . $cat . $post_type );
+			$param_prefix = '&';
+		} else {
+			$url = home_url( $wp->request );
+			$param_prefix = '?';
+		}
 
 		/* translators: 1: Sort direction. */
-		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s?order=DESC">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s?order=ASC">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url ); // WPCS: XSS OK.
+		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s%2$sorder=DESC">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s%2$sorder=ASC">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url, $param_prefix ); // WPCS: XSS OK.
 	}
 endif;
 
