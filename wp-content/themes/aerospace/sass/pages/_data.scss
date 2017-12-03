@@ -73,7 +73,7 @@
 
 	.archive-content {
 		position: relative;
-		padding: 0 $archive-content-padding;
+		padding: 0;
 		margin-bottom: 2rem;
 
         @include breakpoint("medium") {
@@ -192,7 +192,15 @@
 		.display-column {
 			width: 100%;
 			border-bottom: 1px solid $blue-gray;
-			padding-bottom: 3rem;
+			padding-bottom: 1.5rem;
+			margin-left: 0;
+			margin-right: 0;
+
+			@include breakpoint("medium") {
+				margin-left: -0.5rem;
+				margin-right: -0.5rem;
+				padding-bottom: 3rem;
+			}
 		}
 
 		tr:last-child .display-column {
@@ -204,8 +212,10 @@
 	.card-format {
 		&.featured {
 			.entry-main {
-				padding-left: 1rem;
-				padding-right: 0;
+				@include breakpoint("medium") {
+					padding-left: 1rem;
+					padding-right: 0;
+				}
 			}
 		}
 
