@@ -17,9 +17,9 @@ $archive_url = get_post_type_archive_link( 'aerospace101' );
 
 ?>
 
-<label for="data-categories" class="filter-label"><?php esc_html_e( 'Filter by Category' , 'aerospace' ); ?></label>
+<label for="search-categories" class="filter-label"><?php esc_html_e( 'Filter by Category' , 'aerospace' ); ?></label>
 <div class="dropdown-container">
-	<select name="data-categories" class="filter-select data-categories" id="data-categories">
+	<select name="search-categories" class="filter-select search-categories" id="search-categories">
 		<option value="" selected>Choose a category</option>
 		<?php
 			foreach( $categories as $term ) {
@@ -29,9 +29,9 @@ $archive_url = get_post_type_archive_link( 'aerospace101' );
 	</select>
 </div>
 
-<label for="data-tags" class="filter-label"><?php esc_html_e( 'Filter by Keyword' , 'aerospace' ); ?></label>
+<label for="search-tags" class="filter-label"><?php esc_html_e( 'Filter by Keyword' , 'aerospace' ); ?></label>
 <div class="dropdown-container">
-	<select name="data-tags" class="filter-select data-tags" id="data-tags">
+	<select name="search-tags" class="filter-select search-tags" id="search-tags">
 		<option value="" selected>Choose a keyword</option>
 		<?php
 			foreach( $tags as $term ) {

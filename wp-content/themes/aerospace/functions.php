@@ -142,6 +142,7 @@ function aerospace_scripts()
 
     wp_enqueue_script('aerospace-header', get_template_directory_uri() . '/js/header.js', array('jquery'), '20171128', true);
 
+    // Posts
     if ( is_single() ) {
         wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
         wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
@@ -160,6 +161,17 @@ function aerospace_scripts()
     // ASP Archive Page
     if ( is_post_type_archive( 'aerospace101' ) ) {
         wp_enqueue_script('aerospace-aerospace101-archive', get_template_directory_uri() . '/js/aerospace101-archives.js', array('jquery'), '20171202', true);
+    }
+
+    // Search
+    if ( is_search() || $_SERVER['REQUEST_URI'] == '/search' ) {
+        wp_register_script( 'aerospace-search', get_template_directory_uri() . '/js/search.js', '', '20171203', true );
+
+        $search_vars = array(
+            'home_url' => esc_url( home_url( '/' ) )
+        );
+        wp_localize_script( 'aerospace-search', 'search_vars', $search_vars );
+        wp_enqueue_script( 'aerospace-search' );
     }
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');

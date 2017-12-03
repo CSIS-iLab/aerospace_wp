@@ -36,7 +36,7 @@
 	});
 
 	// Filter by Category & Tag
-	$(".data-categories, .data-tags").on( 'change', function () {
+	$(".search-categories, .search-tags").on( 'change', function () {
 		var val = $.fn.dataTable.util.escapeRegex(
 			$(this).val()
 		);

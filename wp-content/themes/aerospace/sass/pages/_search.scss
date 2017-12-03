@@ -2,6 +2,34 @@
 =            Search            =
 ==============================*/
 
+/*----------  Search Page  ----------*/
+.search-page {
+
+    /*----------  Header  ----------*/
+    .page-header {
+        .page-title {
+            margin-bottom: 1rem;
+        }
+    }
+
+    /*----------  Main Content  ----------*/
+    .archive-content {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        padding: 0 $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: 0 $archive-content-padding-md;
+        }
+    }
+
+    /*----------  Bottom  ----------*/
+    
+    .archive-pages-bottom {
+        background-color: transparent;
+    }
+}
+
 /*----------  No Results  ----------*/
 .no-results {
 	.entry-content {
