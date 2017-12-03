@@ -49,7 +49,7 @@ get_header(); ?>
 						wp_reset_postdata();
 					}
 				?>
-				<div class="feature-secondary-posts-more">
+				<div class="feature-secondary-posts-more view-more">
 					View <a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>">all articles<i class="icon-long-arrow-right"></i></a>
 				</div>
 			</section>
@@ -89,7 +89,30 @@ get_header(); ?>
 				</section>
 			</section>
 		</section>
+		<section class="feature-aerospace101 row">
+			<div class="feature-aerospace101-content">
+				<h3 class="section-heading"><?php esc_html_e( 'Aerospace 101', 'aerospace' ); ?></h3>
+				<?php
+				$aerospace101_desc = get_option( 'aerospace_homepage_aerospace101_desc' );
+				echo '<p>' . $aerospace101_desc . '</p>';
+				?>
+				<p class="view-more">Explore <a href="/aerospace-101">Aerospace 101<i class="icon-long-arrow-right"></i></a></p>
+				<?php
+					$featuredAerospace101Args = array(
+						'post_type' => 'aerospace101',
+						'meta_key' => '_post_is_featured',
+						'meta_value' => '1',
+						'posts_per_page' => 1
+					);
+					$featured_aerospace101 = get_posts($featuredAerospace101Args);
 
+					foreach($featured_aerospace101 as $post) : setup_postdata($post);
+						get_template_part( 'template-parts/hp-featured' );
+					endforeach;
+					wp_reset_postdata();
+				?>
+			</div>
+		</section>
 	</main><!-- #main -->
 </div><!-- #primary -->
 

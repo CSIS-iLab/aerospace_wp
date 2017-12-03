@@ -9,6 +9,28 @@
     	margin-top: 3rem;
     }
 
+    .section-heading {
+    	@extend %page-title;
+    	margin: 0 0 2rem 0;
+    }
+
+    .view-more {
+		a {
+			color: $orange;
+
+			&:hover { color: $dark-orange; }
+		}
+
+		i {
+			@include fontSize(26px);
+
+			&::before {
+				vertical-align: middle;
+				margin-left: 0;
+			}
+		}
+    }
+
     /*----------  Unset Default Page Styles  ---------*/
     .hentry {
     	.entry-header {
@@ -68,6 +90,7 @@
     		.entry-header .entry-title {
     			@extend %archive-post-title-md;
     			margin-bottom: 0.5rem;
+    			font-weight: normal;
 
     			a {
     				color: $black;
@@ -83,24 +106,9 @@
 
     	&-posts-more {
     		border-top: 3px solid $dark-blue;
-    		margin: 1rem auto 3rem;
+    		margin: 1rem 1.5rem 3rem;
     		text-align: right;
     		font-family: $font__abel;
-
-    		a {
-    			color: $orange;
-
-    			&:hover { color: $dark-orange; }
-    		}
-
-    		i {
-    			@include fontSize(26px);
-
-    			&::before {
-    				vertical-align: text-bottom;
-    				margin-left: 0;
-    			}
-    		}
     	}
     }
 
@@ -155,6 +163,7 @@
 	    		.entry-header .entry-title {
 	    			@extend %archive-post-title;
 	    			margin: 1rem 0 0.5rem;
+	    			font-weight: normal;
 
 	    			a {
 	    				color: $black;
@@ -203,6 +212,70 @@
 	    			color: $black;
 	    		}
     		}
+    	}
+    }
+
+    .feature-aerospace101 {
+    	position: relative;
+    	background-color: $dark-blue;
+    	padding: 4rem 0;
+    	color: $white;
+    	@include fullWidthBackground($dark-blue);
+
+    	&::after {
+    		background-image: url($img__hp-aerospace101-bg);
+    		background-repeat: no-repeat;
+    		background-size: contain;
+    		left: 66%;
+    	}
+
+    	&-content {
+    		max-width: calc(66% - 6rem);
+    		margin: 0 auto 0 4rem;
+    	}
+
+    	.section-heading {
+    		color: $white;
+    	}
+
+    	p {
+    		@include fontSize(20px);
+    		line-height: 1.6;
+    		font-weight: 300;
+    	}
+
+    	.view-more {
+    		font-family: $font__abel;
+
+    		a {
+    			color: $orange;
+
+    			&:hover { color: $dark-orange; }
+    		}
+    	}
+
+    	.hentry {
+    		margin-top: 2rem;
+    		background-color: transparent;
+    		padding: 0 2rem;
+    		border-left: 1px solid $dark-blue-gray;
+
+    		.entry-header .entry-title {
+    			@include fontSize(22px);
+    			font-weight: normal;
+    			margin-bottom: 0;
+
+    			a {
+    				color: $white;
+    			}
+    		}
+
+    		.post-is-featured {
+    			color: $blue-gray;
+    		}
+
+    		.meta-label { color: $blue-gray; }
+    		.posted-on { color: $white; }
     	}
     }
 }

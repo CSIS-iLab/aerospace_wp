@@ -227,6 +227,24 @@ function aerospace_admin_init_section_homepage() {
 		array( 'aerospace_homepage_featured_data_2', $post_selection['data'] )
 	);
 
+	add_settings_field(
+		'aerospace_homepage_aerospace101_desc',
+		'Aerospace101 Description',
+		'aerospace_textarea_callback',
+		'aerospace-options-page',
+		'aerospace_settings_section_homepage',
+		array( 'aerospace_homepage_aerospace101_desc' )
+	);
+
+	add_settings_field(
+		'aerospace_homepage_data_desc',
+		'Data Repo Desc',
+		'aerospace_textarea_callback',
+		'aerospace-options-page',
+		'aerospace_settings_section_homepage',
+		array( 'aerospace_homepage_data_desc' )
+	);
+
 	register_setting(
 		'aerospace_settings',
 		'aerospace_homepage_featured_post_1',
@@ -261,6 +279,18 @@ function aerospace_admin_init_section_homepage() {
 		'aerospace_settings',
 		'aerospace_homepage_featured_data_2',
 		'sanitize_text_field'
+	);
+
+	register_setting(
+		'aerospace_settings',
+		'aerospace_homepage_aerospace101_desc',
+		'wp_filter_post_kses'
+	);
+
+	register_setting(
+		'aerospace_settings',
+		'aerospace_homepage_data_desc',
+		'wp_filter_post_kses'
 	);
 
 }
