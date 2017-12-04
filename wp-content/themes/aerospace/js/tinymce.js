@@ -52,7 +52,23 @@
             text: 'Interactive',
             tooltip: 'Insert Interactive Shortcode',
             onclick: function() {
-                editor.insertContent( '[interactive id=""]');
+				editor.windowManager.open( {
+					title: 'Insert Full Width',
+                    width: 400,
+                    height: 100,
+                    body: [
+                        {
+                            type: 'textbox',
+                            multiline: false,
+                            name: 'id',
+                            label: 'Interactive ID',
+                            placeholder: 'Insert Interactive ID'
+                        }
+                    ],
+                    onsubmit: function( e ) {
+						editor.insertContent( '[interactive id="' + e.data.id + '"]');
+                    }
+				})
             }
         });
 
@@ -72,12 +88,19 @@
                             label: 'Title',
                             placeholder: 'Optional Title Attribute'
                         },
+						{
+							type: 'textbox',
+							multiline: false,
+							name: 'id',
+							label: 'Post ID',
+							placeholder: 'Insert Post ID'
+						}
                     ],
                     onsubmit: function( e ) {
                         if (e.data.title == '') {
-                            editor.insertContent( '[view id=""]');
+                            editor.insertContent( '[view id="' + e.data.id + '"]');
                         } else {
-                            editor.insertContent( '[view id="" title="' + e.data.title + '"]');
+                            editor.insertContent( '[view id="' + e.data.id + '" title="' + e.data.title + '"]');
                         }
                     }
                 });
