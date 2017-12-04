@@ -102,20 +102,26 @@ function aerospace_shortcode_data( $atts ) {
 	$width = get_post_meta( $atts['id'], '_data_width', true );
 	$height = get_post_meta( $atts['id'], '_data_height', true );
 	$iframe_resize_disabled = get_post_meta( $atts['id'], '_data_iframeResizeDisabled', true );
-
-	// Fallback Image
-	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallbackImgDisabled', true );
-
-	if(!$fallbackImgDisabled) {
-		$fallback_img = get_the_post_thumbnail($atts['id'], 'full');
-	}
+	$iframe_twitter_pic_url = get_post_meta( $atts['id'], '_data_twitter_pic_url', true );
+	$data_img_url = get_post_meta( $atts['id'], '_data_img_url', true );
 
 	$title = get_the_title($atts['id']);
 	$URL = get_permalink();
 	$data_post_url = get_permalink( $atts['id'] );
 
+	// Fallback Image
+	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallbackImgDisabled', true );
+
+	if( $fallbackImgDisabled ) {
+		$fallback_img = null;
+	} elseif ( '' !== $data_img_url ) {
+		$fallback_img = '<img src="' . esc_attr( $data_img_url ) . '" alt="' . $title . '" title="' . $title . '" />';
+	} else {
+		$fallback_img = get_the_post_thumbnail($atts['id'], 'full');
+	}
+
 	if($atts['sharing'] === true || $atts['sharing'] == 'true') {
-		$sharing = aerospace_social_share($title, $URL, $data_post_url);
+		$sharing = aerospace_social_share($title, $URL, $data_post_url, $iframe_twitter_pic_url);
 	}
 
 	return aerospace_data_display_iframe($data_url, $width, $height, $fallback_img, $iframe_resize_disabled).$sharing;
@@ -130,9 +136,9 @@ add_shortcode( 'data', 'aerospace_shortcode_data' );
  * @param  string $data_post_url URL to the data repo post.
  * @return string        HTML of share button
  */
-function aerospace_social_share($title = "", $post_url = "", $data_post_url = "") {
+function aerospace_social_share($title = "", $post_url = "", $data_post_url = "", $twitter_pic_url = null) {
 	$shareArgs = array(
-		'linkname' => $title,
+		'linkname' => $title . ' ' . $twitter_pic_url,
 		'linkurl' => $post_url
 	);
 	echo $URL;

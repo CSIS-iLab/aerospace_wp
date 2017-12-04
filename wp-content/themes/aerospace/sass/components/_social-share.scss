@@ -7,7 +7,7 @@
 	line-height: inherit !important;
 	min-height: 1px;
 
-	&::after {
+	.entry-share &::after {
 		content: "";
 		position: absolute;
 		top: 38px;
@@ -99,6 +99,8 @@
 
 .sharing-inline {
 	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 	border-top: 2px solid $blue-gray;
 	margin: 0.5rem 0 2rem 0;
 
