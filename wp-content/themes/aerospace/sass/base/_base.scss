@@ -25,14 +25,17 @@ body {
 	}
 
 	&.toggled {
+		overflow: hidden;
 		& > .site {
 			left: 80vw;
 
 			@include breakpoint("medium") {
 				left: unset;
+				overflow-x: hidden;
 			}
 		}
 	}
+	overflow-x: hidden;
 
 	.site {
 		position: relative;
@@ -92,7 +95,7 @@ body {
 	visibility: hidden;
 	position: absolute;
 	top: 0;
-	left: -20vw;
+	//left: -20vw;
 	z-index: 5;
 	width: 120vw;
 	height: 100vh;

@@ -70,8 +70,10 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
             </div>
             <div class="col-xs-2 col-md nav-container">
                 <nav id="site-navigation" class="main-navigation">
-                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Menu', 'aerospace'); ?></button>
+                    <button id="menu-toggle-btn" class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Menu', 'aerospace'); ?></button>
                     <div class="nav-items-container">
+                                <span id="mobile-close" class="is-hidden"><i class="icon-close"></i></span>
+
                         <?php
                             wp_nav_menu(
                                 array(

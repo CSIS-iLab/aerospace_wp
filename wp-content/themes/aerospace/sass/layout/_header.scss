@@ -19,8 +19,9 @@
         background-position: center center; //@include transition(height .2s linear);
     }
     .header-top {
-height: $size__header-lg-height - $size__header-sm-height;
-
+        @include breakpoint("medium") {
+            height: $size__header-lg-height - $size__header-sm-height;
+        }
     }
 
     .header-bottom-container {
@@ -85,7 +86,7 @@ height: $size__header-lg-height - $size__header-sm-height;
 
                 img {
                     display: block;
-                    width: 200px;
+                    width: 100%;
                     max-width: 200px;
                     height: auto;
                 }
@@ -93,13 +94,13 @@ height: $size__header-lg-height - $size__header-sm-height;
                     display: block;
                 }
             }
-              img {
-                    display: block;
-                    width: 200px;
-                    max-width: 200px;
-                    height: auto;
-                    margin: auto auto;
-                }
+            img {
+                display: block;
+                width: 100%;
+                max-width: 200px;
+                height: auto;
+                margin: auto auto;
+            }
 
             a {
                 display: block;
@@ -200,8 +201,7 @@ height: $size__header-lg-height - $size__header-sm-height;
 
 
         .site-branding-minimal {
-            display: block;
-            //position: relative;
+            display: block; //position: relative;
             width: 200px;
             margin-right: 20px;
             transition: all .3s cubic-bezier(.33, 0, .2, 1);
@@ -209,6 +209,7 @@ height: $size__header-lg-height - $size__header-sm-height;
         }
     }
 }
+
 
 
 
@@ -233,9 +234,11 @@ height: $size__header-lg-height - $size__header-sm-height;
 
 
 
+
 /*----------  Search  ----------*/
 
 @import 'components/header-search';
+
 
 
 
