@@ -66,7 +66,7 @@
                         }
                     ],
                     onsubmit: function( e ) {
-						editor.insertContent( '[interactive id="' + e.data.id + '"]');
+						editor.insertContent( '[data id="' + e.data.id + '"]');
                     }
 				})
             }
