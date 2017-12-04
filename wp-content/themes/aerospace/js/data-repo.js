@@ -6,7 +6,7 @@
 	var table = $('#dataRepo').DataTable({
 		"info": false,
 		"lengthChange": false,
-		"order": [[ 1, "desc" ]],
+		"order": [[ 2, "desc" ]],
 		"pageLength": 10,
 		"pagingType": "simple_numbers",
 		"language": {
@@ -24,7 +24,7 @@
 	$(".tableSort").click(function() {
 		var col = $(this).attr("data-sortCol");
 
-		if ( col == 3 ) {
+		if ( col == 2 ) {
 			var direction = 'desc';
 		} else {
 			var direction = 'asc';

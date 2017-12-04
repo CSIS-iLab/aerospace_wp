@@ -50,7 +50,7 @@ if ( ! function_exists( 'aerospace_post_is_featured' ) ) :
 	 */
 	function aerospace_post_is_featured ( $id ) {
 		$post_type = get_post_type();
-		if ( in_array( $post_type, array( 'aerospace101', 'data', 'events', 'post' ), true ) ) {
+		if ( in_array( $post_type, array( 'aerospace101', 'post' ), true ) ) {
 			$is_featured = get_post_meta( $id, '_post_is_featured', true );
 			$svg = '<svg id="asp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6.9 17"><path class="st0" d="M1.3 0L0 1.2l2.8 4L.4 8.5l2.4 3.4L0 15.8 1.3 17l5.6-8.5z"/></svg>';
 			if ( 1 == $is_featured ) {
@@ -790,3 +790,18 @@ function get_terms_by_post_type( $taxonomies, $post_type, $fields = 'all' ){
         return $re;
     }
 }
+
+if (! function_exists('aerospace_data_last_updated') ) :
+	/**
+	 * Prints last updated information timestamp only. This is used to sort the Data Repo.
+	 */
+	function aerospace_data_last_updated()
+	{
+		$time_string = '%1$s';
+		$time_string = sprintf( $time_string,
+				esc_attr( get_the_modified_date( 'c' ) )
+		);
+		echo $time_string; // WPCS: XSS OK.
+
+	}
+endif;

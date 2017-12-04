@@ -38,9 +38,9 @@ get_header(); ?>
 					<div class="col-xs-12 col-sm-6 archives-meta-right">
 						<div class="sort-filter">
 							<span class="meta-label">Sort By:</span>
-							<button class="btn-sort tableSort active" data-sortCol="3" aria-label="Sort by Date">Date</button>
+							<button class="btn-sort tableSort active" data-sortCol="2" aria-label="Sort by Date">Date</button>
 							<span class="sort-filter-divider">|</span>
-							<button class="btn-sort tableSort" data-sortCol="2" aria-label="Sort by Title">Title</button>
+							<button class="btn-sort tableSort" data-sortCol="1" aria-label="Sort by Title">Title</button>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -57,7 +57,6 @@ get_header(); ?>
 					<thead>
 						<tr>
 							<th>Display</th>
-							<th>Featured</th>
 							<th>Title</th>
 							<th>Last Updated</th>
 							<th>category</th>

@@ -36,7 +36,7 @@
 
 		@include breakpoint("medium") {
 			padding-left: 0.5rem;
-			padding-right: 0.5rem;
+			padding-right: 0.5rem !important;
 		}
 
 		.subheading {
