@@ -17,11 +17,20 @@ get_header(); ?>
 			// Featured Item
 			$feature_post1 = get_option( 'aerospace_homepage_featured_post_1' );
 			if( $feature_post1 ) {
-				global $post;
-				$post = $feature_post1;
-				setup_postdata($post);
-				$post->isFeaturedMain = true;
-				get_template_part( 'template-parts/content' );
+				$featuredPostArgs = array(
+					'post__in' => array(
+						$feature_post1,
+						$feature_post3
+						),
+					'orderby' => 'post__in',
+					'posts_per_page' => 1
+				);
+				$featured_post = get_posts($featuredPostArgs);
+
+				foreach($featured_post as $post) : setup_postdata($post);
+					$post->isFeaturedMain = 1;
+					get_template_part( 'template-parts/content' );
+				endforeach;
 				wp_reset_postdata();
 			}
 		?>
@@ -42,8 +51,8 @@ get_header(); ?>
 							'orderby' => 'post__in'
 						);
 						$featured_posts = get_posts($featuredPostsArgs);
-
 						foreach($featured_posts as $post) : setup_postdata($post);
+							$post->isFeaturedMain = 0;
 							get_template_part( 'template-parts/content' );
 						endforeach;
 						wp_reset_postdata();

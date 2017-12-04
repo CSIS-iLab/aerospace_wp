@@ -8,12 +8,19 @@
  */
 
 $is_featured = get_post_meta( $id, '_post_is_featured', true );
-if ( 1 == $is_featured ) {
+
+if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
+    $classes = 'row featured card-format';
+    $thumbnail_size = 6;
+} elseif ( isset( $post->isFeaturedMain ) && ! $post->isFeaturedMain ) {
+    $classes = 'row card-format';
+    $thumbnail_size = 4; 
+} elseif ( $is_featured ) {
     $classes = 'row featured card-format';
     $thumbnail_size = 6;
 } else {
     $classes = 'row card-format';
-    $thumbnail_size = 4;
+    $thumbnail_size = 4; 
 }
 
 ?>
