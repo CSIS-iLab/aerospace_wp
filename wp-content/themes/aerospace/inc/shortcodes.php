@@ -50,7 +50,7 @@ add_shortcode( 'first', 'shortcode_first' );
 		}
 	 }
 
-	 return "<div class='view-post' ><a href='" . esc_url( $post_url ) . "'>" . esc_attr( $title ) . " " . esc_attr( $post_title ) . "</a></div>";
+	 return "<div class='view-post'><i class='icon-eye'></i><a href='" . esc_url( $post_url ) . "'><span class='view-post-verb'>" . esc_attr( $title ) . "</span> \"" . esc_attr( $post_title ) . "\"</a></div>";
 
 }
 add_shortcode( 'view', 'shortcode_view' );
