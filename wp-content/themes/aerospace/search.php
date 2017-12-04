@@ -15,8 +15,7 @@ get_header(); ?>
             <div class="title-container">
                 <h1 class="page-title">
                     <?php
-                    /* translators: %s: search query. */
-                    printf(esc_html__('Search Results for: %s', 'aerospace'), '<span>' . get_search_query() . '</span>');
+                    printf( '<span class="archive-label">' . esc_html__('Search: ', 'aerospace') . '</span>%s<span>', get_search_query() );
                     ?>
                 </h1>
                 <div class="archive-pages-top row">
