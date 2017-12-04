@@ -50,7 +50,7 @@ body {
 	@include box-shadow(0, 5px, 8px, -1px, rgba($black, 0.5));
 
 	@include breakpoint("medium") {
-		margin-top: $size__header-lg-height;
+		//margin-top: $size__header-lg-height;
 		margin-bottom: $size__footer-height;
 		overflow-x: hidden;
 	}
