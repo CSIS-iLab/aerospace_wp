@@ -640,12 +640,12 @@ if ( ! function_exists( 'aerospace_event_watch' ) ) :
 		if ( 'events' === get_post_type() ) {
 			$url = get_post_meta( $id, '_events_video_url', true );
 
-						if ( '' !== $url ) {
-								$url = esc_url( $url );
-								printf( '<a href="%1$s" class="btn btn-xl btn-gray btn-watch" target="_blank" rel="nofollow"><i class="icon-play icon-ion-ios-play"></i><span>' . esc_html( 'Watch the event', 'aerospace') . '<i class="icon-external-open"></i></span></a>', $url); // WPCS: XSS OK.
-						}
-				}
+			if ( '' !== $url ) {
+				$url = esc_url( $url );
+				printf( '<a href="%1$s" class="btn btn-xl btn-gray btn-watch" target="_blank" rel="nofollow"><i class="icon-play icon-ion-ios-play"></i><span>' . esc_html( 'Watch the event', 'aerospace') . '<i class="icon-external-open"></i></span></a>', $url); // WPCS: XSS OK.
+			}
 		}
+	}
 endif;
 
 if ( ! function_exists( 'aerospace_post_num' ) ) :
@@ -805,3 +805,44 @@ if (! function_exists('aerospace_data_last_updated') ) :
 
 	}
 endif;
+
+if ( ! function_exists( 'aerospace_event_add_to_calendar' ) ) :
+	/**
+	 * Returns HTML with Add to Calendar Buttons.
+	 *
+	 * @param  int $id Post ID.
+	 */
+	function aerospace_event_add_to_calendar( $id ) {
+		if ( 'events' === get_post_type() ) {
+			$register_url = get_post_meta( $id, '_events_register_url', true );
+			$hosted_by = get_post_meta( $id, '_events_hosted_by', true );
+			$start_date = get_post_meta( $id, '_events_start_date', true );
+			$end_date = get_post_meta( $id, '_events_end_date', true );
+			$time = get_post_meta( $id, '_events_time', true );
+			$address = get_post_meta( $id, '_events_address', true );
+
+			$title = get_the_title( $id );
+			$excerpt = get_the_excerpt( $id );
+
+
+			if ( '' !== $start_date ) {
+
+				$times = explode( '-', $time);
+
+				$description = 'Register Link: ' . esc_url ( $register_url ) . '<br />' . $excerpt;
+
+				printf( '<div title="Add to Calendar" class="addeventatc meta-label" data-render="inline-buttons">
+					    Add to Calendar
+					    <span class="start">%1$s %6$s</span>
+					    <span class="end">%2$s %7$s</span>
+					    <span class="timezone">America/New_York</span>
+					    <span class="title">%4$s</span>
+					    <span class="description">%5$s</span>
+					    <span class="location">%3$s</span>
+					    <span class="calname">use-title</span>
+					</div>', $start_date, $end_date, $address, $title, $description, $times[0], $times[1]); // WPCS: XSS OK.
+			}
+		}
+	}
+endif;
+

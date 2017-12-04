@@ -173,6 +173,20 @@ function aerospace_scripts()
         wp_localize_script( 'aerospace-search', 'search_vars', $search_vars );
         wp_enqueue_script( 'aerospace-search' );
     }
+
+    if ( is_single() && 'events' === get_post_type() ) {
+        wp_enqueue_script('aerospace-calendar', 'https://addevent.com/libs/atc/1.6.1/atc.min.js', array(), '20171204', true );
+        wp_add_inline_script('aerospace-calendar', "window.addeventasync = function(){
+                addeventatc.settings({
+                    dropdown   : {order:'outlook,appleical,google,outlookcom'},
+                    appleical: { show: true, text: 'iCal' },
+                    google: { show: true, text: 'Google Cal' },
+                    yahoo: { show: false },
+                    outlookcom: { show: false }
+                });
+            };
+        ");
+    }
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');
 
