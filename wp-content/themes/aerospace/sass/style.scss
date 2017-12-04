@@ -59,14 +59,13 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 # Pages
   ## Home
   ## Posts
+  ## Pages
   ## Archives
   ## 404
-  ## News
   ## Events
-  ## Opportunities
-  ## Resources
-  ## Alumni
-  ## Announcements
+  ## Data
+  ## Aerospace101
+  ## Search
 # Vendors
 --------------------------------------------------------------*/
 
@@ -90,6 +89,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 
 /*----------  Components  ----------*/
 @import
+  'components/accordion',
   'components/buttons',
   'components/fields',
   'components/lists',
@@ -101,10 +101,11 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   'components/related-content',
   'components/post-meta',
   'components/footnotes',
-  'components/sidebar-left',
   'components/icons',
   'components/calendar',
-  'components/table-of-contents';
+  'components/table-of-contents',
+  'components/interactives',
+  'components/filter-sidebar';
 
 /*----------  Layout  ----------*/
 @import
@@ -117,9 +118,13 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 @import
   'pages/home',
   'pages/posts',
+  'pages/pages',
   'pages/archives',
   'pages/404',
-  'pages/events';
+  'pages/events',
+  'pages/data',
+  'pages/aerospace101',
+  'pages/search';
 
 /*----------  Vendors  ----------*/
 @import

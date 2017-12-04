@@ -15,12 +15,25 @@ input[type="submit"],
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	border: 0;
+	border-radius: 0;
 	color: $white;
+	@include transition(all 0.3s ease-in-out);
 
 	&:hover { background-color: $color__background-button-blue-hover; }
 }
 
+a.btn {
+	box-shadow: none;
+}
+
 .btn {
+
+	&.btn-xs {
+		@include fontSize(12px);
+		letter-spacing: 0.4px;
+		padding: 0.3rem 0.5rem;
+	}
+
 	&.btn-sm {
 		@include fontSize(14px);
 		letter-spacing: 0.5px;
@@ -30,11 +43,23 @@ input[type="submit"],
 		@include fontSize(18px);
 	}
 
+	&.btn-xl {
+		@include fontSize(22px);
+		letter-spacing: 0.4px;
+		padding: 0.75rem 1.5rem;
+	}
+
 	&.btn-blue {
 		background-color: $color__background-button-blue;
+		color: $white;
+
+		&:visited {
+			color: $white;
+		}
 
 		&:hover {
 			background-color: $color__background-button-blue-hover;
+			color: $white;
 		}
 	}
 
@@ -42,26 +67,50 @@ input[type="submit"],
 		background-color: $color__background-button-orange;
 		color: $white;
 
+		&:visited {
+			color: $white;
+		}
+
 		&:hover {
 			background-color: $color__background-button-orange-hover;
 			color: $white; 
 		}
 	}
 
-	&.btn-transparent {
-		background-color: transparent;
-		margin: 0;
-
-		&:hover { background-color: transparent; }
-	}
-
 	&.btn-gray {
 		background-color: $color__background-button-gray;
 		color: $black;
 
+		&:visited {
+			color: $black;
+		}
+
 		&:hover {
 			background-color: $color__background-button-gray-hover;
 			color: $white;
+		}
+	}
+
+	/*----------  Icons  ----------*/
+	i {
+		color: inherit;
+
+		&:hover {
+			color: inherit;
+		}
+	}
+
+	&.btn-download {
+		width: 100%;
+		text-align: center;
+
+		@include breakpoint("medium") {
+			margin-bottom: 1rem;
+		}
+
+		i {
+			@include fontSize(12px);
+			margin-right: 0.3rem;
 		}
 	}
 }

@@ -1,0 +1,241 @@
+/*===================================
+=            Aerospace101           =
+===================================*/
+
+/*----------  Archives  ----------*/
+.post-type-archive-aerospace101 {
+	.archive-description-extra {
+		@extend %list;
+
+		.aerospace101-quote {
+			font-family: $font__abel;
+			@include fontSize(25px);
+			line-height: 1.46;
+			color: $black;
+		}
+
+		.aerospace101-quote-source {
+			@extend %caption;
+		}
+	}
+
+	.archive-content {
+		margin-left: -0.5rem;
+		margin-right: -0.5rem;
+		padding: 0 $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: 0 $archive-content-padding-md;
+        }
+	}
+
+	.filter-sidebar {
+		padding: 0;
+		font-family: $font__abel;
+		margin-bottom: 2rem;
+
+		@include breakpoint("medium") {
+			padding-left: 0.5rem;
+			padding-right: 0.5rem;
+		}
+
+		.subheading {
+			@extend %subheading;
+			margin: 0 0 1rem 0;
+		}
+
+		&-remove-filter {
+			display: block;
+			margin-top: 1rem;
+			padding-top: 0.25rem;
+			border-top: 1px solid $blue-gray;
+			@include fontSize(14px);
+		}
+
+		&-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		&-list li {
+			@include fontSize(18px);
+			line-height: 2.02;
+			margin-bottom: 0;
+
+			a {
+				color: $orange;
+			}
+
+			&.active a {
+				color: $white;
+				background-color: $orange;
+				padding: 0.2rem 0.5rem;
+			}
+
+			&.is-hidden { display: none; }
+		}
+
+		&-list li.filter-sidebar-list-showmore {
+			@include fontSize(14px);
+			text-transform: uppercase;
+			color: $black;
+			cursor: pointer;
+
+			i {
+				color: $orange;
+				margin-left: -5px;
+			}
+
+			.is-hidden { display: none; }
+		}
+	}
+
+	.archive-content-regular {
+		width: 100%;
+		margin: 2rem 0;
+
+		@include breakpoint("medium") {
+			margin-left: -0.5rem;
+			margin-right: -0.5rem;
+		}
+
+		.archive-content-posts {
+			align-items: flex-start;
+			justify-content: flex-start;
+			margin-left: 0;
+			margin-right: 0;
+			padding: 0;
+
+			@include breakpoint("medium") {
+				margin-left: -0.5rem;
+				margin-right: -0.5rem;
+				padding-left: -0.5rem;
+				padding-right: -0.5rem;
+			}
+		}
+
+		.aerospace101 {
+			margin: 0 0 2rem 0;
+			padding: 0;
+			background-color: transparent;
+
+			@include breakpoint("medium") {
+				max-width: calc(50% - 2rem);
+				margin-left: 2rem;
+			}
+
+			.entry-thumbnail {
+				border-bottom: 1px solid $blue-gray;
+
+				img {
+					max-height: unset;
+				}
+			}
+
+			.entry-main {
+				background-color: $white;
+				padding: 2rem;
+			}
+
+			&:hover .read-article {
+				display: block;
+			    top: unset;
+			    bottom: 0;
+			    text-align: right;
+			    padding: 2rem 1rem;
+
+			    i {
+			    	display: inline;
+			    	@include fontSize(24px);
+			    }
+			}
+		}
+	}
+
+	.aerospace101 {
+		padding: 0;
+
+		&.featured {
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+
+			.entry-thumbnail {
+				border-bottom: 1px solid $blue-gray;
+
+				@include breakpoint("medium") {
+					border-bottom: 0;
+					border-left: 1px solid $blue-gray;
+				}
+			}
+
+			.entry-main {
+				padding: 2rem;
+			}
+		}
+
+		.entry-thumbnail {
+			padding: 0;
+			margin: 0;
+		}
+
+		.post-is-featured {
+			color: $primary-blue;
+			svg { fill: $primary-blue; }
+		}
+
+		.post-tags-container {
+			padding-left: 0;
+			padding-right: 0;
+
+			.subheading-lg { display: none; }
+			.subheading {
+				@extend .meta-label;
+			}
+
+			ul {
+				display: inline-block;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				display: inline;
+				margin: 0;
+
+				&::after {
+					content: ", ";
+					margin-right: 0.25rem;
+				}
+
+				&:last-of-type::after { content: none; }
+
+				a {
+					color: $black;
+
+					&:hover { color: $secondary-blue; }
+				}
+			}
+		}
+
+		&:hover {
+			.entry-title a { color: $orange; }
+			.calendar-container {
+				@include calendarGradient ( -45deg, transparent, $orange, 28.28427px );
+
+				a { color: $white;}
+			}
+		}
+	}
+
+	.archive-pages-bottom {
+		background-color: transparent;
+		padding-top: 0;
+
+		&::before {
+			top: 0;
+		}
+	}
+}

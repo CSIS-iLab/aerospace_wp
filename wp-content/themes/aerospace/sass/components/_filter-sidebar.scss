@@ -1,0 +1,86 @@
+/*======================================
+=            Filter Sidebar            =
+======================================*/
+
+.filter-sidebar {
+    padding-right: 0.5rem !important;
+
+    @include breakpoint("medium") {
+        padding-right: 4rem !important;
+    }
+
+    .filter-label {
+        @extend %form-label;
+        display: block;
+    }
+
+    .dropdown-container {
+        width: 100%;
+
+        select.filter-select {
+            width: auto;
+            color: $gray;
+        }
+
+        /* IE Fix */
+        select#search-categories,
+        select#search-tags {
+            width: 100%;
+        }
+
+        select:focus#search-categories,
+        select:focus#search-tags {
+            width: auto\9;
+        }
+    }
+
+    input[type="text"],
+    input[type="search"],
+    select {
+        display: block;
+        font-family: $font__source;
+        @include fontSize(16px);
+        margin: 0 0 2rem 0;
+    }
+
+    .filter-search-container {
+        position: relative;
+
+        &::after {
+            content: '\f2f5';
+            font-family: 'asp';
+            display: block;
+            position: absolute;
+            right: 0.6rem;
+            bottom: 1px;
+        }
+    }
+
+    .filter-input {
+        width: 100%;
+        padding: 0.2rem 0.6rem;
+        line-height: 1.67;
+
+        @include placeholder {
+            color: $gray;
+        }
+    }
+
+    .filter-post-types {
+    	margin-bottom: 2rem;
+    }
+
+    .search-form {
+    	.search-field {
+    		width: 100%;
+    	}
+    	.search-submit {
+	    	display: none;
+	    }
+    }
+
+    .filter-checkbox {
+    	display: block;
+    }
+}
+

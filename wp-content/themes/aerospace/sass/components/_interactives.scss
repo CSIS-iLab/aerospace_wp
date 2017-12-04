@@ -1,0 +1,54 @@
+/*====================================
+=            Interactives            =
+====================================*/
+
+/*----------  Interactive Embed  ----------*/
+.interactive-heading { display: none; }
+.data-fallbackImg ~ .data-iframe {
+	display: none;
+
+	@include breakpoint("medium") {
+		display: inline;
+	}
+}
+
+.data-fallbackImg {
+	@include breakpoint("medium") {
+		display: none;
+	}
+
+	p {
+		@include fontSize(14px);
+		font-style: italic;
+	}
+}
+
+/*----------  Full Width Content  ----------*/
+.fullWidthFeatureContent {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    text-align: center;
+
+    .fullWidthInner {
+        margin: 0 auto;
+        @include breakpoint("small") {
+            max-width: 95% !important;
+        }
+    }
+
+    .overlay-isActive & {
+        position: static;
+    }
+
+    @include breakpoint("medium") {
+        .sharing-shareBtns.isVisible {
+            max-width: $size__content-max-width;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}

@@ -88,6 +88,7 @@ function data_build_meta_box( $post ) {
 	$current_source = get_post_meta( $post->ID, '_data_source', true );
 	$current_url = get_post_meta( $post->ID, '_data_url', true );
 	$current_width = get_post_meta( $post->ID, '_data_width', true );
+	$current_full_width = get_post_meta( $post->ID, '_data_full_width', true );
 	$current_height = get_post_meta( $post->ID, '_data_height', true );
 	$current_iframe_resize_disabled = get_post_meta( $post->ID, '_data_iframe_resize_disabled', true );
 	$current_fallback_img_disabled = get_post_meta( $post->ID, '_data_fallback_img_disabled', true );
@@ -98,6 +99,10 @@ function data_build_meta_box( $post ) {
 	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 	$current_twitter_pic_url = get_post_meta( $post->ID, '_data_twitter_pic_url', true );
 
+	if ( ! $current_content_placement ) {
+		$current_content_placement = 'above';
+	}
+
 	?>
 	<div class='inside'>
 
@@ -106,9 +111,15 @@ function data_build_meta_box( $post ) {
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
 		</p>
 
-		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Content Placement', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="source" value="<?php echo esc_attr( $current_source ); ?>" />
+			<input type="radio" name="content_placement" value="above" <?php checked( $current_content_placement, 'above' ); ?> /> Above <br>
+			<input type="radio" name="content_placement" value="below" <?php checked( $current_content_placement, 'below' ); ?> /> Below
+		</p>
+
+		<h3><?php esc_html_e( 'Interactive Title', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="title" value="<?php echo esc_attr( $current_title ); ?>" />
 		</p>
 
 		<h3><?php esc_html_e( 'Interactive URL', 'aerospace' ); ?></h3>
@@ -116,27 +127,25 @@ function data_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="url" value="<?php echo esc_url( $current_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Interactive Width', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Width (% of Content)', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />
+			<input type="number" min="0" max="100" class="small-text" name="width" value="<?php echo esc_attr( $current_width ); ?>" />%
 		</p>
+		<p class="howto">If left blank, defaults to 100%</p>
+
+		<h3><?php esc_html_e( 'Interactive Width (% of Screen)', 'aerospace' ); ?></h3>
+		<p>
+			<input type="number" min="0" max="100" class="small-text" name="full_width" value="<?php echo esc_attr( $current_full_width ); ?>" />%
+		</p>
+		<p class="howto">Only fill out if the interactive needs to be wider than the content area.</p>
 
 		<h3><?php esc_html_e( 'Interactive Height', 'aerospace' ); ?></h3>
 		<p>
-			<input type="text" class="large-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
+			<input type="number" min="0" max="100" class="small-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
 		</p>
+		<p class="howto">If left blank, interactive will be automatically sized to fit its content. You must specify units (%, px, etc.)</p>
 		<p>
 			<input type="checkbox" name="iframe_resize_disabled" value="1" <?php checked( $current_iframe_resize_disabled, '1' ); ?> /> iFrame Resize Disabled
-		</p>
-
-		<h3><?php esc_html_e( 'Fallback Image', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
-		</p>
-
-		<h3><?php esc_html_e( 'Interactive Title', 'aerospace' ); ?></h3>
-		<p>
-			<input type="text" class="large-text" name="title" value="<?php echo esc_url( $current_title ); ?>" />
 		</p>
 
 		<h3><?php esc_html_e( 'Interactive Image URL', 'aerospace' ); ?></h3>
@@ -144,18 +153,22 @@ function data_build_meta_box( $post ) {
 			<input type="text" class="large-text" name="img_url" value="<?php echo esc_url( $current_img_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Content Placement', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Interactive Fallback Image', 'aerospace' ); ?></h3>
 		<p>
-			<input type="radio" name="above" value="above" <?php checked( $current_content_placement, 'above' ); ?> /> Above <br>
-			<input type="radio" name="below" value="below" <?php checked( $current_content_placement, 'below' ); ?> /> Below
+			<input type="checkbox" name="fallback_img_disabled" value="1" <?php checked( $current_fallback_img_disabled, '1' ); ?> /> Fallback Image Disabled
 		</p>
+
+		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
+		<p>
+			<textarea rows="5" name="source" style="width: 100%;"><?php echo esc_textarea( $current_source ); ?></textarea>
+		</p>		
 
 		<h3><?php esc_html_e( 'Source URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="source_url" value="<?php echo esc_url( $current_source_url ); ?>" />
 		</p>
 
-		<h3><?php esc_html_e( 'Twitter Pic', 'aerospace' ); ?></h3>
+		<h3><?php esc_html_e( 'Twitter Pic URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="twitter_pic_url" value="<?php echo esc_url( $current_twitter_pic_url ); ?>" />
 		</p>
@@ -181,16 +194,16 @@ function data_save_meta_box_data( $post_id ){
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	
+
 	// Is Featured?
 	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', sanitize_text_field( $_POST['is_featured'] ) );
+		update_post_meta( $post_id, '_post_is_featured', intval( wp_unslash( $_POST['is_featured'] ) ) );
 	} else {
-		update_post_meta( $post_id, '_post_is_featured', '' );
+		update_post_meta( $post_id, '_post_is_featured', 0 );
 	}
 	// Source.
 	if ( isset( $_REQUEST['source'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_data_source', sanitize_text_field( wp_unslash( $_POST['source'] ) ) ); // Input var okay.
+		update_post_meta( $post_id, '_data_source', sanitize_textarea_field( wp_unslash( $_POST['source'] ) ) ); // Input var okay.
 	}
 	// URL
 	if ( isset( $_REQUEST['url'] ) ) { // Input var okay.
@@ -199,6 +212,10 @@ function data_save_meta_box_data( $post_id ){
 	// Width
 	if ( isset( $_REQUEST['width'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_data_width', sanitize_text_field( wp_unslash( $_POST['width'] ) ) ); // Input var okay.
+	}
+	// Full Width
+	if ( isset( $_REQUEST['full_width'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_data_full_width', sanitize_text_field( wp_unslash( $_POST['full_width'] ) ) ); // Input var okay.
 	}
 	// Height
 	if ( isset( $_REQUEST['height'] ) ) { // Input var okay.
@@ -241,16 +258,16 @@ add_action( 'save_post_data', 'data_save_meta_box_data' );
 
 /*----------  Display iFrame  ----------*/
 /**
- * Displays the specified interactive in an iframe
+ * Displays the specified data in an iframe
  *
- * @param  String  $interactive_url       URL to the interactive.
+ * @param  String  $data_url       URL to the data.
  * @param  String  $width                Width of the iframe, can be in px or %.
  * @param  String  $height               Height of the iframe, can be in px or %.
  * @param  String  $fallback_img          Featured image thumbnail img tag string.
  * @param  boolean $iframe_resize_disabled Indicate if iframe should automatically resize based on content height.
  * @return String                        HTML of the iframe.
  */
-function aerospace_data_display_iframe( $interactive_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false ) {
+function aerospace_data_display_iframe( $data_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false ) {
 	if ( empty( $width ) ) {
 		$width = '100%';
 	}
@@ -258,13 +275,13 @@ function aerospace_data_display_iframe( $interactive_url, $width, $height, $fall
 		$height_value = 'height="' . $height . '"';
 	}
 	if ( $fallback_img ) {
-		$fallback_img = '<div class="interactive-fallbackImg">' . $fallback_img . '<p>For best experience, please view on a desktop computer.</p></div>';
+		$fallback_img = '<div class="data-fallbackImg">' . $fallback_img . '<p>For best experience, please view on a desktop computer.</p></div>';
 	}
 	if ( ! $iframe_resize_disabled ) {
 		$enabled_class = ' js-iframeResizeEnabled';
 	}
 
-	return $fallback_img . '<iframe class="interactive-iframe' . $enabled_class . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $interactive_url . '"></iframe>';
+	return $fallback_img . '<iframe class="data-iframe' . $enabled_class . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $data_url . '"></iframe>';
 }
 
 /*----------  Display Generate Shortcode Button  ----------*/
@@ -287,9 +304,9 @@ add_filter( 'manage_edit-data_columns', 'aerospace_data_columns' );
  * @param  int    $cptid   Column ID number.
  */
 function aerospace_data_column( $colname, $cptid ) {
-	$shortcode_html = "[interactive id=\'" . $cptid . "\']";
+	$shortcode_html = "[data id=\'" . $cptid . "\']";
 	if ( 'shortcode' === $colname ) {
-		echo '<a href="#" class="button button-small" onclick="prompt(\'Shortcode to include featured interactive in posts and pages:\', \'' . esc_html( $shortcode_html ) . '\'); return false;">Get Embed Code</a>';
+		echo '<a href="#" class="button button-small" onclick="prompt(\'Shortcode to include featured data in posts and pages:\', \'' . esc_html( $shortcode_html ) . '\'); return false;">Get Embed Code</a>';
 	}
 }
 add_action( 'manage_data_posts_custom_column', 'aerospace_data_column', 10, 2 );
