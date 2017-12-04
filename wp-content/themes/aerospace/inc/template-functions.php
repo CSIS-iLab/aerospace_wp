@@ -190,3 +190,16 @@ function aerospace_add_query_vars_filter( $vars ){
   return $vars;
 }
 add_filter( 'query_vars', 'aerospace_add_query_vars_filter' );
+
+if ( class_exists( 'easyFootnotes' ) ) {
+    /**
+     * Removes the easy footnotes from the content so we can display them separately elsewhere.
+     * @param  string $content The post content.
+     * @return string          The modified post content.
+     */
+    function aerospace_remove_easy_footnotes($content) {
+        $content = preg_replace('#<ol[^>]*class="easy-footnotes-wrapper"[^>]*>.*?</ol>#is', '', $content);
+        return $content;
+    }
+    add_filter('the_content', 'aerospace_remove_easy_footnotes', 30);
+}
