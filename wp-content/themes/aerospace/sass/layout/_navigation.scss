@@ -3,18 +3,18 @@
 =======================================*/
 
 .nav-container {
-	order: 1;
+    order: 1;
 
-	@include breakpoint("medium") {
-		order: 2;
-	}
+    @include breakpoint("medium") {
+        order: 2;
+    }
 }
 
 .main-navigation {
 
     .menu-toggle {
-    	padding: 0;
-    	margin: 0;
+        padding: 0;
+        margin: 0;
 
         @include breakpoint("medium") {
             display: none;
@@ -22,58 +22,58 @@
     }
 
     .menu-menu-1-container {
-    	display: none;
+        display: none;
 
-    	@include breakpoint("medium") {
-    		display: block;
-    	}
+        @include breakpoint("medium") {
+            display: block;
+        }
     }
 
     .nav-items-container {
-    	display: block;
-    	position: absolute;
-    	z-index: 20;
-    	top: $size__header-mobile-height;
-    	left: -100%;
-    	width: 80vw;
-    	height: 100vh;
-    	background-color: $dark-blue;
-    	padding: 1rem 0;
-    	@include transition(left 0.5s linear);
+        display: block;
+        position: absolute;
+        z-index: 20;
+        top: $size__header-mobile-height;
+        left: -100%;
+        width: 80vw;
+        height: 100vh;
+        background-color: $dark-blue;
+        padding: 1rem 0;
+        @include transition(left 0.5s linear);
 
-    	@include breakpoint("medium") {
-    		position: relative;
-    		z-index: unset;
-    		top: unset;
-    		left: unset;
-    		width: unset;
-    		height: unset;
-    		background-color: transparent;
-    		padding: 0;
-    	}
+        @include breakpoint("medium") {
+            position: unset;
+            z-index: unset;
+            top: unset;
+            left: unset;
+            width: unset;
+            height: unset;
+            background-color: transparent;
+            padding: 0;
+        }
 
-    	.header-social {
-    		display: none;
-    	}
+        .header-social {
+            display: none;
+        }
     }
 
     &.toggled .nav-items-container {
-    	left: 0;
+        left: 0;
 
-    	.menu-menu-1-container {
-    		display: block;
-    	}
+        .menu-menu-1-container {
+            display: block;
+        }
     }
 
     .nav-menu {
-		list-style: none;
-	    margin: 0;
-	    padding: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
 
-    	@include breakpoint("medium") {
-	    	display: block;
-	        justify-content: space-between;
-	    }
+        @include breakpoint("medium") {
+            display: block;
+            justify-content: space-between;
+        }
     }
 
     .nav-menu li {
@@ -81,16 +81,20 @@
         margin-bottom: 0.5rem;
 
         @include breakpoint("medium") {
-        	margin-bottom: 0;
+            margin-bottom: 0;
             display: block;
             float: left;
             margin-right: 40px;
             z-index: 10;
+            position: unset;
+            display: flex;
+            align-items: center;
+            height: $size__header-sm-height;
         }
 
-        & > a {
-        	display: block;
-        	padding: 0.25rem 2rem;
+        &>a {
+            display: block;
+            padding: 0.25rem 2rem;
             font-family: $font__source;
             @include fontSize(20px);
             line-height: 1.6;
@@ -98,53 +102,75 @@
             color: $white;
 
             @include breakpoint("medium") {
-            	padding: 0;
-            	@include fontSize(18px);
-	            line-height: 1;
-	            font-weight: 300;
-	            letter-spacing: 1px;
+                padding: 0;
+                @include fontSize(18px);
+                line-height: 1;
+                font-weight: 300;
+                letter-spacing: 1px;
             }
         }
 
         &:hover {
-        	background-color: $darkest-blue;
-            .submenu-container { display: flex; }
+            background-color: $darkest-blue;
+            .submenu-container {
+                display: flex;
+            }
 
             @include breakpoint("medium") {
-            	background-color: transparent;
-            	margin-bottom: -1rem;
+                background-color: transparent;
+                margin-bottom: -1rem;
             }
         }
 
-        &.menu-item-has-children > a {
-        	pointer-events: none;
+        &.menu-item-has-children>a {
+            pointer-events: none;
 
-        	@include breakpoint("medium") {
-        		pointer-events: auto;
-        	}
+            @include breakpoint("medium") {
+                pointer-events: auto;
+            }
+        }
+
+        @include breakpoint("medium") {
+            &.menu-item-has-children:nth-of-type(3) {
+
+                .submenu-container {
+                    @include fullWidthBackground($primary-blue);
+                     background-color: $primary-blue;
+                }
+            }
+            &.menu-item-has-children:nth-of-type(2) {
+                .submenu-container {
+                    @include fullWidthBackground($secondary-blue);
+                     background-color: $secondary-blue;
+                }
+            }
         }
     }
+
 
     .submenu-container {
         display: none;
 
         @include breakpoint("medium") {
-	        position: fixed;
-	        left: 0;
-	        right: 0;
-	        background-color: $secondary-blue;
-	        margin-top: 0.5rem;
-	        padding-top: 2rem;
-	        padding-bottom: 2rem;
-	    }
+            position: absolute;
+            left: 0;
+            right: 0; 
+            top: $size__header-sm-height;
+           
+            //margin-top: 0.5rem;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+
 
         .submenu-parent,
         .submenu-featured-post,
         .submenu-children {
-        	@include breakpoint("medium") {
-	            padding-left: 2rem;
-	            padding-right: 2rem;
-	        }
+            @include breakpoint("medium") {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
         }
 
         .submenu-parent {
@@ -190,7 +216,7 @@
                 padding: 0;
 
                 @include breakpoint("medium") {
-                	margin-bottom: 0;
+                    margin-bottom: 0;
                 }
             }
 
@@ -199,36 +225,38 @@
                 margin-bottom: 1rem;
 
                 @include breakpoint("medium") {
-                	margin-top: 0;
-                	margin-bottom: 1.5rem;
+                    margin-top: 0;
+                    margin-bottom: 1.5rem;
                 }
 
                 &:hover {
-                    .submenu-desc { color: $white; }
+                    .submenu-desc {
+                        color: $white;
+                    }
                 }
             }
 
             a {
-            	padding-left: 3.25rem;
+                padding-left: 3.25rem;
                 text-transform: none;
                 @include fontSize(16px);
                 font-weight: 300;
 
                 @include breakpoint("medium") {
-                	padding-left: 0;
-                	@include fontSize(20px);
-                	font-weight: normal;
+                    padding-left: 0;
+                    @include fontSize(20px);
+                    font-weight: normal;
                 }
             }
 
             .submenu-desc {
-            	display: none;
-            	@include breakpoint("medium") {
+                display: none;
+                @include breakpoint("medium") {
                     display: block;
-	                @include fontSize(16px);
-	                color: $blue-gray;
-	                margin: 0 0 0 1.5rem;
-	            }
+                    @include fontSize(16px);
+                    color: $blue-gray;
+                    margin: 0 0 0 1.5rem;
+                }
             }
         }
     }

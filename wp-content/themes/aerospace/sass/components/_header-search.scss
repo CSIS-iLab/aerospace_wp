@@ -7,7 +7,7 @@
     text-align: right;
     color: $white;
     font-size: 1.3em;
-    
+
     @include breakpoint("medium") {
         font-size: 1em;
     }
