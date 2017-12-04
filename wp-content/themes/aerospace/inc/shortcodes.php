@@ -93,7 +93,6 @@ function aerospace_shortcode_data( $atts ) {
 			'width' => '', // Width of Interactive
 			'height' => '', // Height of Interactive,
 			'sharing' => true, // Include share component
-			'toc' => true // Include in Table of Contents
 		),
 		$atts,
 		'data'
@@ -112,18 +111,14 @@ function aerospace_shortcode_data( $atts ) {
 	}
 
 	$title = get_the_title($atts['id']);
-	$sanitizedTitle = sanitize_title($title);
-	$URL = get_permalink()."#".$sanitizedTitle;
-
-	if($atts['toc'] === true || $atts['toc'] == 'true') {
-		$heading = '<h2 class="interactive-heading" id="'.$sanitizedTitle.'">'.$title.'</h2>';
-	}
+	$URL = get_permalink();
+	$data_post_url = get_permalink( $atts['id'] );
 
 	if($atts['sharing'] === true || $atts['sharing'] == 'true') {
-		$sharing = aerospace_social_share($title, $URL);
+		$sharing = aerospace_social_share($title, $URL, $data_post_url);
 	}
 
-	return $heading.aerospace_data_display_iframe($data_url, $width, $height, $fallback_img, $iframe_resize_disabled).$sharing;
+	return aerospace_data_display_iframe($data_url, $width, $height, $fallback_img, $iframe_resize_disabled).$sharing;
 
 }
 add_shortcode( 'data', 'aerospace_shortcode_data' );
@@ -131,24 +126,23 @@ add_shortcode( 'data', 'aerospace_shortcode_data' );
 /**
  * Adds inline social sharing component to podcasts, stats, and interactives embedded in posts via shortcode
  * @param  string $title Title to be used by social media
- * @param  string $URL   URL to be used by social media
+ * @param  string $post_url   URL to be used by social media
+ * @param  string $data_post_url URL to the data repo post.
  * @return string        HTML of share button
  */
-function aerospace_social_share($title = "", $URL = "") {
+function aerospace_social_share($title = "", $post_url = "", $data_post_url = "") {
 	$shareArgs = array(
 		'linkname' => $title,
-		'linkurl' => $URL
+		'linkurl' => $post_url
 	);
+	echo $URL;
 	$output = '<div class="sharing-inline">';
-	$output .= '<button class="btn btn-gray sharing-openShareBtn">Share <i class="icon icon-share"></i></button>';
-	$output .= '<div class="sharing-shareBtns">';
-	$output .= '<div class="post-title">'.$title.'</div>';
+	$output .= '<div class="col-xs-12 col-md-6 sharing-inline-share"><span class="meta-label">Share</span>';
 	ob_start();
     ADDTOANY_SHARE_SAVE_KIT($shareArgs);
     $output .= ob_get_contents();
     ob_end_clean();
-    $output .= '<i class="icon icon-close-x"></i>';
-    $output .= '</div>';
+    $output .= '</div><div class="col-xs-12 col-md-6 sharing-inline-view">View in the <a href="' . esc_url( $data_post_url ) . '">Data Repository</a></div>';
     $output .= '</div>';
     return $output;
 }
