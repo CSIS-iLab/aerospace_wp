@@ -411,6 +411,7 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
 		 */
 		function aerospace_report_download( $id ) {
 				if ( 'post' === get_post_type() ) {
+						$report_cover_url = get_post_meta( $id, '_post_report_cover_url', true );
 						$download_url = get_post_meta( $id, '_post_download_url', true );
 						$view_url = get_post_meta( $id, '_post_view_url', true );
 
@@ -418,9 +419,17 @@ if ( ! function_exists( 'aerospace_report_download' ) ) :
 								$download = '<a href="' . esc_url( $download_url ) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i>' . esc_html( 'Download PDF', 'aerospace' ) . '</a>';
 						}
 
-						if ( '' !== $view_url && has_term( 'Report', 'post_types' ) && has_post_thumbnail() ) {
+						if ( '' !== $view_url && has_term( 'Report', 'post_types' ) ) {
 
-								$view = '<div class="entry-report-thumbnail"><a href="' . esc_url( $view_url ) . '" target="_blank"> ' . get_the_post_thumbnail( null, 'full', array( 'title' => 'View the Report' ) ) . '</a></div>';
+							if ( '' !== $report_cover_url ) {
+								$report_cover = '<img src="' . esc_attr( $report_cover_url ) . '" class="attachment-full size-full wp-post-image" title="View the Report" alt="View the Report" />';
+							} elseif ( has_post_thumbnail() ) {
+								$report_cover = get_the_post_thumbnail( null, 'full', array( 'title' => 'View the Report' ) );
+							} else {
+								$report_cover = '';
+							}
+
+							$view = '<div class="entry-report-thumbnail"><a href="' . esc_url( $view_url ) . '" target="_blank"> ' . $report_cover . '</a></div>';
 						}
 						printf( '<div class="post-report">%1$s%2$s</div>', $view, $download ); // WPCS: XSS OK.
 				}
