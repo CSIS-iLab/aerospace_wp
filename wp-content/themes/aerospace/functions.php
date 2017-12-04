@@ -234,6 +234,12 @@ if (defined('JETPACK__VERSION') ) {
 require get_template_directory() . '/inc/shortcodes.php';
 
 /**
+ * Register Custom TinyMCE Buttons
+ */
+require get_template_directory() . '/inc/custom-tinymce-buttons.php';
+
+/**
  * Remove AddToAny Default CSS
  */
 add_action( 'wp_enqueue_scripts', function() { wp_dequeue_style( 'addtoany' ); }, 21 );
+
