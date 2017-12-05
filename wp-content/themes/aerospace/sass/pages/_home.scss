@@ -20,6 +20,8 @@
     }
 
     .view-more {
+        font-family: $font__abel;
+
 		a {
 			color: $orange;
 
@@ -394,6 +396,7 @@
     		.entry-header .entry-title {
     			@extend %archive-post-title;
     			margin-bottom: 0.5rem;
+                font-weight: normal;
 
     			a {
     				color: $black;
