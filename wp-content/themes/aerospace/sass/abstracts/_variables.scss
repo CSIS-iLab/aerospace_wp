@@ -13,6 +13,7 @@ $orange: #d66e42;
 $dark-orange: #b25b36;
 $gray: #8c8c8c;
 $light-gray: #d8d8d8;
+$line-gray: #dedede;
 $blue-gray: #b5bdc1;
 $dark-blue-gray: #5b6d76;
 
@@ -26,7 +27,7 @@ $color__background-button-blue: $dark-blue;
 $color__background-button-blue-hover: #1b5e81;
 $color__background-button-orange: $orange;
 $color__background-button-orange-hover: $dark-orange;
-$color__background-button-gray: #dedede;
+$color__background-button-gray: $line-gray;
 $color__background-button-gray-hover: $orange;
 $color__background-pre: #eee;
 $color__background-ins: #fff9c0;

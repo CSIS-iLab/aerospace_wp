@@ -48,7 +48,7 @@
                 right: calc(#{$size__highlights-max-width} + 0.55rem);
                 height: 100%;
                 width: 3px;
-                background-color: $blue-gray;
+                background-color: $line-gray;
 
                 @include breakpoint("large") {
                     right: calc(#{$size__highlights-max-width} + 1rem);
@@ -162,7 +162,7 @@
             height: 100%;
             margin: 0 0 $size__highlights-margin-bottom $size__highlights-margin-left;
             padding: $size__highlights-padding-top 2rem;
-            border-left: 3px solid $blue-gray;
+            border-left: 3px solid $line-gray;
         }
 
         &-title {
@@ -229,7 +229,7 @@
 
         @include breakpoint("medium") {
             > div:not(:first-child) {
-                border-left: 3px solid $blue-gray;
+                border-left: 3px solid $line-gray;
             }
         }
 
