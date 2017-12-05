@@ -97,7 +97,3 @@
         @include transition(visibility 0s, opacity .5s cubic-bezier(.33, 0, .2, 1));
     }
 }
-
-.is-minimal .search-container .search-overlay {
-    height: 100%;
-}

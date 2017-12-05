@@ -155,36 +155,6 @@
             }
         }
     }
-
-    .toggled .header-social {
-        display: block;
-        margin-left: 2rem;
-    }
-
-    /*----------  Minimal  ----------*/
-    &.is-minimal {
-        @include breakpoint("medium") {
-            height: $size__header-bottom-height;
-            background-image: none;
-
-            .header-top,
-            .stars {
-                //display: none;
-            }
-
-            .header-bottom {
-                height: 100%; //position: fixed;
-            }
-
-            .site-branding-minimal {
-                //display: inline-block;
-            }
-
-            .main-navigation .nav-menu {
-                justify-content: space-around;
-            }
-        }
-    }
 }
 
 .header-bottom-container.is-sticky {

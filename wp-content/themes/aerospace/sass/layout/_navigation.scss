@@ -55,6 +55,10 @@
 
         .header-social {
             display: block;
+
+            @include breakpoint("medium") {
+                display: none;
+            }
         }
     }
 
