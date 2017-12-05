@@ -11,7 +11,7 @@ $email = get_option( 'aerospace_email' );
 get_header(); ?>
 
     <div id="primary" class="content-area">
-        <main id="main" class="site-main">
+        <main id="main" class="site-main content-wrapper">
 
             <section class="error-404 not-found">
                 <header class="page-header">
@@ -32,10 +32,10 @@ get_header(); ?>
                     <p>The page you are looking for was moved, removed, renamed, or might never have existed. We apologize for the inconvenience!</p>
                     <div class="btn-container row">
 
-                        <div class="col-sm-6">
+                        <div class="col-xs-6">
                             <a href="<?php echo get_template_directory_uri(); ?>" class="btn btn-orange">Go to the homepage</a>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-xs-6">
                             <?php
                             echo '<a class="btn btn-orange " href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Report this Link</a>';
                             
