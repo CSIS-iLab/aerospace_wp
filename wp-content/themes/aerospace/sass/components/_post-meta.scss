@@ -24,7 +24,7 @@
 
 /*----------  Featured Post  ----------*/
 .post-is-featured {
-	font-family: $font__abel;
+	font-family: $font__source;
 	@icnlude fontSize(16px);
 	line-height: 1.34;
 	letter-spacing: 0.9px;
@@ -34,6 +34,7 @@
 
 	svg {
 		max-width: 7px;
+		max-height: 15px;
 		fill: $orange;
 		margin-left: 0.2rem;
 		margin-bottom: -2px;

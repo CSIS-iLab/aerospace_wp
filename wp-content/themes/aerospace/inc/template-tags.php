@@ -731,8 +731,16 @@ if ( ! function_exists( 'aerospace_sort_filter' ) ) :
 			$param_prefix = '?';
 		}
 
+		if ( $wp->query_vars['order'] == 'ASC' ) {
+			$asc_active = 'active';
+			$desc_active = '';
+		} else {
+			$asc_active = '';
+			$desc_active = 'active';
+		}
+
 		/* translators: 1: Sort direction. */
-		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s%2$sorder=DESC">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s%2$sorder=ASC">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url, $param_prefix ); // WPCS: XSS OK.
+		printf( '<div class="sort-filter"><span class="meta-label">' . esc_html_x( 'Sort By:', 'aerospace' ) . '</span><a href="%1$s%2$sorder=DESC" class="%3$s">' . esc_html_x( 'Newest', 'aerospace' ) . '</a><span class="sort-filter-divider">|</span><a href="%1$s%2$sorder=ASC" class="%4$s">' . esc_html_x( 'Oldest', 'aerospace' ) . '</a></div>', $url, $param_prefix, $desc_active, $asc_active ); // WPCS: XSS OK.
 	}
 endif;
 
