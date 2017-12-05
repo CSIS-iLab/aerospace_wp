@@ -12,7 +12,7 @@ $url = home_url( $wp->request );
 $tag_id = get_query_var( 'tid' );
 
 $total_terms = count($filter_terms) - 1;
-$display_limit = 2;
+$display_limit = get_option( 'aerospace_archives_aerospace101_filter_limit' );
 
 $archive_url = get_post_type_archive_link( 'aerospace101' );
 

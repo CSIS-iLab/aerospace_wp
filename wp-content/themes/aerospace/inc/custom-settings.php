@@ -302,6 +302,42 @@ function aerospace_display_section_homepage_message() {
 	echo 'The featured posts shown on the home page.';
 }
 
+add_action( 'admin_init', 'aerospace_admin_init_section_archives' );
+/**
+ * Creates the "Footer" settings section.
+ */
+function aerospace_admin_init_section_archives() {
+
+	add_settings_section(
+		'aerospace_settings_section_archives',
+		'Archives',
+		'aerospace_display_section_archives_message',
+		'aerospace-options-page'
+	);
+
+	add_settings_field(
+		'aerospace_archives_aerospace101_filter_limit',
+		'Aerospace101 Filter Tags Limit',
+		'aerospace_text_callback',
+		'aerospace-options-page',
+		'aerospace_settings_section_archives',
+		array( 'aerospace_archives_aerospace101_filter_limit' )
+	);
+
+	register_setting(
+		'aerospace_settings',
+		'aerospace_archives_aerospace101_filter_limit',
+		'sanitize_text_field'
+	);
+}
+
+/**
+ * Archives section description.
+ */
+function aerospace_display_section_archives_message() {
+	echo 'Information visible in the site\'s archives.';
+}
+
 /**
  * Renders the text input fields.
  *
