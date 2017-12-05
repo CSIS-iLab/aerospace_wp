@@ -156,6 +156,10 @@
         	height: 2px;
         	background-color: $blue-gray;
 
+            @include breakpoint("small") {
+                top: calc(1.3rem - 1px);
+            }
+
         	@include breakpoint("medium") {
         		top: calc(#{$archive-content-padding-md} - 1px);
         		width: calc(100% - (#{$archive-content-padding-md} * 2));
