@@ -221,7 +221,7 @@
                     background-color: $primary-blue;
                     .submenu-parent {
 
-                        border-right: 1px solid lighten($primary-blue, 8%);
+                        border-right: 1px solid desaturate((lighten($primary-blue, 20%)), 40%);
                     }
                 }
             }
@@ -231,7 +231,7 @@
                     background-color: $secondary-blue;
                     .submenu-parent {
 
-                        border-right: 1px solid lighten($secondary-blue, 8%);
+                        border-right: 1px solid desaturate((lighten($secondary-blue, 20%)), 40%);
                     }
                 }
             }
