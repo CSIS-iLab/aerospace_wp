@@ -11,8 +11,6 @@
         headerChange = headerChange + adminBar;
     }
 
-    console.log(headerChange);
-
     // Add class to header on scroll
     $(window).scroll(function() {
         var currentScroll = $(this).scrollTop();
