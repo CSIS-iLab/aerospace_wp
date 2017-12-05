@@ -122,7 +122,7 @@ if ( ! function_exists( 'exclude_post_categories' ) ) :
 		/**
 		 * Creates function to filter out primary category id from catlist
 		 */
-		function exclude_post_categories($excl='', $spacer=' ') {
+		function exclude_post_categories($excl='', $spacer=', ') {
 			$categories = get_the_category($post->ID);
 			if (!empty($categories)) {
 				$exclude = $excl;
@@ -133,7 +133,7 @@ if ( ! function_exists( 'exclude_post_categories' ) ) :
 					if (!in_array($cat->cat_ID, $exclude)) {
 						$html .= '<a href="' . get_category_link($cat->cat_ID) . '" ';
 						$html .= 'title="' . $cat->cat_name . '">' . $cat->cat_name . '</a>';
-						if ($thecount > 0) {
+						if ($thecount > 1) {
 							$html .= $spacer;
 						}
 						$thecount--;
@@ -176,14 +176,14 @@ if ( ! function_exists( 'aerospace_entry_primary_cats' ) ) :
 				}
 				// Display category
 				if ( !empty($category_display) ) {
-				if ( $useCatLink == true && !empty($category_link) ) {
-					echo '<span class="post-category">';
-					echo '<a href="'.$category_link.'">'.htmlspecialchars($category_display).'&nbsp;</a>';
-					echo '</span>';
-					echo exclude_post_categories($wpseo_primary_term);
-				} else {
-					echo '<span class="post-category">'.htmlspecialchars($category_display).'</span>';
-					}
+					if ( $useCatLink == true && !empty($category_link) ) {
+						echo '<span class="post-category">';
+						echo '<a href="'.$category_link.'">'.htmlspecialchars($category_display).'</a>';
+						echo '</span>, ';
+						echo exclude_post_categories($wpseo_primary_term);
+					} else {
+						echo '<span class="post-category">'.htmlspecialchars($category_display).'</span>';
+						}
 				}
 			}
 		}

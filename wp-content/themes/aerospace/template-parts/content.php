@@ -53,7 +53,7 @@ if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
 
         <footer class="entry-footer">
             <?php aerospace_post_format( $post->ID ); ?>
-            <?php aerospace_entry_categories(); ?>
+            <?php aerospace_entry_primary_cats(); ?>
         </footer><!-- .entry-footer -->
     </div>
 </article><!-- #post-<?php the_ID(); ?> -->

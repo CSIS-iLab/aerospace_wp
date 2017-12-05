@@ -19,7 +19,7 @@ get_header(); ?>
 							<?php aerospace_post_format( $post->ID ); ?>
 						</div>
 						<div class="categories-container">
-							<?php aerospace_entry_categories(); ?>
+							<?php aerospace_entry_primary_cats(); ?>
 						</div>
 			    	</div>
 			    	<div class="title-container content-padding col-xs-12">

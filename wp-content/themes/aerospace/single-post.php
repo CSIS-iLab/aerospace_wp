@@ -20,7 +20,6 @@ get_header(); ?>
 							</div>
 							<div class="categories-container">
 								<?php aerospace_entry_primary_cats(); ?>
-								<?php // aerospace_entry_categories(); ?>
 							</div>
 						</div>
 						<div class="title-container content-padding col-xs-12">
