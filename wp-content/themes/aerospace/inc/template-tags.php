@@ -274,7 +274,7 @@ if ( ! function_exists( 'aerospace_citation' ) ) :
 
 		$authors = coauthors( ', ', null, null, null, false );
 
-		printf( '<span class="meta-label">Cite this Page</span><p class="citation">' . esc_html( '%1$s,', 'aerospace') . ' <em>%2$s</em> ' . esc_html( '(Washington D.C.: Center for Strategic and International Studies, %3$s), %4$s', 'aerospace' ) . ' <button id="btn-copy" class="btn btn-gray" data-clipboard-target=".citation" aria-label="Copied!">Copy</button></p>', $authors, get_the_title(), $year, get_the_permalink() ); // WPCS: XSS OK.
+		printf( '<span class="meta-label">Cite this Page</span><p class="citation">' . esc_html( '%1$s,', 'aerospace') . ' <em>%2$s</em> ' . esc_html( '(Washington D.C.: Center for Strategic and International Studies, %3$s), %4$s', 'aerospace' ) . '</p><button id="btn-copy" class="btn btn-gray" data-clipboard-target=".citation" aria-label="Copied!">Copy</button>', $authors, get_the_title(), $year, get_the_permalink() ); // WPCS: XSS OK.
 	}
 endif;
 
@@ -744,11 +744,11 @@ if ( ! function_exists( 'aerospace_sort_filter' ) ) :
 	}
 endif;
 
-/* get terms limited to post type 
- @ $taxonomies - (string|array) (required) The taxonomies to retrieve terms from. 
+/* get terms limited to post type
+ @ $taxonomies - (string|array) (required) The taxonomies to retrieve terms from.
  @ $args  -  (string|array) all Possible Arguments of get_terms http://codex.wordpress.org/Function_Reference/get_terms
  @ $post_type - (string|array) of post types to limit the terms to
- @ $fields - (string) What to return (default all) accepts ID,name,all,get_terms. 
+ @ $fields - (string) What to return (default all) accepts ID,name,all,get_terms.
  if you want to use get_terms arguments then $fields must be set to 'get_terms'
 */
 function get_terms_by_post_type( $taxonomies, $post_type, $fields = 'all' ){
@@ -770,7 +770,7 @@ function get_terms_by_post_type( $taxonomies, $post_type, $fields = 'all' ){
 		        $t->count = 1;
 		        $terms[$t->term_id] = $t;
 		        $terms_ids[] = $t->term_id;
-		    	
+
 		    }
 
 		}
@@ -860,4 +860,3 @@ if ( ! function_exists( 'aerospace_event_add_to_calendar' ) ) :
 		}
 	}
 endif;
-
