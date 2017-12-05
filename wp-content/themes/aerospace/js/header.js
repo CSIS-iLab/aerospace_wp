@@ -3,14 +3,19 @@
  */
 
 (function($) {
+    var sBrowser, sUsrAg = navigator.userAgent;
+    var headerChange = parseInt($(".header-top").css('height'));
+
+    if ( $('body').hasClass('admin-bar') ) {
+        var adminBar = 32;
+        headerChange = headerChange + adminBar;
+    }
+
+    console.log(headerChange);
 
     // Add class to header on scroll
     $(window).scroll(function() {
         var currentScroll = $(this).scrollTop();
-
-
-        var sBrowser, sUsrAg = navigator.userAgent;
-        var headerChange = parseInt($(".header-top").css('height'));
 
         if (currentScroll > headerChange) {
             // $(".site-header").addClass("is-minimal");

@@ -3,7 +3,6 @@
 ==============================*/
 
 .site-header {
-    //position: fixed;
     z-index: 10;
     top: 0;
     left: 0;
@@ -16,14 +15,11 @@
         background-image: url($img__header-bg);
         background-repeat: no-repeat;
         background-size: cover;
-        background-position: center center; //@include transition(height .2s linear);
+        background-position: center center;
     }
     .header-top {
-        //height: $size__header-mobile-height;
-        //display: none;
         @include breakpoint("medium") {
             height: $size__header-lg-height - $size__header-sm-height;
-            //display: block;
         }
     }
 
@@ -275,57 +271,12 @@ position: fixed;
 } 
 }
 
-
-
-
 /*----------  Stars  ----------*/
-
 @import 'components/header-stars';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*----------  Search  ----------*/
-
 @import 'components/header-search';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*----------  Admin Bar  ----------*/
-
-.admin-bar .site-header {
-    top: 46px;
-
-    @include breakpoint("medium") {
-        top: 32px;
-    }
-}
-
-#wpadminbar {
-    display: none;
+.admin-bar .header-bottom-container.is-sticky {
+    top: 32px;
 }
