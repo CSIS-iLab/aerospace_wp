@@ -22,13 +22,13 @@ class Aerospace_Menu extends Walker_Nav_Menu {
 
         $indent = str_repeat("\t", $depth);
         $output .= "\n$indent<div class='submenu-container row'>
-            <div class='hidden-xs col-md-4 submenu-parent'>
+            <div class='hidden-xs col-md-3 submenu-parent'>
             " . $args->parent_title . "
             </div>\n
             <div class='hidden-xs col-md-4 submenu-featured-post'>
                 " . $featured_post_html . "
             </div>\n
-            <div class='col-xs-12 col-md-4 submenu-children'>\n
+            <div class='col-xs-12 col-md submenu-children'>\n
                 <ul class='sub-menu'>\n";
     }
 
