@@ -272,7 +272,7 @@ if ( ! function_exists( 'aerospace_citation' ) ) :
 	function aerospace_citation() {
 		$year = get_the_date( 'Y' );
 
-		$authors = coauthors( ', ', ', and ', null, null, false );
+		$authors = coauthors( ', ', null, null, null, false );
 
 		printf( '<span class="meta-label">Cite this Page</span><p class="citation">' . esc_html( '%1$s,', 'aerospace') . ' <em>%2$s</em> ' . esc_html( '(Washington D.C.: Center for Strategic and International Studies, %3$s), %4$s', 'aerospace' ) . ' <button id="btn-copy" class="btn btn-gray" data-clipboard-target=".citation" aria-label="Copied!">Copy</button></p>', $authors, get_the_title(), $year, get_the_permalink() ); // WPCS: XSS OK.
 	}
