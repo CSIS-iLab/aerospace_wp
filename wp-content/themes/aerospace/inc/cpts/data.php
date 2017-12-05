@@ -253,9 +253,10 @@ add_action( 'save_post_data', 'data_save_meta_box_data' );
  * @param  String  $height               Height of the iframe, can be in px or %.
  * @param  String  $fallback_img          Featured image thumbnail img tag string.
  * @param  boolean $iframe_resize_disabled Indicate if iframe should automatically resize based on content height.
+ * @param string $align Alignment of the iframe
  * @return String                        HTML of the iframe.
  */
-function aerospace_data_display_iframe( $data_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false ) {
+function aerospace_data_display_iframe( $data_url, $width, $height, $fallback_img = null, $iframe_resize_disabled = false, $align = null ) {
 	if ( empty( $width ) ) {
 		$width = '100%';
 	}
@@ -269,7 +270,7 @@ function aerospace_data_display_iframe( $data_url, $width, $height, $fallback_im
 		$enabled_class = ' js-iframeResizeEnabled';
 	}
 
-	return $fallback_img . '<iframe class="data-iframe' . $enabled_class . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $data_url . '"></iframe>';
+	return $fallback_img . '<iframe class="data-iframe' . $enabled_class . ' ' . $align . '" width="' . $width . '" ' . $height_value . ' scrolling="no" frameborder="no" src="' . $data_url . '"></iframe>';
 }
 
 /*----------  Display Generate Shortcode Button  ----------*/

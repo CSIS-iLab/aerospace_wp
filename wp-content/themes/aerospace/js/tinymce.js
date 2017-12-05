@@ -63,10 +63,24 @@
                             name: 'id',
                             label: 'Interactive ID',
                             placeholder: 'Insert Interactive ID'
-                        }
+                        },
+                        {
+                            type: 'listbox',
+                            name: 'align',
+                            label: 'Alignment',
+                            'values': [
+                                {text: 'None', value: null },
+                                {text: 'Left', value: 'left' },
+                                {text: 'Right', value: 'right' }
+                            ]
+                        },
                     ],
                     onsubmit: function( e ) {
-						editor.insertContent( '[data id="' + e.data.id + '"]');
+                        var align = '';
+                        if ( e.data.align ) {
+                            align = ' align="' + e.data.align + '"';
+                        }
+						editor.insertContent( '[data id="' + e.data.id + '"' + align + ']');
                     }
 				})
             }

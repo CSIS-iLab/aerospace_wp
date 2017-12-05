@@ -92,7 +92,8 @@ function aerospace_shortcode_data( $atts ) {
 			'id' => '', // ID of Interactive Post
 			'width' => '', // Width of Interactive
 			'height' => '', // Height of Interactive,
-			'sharing' => true, // Include share component
+			'sharing' => true, // Include share component,
+			'align' => null // Whether to align the iframe to either the left or right.
 		),
 		$atts,
 		'data'
@@ -124,7 +125,13 @@ function aerospace_shortcode_data( $atts ) {
 		$sharing = aerospace_social_share($title, $URL, $data_post_url, $iframe_twitter_pic_url);
 	}
 
-	return aerospace_data_display_iframe($data_url, $width, $height, $fallback_img, $iframe_resize_disabled).$sharing;
+	if ( $atts['align'] ) {
+		$align = "align" . $atts['align'];
+	} else {
+		$align = null;
+	}
+
+	return aerospace_data_display_iframe($data_url, $width, $height, $fallback_img, $iframe_resize_disabled, $align).$sharing;
 
 }
 add_shortcode( 'data', 'aerospace_shortcode_data' );
