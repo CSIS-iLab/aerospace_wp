@@ -11,7 +11,7 @@
 
         var sBrowser, sUsrAg = navigator.userAgent;
         var headerChange = parseInt($(".header-top").css('height'));
-
+        console.log(headerChange);
         if (currentScroll > headerChange) {
            // $(".site-header").addClass("is-minimal");
            // $(".site-content").addClass("is-minimal");
@@ -32,6 +32,8 @@
         $(parent).children(".search-overlay").toggleClass("is-hidden");
         $(parent).find(".search-label").toggleClass("is-hidden");
         $(parent).toggleClass("is-active");
+                $('.header-bottom').toggleClass("search-active");
+
 
         // Focus
         // $(parent).children(".search-field").focus();

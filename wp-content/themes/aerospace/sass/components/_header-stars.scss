@@ -2,6 +2,8 @@
 =            Header: Stars            =
 =====================================*/
 
+
+
 .site-header {
     $stars1: multiple-box-shadow(500);
     $stars2: multiple-box-shadow(400);
@@ -76,4 +78,9 @@
             transform: translateY(-2000px) translateX(2000px);
         }
     }
+}
+
+
+.home .site-header .stars {
+    display: block;
 }
