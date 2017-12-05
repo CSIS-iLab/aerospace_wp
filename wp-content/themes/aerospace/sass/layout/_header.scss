@@ -20,9 +20,10 @@
     }
     .header-top {
         //height: $size__header-mobile-height;
-        display: none;
+        //display: none;
         @include breakpoint("medium") {
             height: $size__header-lg-height - $size__header-sm-height;
+            //display: block;
         }
     }
 
@@ -191,7 +192,7 @@
 }
 
 .header-bottom-container.is-sticky {
-    position: fixed;
+position: fixed;
     height: $size__header-bottom-height;
     top: 0px;
     background-image: none;
@@ -200,12 +201,6 @@
     width: 100%;
     @include breakpoint("medium") {
 
-        height: $size__header-bottom-height;
-        top: 0px;
-        background-image: none;
-        background-color: $darkest-blue;
-        z-index: 20;
-        width: 100%;
 
 
 
@@ -219,70 +214,66 @@
     }
 }
 
-
-
-
-
-.home .site-header {
-    display: block;
-    height: 300px;
-    background-image: url($img__header-sm);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center; 
-    @include transition(height .2s linear);
-    &.is-minimal {
+@include breakpoint("xsmall") {
+ .home {
+    .site-header {
+        display: block;
+        height: 300px;
+        background-image: url($img__header-sm);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        @include transition(height .2s linear);
+        &.is-small {
             height: 0px;
-
         }
-    .header-top {
-        height: $size__header-bottom-height;
-        display: block;
-        background-color: transparent;
-
-    }
-    .site-branding {
-        display: block;
-        margin: 0 auto 1.5rem auto;
-        padding-top: 5rem;
-        text-align: center;
-        img {
-            max-height: 110px;
-            max-width: 80%;
-        }
-        .site-description {
+        .header-top {
+            height: $size__header-bottom-height;
             display: block;
+            background-color: transparent;
         }
-    }
- 
-    .header-bottom-container {
-        position: fixed;
-        height: $size__header-bottom-height;
-        top: 0px;
-        background-image: none;
-        background-color: $dark-blue;
-        z-index: 20;
-        width: 100%;
-
-        img {
-            display: none;
-        }
-    }
-
-    .header-bottom-container.is-sticky {
-        background-color: $dark-blue;
-
-        img {
+        .site-branding {
             display: block;
+            margin: 0 auto 1.5rem auto;
+            padding-top: 5rem;
+            text-align: center;
+            img {
+                max-height: 110px;
+                max-width: 80%;
+            }
+            .site-description {
+                display: block;
+            }
+        }
+
+        .header-bottom-container {
+            position: fixed;
+            height: $size__header-bottom-height;
+            top: 0px;
+            background-image: none;
+            background-color: $dark-blue;
+            z-index: 20;
+            width: 100%;
+
+            img {
+                display: none;
+            }
+        }
+
+        .header-bottom-container.is-sticky {
+            background-color: $dark-blue;
+
+            img {
+                display: block;
+            }
+        }
+
+        .header-bottom.search-active {
+            background-color: $dark-blue;
         }
     }
-
-    .header-bottom.search-active {
-        background-color: $dark-blue;
-    }
+} 
 }
-
-
 
 
 
@@ -305,9 +296,11 @@
 
 
 
+
 /*----------  Search  ----------*/
 
 @import 'components/header-search';
+
 
 
 

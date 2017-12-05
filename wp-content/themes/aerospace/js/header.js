@@ -13,12 +13,12 @@
         var headerChange = parseInt($(".header-top").css('height'));
         console.log(headerChange);
         if (currentScroll > headerChange) {
-           // $(".site-header").addClass("is-minimal");
-            $(".site-header").addClass("is-minimal");
+            // $(".site-header").addClass("is-minimal");
+            $(".site-header").addClass("is-small");
             $(".header-bottom-container").addClass("is-sticky");
         } else {
-           // $(".site-header").removeClass("is-minimal");
-            $(".site-header").removeClass("is-minimal");
+            // $(".site-header").removeClass("is-minimal");
+            $(".site-header").removeClass("is-small");
             $(".header-bottom-container").removeClass("is-sticky");
 
         }
@@ -32,7 +32,7 @@
         $(parent).children(".search-overlay").toggleClass("is-hidden");
         $(parent).find(".search-label").toggleClass("is-hidden");
         $(parent).toggleClass("is-active");
-                $('.header-bottom').toggleClass("search-active");
+        $('.header-bottom').toggleClass("search-active");
 
 
         // Focus
