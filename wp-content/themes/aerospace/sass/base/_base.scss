@@ -1,12 +1,5 @@
 html {
     box-sizing: border-box;
-    position: absolute;
-    top: -48px;
-
-    @include breakpoint("small") {
-        position: static;
-        top: 0;
-    }
 }
 
 *,
@@ -55,7 +48,16 @@ body {
     .site {
         position: relative;
         left: 0;
-        @include transition(left 0.5s linear);
+        @include transition(left 0.3s ease-in-out);
+    }
+
+    &.logged-in {
+        position: absolute;
+        top: 0;
+
+        @include breakpoint("small") {
+            position: static;
+        }
     }
 }
 
@@ -116,7 +118,7 @@ body {
     background-color: $black;
     overflow: hidden;
     opacity: 0;
-    @include transition(visibility 0s, opacity 0.3s linear);
+    @include transition(visibility 0s, opacity 0.1s ease-in-out);
 
     @include breakpoint("medium") {
         display: none;

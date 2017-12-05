@@ -40,7 +40,7 @@
         height: 100%;
         background-color: $dark-blue;
         padding: 1rem 0;
-        @include transition(left 0.5s linear);
+        @include transition(left 0.3s ease-in-out);
 
         @include breakpoint("medium") {
             position: unset;
