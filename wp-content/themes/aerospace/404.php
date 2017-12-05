@@ -33,12 +33,12 @@ get_header(); ?>
                     <div class="btn-container row">
 
                         <div class="col-xs-6">
-                            <a href="<?php echo get_template_directory_uri(); ?>" class="btn btn-orange">Go to the homepage</a>
+                            <a href="<?php echo get_home_url(); ?>" class="btn btn-orange">Go to the homepage</a>
                         </div>
                         <div class="col-xs-6">
                             <?php
                             echo '<a class="btn btn-orange " href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Report this Link</a>';
-                            
+
                             ?>
                         </div>
                     </div>
