@@ -1,0 +1,39 @@
+/*============================================
+=            Aerospace Shortcodes            =
+============================================*/
+
+/*----------  View  ----------*/
+.view-post {
+	font-family: $font__abel;
+	margin: 0.25rem 0;
+
+	i {
+		color: $orange;
+
+		a:hover & { color: $dark-orange; }
+	}
+
+	a,
+	a:visited {
+		box-shadow: none;
+		color: $black;
+
+		&:hover { color: $dark-blue; }
+	}
+
+	&-verb {
+		color: $orange;
+		text-transform: uppercase;
+		margin: 0 0.25rem;
+
+		a:hover & {
+			color: $dark-orange;
+		}
+	}
+}
+
+/*----------  ASP Aircraft  ----------*/
+.img-aircraft {
+    max-width: 7px;
+    margin-left: 5px;
+}

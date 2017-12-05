@@ -97,7 +97,6 @@ textarea {
 	@include fontSize(16px);
 	line-height: 1.59;
 	letter-spacing: 1px;
-	color: $primary-blue;
 }
 
 %post-meta-label {
@@ -118,6 +117,8 @@ textarea {
 	@include fontSize(14px);
 	line-height: 1.81;
 	letter-spacing: 0.9px;
+	text-transform: uppercase;
+	color: $gray;
 }
 
 %note {
@@ -287,6 +288,7 @@ blockquote, q {
 }
 
 address {
+	font-style: normal;
 	margin: 0 0 1rem;
 }
 
@@ -341,6 +343,16 @@ big {
 	a:hover {
 		color: $secondary-blue;
 	}
+}
+
+.callout {
+	background-color: $off-white;
+	padding: 1.5rem;
+	@extend %list;
+}
+
+.text-orange {
+	color: $orange;
 }
 
 /*=============================

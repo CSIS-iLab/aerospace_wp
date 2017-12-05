@@ -59,3 +59,149 @@
 	}
 	
 }
+
+/*----------  Archives  ----------*/
+.post-type-archive-data {
+	.archive-pages-bottom {
+		background-color: transparent;
+		padding-top: 0;
+
+		&::before {
+			top: 0;
+		}
+	}
+
+	.archive-content {
+		position: relative;
+		padding: 0;
+		margin-bottom: 2rem;
+
+        @include breakpoint("medium") {
+            padding: 0 $archive-content-padding-md;
+        }
+	}
+
+	/*----------  Filter Options  ----------*/
+	.sort-filter {
+		@include fontSize(16px);
+		line-height: 1.65;
+
+		.btn-sort {
+			background-color: transparent;
+			font-family: $font__source;
+			color: $black;
+			margin: 0;
+			padding: 0;
+			text-transform: none;
+
+			&.active,
+			&:hover {
+				color: $orange;
+			}
+		}
+	}
+
+	/*----------  Data Table  ----------*/
+	article.is-hidden,
+	#dataRepo.is-hidden,
+	.archive-pages-bottom .archives-meta-right.is-hidden
+	{
+		display: none;
+	}
+
+	.dataTables_filter { display: none; }
+
+	.dataTable {
+		margin-top: 0;
+
+		&.is-hidden { display: none; }
+
+		thead { display: none; }
+		td {
+			border: 0;
+		}
+
+		td:not(.display-column) {
+			display: none;
+		}
+
+		.display-column {
+			width: 100%;
+			border-bottom: 1px solid $blue-gray;
+			padding-bottom: 1.5rem;
+			margin-left: 0;
+			margin-right: 0;
+
+			@include breakpoint("medium") {
+				margin-left: -0.5rem;
+				margin-right: -0.5rem;
+				padding-bottom: 3rem;
+			}
+		}
+
+		tr:last-child .display-column {
+			border-bottom: 0;
+			padding-bottom: 4rem;
+		}
+	}
+
+	.card-format {
+		&.featured {
+			.entry-main {
+				@include breakpoint("medium") {
+					padding-left: 1rem;
+					padding-right: 0;
+				}
+			}
+		}
+
+		.entry-meta .posted-on,
+		.cat-links li,
+		.entry-tags li {
+			@include fontSize(16px);
+			line-height: 2;
+		}
+
+		.posted-on::before {
+			display: none;
+		}
+
+		.cat-links {
+			&::before {
+				content: "Categories";
+				@extend .meta-label;
+			}
+		}
+	}
+
+	/*----------  Pagination  ----------*/
+	.dataTables_paginate {
+		position: absolute;
+		right: calc(#{$archive-content-padding} + 0.5rem);
+		bottom: -3.9rem;
+		z-index: 10;
+
+		@include breakpoint("medium") {
+			right: calc(#{$archive-content-padding-md} + 0.5rem);
+		}
+
+		.current {
+			padding-top: 3px;
+		}
+
+		span {
+			margin-left: 0;
+			margin-right: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
+
+		.next,
+		.previous {
+			margin: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+}
+

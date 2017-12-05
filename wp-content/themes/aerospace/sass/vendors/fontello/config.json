@@ -321,6 +321,20 @@
       ]
     },
     {
+      "uid": "3b48099c828052833a3024eaebe021bf",
+      "css": "arrow-left",
+      "code": 62418,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M375 224.6L82 500 375 775.4 334 812.5 0 500 334 187.5Z",
+        "width": 375
+      },
+      "search": [
+        "ion-ios-arrow-left"
+      ]
+    },
+    {
       "uid": "0cfa2a7a791ed847fe06b034c6d36cbe",
       "css": "calendar-events",
       "code": 59426,
@@ -3986,20 +4000,6 @@
       },
       "search": [
         "ion-ios-arrow-forward"
-      ]
-    },
-    {
-      "uid": "3b48099c828052833a3024eaebe021bf",
-      "css": "arrow-left",
-      "code": 62418,
-      "src": "custom_icons",
-      "selected": false,
-      "svg": {
-        "path": "M375 224.6L82 500 375 775.4 334 812.5 0 500 334 187.5Z",
-        "width": 375
-      },
-      "search": [
-        "ion-ios-arrow-left"
       ]
     },
     {

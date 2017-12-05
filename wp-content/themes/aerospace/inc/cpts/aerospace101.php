@@ -44,7 +44,7 @@ function aerospace_cpt_aerospace101() {
 		'label'                 => __( 'Aerospace 101', 'aerospace' ),
 		'description'           => __( 'Aerospace 101', 'aerospace' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author' ),
 		'taxonomies'            => array( 'category', 'post_tag' ),
 		'hierarchical'          => false,
 		'public'                => true,

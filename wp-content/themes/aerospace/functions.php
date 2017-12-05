@@ -92,6 +92,7 @@ if (! function_exists('aerospace_setup') ) :
         );
     }
 endif;
+
 add_action('after_setup_theme', 'aerospace_setup');
 
 /**
@@ -141,18 +142,51 @@ function aerospace_scripts()
 
     wp_enqueue_script('aerospace-header', get_template_directory_uri() . '/js/header.js', array('jquery'), '20171128', true);
 
-    wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
-    wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
-    
-    wp_enqueue_script('aerospace-clipboard', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js', array(), '20171129', true );
-    wp_add_inline_script('aerospace-clipboard', "var clipboard = new Clipboard('#btn-copy');
-        clipboard.on('success', function(e) {
-            var d = document.getElementById('btn-copy');
-            d.className += ' tooltipped';
-        });
-    ");
+    // Posts
+    if ( is_single() ) {
+        wp_enqueue_script( 'aerospace-iframe-resize', 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.min.js', array(), '20170622', true );
+        wp_add_inline_script( 'aerospace-iframe-resize', 'jQuery("iframe.js-iframeResizeEnabled").iFrameResize({log:false});' );
 
-    wp_enqueue_script('aerospace-posts', get_template_directory_uri() . '/js/posts.js', array('jquery'), '20171129', true);
+        wp_enqueue_script('aerospace-clipboard', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js', array(), '20171129', true );
+        wp_add_inline_script('aerospace-clipboard', "var clipboard = new Clipboard('#btn-copy');
+            clipboard.on('success', function(e) {
+                var d = document.getElementById('btn-copy');
+                d.className += ' tooltipped';
+            });
+        ");
+
+        wp_enqueue_script('aerospace-posts', get_template_directory_uri() . '/js/posts.js', array('jquery'), '20171129', true);
+    }
+
+    // ASP Archive Page
+    if ( is_post_type_archive( 'aerospace101' ) ) {
+        wp_enqueue_script('aerospace-aerospace101-archive', get_template_directory_uri() . '/js/aerospace101-archives.js', array('jquery'), '20171202', true);
+    }
+
+    // Search
+    if ( is_search() || $_SERVER['REQUEST_URI'] == '/search' ) {
+        wp_register_script( 'aerospace-search', get_template_directory_uri() . '/js/search.js', '', '20171203', true );
+
+        $search_vars = array(
+            'home_url' => esc_url( home_url( '/' ) )
+        );
+        wp_localize_script( 'aerospace-search', 'search_vars', $search_vars );
+        wp_enqueue_script( 'aerospace-search' );
+    }
+
+    if ( is_single() && 'events' === get_post_type() ) {
+        wp_enqueue_script('aerospace-calendar', 'https://addevent.com/libs/atc/1.6.1/atc.min.js', array(), '20171204', true );
+        wp_add_inline_script('aerospace-calendar', "window.addeventasync = function(){
+                addeventatc.settings({
+                    dropdown   : {order:'outlook,appleical,google,outlookcom'},
+                    appleical: { show: true, text: 'iCal' },
+                    google: { show: true, text: 'Google Cal' },
+                    yahoo: { show: false },
+                    outlookcom: { show: false }
+                });
+            };
+        ");
+    }
 }
 add_action('wp_enqueue_scripts', 'aerospace_scripts');
 
@@ -214,6 +248,12 @@ if (defined('JETPACK__VERSION') ) {
 require get_template_directory() . '/inc/shortcodes.php';
 
 /**
+ * Register Custom TinyMCE Buttons
+ */
+require get_template_directory() . '/inc/custom-tinymce-buttons.php';
+
+/**
  * Remove AddToAny Default CSS
  */
 add_action( 'wp_enqueue_scripts', function() { wp_dequeue_style( 'addtoany' ); }, 21 );
+

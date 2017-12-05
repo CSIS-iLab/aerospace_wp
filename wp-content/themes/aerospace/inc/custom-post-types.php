@@ -14,6 +14,5 @@ require get_template_directory() . '/inc/cpts/data.php';
 /*----------  Events  ----------*/
 require get_template_directory() . '/inc/cpts/events.php';
 
-
-
- ?>
+/*----------  Pages  ----------*/
+add_post_type_support( 'page', 'excerpt' );

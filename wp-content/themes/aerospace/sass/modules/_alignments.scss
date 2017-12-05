@@ -9,6 +9,16 @@
 	&.wp-caption {
 		@include imgNegMargin('left');
 	}
+
+	.entry-content-post-body & {
+		@include imgNegMargin('left');
+		margin-top: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	& + .sharing-inline {
+		clear: left;
+	}
 }
 
 .alignright {
@@ -21,6 +31,16 @@
 
 	&.wp-caption {
 		@include imgNegMargin('right');
+	}
+
+	.entry-content-post-body & {
+		@include imgNegMargin('right');
+		margin-top: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	& + .sharing-inline {
+		clear: right;
 	}
 }
 

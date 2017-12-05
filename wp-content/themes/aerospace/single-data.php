@@ -12,8 +12,6 @@ $id = get_the_id();
 $content_placement = get_post_meta( $id, '_data_content_placement', true );
 $full_width = get_post_meta( $id, '_data_full_width', true );
 
-echo $full_width;
-
 if ( $full_width ) {
 	$interactive = do_shortcode( '[fullWidth width="' . $full_width . '%"][data id="' . $id . '"][/fullWidth]');
 } else {

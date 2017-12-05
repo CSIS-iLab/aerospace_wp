@@ -36,7 +36,7 @@ $color__background-nav-overlay-heading: #4a5b63;
 $color__background-share-divider: $color__background-hr-stat-home;
 $color__background-btn-view: #d1d8dc;
 $color__background-btn-view-hover: $color__background-button-gray;
-$color__background-input: #fafafa;
+$color__background-input: $white;
 $color__background-archive-sidebar: #e5e5e5;
 $color__background-checkbox: #e6e6e6;
 $color__background-keywords: #102738;
@@ -54,7 +54,7 @@ $color__text-statIcon: #698491;
 $color__text-h6: #1c2e36;
 $color__text-captions: #808081;
 
-$color__border-input: $dark-blue;
+$color__border-input: $light-gray;
 $color__border-abbr: #666;
 
 $color__facebook: #3b5998;
@@ -110,6 +110,9 @@ $size__highlights-margin-left: 2rem;
 $size__highlights-margin-bottom: 2rem;
 $size__highlights-padding-top: 0.5rem;
 
+$archive-content-padding: 1.5rem;
+$archive-content-padding-md: 4rem;
+
 /*==============================
 =            Assets            =
 ==============================*/
@@ -118,4 +121,5 @@ $theme_folder: '/wp-content/themes/aerospace/';
 $img__header-bg: $theme_folder + 'img/header-background.png';
 $img__header-sm: $theme_folder + 'img/header-background-mobile.png';
 $img__footer-bg: $theme_folder + 'img/footer-lg.png';
+$img__hp-aerospace101-bg: $theme_folder + 'img/homepage-101-graphic.png';
 

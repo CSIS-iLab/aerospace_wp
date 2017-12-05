@@ -70,7 +70,7 @@ get_header(); ?>
 			    			<?php aerospace_event_register( $post->ID, true ); ?>
 			    		</div>
 			    		<div class="entry-calendar col-xs-12 col-md-4">
-			    			Add to Calendar
+			    			<?php aerospace_event_add_to_calendar( $post->ID ); ?>
 			    		</div>
 			    		<div class="entry-share col-xs-12 col-md-4">
 			    			<?php get_template_part( 'components/share-inline' ); ?>

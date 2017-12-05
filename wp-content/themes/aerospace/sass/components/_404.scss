@@ -1,0 +1,111 @@
+/*==================================
+=            404            =
+==================================*/
+
+#page404 {
+	margin-bottom: 4rem;
+	p {
+		margin-top: 1rem;
+	}
+    #container404 {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .btn-container {
+        .col-sm-6:first-of-type .btn {
+            float: right;
+        }
+        .col-sm-6:last-of-type .btn {
+            float: left;
+        }
+    }
+    .btn {
+        margin: 0 1rem;
+       	
+
+        @include breakpoint("xsmall") {
+        	margin: .5rem auto;
+        }
+    }
+
+    .layer404 {
+        display: block;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    #background404 {
+        position: relative;
+        border: 3px solid white;
+    }
+
+    #foreground404 {
+        width: 101%;
+    }
+
+    svg {
+        display: block;
+        overflow: hidden;
+    }
+
+    #F1 {
+        animation: float1 18s 0s infinite alternate;
+    }
+
+    @keyframes float1 {
+        50% {
+            transform: translate(5%, 10%)
+        }
+
+        100% {
+            transform: translate(0%, 10%)
+        }
+    }
+
+    #F2 {
+        animation: float2 20s 0s infinite alternate;
+    }
+
+    @keyframes float2 {
+        50% {
+            transform: translate(-5%, -5%)
+        }
+        100% {
+            transform: translate(10%, 10)
+        }
+    }
+
+    #planet {
+        margin: 0 auto;
+        position: absolute;
+        bottom: -0%;
+        left: 35%;
+        width: 40%;
+        animation: float3 25s 0s infinite alternate;
+    }
+
+
+
+    @keyframes float3 {
+        100% {
+            transform: translate(-5%, -5%) scale(1.1)
+        }
+    }
+
+    #deathstar {
+        animation: deathstar 30s 3s linear infinite;
+    }
+
+    @keyframes deathstar {
+        60% {
+            transform: translate(1200%, 130%)
+        }
+        100% {
+            transform: translate(1200%, 130%)
+        }
+    }
+}

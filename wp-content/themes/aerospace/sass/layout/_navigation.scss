@@ -259,7 +259,7 @@
             position: absolute;
             left: 0;
             right: 0;
-            top: $size__header-sm-height; //margin-top: 0.5rem;
+            top: $size__header-sm-height;
             padding-top: 2rem;
             padding-bottom: 2rem;
         }
@@ -324,12 +324,12 @@
             li {
                 display: block;
                 float: none;
+                height: unset;
                 margin-top: 0.5rem;
                 margin-bottom: 1rem;
 
                 @include breakpoint("medium") {
                     margin-top: 0;
-                    margin-bottom: 1.5rem;
                 }
 
                 &:hover,
