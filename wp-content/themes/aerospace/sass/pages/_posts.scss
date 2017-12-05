@@ -102,6 +102,7 @@
         background-color: $dark-blue;
         color: $white;
         flex: 1 0 auto;
+        max-width: -moz-fit-content;
         max-width: fit-content;
         margin-right: 1rem;
 
