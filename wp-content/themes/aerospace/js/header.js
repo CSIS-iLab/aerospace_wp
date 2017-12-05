@@ -11,7 +11,7 @@
 
         var sBrowser, sUsrAg = navigator.userAgent;
         var headerChange = parseInt($(".header-top").css('height'));
-        console.log(headerChange);
+
         if (currentScroll > headerChange) {
             // $(".site-header").addClass("is-minimal");
             $(".site-header").addClass("is-small");
