@@ -466,23 +466,24 @@ if ( ! function_exists( 'aerospace_event_dates' ) ) :
 			$start_date = get_post_meta( $id, '_events_start_date', true );
 			$start_date_array = aerospace_check_date( $start_date );
 			if ( $start_date_array ) {
-					$start_date = date( get_option( 'date_format' ), mktime( 0, 0, 0, $start_date_array[1], $start_date_array[2], $start_date_array[0] ) );
+				$start_date_formatted = date( get_option( 'date_format' ), mktime( 0, 0, 0, $start_date_array[1], $start_date_array[2], $start_date_array[0] ) );
 			}
 			$end_date = get_post_meta( $id, '_events_end_date', true );
 
+
 			if ( $start_only ) {
-					$label = 'Date';
-					$end_date = null;
-			} elseif ( $end_date ) {
+				$label = 'Date';
+				$end_date_formatted = null;
+			} elseif ( $end_date && $end_date !== $start_date ) {
 				$label = 'Dates';
 				$end_date_array = aerospace_check_date( $end_date );
 				if ( $end_date_array ) {
-					$end_date = ' - ' . date( get_option( 'date_format' ), mktime( 0, 0, 0, $end_date_array[1], $end_date_array[2], $end_date_array[0] ) );
+					$end_date_formatted = ' - ' . date( get_option( 'date_format' ), mktime( 0, 0, 0, $end_date_array[1], $end_date_array[2], $end_date_array[0] ) );
 				}
 			}
-						printf( '<div class="post-event-dates"><span class="meta-label">' . esc_html_x( '%1$s', 'aerospace' ) . '</span>%2$s%3$s</div>', $label, $start_date, $end_date ); // WPCS: XSS OK.
-				}
+			printf( '<div class="post-event-dates"><span class="meta-label">' . esc_html_x( '%1$s', 'aerospace' ) . '</span>%2$s%3$s</div>', $label, $start_date_formatted, $end_date_formatted ); // WPCS: XSS OK.
 		}
+	}
 endif;
 
 if ( ! function_exists( 'aerospace_posted_on_calendar' ) ) :
