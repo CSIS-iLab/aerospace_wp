@@ -104,6 +104,14 @@
 		}
 	}
 
+    .archives-meta-left {
+        margin-bottom: 5px;
+
+        @include breakpoint("small") {
+            margin-bottom: 0;
+        }
+    }
+
 	.archives-meta-right {
 		@include breakpoint("small") {
 			text-align: right;
@@ -143,7 +151,7 @@
         	content: "";
         	display: block;
         	position: absolute;
-        	top: calc(#{$archive-content-padding} - 1px);
+        	top: calc((2 * #{$archive-content-padding}) + 4px);
         	width: calc(100% - (#{$archive-content-padding} * 2));
         	height: 2px;
         	background-color: $blue-gray;

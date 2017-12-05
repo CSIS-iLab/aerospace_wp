@@ -8,7 +8,11 @@
 
 .pagination,
 .dataTables_paginate {
-	text-align: right;
+	text-align: left;
+
+	@include breakpoint("small") {
+		text-align: right;
+	}
 
 	span, a {
 		margin: 0 0.2rem;
@@ -20,6 +24,10 @@
 		box-shadow: none;
 		text-align: center;
 		cursor: pointer;
+
+		&:first-of-type {
+			margin-left: 0;
+		}
 	}
 
 	.dots {
