@@ -29,9 +29,11 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
     <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'aerospace'); ?></a>
 
     <header id="masthead" class="site-header">
+        <div class="stars-container">
         <div class="stars stars1"></div>
         <div class="stars stars2"></div>
         <div class="stars stars3"></div>
+    </div>
         <div class="content-wrapper row flex-center__y header-top">
             <div class="col-xs-12 header-social-container">
                 <ul class="header-social">

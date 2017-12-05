@@ -6,6 +6,7 @@
  *
  * @package Aerospace
  */
+$email = get_option( 'aerospace_email' );
 
 get_header(); ?>
 
@@ -14,43 +15,33 @@ get_header(); ?>
 
             <section class="error-404 not-found">
                 <header class="page-header">
-                    <h1 class="page-title"><?php esc_html_e('Oops! That page can&rsquo;t be found.', 'aerospace'); ?></h1>
+                    <h1 class="page-title"><?php esc_html_e('Houston, we have a problem', 'aerospace'); ?></h1>
                 </header><!-- .page-header -->
 
-                <div class="page-content">
-                    <p><?php esc_html_e('It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'aerospace'); ?></p>
+                <div class="page-content" id="page404">
+                    <div id="container404">
 
-        <?php
-        get_search_form();
+                        <img class="layer404" id="background404" src="<?php echo get_template_directory_uri(); ?>/img/404-background.png" alt="<?php bloginfo('name'); ?> 404" title="<?php bloginfo('name'); ?> 404" />
 
-        the_widget('WP_Widget_Recent_Posts');
-        ?>
+                        <svg  class="layer404" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 621"><title>404 image</title><g id="background"><rect width="1024" height="621" fill="none"/></g><g id="deathstar"><g id="deathstar-2" data-name="deathstar"><circle cx="66.64" cy="65.94" r="45.75" fill="#a7a9ac"/><path d="M38.27,64.48c0-19,9.52-35.46,23.59-44a45.75,45.75,0,0,0,4.78,91.26c.47,0,.93,0,1.39,0C50.65,104.52,38.27,86.09,38.27,64.48Z" fill="#6d6e71"/><path d="M94.71,52.19c5.09.21,10.38.48,15.82.83q-.33-1.12-.71-2.22a650.2,650.2,0,0,0-75.36-.48l2.41-11.51c11.79-.55,37-1.33,66.71.12q-.63-.86-1.3-1.69l-4.7-.2L94,30.12l1.22.07c-.5-.4-1-.79-1.52-1.17h-.28l-.07-.14-.23.12c-4.37-.22-13.7-.56-27.44-.48l1.08-8.11-1.37-.18-1.34,0-1.1,8.26H61.63l1.08-8.14-.17,0c-.87.08-1.74.17-2.59.3l-1.05,7.9q-8.75.13-19.39.53c-.42.31-.83.63-1.24,1v.18q8.68-.35,16.14-.49l-.92,6.9c-11.61.24-19.74.69-22.69.87-.38.48-.76,1-1.12,1.47l0,.23c.07,0,1.61-.11,4.37-.26L31.66,50.49c-4,.25-6.84.48-8.29.6q-.38,1.11-.7,2.24l2.46-.21-1.41,10.6-2.77.07c0,.58,0,1.17,0,1.76L21,68.74c0,.34,0,.67.08,1q14.35-.38,26.62-.53A61.4,61.4,0,0,0,48.09,80c-17.36-.45-25.34-1.83-25.49-1.85l0,.12q.31,1.1.67,2.17A224.23,224.23,0,0,0,48.4,82.18a65,65,0,0,0,3,11.69C37,93.26,30,91.57,29.84,91.53l-.29,1.17.36.51c.83.18,2.79.57,5.9,1l5.51,8c-1.29-.08-2.2-.15-2.78-.2q.8.62,1.62,1.21c3.34.23,10.13.58,20.63.58,1.93,0,4,0,6.17,0v7.83h2.35l.36,0v-7.84l1.67,0v7.74c.91-.09,1.81-.22,2.71-.37v-7.44c5.79-.14,12.32-.38,19.57-.76q.77-.57,1.52-1.16-7.61.41-14.16.64l.53-7.27c6.64-.4,13.95-1,21.92-1.95q.65-.88,1.26-1.78a356,356,0,0,1-46.24,2.7A81.85,81.85,0,0,1,55.3,82.29l3.93,0c13.12,0,30-.54,50.9-2.15q.36-1.1.66-2.22l-1.48.11.62-8.53,2.3.08c.1-1.21.16-2.43.16-3.66q0-1.15-.06-2.29c-2.1-.08-7.49-.26-15.94-.39Zm-37-22.51c16.19-.27,27.57.05,33.47.31l-.26.14,3.55,6.81c-14.27-.5-27.19-.52-37.68-.35Zm-9,33.56q-10.38.14-22.29.41l1.43-10.74c4.73-.34,12.4-.79,22.38-1.06ZM53,51.79c10.79-.24,24-.25,39,.29l1.69,11.13c-10.29-.14-24.46-.22-42.17,0Zm9,43.92c4.69,0,9.92-.12,15.66-.41l-.52,7.18c-15.44.46-26.14.21-32.45-.07l-5.34-7.79A214.34,214.34,0,0,0,62,95.71ZM81,79.7c-10.06.39-18.71.49-26,.42a55.16,55.16,0,0,1-.73-11C64.5,69,73.53,69,81.24,69Zm25.62-1.45q-11.81.86-21.82,1.29L85,69.07c10,.08,17.51.24,22.2.37Z" fill="#6d6e71"/><ellipse cx="80.64" cy="44.4" rx="13.54" ry="14.07" fill="#6d6e71"/><path d="M80.64,56.24A11.85,11.85,0,1,1,92.05,44.4,11.65,11.65,0,0,1,80.64,56.24Zm0-22.59A10.76,10.76,0,1,0,91,44.4,10.56,10.56,0,0,0,80.64,33.65Z" fill="#414042"/><ellipse cx="80.64" cy="44.4" rx="3.89" ry="4.04" fill="#414042"/><path d="M80.08,43.73a14.19,14.19,0,0,1,6.46-12,13.07,13.07,0,0,0-5.9-1.4A13.82,13.82,0,0,0,67.09,44.4,13.82,13.82,0,0,0,80.64,58.47a13.11,13.11,0,0,0,7.09-2.08A14.13,14.13,0,0,1,80.08,43.73Z" fill="#bcbec0"/><path d="M84.69,54.29a9.92,9.92,0,0,1-4.05.86,10.76,10.76,0,0,1,0-21.51,9.92,9.92,0,0,1,3.08.49c.27-.3.54-.58.83-.85a11,11,0,0,0-3.91-.72,11.85,11.85,0,0,0,0,23.68,11,11,0,0,0,5-1.18C85.29,54.82,85,54.56,84.69,54.29Z" fill="#808285"/><path d="M80.08,43.73a14.62,14.62,0,0,1,.39-3.36,4,4,0,0,0,.16,8.08h.23A14.54,14.54,0,0,1,80.08,43.73Z" fill="#808285"/><path d="M38.27,64.48c0-.36,0-.72,0-1.08q-5.72.1-11.84.25l1.43-10.74c2.88-.21,6.85-.45,11.76-.68q.25-1.11.55-2.19c-2.07.09-4,.19-5.73.28l2.41-11.51c2.21-.1,4.88-.21,8-.32q.46-.84,1-1.65c-7.49.24-12.74.53-15,.67-.38.48-.76,1-1.12,1.47l0,.23c.07,0,1.61-.11,4.37-.26L31.66,50.49c-4,.25-6.84.48-8.29.6q-.38,1.11-.7,2.24l2.46-.21-1.41,10.6-2.77.07c0,.58,0,1.17,0,1.76L21,68.74c0,.34,0,.67.08,1q9.14-.24,17.43-.39Q38.28,66.95,38.27,64.48Z" fill="#414042"/><path d="M50.84,29.83q.48-.56,1-1.11-5.81.14-12.32.39c-.42.31-.83.63-1.24,1v.18Q44.91,30,50.84,29.83Z" fill="#414042"/><path d="M61.84,20.45c-.63.06-1.26.14-1.89.23l-.15,1.09Q60.8,21.08,61.84,20.45Z" fill="#414042"/><path d="M67,111.2v.41h1Z" fill="#414042"/><path d="M40.41,79.73A161,161,0,0,1,22.6,78.15l0,.12q.31,1.1.67,2.17c2.2.32,8,1,17.85,1.48Q40.73,80.84,40.41,79.73Z" fill="#414042"/><path d="M54.24,102.69c-3.86-.06-7-.16-9.52-.28l-5.34-7.79c2.39.26,5.22.5,8.48.69q-.59-.83-1.15-1.69c-11.25-.73-16.77-2.06-16.88-2.09l-.29,1.17.36.51c.83.18,2.79.57,5.9,1l5.51,8c-1.29-.08-2.2-.15-2.78-.2q.8.62,1.62,1.21c2.74.19,7.79.46,15.28.55Q54.83,103.25,54.24,102.69Z" fill="#414042"/></g></g><g id="F1"><g id="F1-2" data-name="F1"><path d="M236.81,173.64h46V311.92h22.66v45.66H282.79v89.78h-46V357.58H99.18V311.92Zm0,58.79-80.14,79.49h80.14Z" fill="#efd4af"/></g></g><g id="F2"><g id="F2-2" data-name="F2"><path d="M819,173.64H863.2v133H885v43.91H863.2v86.34H819V350.54H686.63V306.63Zm0,56.54-77.07,76.44H819Z" fill="#efd4af"/></g></g></svg>
 
-                    <div class="widget widget_categories">
-                        <h2 class="widget-title"><?php esc_html_e('Most Used Categories', 'aerospace'); ?></h2>
-                        <ul>
-        <?php
-        wp_list_categories(
-            array(
-                                'orderby'    => 'count',
-                                'order'      => 'DESC',
-                                'show_count' => 1,
-                                'title_li'   => '',
-                                'number'     => 10,
-            ) 
-        );
-        ?>
-                        </ul>
-                    </div><!-- .widget -->
+                        <img id="planet" src="<?php echo get_template_directory_uri(); ?>/img/404-planet.png" alt="<?php bloginfo('name'); ?> 404" title="<?php bloginfo('name'); ?> 404" />
 
-        <?php
+                        <img class="layer404" id="foreground404" src="<?php echo get_template_directory_uri(); ?>/img/404-foreground.png" alt="<?php bloginfo('name'); ?> 404" title="<?php bloginfo('name'); ?> 404" />
+                    </div>
+                    <p>The page you are looking for was moved, removed, renamed, or might never have existed. We apologize for the inconvenience!</p>
+                    <div class="btn-container row">
 
-        /* translators: %1$s: smiley */
-        $archive_content = '<p>' . sprintf(esc_html__('Try looking in the monthly archives. %1$s', 'aerospace'), convert_smilies(':)')) . '</p>';
-        the_widget('WP_Widget_Archives', 'dropdown=1', "after_title=</h2>$archive_content");
-
-        the_widget('WP_Widget_Tag_Cloud');
-        ?>
+                        <div class="col-sm-6">
+                            <a href="<?php echo get_template_directory_uri(); ?>" class="btn btn-orange">Go to the homepage</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <?php
+                            echo '<a class="btn btn-orange " href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '">Report this Link</a>';
+                            
+                            ?>
+                        </div>
+                    </div>
 
                 </div><!-- .page-content -->
             </section><!-- .error-404 -->
