@@ -3,84 +3,54 @@
 ==================================*/
 
 .pagination-totals {
-	position: relative;
-	top: -1rem;
-	left: 50%;
-	right: 50%;
-	width: 100vw;
-	margin-left: -50vw;
-	margin-right: -50vw;
-	background-color: $off-white;
-	font-family: $font__abel;
-	@include fontSize(16px);
-	line-height: 1.34;
-	font-weight: 300;
-	text-align: center;
-	padding: 1rem 0;
-
-	span { color: $secondary-blue; }
-
-	@include breakpoint("medium") {
-		top: unset;
-		left: unset;
-		right: unset;
-		width: unset;
-		margin-left: unset;
-		margin-right: unset;
-		background-color: transparent;
-		text-align: left;
-		padding: 0;
-	}
+	@extend %post-meta-content;
 }
 
-.pagination {
-	text-align: center;
-	margin: 4rem 0 3rem;
+.pagination,
+.dataTables_paginate {
+	text-align: right;
 
 	span, a {
 		margin: 0 0.2rem;
-		background-color: $off-white;
-		padding: 4px 10px;
-		font-family: $font__abel;
+		padding: 4px 8px;
+		font-family: $font__source;
 		@include fontSize(16px);
 		line-height: 1.34;
+		font-weight: 300;
 		box-shadow: none;
-
-		@include breakpoint("medium") {
-			margin: 0 0.25rem;
-		}
+		text-align: center;
+		cursor: pointer;
 	}
 
 	.dots {
 		background-color: transparent !important;
-		padding: 4px 5px;
+		padding: 4px;
 	}
 
 	a {
 		color: $black;
 
 		&:hover {
-			background-color: $secondary-blue;
-			color: $white;
+			color: $orange;
 		}
 	}
 
 	.current {
-		background-color: $primary-blue;
-		color: $white;
+		position: relative;
+		z-index: 10;
+		color: $dark-blue;
+		font-weight: bold;
+		border-top: 2px solid $dark-blue;
 	}
 
 	.next,
 	.prev {
 		position: relative;
-		background-color: transparent;
 		color: $black;
-		padding: 4px 5px;
-		text-transform: uppercase;
+		padding: 4px 0;
 
 		&:hover {
-			background-color: transparent;
-			color: $secondary-blue;
+			color: $orange;
 		}
 	}
 

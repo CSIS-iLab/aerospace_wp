@@ -15,24 +15,30 @@
 get_header(); ?>
 
     <div id="primary" class="content-area">
-        <main id="main" class="site-main">
-
-    <?php
-    while ( have_posts() ) : the_post();
-
-        get_template_part('template-parts/content', 'page');
-
-        // If comments are open or we have at least one comment, load up the comment template.
-        if (comments_open() || get_comments_number() ) :
-            comments_template();
-        endif;
-
-    endwhile; // End of the loop.
-    ?>
-
+        <main id="main" class="site-main content-wrapper">
+            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+                <header class="entry-header">
+                <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+                </header><!-- .entry-header -->
+                <div class="entry-content content-padding">
+                    <div class="page-description">
+                        <?php the_excerpt(); ?>
+                    </div>
+                    <div class="entry-content-post-body">
+                        <?php
+                        the_content();
+                        wp_link_pages(
+                            array(
+                                    'before' => '<div class="page-links">' . esc_html__('Pages:', 'aerospace'),
+                                    'after'  => '</div>',
+                            )
+                        );
+                        ?>
+                    </div>
+                </div><!-- .entry-content -->
+            </article><!-- #post-<?php the_ID(); ?> -->
         </main><!-- #main -->
     </div><!-- #primary -->
 
 <?php
-get_sidebar();
 get_footer();

@@ -2,6 +2,196 @@
 =            Archives            =
 ================================*/
 
-.archive {
+.archive,
+.blog,
+.search {
 
+	.site-content {
+        background-color: $off-white;
+        &.is-minimal {
+            margin-top: 0;
+        }
+    }
+
+    .content-padding {
+    	@extend .content-padding;
+    }
+
+    .title-container {
+    	width: 100%;
+    }
+
+    .page-header {
+    	margin-top: 1.5rem;
+    	padding: 2rem;
+
+    	@include breakpoint("medium") {
+    		margin-top: 3rem;
+    	}
+
+    	.page-title {
+    		@extend %page-title;
+    		text-align: center;
+    		margin: 0 0 2rem 0;
+    		padding-bottom: 1rem;
+    		border-bottom: 3px solid $dark-blue;
+
+    		.archive-label {
+    			text-transform: uppercase;
+    			color: $blue-gray;
+    		}
+
+    	}
+
+    	.archive-description {
+    		@extend %page-description;
+    		padding-bottom: 2rem;
+    		border-bottom: 2px solid $blue-gray;
+
+    		@include breakpoint("medium") {
+		        width: calc(100% - #{$archive-content-padding-md});
+				margin: 0 auto;
+			}
+
+			&-desc,
+			&-extra {
+				p:last-of-type {
+					margin-bottom: 0;
+				}
+			}
+
+    		&-desc {
+    			order: 1;
+    			margin: 0 auto;
+
+    			@include breakpoint("medium") {
+    				max-width: calc(100% - (#{$archive-content-padding-md} * 2));
+    			}
+    		}
+
+    		&-extra {
+    			order: 2;
+    			margin-top: 1rem;
+
+    			@include breakpoint("medium") {
+    				margin-top: 0;
+    				padding-left: 2rem;
+    				padding-right: 0;
+    			}
+    		}
+
+    		.archive-description-extra + .archive-description-desc {
+    			@include breakpoint("medium") {
+	    			padding-left: 0;
+	    			padding-right: 2rem;
+	    		}
+    		}
+    	}
+    }
+
+    .archive-pages-top {
+    	@include breakpoint("medium") {
+	        width: calc(100% - #{$archive-content-padding-md});
+			margin: 0 auto;
+		}
+
+		.archives-meta-left,
+		.archives-meta-right {
+			@include breakpoint("medium") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
+
+	.archives-meta-right {
+		@include breakpoint("small") {
+			text-align: right;
+		}
+	}
+
+	.sort-filter {
+		@include fontSize(16px);
+		line-height: 2.0;
+
+		a {
+			color: $black;
+			box-shadow: none;
+
+			&:hover {
+				color: $orange;
+			}
+		}
+
+		&-divider {
+			color: $blue-gray;
+			margin: 0 0.5rem;
+		}
+	}
+
+	.archive-pages-bottom {
+		position: relative;
+		background-color: $white;
+		padding: $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: $archive-content-padding-md;
+        }
+
+        &::before {
+        	content: "";
+        	display: block;
+        	position: absolute;
+        	top: calc(#{$archive-content-padding} - 1px);
+        	width: calc(100% - (#{$archive-content-padding} * 2));
+        	height: 2px;
+        	background-color: $blue-gray;
+
+        	@include breakpoint("medium") {
+        		top: calc(#{$archive-content-padding-md} - 1px);
+        		width: calc(100% - (#{$archive-content-padding-md} * 2));
+        	}
+        }
+	}
+
+    .hentry {
+    	background-color: $white;
+        padding: calc(#{$archive-content-padding} + 0.5rem) $archive-content-padding calc(#{$archive-content-padding} - 0.5rem) $archive-content-padding;
+
+        @include breakpoint("medium") {
+            padding: $archive-content-padding-md;
+            padding-bottom: 0;
+        }
+    }
+
+    /*-----  Page 2+ Styles or Filtered Results  -------*/
+    &.paged,
+    &.archive-filtered-results {
+    	.page-header {
+    		margin-top: 0;
+    	}
+
+    	.page-title {
+			@include fontSize(28px);
+			line-height: 1.71;
+			text-align: left;
+			margin: 0 auto;
+			padding-bottom: 0;
+
+			@include breakpoint("medium") {
+				padding-left: 1rem;
+			    padding-right: 1rem;
+			    width: calc(100% - 2rem);
+			}
+		}
+
+		.archive-description { display: none; }
+
+		.archive-pages-top {
+			@include breakpoint("medium") {
+		        width: calc(100% - #{$archive-content-padding-md});
+				margin: 0 auto;
+			}
+		}
+    }
 }

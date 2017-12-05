@@ -22,6 +22,24 @@
   text-transform: uppercase;
 }
 
+/*----------  Featured Post  ----------*/
+.post-is-featured {
+	font-family: $font__abel;
+	@icnlude fontSize(16px);
+	line-height: 1.34;
+	letter-spacing: 0.9px;
+	text-transform: uppercase;
+	color: $orange;
+	margin-bottom: 0.5rem;
+
+	svg {
+		max-width: 7px;
+		fill: $orange;
+		margin-left: 0.2rem;
+		margin-bottom: -2px;
+	}
+}
+
 /*----------  Authors List  ----------*/
 .authors-list {
 	display: inline-block;
@@ -64,6 +82,10 @@
 	a {
 		text-transform: none;
 		color: $orange;
+
+		&:hover {
+			color: $dark-orange;
+		}
 	}
 
 	p {

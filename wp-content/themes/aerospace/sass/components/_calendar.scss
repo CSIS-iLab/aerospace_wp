@@ -3,38 +3,115 @@
 ================================*/
 
 .calendar-container {
-	display: none;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 23vw;
+	height: 23vw;
+	text-align: center;
+	font-family: $font__abel;
+	line-height: 1;
+    @include calendarGradient ( -45deg, transparent, $off-white, 28.28427px );
 
-	@include breakpoint("small") {
+    @include breakpoint("small") {
+    	width: 17vw;
+		height: 17vw;
+    }
+
+    @include breakpoint("medium") {
+    	width: 12vw;
+		height: 12vw;
+    }
+
+
+	a {
+		color: $dark-blue;
+		transition: none;
+	}
+
+	.month,
+	.day {
 		display: block;
-		width: 4rem;
-		text-align: center;
-		font-family: $font__abel;
-		font-weight: bold;
-		line-height: 1.35;
+	}
 
-		a {
-			color: $white;
+	.month {
+		@include fontSize(18px);
+		text-transform: uppercase;
+
+		@include breakpoint("small") {
+			@include fontSize(22px);
 		}
 
-		.month {
-			height: 1.5rem;
-			background-color: $secondary-blue;
-			@include fontSize(18px);
-			text-transform: uppercase;
+		@include breakpoint("medium") {
+			@include fontSize(23px);
 		}
 
-		.day {
-			height: 3rem;
-			background-color: $dark-blue;
-			@include fontSize(36px);
+		@include breakpoint("large") {
+			@include fontSize(27px);
 		}
 	}
 
-	.past & .month {
-		background-color: $gray;
-	}
-	.past & .day {
-		background-color: $dark-gray;
+	.day {
+		@include fontSize(24px);
+
+		@include breakpoint("small") {
+			@include fontSize(34px);
+		}
+
+		@include breakpoint("medium") {
+			@include fontSize(38px);
+		}
+
+		@include breakpoint("large") {
+			@include fontSize(59px);
+		}
 	}
 }
+
+/*----------  Add to Calendar  ----------*/
+/* Hide button at load */
+.addeventatc {visibility:hidden;}
+
+/* Make sure the options layer / dropdown is always visible */
+.addeventatc_dropdown {display:block!important;}
+
+/* Some demo styling of the options */
+.addeventatc_dropdown span {
+	display: block;
+	margin: 0 0 0.5rem;
+	font-family: $font__abel;
+	@include fontSize(12px);
+	line-height: 1;
+	text-transform: none;
+	letter-spacing: 0.4px;
+	padding: 0.3rem 0.5rem;
+	background-color: $color__background-button-gray;
+	color: $black;
+	max-width: -moz-fit-content;
+	max-width: fit-content;
+	cursor: pointer;
+
+	&:visited {
+		color: $black;
+	}
+
+	&:hover {
+		background-color: $color__background-button-gray-hover;
+		color: $white;
+	}
+}
+.addeventatc_dropdown span em { display: none; }
+
+.addeventatc_dropdown {
+	.ateoutlook,
+	.ateoutlookcom {
+		display: inline-block;
+		margin-right: 0.5rem;
+		margin-top: 0;
+	}
+}
+
+/* Remove the AddEvent credits */
+.addeventatc_dropdown .copyx {display:none;}

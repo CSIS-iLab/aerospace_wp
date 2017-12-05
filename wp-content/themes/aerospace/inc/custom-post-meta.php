@@ -33,6 +33,7 @@ function post_build_meta_box( $post ) {
 	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
+	$current_report_cover_url = get_post_meta( $post->ID, '_post_report_cover_url', true );
 
 
 	?>
@@ -83,6 +84,10 @@ function post_build_meta_box( $post ) {
 				);
 			?>
 		</p>
+		<h3><?php esc_html_e( 'Report Cover URL', 'aerospace' ); ?></h3>
+	    <p>
+	        <input type="text" class="large-text" name="report_cover_url" value="<?php echo esc_attr( $current_report_cover_url ); ?>" />
+	    </p>
 		<h3><?php esc_html_e( 'Download Report URL', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="download_url" value="<?php echo esc_attr( $current_download_url ); ?>" />
@@ -131,6 +136,10 @@ function post_save_meta_box_data( $post_id ) {
 	// Sources.
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
+	}
+	// Report Cover URL
+	if ( isset( $_REQUEST['report_cover_url'] ) ) {
+	  update_post_meta( $post_id, '_post_report_cover_url', esc_attr( $_POST['report_cover_url'] ) );
 	}
 	// Download URL
 	if ( isset( $_REQUEST['download_url'] ) ) {

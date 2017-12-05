@@ -98,12 +98,6 @@ function events_build_meta_box( $post ) {
 
 	?>
 	<div class='inside'>
-
-		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
-		<p>
-			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
-		</p>
-
 		<h3><?php esc_html_e( 'Hosted By', 'aerospace' ); ?></h3>
 		<p>
 			<input type="text" class="large-text" name="hosted_by" value="<?php echo esc_attr( $current_hosted_by ); ?>" />
@@ -164,11 +158,7 @@ function events_save_meta_box_data( $post_id ) {
 		return;
 	}
 	// Is Featured?
-	if ( isset( $_REQUEST['is_featured'] ) ) {
-		update_post_meta( $post_id, '_post_is_featured', intval( wp_unslash( $_POST['is_featured'] ) ) );
-	} else {
-		update_post_meta( $post_id, '_post_is_featured', 0 );
-	}
+	update_post_meta( $post_id, '_post_is_featured', 0 );
 
 	// Location.
 	if ( isset( $_REQUEST['location'] ) ) { // Input var okay.

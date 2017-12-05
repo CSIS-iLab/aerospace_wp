@@ -7,23 +7,54 @@
  * @package Aerospace
  */
 
+echo $description;
+
+if ( get_archive_top_content() ) {
+    $description = get_archive_top_content();
+} else {
+    $description = get_the_archive_description();
+}
+
+// Author Archives
+if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
+    $author = get_queried_object();
+    $img = coauthors_get_avatar( $author, 150 );
+    $bio = $author->description;
+    $description = '<div class="row"><div class="col-xs-3 col-sm-2">' . $img . '</div><div class="col-xs col-sm"><p>' . $bio . '</p></div></div>';
+}
+
+$description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
+
+if ( get_archive_bottom_content() ) {
+    $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
+}
+
 get_header(); ?>
 
     <div id="primary" class="content-area">
         <main id="main" class="site-main content-wrapper">
 
-            <header class="page-header">
-                <?php
-                the_archive_title('<h1 class="page-title">', '</h1>');
-                the_archive_description('<div class="archive-description">', '</div>');
-                ?>
-                <div class="archive-pages-top row">
-                    <?php if (have_posts() ) : ?>
-                    <div class="col-xs-12 col-md-6">
-                        <?php aerospace_post_num(); ?>
+            <header class="page-header row">
+                <div class="title-container">
+                    <?php the_archive_title('<h1 class="page-title">', '</h1>'); ?>
+                    <div class="archive-description row">
+                        <?php echo $description_extra; ?>
+                        <?php echo $description; ?>
                     </div>
-                    <?php endif; ?>
-                    <div class="col-xs-12 col-md-6 text-right">Sort</div>
+                    <div class="archive-pages-top row">
+                        <?php if (have_posts() ) : ?>
+                        <div class="col-xs-12 col-sm archives-meta-left">
+                            <?php aerospace_post_num(); ?>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 archives-meta-right">
+                            <?php
+                            if ( ! is_post_type_archive( 'events' ) ) {
+                                aerospace_sort_filter();
+                            }
+                            ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </header><!-- .page-header -->
 
@@ -42,12 +73,15 @@ get_header(); ?>
 
         endwhile;
         ?>
-        <div class="archive-pages-top row">
-            <div class="col-xs-12 col-md-6 left-side"><?php aerospace_post_num(); ?></div>
-            <div class="col-xs-12 col-md-6 text-right">
-                <?php the_posts_pagination(); ?>
+        <footer class="archive-pages-bottom row">
+            <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
+            <div class="col-xs-12 col-sm-6 archives-meta-right">
+                <?php the_posts_pagination( array(
+                    'prev_text' => '<i class="icon-arrow-left"></i>',
+                    'next_text' => '<i class="icon-arrow-right"></i>',
+                )); ?>
             </div>
-        </div>
+        </footer>
         <?php
         else :
 
