@@ -248,6 +248,15 @@
 
 @import 'components/header-search';
 
+#wpadminbar {
+    display: none;
+
+    @include breakpoint("medium") {
+        display: block;
+    }
+}
 .admin-bar .header-bottom-container.is-sticky {
-    top: 32px;
+    @include breakpoint("medium") {
+        top: 32px;
+    }
 }

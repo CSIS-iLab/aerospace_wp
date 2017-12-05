@@ -1,5 +1,12 @@
 html {
     box-sizing: border-box;
+    position: absolute;
+    top: -48px;
+
+    @include breakpoint("small") {
+        position: static;
+        top: 0;
+    }
 }
 
 *,
@@ -27,9 +34,8 @@ body {
     }
 
     &.toggled {
-        //overflow: hidden;
         &>.site {
-            left: 80%;
+            left: 80vw;
 
             @include breakpoint("medium") {
                 left: unset;
@@ -49,7 +55,7 @@ body {
     .site {
         position: relative;
         left: 0;
-        @include transition(left 0.3s ease-in);
+        @include transition(left 0.5s linear);
     }
 }
 
@@ -103,14 +109,14 @@ body {
 #site-overlay {
     visibility: hidden;
     position: fixed;
-    top: 0px; //left: -20vw;
+    top: 0; //left: -20vw;
     z-index: 20;
     width: 100%;
     height: 100%;
     background-color: $black;
     overflow: hidden;
     opacity: 0;
-    @include transition(visibility 0s, opacity 0.3s ease-in);
+    @include transition(visibility 0s, opacity 0.3s linear);
 
     @include breakpoint("medium") {
         display: none;
