@@ -25,9 +25,9 @@
 
     .header-bottom-container {
         height: $size__header-mobile-height;
+        
         @include breakpoint("medium") {
             width: 100%;
-            overflow-x: visible;
             overflow-y: visible;
             height: $size__header-sm-height;
         }
@@ -188,7 +188,7 @@
 }
 
 .header-bottom-container.is-sticky {
-position: fixed;
+    position: fixed;
     height: $size__header-bottom-height;
     top: 0px;
     background-image: none;
@@ -196,10 +196,6 @@ position: fixed;
     z-index: 20;
     width: 100%;
     @include breakpoint("medium") {
-
-
-
-
         .site-branding-minimal {
             display: block; //position: relative;
             width: 200px;
@@ -210,7 +206,8 @@ position: fixed;
     }
 }
 
-@include breakpoint("xsmall") {
+
+/* @media screen and (max-width: $breakpoint-medium)  {
  .home {
     .site-header {
         display: block;
@@ -269,12 +266,16 @@ position: fixed;
         }
     }
 } 
-}
+} */
+
 
 /*----------  Stars  ----------*/
+
 @import 'components/header-stars';
 
+
 /*----------  Search  ----------*/
+
 @import 'components/header-search';
 
 .admin-bar .header-bottom-container.is-sticky {
