@@ -14,11 +14,11 @@
         console.log(headerChange);
         if (currentScroll > headerChange) {
            // $(".site-header").addClass("is-minimal");
-           // $(".site-content").addClass("is-minimal");
+            $(".site-header").addClass("is-minimal");
             $(".header-bottom-container").addClass("is-sticky");
         } else {
            // $(".site-header").removeClass("is-minimal");
-            //$(".site-content").removeClass("is-minimal");
+            $(".site-header").removeClass("is-minimal");
             $(".header-bottom-container").removeClass("is-sticky");
 
         }

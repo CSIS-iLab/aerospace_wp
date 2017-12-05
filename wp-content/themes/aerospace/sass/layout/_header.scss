@@ -229,11 +229,17 @@
     background-image: url($img__header-sm);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center; //@include transition(height .2s linear);
+    background-position: center center; 
+    @include transition(height .2s linear);
+    &.is-minimal {
+            height: 0px;
+
+        }
     .header-top {
-        height: 80%;
+        height: $size__header-bottom-height;
         display: block;
         background-color: transparent;
+
     }
     .site-branding {
         display: block;
@@ -248,12 +254,13 @@
             display: block;
         }
     }
+ 
     .header-bottom-container {
         position: fixed;
         height: $size__header-bottom-height;
         top: 0px;
         background-image: none;
-        background-color: transparent;
+        background-color: $dark-blue;
         z-index: 20;
         width: 100%;
 
