@@ -92,9 +92,9 @@ $size__homepage-block-height: 15rem;
 $size__homepage-block-height-2x: 31rem;
 $size__homepage-block-height-mobile: 10.3rem;
 
-$size__header-mobile-height: 52px;
-$size__header-sm-height: 70px;
-$size__header-lg-height: 270px; 
+$size__header-mobile-height: 50px;
+$size__header-sm-height: 50px;
+$size__header-lg-height: 300px; 
 $size__footer-height: 314px;
 
 $size__content-max-width-sm: 687px;
@@ -119,6 +119,7 @@ $archive-content-padding-md: 4rem;
 
 $theme_folder: '/wp-content/themes/aerospace/';
 $img__header-bg: $theme_folder + 'img/header-background.png';
+$img__header-sm: $theme_folder + 'img/header-background-mobile.png';
 $img__footer-bg: $theme_folder + 'img/footer-lg.png';
 $img__hp-aerospace101-bg: $theme_folder + 'img/homepage-101-graphic.png';
 
