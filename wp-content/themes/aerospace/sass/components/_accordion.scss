@@ -9,10 +9,11 @@
 		@extend %aerospace101-list;
 		margin: 0;
 		padding: 1rem;
-		border-bottom: 2px solid $blue-gray;
+		border-top: 2px solid $blue-gray;
+		clear: both;
 
-		&:first-child {
-			border-top: 2px solid $blue-gray;
+		&:last-of-type {
+			border-bottom: 2px solid $blue-gray;
 		}
 
 		&::before {
@@ -31,14 +32,19 @@
 			cursor: pointer;
 		}
 
+		&.open {
+			border-bottom: 0;
+		}
+
 		&.open::before {
 			transform: rotate(90deg);
 		}
 	}
 
 	.accordion-content {
-		border-bottom: 2px solid $blue-gray;
+		display: none;
 		padding: 1.5rem;
+		border-top: 2px solid $blue-gray;
 
 		&:last-of-type {
 			border-bottom: 0;
