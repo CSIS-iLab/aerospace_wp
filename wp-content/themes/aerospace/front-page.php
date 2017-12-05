@@ -105,7 +105,7 @@ get_header(); ?>
 				$aerospace101_desc = get_option( 'aerospace_homepage_aerospace101_desc' );
 				echo '<p>' . $aerospace101_desc . '</p>';
 				?>
-				<p class="view-more">Explore <a href="/aerospace-101">Aerospace 101<i class="icon-long-arrow-right"></i></a></p>
+				<p class="view-more">Explore <a href="/aerospace101">Aerospace 101<i class="icon-long-arrow-right"></i></a></p>
 				<?php
 					$featuredAerospace101Args = array(
 						'post_type' => 'aerospace101',
