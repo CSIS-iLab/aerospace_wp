@@ -8,6 +8,7 @@
 $selected_category = get_query_var( 'cat' );
 $categories_args = array(
 	'show_option_none' => 'Choose a category',
+	'show_option_all' => 'All Categories',
 	'orderby' => 'name',
 	'class' => 'filter-select search-categories',
 	'id' => 'search-categories',
