@@ -29,9 +29,11 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
     <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'aerospace'); ?></a>
 
     <header id="masthead" class="site-header">
-        <div class="stars stars1"></div>
-        <div class="stars stars2"></div>
-        <div class="stars stars3"></div>
+        <div id="stars-container">
+            <div class="stars stars1"></div>
+            <div class="stars stars2"></div>
+            <div class="stars stars3"></div>
+        </div>
         <div class="content-wrapper row flex-center__y header-top">
             <div class="col-xs-12 header-social-container">
                 <ul class="header-social">
@@ -59,6 +61,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <?php endif; ?>
             </div>
         </div>
+        <div class="header-bottom-container">
         <div class="content-wrapper row flex-center__y header-bottom">
             <div class="col-xs-8 col-md-2 site-branding-minimal">
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
@@ -67,8 +70,10 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
             </div>
             <div class="col-xs-2 col-md nav-container">
                 <nav id="site-navigation" class="main-navigation">
-                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Menu', 'aerospace'); ?></button>
+                    <button id="menu-toggle-btn" class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e('Menu', 'aerospace'); ?></button>
                     <div class="nav-items-container">
+                                <span id="mobile-close" class="is-hidden"><i class="icon-close"></i></span>
+
                         <?php
                             wp_nav_menu(
                                 array(
@@ -94,10 +99,12 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                     </div>
                 </nav><!-- #site-navigation -->
             </div>
-            <div class="col-xs-2 col-md-6 search-container">
+            <div class="col-xs-2 col-md-2 search-container">
                 <?php get_template_part( 'components/search-inline' ); ?>
             </div>
+
         </div><!-- .site-branding -->
+              </div>
     </header><!-- #masthead -->
 
     <div id="content" class="site-content">
