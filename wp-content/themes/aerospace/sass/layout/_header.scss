@@ -11,6 +11,7 @@
     background-color: $dark-blue;
 
     @include breakpoint("medium") {
+        position: relative;
         height: $size__header-lg-height;
         background-image: url($img__header-bg);
         background-repeat: no-repeat;
