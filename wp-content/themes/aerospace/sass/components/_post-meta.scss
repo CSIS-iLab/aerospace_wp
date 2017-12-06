@@ -12,8 +12,8 @@
 }
 
 .meta-content {
-	@extend %post-meta-content;
-	color: $black;
+    @extend %post-meta-content;
+    color: $black;
 }
 
 /*----------  Post Format/Content Type  ----------*/
@@ -24,33 +24,28 @@
 
 /*----------  Featured Post  ----------*/
 .post-is-featured {
-	font-family: $font__source;
-	@icnlude fontSize(16px);
-	line-height: 1.34;
-	letter-spacing: 0.9px;
-	text-transform: uppercase;
-	color: $orange;
-	margin-bottom: 0.5rem;
+    font-family: $font__source;
+    @icnlude fontSize(16px);
+    line-height: 1.34;
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    color: $orange;
+    margin-bottom: 0.5rem;
 
-	svg {
-		max-width: 7px;
-		max-height: 15px;
-		fill: $orange;
-		margin-left: 0.2rem;
-		margin-bottom: -2px;
-	}
+    svg {
+        max-width: 7px;
+        max-height: 15px;
+        fill: $orange;
+        margin-left: 0.2rem;
+        margin-bottom: -2px;
+    }
 }
 
 /*----------  Report Cover Overlay  ----------*/
 
 .entry-report-thumbnail {
     position: relative;
-
-    img {
-    	display: block;
-    }
-
-    a::after {
+    a:after {
         display: block;
         visibility: visible;
         opacity: 1;
@@ -64,11 +59,9 @@
         top: 0;
         right: 0;
     }
-
     &:hover {
-    	text-align: center;
-
-        a::before {
+        text-align: center;
+        a:before {
             display: table-cell;
             visibility: visible;
             opacity: 1;
@@ -85,7 +78,7 @@
             right: 0;
             padding-top: calc(50% - .1em);
         }
-        a::after {
+        a:after {
             display: table-cell;
             visibility: visible;
             opacity: 1;
@@ -107,97 +100,120 @@
 
 /*----------  Authors List  ----------*/
 .authors-list {
-	display: inline-block;
-	margin: 0;
-	@extend %post-meta-content;
+    display: inline-block;
+    margin: 0;
+    @extend %post-meta-content;
 
-	a {
-		@extend %box-shadow-link;
-		color: $black;
-	}
+    a {
+        @extend %box-shadow-link;
+        color: $black;
+    }
 }
 
 .authors-container {
 
-	.subheading-lg {
-		@extend %subheading-lg;
-		text-transform: uppercase;
-		margin: 2rem 0;
-	}
+    .subheading-lg {
+        @extend %subheading-lg;
+        text-transform: uppercase;
+        margin: 2rem 0;
+    }
 }
 .authors-list-extended {
-	.entry-author {
-		margin-bottom: 2rem;
+    .entry-author {
+        margin-bottom: 2rem;
+    }
+
+    @media only screen and (max-width: 36em){
+    	.author-img {
+	    	display: none;
+	    }
+	}
+	@media only screen and (max-width: 36em){
+    .author-img-mobile {
+	    	display: block;
+	    	float: right;
+	    	padding: 0px 0px .2rem .5rem;
+	    	width: 125px;
+	    	height: auto;
+    	}
+	}
+	    @media only screen and (min-width: 36em){
+    	.author-img-mobile {
+	    	display: none;
+	    }
+
 	}
 
-	.author-read-more {
-		text-align: right;
-		font-family: $font__abel;
-		border-top: 1px solid $blue-gray;
-		margin-top: 1rem;
-		padding-top: 0.75rem;
+    .author-read-more {
+        text-align: right;
+        font-family: $font__abel;
+        border-top: 1px solid $blue-gray;
+        margin-top: .5rem;
+        padding-top: 0.25rem;
+        max-width: 100%;
+        clear: right;
 
-		@include breakpoint("medium") {
-			max-width: 60%;
-			margin-left: auto;
-			margin-right: 0;
-		}
-	}
+        @include breakpoint("medium") {
+            max-width: 60%;
+            margin-left: auto;
+            margin-right: 0;
+        }
+    }
 
-	a {
-		text-transform: none;
-		color: $orange;
+    a {
+        text-transform: none;
+        color: $orange;
 
-		&:hover {
-			color: $dark-orange;
-		}
-	}
+        &:hover {
+            color: $dark-orange;
+        }
+    }
 
-	p {
-		margin-bottom: 0;
-	}
+    p {
+        margin-bottom: 0;
+    }
 }
 
 /*----------  Posted On  ----------*/
 .posted-on {
-	@extend .meta-content;
-	display: inline-block;
-	margin-bottom: 0;
+    @extend .meta-content;
+    display: inline-block;
+    margin-bottom: 0;
 }
 
 /*----------  Categories  ----------*/
 .cat-links {
-	ul {
-		padding: 0;
-		list-style-type: none;
-		display: inline;
-		margin-left: 0.2rem;
-		margin-bottom: 0;
-	}
+    ul {
+        padding: 0;
+        list-style-type: none;
+        display: inline;
+        margin-left: 0.2rem;
+        margin-bottom: 0;
+    }
 
-	li {
-		@extend %content-type;
-		display: inline;
+    li {
+        @extend %content-type;
+        display: inline;
 
-		&::after {
-			content: ", ";
-		}
+        &::after {
+            content: ", ";
+        }
 
-		&:last-of-type::after { content: none; }
+        &:last-of-type::after { content: none; }
 
-		a {
-			color: $black;
+        a {
+            color: $black;
 
-			&:hover { color: $secondary-blue; }
-		}
-	}
+            &:hover { color: $secondary-blue; }
+        }
+    }
 }
 
 /*----------  Citation  ----------*/
 .entry-citation {
-	@extend %post-meta-content;
+    @extend %post-meta-content;
 
-	p {
-		margin: 0;
-	}
+    p {
+        margin: 0;
+    }
 }
