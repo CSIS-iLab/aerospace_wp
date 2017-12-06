@@ -216,10 +216,10 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
 			$authors = '<h3 class="subheading-lg">' . esc_html__( 'About the Authors' , 'aerospace' ) . '</h3>';
 			foreach ( get_coauthors() as $coauthor ) :
 				$authors .= '<div class="entry-author row">
-				<div class="author-img col-sm-3 col-md-2">
+				<div class="author-img col-xs-3 col-md-2">
 				' . coauthors_get_avatar( $coauthor, 150 ) . '
 				</div>
-				<div class="author-bio col-sm">
+				<div class="author-bio col-xs">
 					<div class="author-img-mobile">
 					' . coauthors_get_avatar( $coauthor, 150 ) . '
 					</div>
