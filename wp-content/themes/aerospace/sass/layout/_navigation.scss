@@ -148,10 +148,10 @@
 
             .submenu-container {
                 display: flex;
+                
                 @include breakpoint("medium") {
                     visibility: visible;
                     opacity: 1;
-                    @include transition(all .5s cubic-bezier(.33, 0, .2, 1));
                 }
 
                 .hidden-xs {
@@ -262,13 +262,16 @@
         display: none;
 
         @include breakpoint("medium") {
-
+            display: flex;
             position: absolute;
             left: 0;
             right: 0;
             top: $size__header-sm-height;
             padding-top: 2rem;
             padding-bottom: 2rem;
+            visibility: hidden;
+            opacity: 0;
+            @include transition(visibility 0s, opacity .5s cubic-bezier(.33, 0, .2, 1));
         }
 
 
