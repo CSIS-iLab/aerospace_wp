@@ -360,8 +360,15 @@
                 padding-right: 0;
             }
 
+            a {
+                display: block;
+                height: 100%;
+            }
+
             img {
-                max-height: 350px;
+                max-height: unset;
+                object-fit: cover;
+                height: 100%;
             }
         }
 
@@ -397,11 +404,13 @@
         a {
             display: block;
             position: relative;
+            height: 227px;
+            overflow: hidden;
         }
 
         img {
             display: block;
-            max-height: 227px;
+            min-height: 227px;
         }
     }
 
