@@ -45,7 +45,12 @@
 
 .entry-report-thumbnail {
     position: relative;
-    a:after {
+
+    img {
+    	display: block;
+    }
+
+    a::after {
         display: block;
         visibility: visible;
         opacity: 1;
@@ -59,9 +64,11 @@
         top: 0;
         right: 0;
     }
+
     &:hover {
     	text-align: center;
-        a:before {
+
+        a::before {
             display: table-cell;
             visibility: visible;
             opacity: 1;
@@ -78,7 +85,7 @@
             right: 0;
             padding-top: calc(50% - .1em);
         }
-        a:after {
+        a::after {
             display: table-cell;
             visibility: visible;
             opacity: 1;
