@@ -78,14 +78,30 @@
     			text-transform: none;
     		}
 
+            .posted-on {
+                display: block !important;
+            }
+
     		.entry-main {
     			padding: 1rem;
 
     			@include breakpoint("medium") {
-    				padding: 2rem 3rem;
+    				padding: 3rem 4rem;
     			}
     		}
     	}
+
+        .card-format.featured .entry-thumbnail {
+            a {
+                height: 100%;
+            }
+
+            img {
+                max-height: unset;
+                object-fit: cover;
+                height: 100%;
+            }
+        }
 
     	.post-is-featured { display: none; }
     }
