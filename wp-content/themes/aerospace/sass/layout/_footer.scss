@@ -4,7 +4,6 @@
 
 .site-footer {
 	position: relative;
-	z-index: -1;
 	background-image: url($img__footer-bg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -13,6 +12,7 @@
 
 	@include breakpoint("medium") {
 		position: fixed;
+		z-index: -1;
 		bottom: 0;
 		left: 0;
 		right: 0;
