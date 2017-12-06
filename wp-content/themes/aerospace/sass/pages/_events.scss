@@ -206,5 +206,14 @@
 				@include fontSize(12px);
 			}
 		}
+
+		&:hover {
+			.entry-title a { color: $orange; }
+			.calendar-container {
+				@include calendarGradient ( -45deg, transparent, $orange, 28.28427px );
+
+				a { color: $white;}
+			}
+		}
 	}
 }
