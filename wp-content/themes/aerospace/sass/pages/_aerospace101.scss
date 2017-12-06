@@ -137,19 +137,6 @@
 				background-color: $white;
 				padding: 2rem;
 			}
-
-			&:hover .read-article {
-				display: block;
-			    top: unset;
-			    bottom: 0;
-			    text-align: right;
-			    padding: 2rem 1rem;
-
-			    i {
-			    	display: inline;
-			    	@include fontSize(24px);
-			    }
-			}
 		}
 	}
 
@@ -186,6 +173,19 @@
 
 			img {
 				min-height: unset;
+			}
+
+			&:hover .read-article {
+				display: block;
+			    top: unset;
+			    bottom: 0;
+			    text-align: right;
+			    padding: 2rem 1rem;
+
+			    i {
+			    	display: inline;
+			    	@include fontSize(24px);
+			    }
 			}
 		}
 
