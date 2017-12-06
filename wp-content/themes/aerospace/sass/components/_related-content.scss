@@ -57,6 +57,10 @@
 			letter-spacing: 0.6px;
 			line-height: 1;
 			font-weight: 300;
+
+			&:hover {
+				background-color: $color__background-button-blue-hover;
+			}
 		}
 	}
 

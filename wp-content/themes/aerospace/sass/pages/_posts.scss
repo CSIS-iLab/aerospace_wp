@@ -452,14 +452,14 @@
         }
     }
 
-    &.post .posted-on {
-        &::before {
+    &.post .authors-list {
+        &::after {
             @include breakpoint("small") {
                 content: "/";
                 font-family: $font__abel;
                 @include fontSize(14px);
                 color: $gray;
-                margin: 0 0.4rem;
+                margin: 0 0 0 0.4rem;
             }
         }
     }

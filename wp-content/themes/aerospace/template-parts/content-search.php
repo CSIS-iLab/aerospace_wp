@@ -32,7 +32,6 @@ $thumbnail_size = 3;
     ?>
     <div class="col-xs-12 col-md entry-main">
         <header class="entry-header">
-            <?php aerospace_post_is_featured ( $post->ID ) ?>
             <?php
             the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
             ?>

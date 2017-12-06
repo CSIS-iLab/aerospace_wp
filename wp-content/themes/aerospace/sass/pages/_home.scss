@@ -60,6 +60,14 @@
     			padding-right: 0.5rem;
     		}
     	}
+
+        .meta-label {
+            line-height: 1.5;
+        }
+
+        .entry-meta {
+            margin-top: 0.5rem;
+        }
     }
 
     /*----------  Main Feature  ----------*/
@@ -77,6 +85,10 @@
     			@extend %subheading-lg;
     			text-transform: none;
     		}
+
+            .authors-list::after {
+                display: none;
+            }
 
             .posted-on {
                 display: block !important;
@@ -98,6 +110,7 @@
     .feature-secondary {
     	.subheading {
     		@extend %subheading;
+            @include fontSize(16px);
     		color: $gray;
     		margin-top: 0;
     	}
@@ -210,7 +223,7 @@
 
     	/*----------  Event  ----------*/
     	&-events {
-    		margin-top: 3rem;
+    		margin-top: 0;
     		margin-bottom: 3rem;
 
     		@include breakpoint("medium") {
@@ -374,6 +387,7 @@
     		}
 
     		.post-is-featured {
+                @include fontSize(14px);
     			color: $blue-gray;
     		}
 
