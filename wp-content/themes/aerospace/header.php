@@ -39,7 +39,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <ul class="header-social">
                     <?php
                     if ( $twitter ) {
-                        echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
+                        echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '" target="_blank"><i class="icon-twitter"></i></a></li>';
                     }
                     if ( $email ) {
                         echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '"><i class="icon-mail"></i></a></li>';
@@ -86,7 +86,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                         <ul class="header-social">
                             <?php
                             if ( $twitter ) {
-                                echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '"><i class="icon-twitter"></i></a></li>';
+                                echo '<li><a href="https://twitter.com/' . esc_attr( $twitter ) . '" target="_blank"><i class="icon-twitter"></i></a></li>';
                             }
                             if ( $email ) {
                                 echo '<li><a href="mailto:' . esc_attr( $email ) . '?subject=' . esc_attr( get_bloginfo( 'name' ) ) . '"><i class="icon-mail"></i></a></li>';
