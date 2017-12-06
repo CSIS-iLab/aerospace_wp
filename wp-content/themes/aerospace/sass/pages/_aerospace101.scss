@@ -178,6 +178,15 @@
 		.entry-thumbnail {
 			padding: 0;
 			margin: 0;
+
+			a {
+				height: unset;
+				overflow: auto;
+			}
+
+			img {
+				min-height: unset;
+			}
 		}
 
 		.post-tags-container {
