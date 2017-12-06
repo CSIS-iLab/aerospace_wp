@@ -108,7 +108,7 @@
             }
             @include breakpoint("medium") {
                 &.col-md-2 {
-                    flex-basis: unset;
+                    flex-basis: auto;
                 }
             }
         }
@@ -173,7 +173,6 @@
             width: 200px;
             margin-right: 20px;
             transition: all .3s cubic-bezier(.33, 0, .2, 1);
-            &.col-md-2 {}
         }
     }
 }
