@@ -41,6 +41,70 @@
 	}
 }
 
+/*----------  Report Cover Overlay  ----------*/
+
+.entry-report-thumbnail {
+    position: relative;
+
+    img {
+    	display: block;
+    }
+
+    a::after {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        padding: 5px 15px;
+        color: white;
+        background-color: $orange;
+        content: "\F2F5";
+        font-family: "asp";
+        font-size: 1em;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    &:hover {
+    	text-align: center;
+
+        a::before {
+            display: table-cell;
+            visibility: visible;
+            opacity: 1;
+            color: white;
+            height: 50%;
+            width: 100%;
+            background-color: rgba($orange, .9);
+            content: "View Online";
+            font-family: $font__abel;
+            font-size: 1.5em;
+            position: absolute;
+            vertical-align: bottom;
+            top: 0;
+            right: 0;
+            padding-top: calc(50% - .1em);
+        }
+        a::after {
+            display: table-cell;
+            visibility: visible;
+            opacity: 1;
+            color: white;
+            top: 50%;
+            height: 50%;
+            width: 100%;
+            background-color: rgba($orange, .9);
+            content: "\F2F5";
+            font-family: "asp";
+            font-size: 2em;
+            position: absolute;
+         
+            right: 0;
+        }
+    }
+}
+
+
 /*----------  Authors List  ----------*/
 .authors-list {
 	display: inline-block;
