@@ -3,49 +3,201 @@
 ==========================================*/
 
 .header-post-header {
+	position: fixed;
+	z-index: 10;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	display: flex;
-	order: 2;
-	position: absolute;
-	visibility: hidden;
-	opacity: 0;
-	@include transition(visibility 0s, opacity 250ms 250ms cubic-bezier(.33,0,.2,1));
+	background-color: $white;
+	padding: 0.5rem;
+	@include box-shadow( 0, 2px, 2px, 3px, rgba($black, 0.3));
 
+	@include breakpoint("medium") {
+		order: 2;
+		background-color: transparent;
+		box-shadow: none;
+		padding: 0;
+		position: absolute;
+		visibility: hidden;
+		opacity: 0;
+		@include transition(visibility 0s, opacity 250ms 250ms cubic-bezier(.33,0,.2,1));
+	}
 
 	&.is-active {
-		position: static;
-		visibility: visible;
-		opacity: 1;
+		@include breakpoint("medium") {
+			position: static;
+			visibility: visible;
+			opacity: 1;
 
-		.header-post-header-share { display: block; }
+			.header-post-title {
+				order: 1;
+			}
+
+			.header-post-header-share {
+				order: 2;
+				display: block;
+			}
+		}
 	}
 
 	.meta-label {
-		color: $blue-gray;
+		display: none;
+
+		@include breakpoint("medium") {
+			display: inline-block;
+			color: $blue-gray;
+		}
 	}
 
 	&-title {
+		@include fontSize(14px);
 		font-weight: 300;
-		color: $white;
+		line-height: 1.43;
+		color: $dark-gray;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+
+		@include breakpoint("medium") {
+			@include fontSize(18px);
+			color: $white;
+		}
+	}
+
+	&-backtotop {
+		transform: rotate(180deg);
+		@include breakpoint("medium") {
+			display: none;
+		}
+
+		i {
+			color: $blue-gray;
+		}
 	}
 
 	&-share {
-		display: none;
-		text-align: right;
+		padding-left: 0 !important;
+
+		@include breakpoint("medium") {
+			display: none;
+			text-align: right;
+		}
+
+		.share-icon {
+			color: $blue-gray;
+
+			@include breakpoint("medium") {
+				display: none;
+			}
+		}
+
+		.share-container {
+			position: absolute;
+			visibility: hidden;
+			opacity: 0;
+			@include transition(visibility 0s, opacity 0.3s ease-in-out);
+
+			&.is-active {
+				visibility: visible;
+				opacity: 1;
+				bottom: 2.5rem;
+				left: 0;
+				right: 0;
+				background-color: $dark-blue;
+				padding: 1rem 1.75rem 0.25rem 1rem;
+
+			}
+
+			@include breakpoint("medium") {
+				position: static;
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+
+		.share-title {
+			@include fontSize(14px);
+			line-height: 1.21;
+			color: $line-gray;
+
+			.meta-label {
+				display: inline-block;
+				@include fontSize(12px);
+				line-height: 2.12;
+				letter-spacing: 0.8px;
+				color: $blue-gray;
+			}
+
+			@include breakpoint("medium") {
+				display: none;
+			}
+		}
+
+		.icon-close {
+			float: right;
+			margin-left: 0.5rem;
+			margin-top: -0.5rem;
+			margin-right: -0.25rem;
+			@include fontSize(20px);
+			color: $white;
+
+			@include breakpoint("medium") {
+				display: none;
+			}
+		}
 
 		.addtoany_list {
+			border-top: 1px solid $dark-blue-gray;
+			margin-top: 0.5rem;
+			display: flex;
+			justify-content: space-between;
+
+			@include breakpoint("medium") {
+				border-top: 0;
+				margin-top: 0;
+				display: block;
+				justify-content: unset;
+			}
+
 			a {
 				float: none;
+				margin-right: 0;
+
+				@include breakpoint("medium") {
+					margin-left: 0.75rem;
+				}
 
 				&:hover {
 					.a2a_svg::before {
+
 						color: $orange;
+					}
+				}
+
+				&>span {
+					@include fontSize(28px);
+
+					@include breakpoint("medium") {
+						@include fontSize(18px);
 					}
 				}
 			}
 
+			.a2a_button_print {
+				display: none;
+				@include breakpoint("medium") {
+					display: inline;
+				}
+			}
+
 			.a2a_svg::before {
-				color: $blue-gray;
+				color: $white;
 				vertical-align: text-top;
+
+				@include breakpoint("medium") {
+					color: $blue-gray;
+				}
 			}
 		}
 	}

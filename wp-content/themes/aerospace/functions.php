@@ -156,6 +156,8 @@ function aerospace_scripts()
         ");
 
         wp_enqueue_script('aerospace-posts', get_template_directory_uri() . '/js/posts.js', array('jquery'), '20171129', true);
+
+        wp_enqueue_script('aerospace-share', get_template_directory_uri() . '/js/social-share.js', array('jquery'), '20171206', true);
     }
 
     // ASP Archive Page
