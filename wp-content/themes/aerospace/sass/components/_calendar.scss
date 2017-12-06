@@ -8,23 +8,48 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 23vw;
-	height: 23vw;
 	text-align: center;
 	font-family: $font__abel;
 	line-height: 1;
-    @include calendarGradient ( -45deg, transparent, $off-white, 28.28427px );
+	margin: 0 auto;
+	overflow: hidden;
+	width: 22vw;
+	height: 22vw;
+	max-width: 175px;
+	max-height: 175px;
 
-    @include breakpoint("small") {
-    	width: 17vw;
-		height: 17vw;
-    }
+	@include breakpoint("small") {
+		width: 15vw;
+		height: 15vw;
+	}
 
-    @include breakpoint("medium") {
-    	width: 12vw;
+	@include breakpoint("medium") {
+		width: 12vw;
 		height: 12vw;
-    }
+		max-width: 150px;
+		max-height: 150px;
+	}
 
+	&::after {
+		content: '';
+		position: absolute;
+		width: 1100%;
+		height: 1100%;
+		bottom: 20px;
+		right: -500%;
+		background-color: $off-white;
+		transform-origin: 54% 100%;
+		transform: rotate(-45deg);
+		z-index: 1;
+	}
+
+	&:hover::after {
+		background-color: $orange;
+	}
+
+	&:hover a {
+		color: $white;
+	}
 
 	a {
 		color: $dark-blue;
@@ -34,10 +59,12 @@
 	.month,
 	.day {
 		display: block;
+		position: relative;
+		z-index: 10;
 	}
 
 	.month {
-		@include fontSize(18px);
+		@include fontSize(20px);
 		text-transform: uppercase;
 
 		@include breakpoint("small") {
@@ -54,7 +81,7 @@
 	}
 
 	.day {
-		@include fontSize(24px);
+		@include fontSize(26px);
 
 		@include breakpoint("small") {
 			@include fontSize(34px);
