@@ -360,8 +360,15 @@
                 padding-right: 0;
             }
 
+            a {
+                display: block;
+                height: 100%;
+            }
+
             img {
-                max-height: 350px;
+                max-height: unset;
+                object-fit: cover;
+                height: 100%;
             }
         }
 
@@ -397,11 +404,13 @@
         a {
             display: block;
             position: relative;
+            height: 227px;
+            overflow: hidden;
         }
 
         img {
             display: block;
-            max-height: 227px;
+            min-height: 227px;
         }
     }
 
@@ -556,43 +565,38 @@
 
     /*----------  Read More  ----------*/
     .read-article { display: none; }
-    &:hover {
-        .entry-title a { color: $orange; }
-        .read-article {
-            display: flex;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: $orange;
-            opacity: 0.9;
-            @extend %subheading;
-            color: $white;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+    .entry-thumbnail:hover .read-article {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $orange;
+        opacity: 0.9;
+        @extend %subheading;
+        color: $white;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-            i {
-                display: block;
-                @include fontSize(54px);
-            }
+        i {
+            display: block;
+            @include fontSize(54px);
         }
     }
 
     // Featured
-    &.featured:hover {
-        .read-article {
-            display: block;
-            top: unset;
-            bottom: 0;
-            text-align: right;
-            padding: 2rem 1rem;
+    &.featured .entry-thumbnail:hover .read-article {
+        display: block;
+        top: unset;
+        bottom: 0;
+        text-align: right;
+        padding: 2rem 1rem;
 
-            i {
-                display: inline;
-                @include fontSize(24px);
-            }
+        i {
+            display: inline;
+            @include fontSize(24px);
         }
     }
 }
