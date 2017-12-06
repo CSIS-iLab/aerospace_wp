@@ -36,11 +36,22 @@
 	});
 
 	// Filter by Category & Tag
-	$(".search-categories, .search-tags").on( 'change', function () {
+	$(".search-categories").on( 'change', function () {
 		var val = $.fn.dataTable.util.escapeRegex(
 			$(this).val()
 		);
 		table
+			.column(3)
+			.search( val ? val : '', true, false )
+			.draw();
+	} );
+
+	$(".search-tags").on( 'change', function () {
+		var val = $.fn.dataTable.util.escapeRegex(
+			$(this).val()
+		);
+		table
+			.column(4)
 			.search( val ? val : '', true, false )
 			.draw();
 	} );
