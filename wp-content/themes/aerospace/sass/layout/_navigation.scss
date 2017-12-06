@@ -5,9 +5,17 @@
 .nav-container {
     order: 1;
 
-
     @include breakpoint("medium") {
         order: 2;
+        @include transition(visibility 0s, opacity 250ms 250ms cubic-bezier(.33,0,.2,1));
+    }
+
+    &.is-hidden {
+        @include breakpoint("medium") {
+            position: absolute;
+            visibility: hidden;
+            opacity: 0;
+        }
     }
 }
 

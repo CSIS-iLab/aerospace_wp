@@ -11,7 +11,10 @@
         headerChange = headerChange + adminBar;
     }
 
+    var entryContentTop = $( '.entry-content' ).offset().top;
+
     // Add class to header on scroll
+    var previousScroll = 0;
     $(window).scroll(function() {
         var currentScroll = $(this).scrollTop();
 
@@ -21,7 +24,24 @@
         } else {
             $(".site-header").removeClass("is-small");
             $(".header-bottom-container").removeClass("is-sticky");
+        }
 
+        // If we're on a single post page, we need to swap out the menu bar for the header-post-bar once we reach the entry content, but go back to the navigation when we scroll up.
+        if ( $('body').hasClass('single') ) {
+            if ( currentScroll > entryContentTop ) {
+                $( '.header-post-header' ).addClass('is-active');
+                $( '.header-bottom .nav-container, .header-bottom .search-container' ).addClass('is-hidden');
+            } else {
+                $( '.header-post-header' ).removeClass('is-active');
+                $( '.header-bottom .nav-container, .header-bottom .search-container' ).removeClass('is-hidden');
+            }
+
+            if ( currentScroll < previousScroll ) {
+                $( '.header-post-header' ).removeClass('is-active');
+                $( '.header-bottom .nav-container, .header-bottom .search-container' ).removeClass('is-hidden');
+            }
+
+            previousScroll = currentScroll;
         }
 
     });

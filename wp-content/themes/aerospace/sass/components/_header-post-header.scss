@@ -1,0 +1,52 @@
+/*==========================================
+=            Header Post Header            =
+==========================================*/
+
+.header-post-header {
+	display: flex;
+	order: 2;
+	position: absolute;
+	visibility: hidden;
+	opacity: 0;
+	@include transition(visibility 0s, opacity 250ms 250ms cubic-bezier(.33,0,.2,1));
+
+
+	&.is-active {
+		position: static;
+		visibility: visible;
+		opacity: 1;
+
+		.header-post-header-share { display: block; }
+	}
+
+	.meta-label {
+		color: $blue-gray;
+	}
+
+	&-title {
+		font-weight: 300;
+		color: $white;
+	}
+
+	&-share {
+		display: none;
+		text-align: right;
+
+		.addtoany_list {
+			a {
+				float: none;
+
+				&:hover {
+					.a2a_svg::before {
+						color: $orange;
+					}
+				}
+			}
+
+			.a2a_svg::before {
+				color: $blue-gray;
+				vertical-align: text-top;
+			}
+		}
+	}
+}

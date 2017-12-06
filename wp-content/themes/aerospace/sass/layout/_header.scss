@@ -242,13 +242,14 @@
 
 
 /*----------  Stars  ----------*/
-
 @import 'components/header-stars';
 
 
 /*----------  Search  ----------*/
-
 @import 'components/header-search';
+
+/*----------  Header Post Header  ----------*/
+@import 'components/header-post-header';
 
 #wpadminbar {
     display: none;

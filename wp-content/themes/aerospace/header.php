@@ -99,6 +99,11 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                     </div>
                 </nav><!-- #site-navigation -->
             </div>
+            <?php
+            if ( is_single() ) {
+                get_template_part( 'components/header-post-header' );
+            }
+            ?>
             <div class="col-xs-2 col-md-2 search-container">
                 <?php get_template_part( 'components/search-inline' ); ?>
             </div>
