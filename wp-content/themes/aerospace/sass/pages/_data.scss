@@ -218,3 +218,15 @@
 	}
 }
 
+/*----------  Inline Sharing  ----------*/
+.single-data {
+	.sharing-inline {
+		margin-left: auto;
+		margin-right: auto;
+        @include postBodyMaxWidth();
+
+        &-share { padding-left: 0; }
+
+		&-view { display: none; }
+	}
+}
