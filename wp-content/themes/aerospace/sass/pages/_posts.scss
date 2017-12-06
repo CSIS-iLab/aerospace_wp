@@ -103,6 +103,10 @@
         max-width: fit-content;
         margin-right: 1rem;
 
+        @include breakpoint("medium") {
+            flex: none;
+        }
+
         .post-format {
             padding: 0.2rem 1.5rem 0;
             color: $white;
