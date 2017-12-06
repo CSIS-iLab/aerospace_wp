@@ -91,18 +91,6 @@
     		}
     	}
 
-        // .card-format.featured .entry-thumbnail {
-        //     a {
-        //         height: 100%;
-        //     }
-
-        //     img {
-        //         max-height: unset;
-        //         object-fit: cover;
-        //         height: 100%;
-        //     }
-        // }
-
     	.post-is-featured { display: none; }
     }
 
@@ -234,6 +222,10 @@
     			width: unset;
     			height: unset;
     			border-right: 1px solid $light-gray;
+
+                &:hover::after {
+                    display: none;
+                }
 
     			a {
     				color: $orange;
