@@ -84,7 +84,7 @@
 
 		@include breakpoint("medium") {
 			border-left: 1px solid $blue-gray;
-			padding: 0 0 0 1rem;
+			padding: 0 1rem;
 		}
 
 		&:hover {
