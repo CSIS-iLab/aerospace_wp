@@ -228,3 +228,14 @@ function nuclearnetwork_co_author_wseo_title( $title ) {
     return $title;
 }
 add_filter( 'wpseo_title', 'nuclearnetwork_co_author_wseo_title' );
+
+/**
+ * Set default attributes for the accordion shortcode.
+ * @param array $atts Shortcode attributes.
+ */
+function set_accordion_shortcode_defaults($atts) {
+    // Override the openfirst setting here
+    $atts['scroll'] = 80;
+    return $atts;
+}
+add_filter('shortcode_atts_accordion', 'set_accordion_shortcode_defaults', 10, 3);
