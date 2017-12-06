@@ -2,15 +2,13 @@
 =            Post Meta            =
 =================================*/
 
-
 /*----------  Meta Labels  ----------*/
-
 .meta-label {
-    @extend %post-meta-label;
-    text-transform: uppercase;
-    color: $gray;
-    display: inline-block;
-    margin-right: 0.5rem;
+  @extend %post-meta-label;
+  text-transform: uppercase;
+  color: $gray;
+  display: inline-block;
+  margin-right: 0.5rem;
 }
 
 .meta-content {
@@ -18,28 +16,16 @@
     color: $black;
 }
 
-
-
-
-
-
 /*----------  Post Format/Content Type  ----------*/
-
 .post-format {
-    @extend %content-type;
-    text-transform: uppercase;
+  @extend %content-type;
+  text-transform: uppercase;
 }
 
-
-
-
-
-
 /*----------  Featured Post  ----------*/
-
 .post-is-featured {
     font-family: $font__source;
-    @include fontSize(16px);
+    @icnlude fontSize(16px);
     line-height: 1.34;
     letter-spacing: 0.9px;
     text-transform: uppercase;
@@ -54,11 +40,6 @@
         margin-bottom: -2px;
     }
 }
-
-
-
-
-
 
 /*----------  Report Cover Overlay  ----------*/
 
@@ -79,7 +60,7 @@
         right: 0;
     }
     &:hover {
-    	text-align: center;
+        text-align: center;
         a:before {
             display: table-cell;
             visibility: visible;
@@ -117,13 +98,7 @@
 }
 
 
-
-
-
-
-
 /*----------  Authors List  ----------*/
-
 .authors-list {
     display: inline-block;
     margin: 0;
@@ -143,7 +118,6 @@
         margin: 2rem 0;
     }
 }
-
 .authors-list-extended {
     .entry-author {
         margin-bottom: 2rem;
@@ -177,26 +151,14 @@
     }
 }
 
-
-
-
-
-
 /*----------  Posted On  ----------*/
-
 .posted-on {
     @extend .meta-content;
     display: inline-block;
     margin-bottom: 0;
 }
 
-
-
-
-
-
 /*----------  Categories  ----------*/
-
 .cat-links {
     ul {
         padding: 0;
@@ -214,27 +176,17 @@
             content: ", ";
         }
 
-        &:last-of-type::after {
-            content: none;
-        }
+        &:last-of-type::after { content: none; }
 
         a {
             color: $black;
 
-            &:hover {
-                color: $secondary-blue;
-            }
+            &:hover { color: $secondary-blue; }
         }
     }
 }
 
-
-
-
-
-
 /*----------  Citation  ----------*/
-
 .entry-citation {
     @extend %post-meta-content;
 
