@@ -203,3 +203,28 @@ if ( class_exists( 'easyFootnotes' ) ) {
     }
     add_filter('the_content', 'aerospace_remove_easy_footnotes', 30);
 }
+
+function nuclearnetwork_co_author_archive( $query ) {
+    if ( $query->is_author ) {
+        $query->set( 'post_type', array( 'post', 'aerospace101' ) );
+    }
+    remove_action( 'pre_get_posts', 'co_author_archive' );
+}
+add_action( 'pre_get_posts', 'nuclearnetwork_co_author_archive' );
+
+/**
+ * Custom page titles for Guest Authors with WordPress SEO
+ * Returns "[author name]&#39;s articles on [site name]".
+ *
+ * @param  string $title Author's name.
+ */
+function nuclearnetwork_co_author_wseo_title( $title ) {
+    // Only filter title output for author pages.
+    if ( is_author() && function_exists( 'get_coauthors' ) ) {
+        $qo = get_queried_object();
+        $author_name = $qo->display_name;
+        return $author_name . '&#39;s articles on ' . get_bloginfo( 'name' );
+    }
+    return $title;
+}
+add_filter( 'wpseo_title', 'nuclearnetwork_co_author_wseo_title' );
