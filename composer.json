@@ -21,11 +21,12 @@
 				"wpackagist-plugin/disable-emojis": "*",
 				"wpackagist-plugin/easy-footnotes": "*",
 				"wpackagist-plugin/google-authenticator": "*",
+				"wpackagist-plugin/stream": "*",
 				"wpackagist-plugin/tinymce-advanced": "*",
 				"wpackagist-plugin/wordpress-seo": "*",
 				"wpackagist-plugin/jetpack": "*",
 				"wpackagist-plugin/search-by-algolia-instant-relevant-results": "*",
 				"wpackagist-plugin/regenerate-thumbnails": "*",
-                "wpackagist-plugin/related": "*"
+				"wpackagist-plugin/related": "*"
 		}
 }
