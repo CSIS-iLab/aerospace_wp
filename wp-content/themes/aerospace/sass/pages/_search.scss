@@ -53,6 +53,11 @@
             margin-right: 0;
         }
 
+        .card-format .entry-thumbnail {
+            a { height: 150px; }
+            img { min-height: 150px; }
+        }
+
         article:last-of-type {
             padding-bottom: $archive-content-padding;
 
@@ -97,3 +102,4 @@
         }
 	}
 }
+
