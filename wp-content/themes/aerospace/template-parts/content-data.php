@@ -9,7 +9,7 @@
 
 
 $classes = 'row card-format';
-$thumbnail_size = 4;
+$thumbnail_size = 3;
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( $classes ); ?>>
