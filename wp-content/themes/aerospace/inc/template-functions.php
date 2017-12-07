@@ -39,7 +39,7 @@ add_action('wp_head', 'aerospace_pingback_header');
  * @param  array $query Query object.
  */
 function aerospace_custom_sort_posts( $query ) {
-	if ( ! is_admin() && ( ( is_home() && get_option( 'page_for_posts' ) ) || is_category() || is_archive() ) && $query->is_main_query() && ! is_post_type_archive( 'events' ) && ! is_post_type_archive( 'data' ) ) {
+	if ( ! is_admin() && ( ( is_home() && get_option( 'page_for_posts' ) ) || is_category() || is_archive() ) && $query->is_main_query() && ! is_post_type_archive( 'events' ) && ! is_post_type_archive( 'data' ) && ! is_author() ) {
 		$query->set( 'meta_key', '_post_is_featured' );
 
         if ( 'ASC' === get_query_var( 'order' ) ) {
