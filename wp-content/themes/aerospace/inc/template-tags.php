@@ -194,16 +194,18 @@ if ( ! function_exists( 'aerospace_authors_list' ) ) :
 	 * Return short list of authors, separated by a comma.
 	 */
 	function aerospace_authors_list() {
-		if ( function_exists( 'coauthors_posts_links' ) ) {
-			$prefix = $authors = '';
-			foreach ( get_coauthors() as $coauthor ) :
-				$authors .= $prefix . '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $coauthor->display_name . '</a>';
-								$prefix = ', ';
-			endforeach;
-		} else {
-			$authors = the_author_posts_link();
+		if ( in_array( get_post_type(), array( 'post', 'aerospace101' ), true ) ) {
+			if ( function_exists( 'coauthors_posts_links' ) ) {
+				$prefix = $authors = '';
+				foreach ( get_coauthors() as $coauthor ) :
+					$authors .= $prefix . '<a href="' . get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ) . '">' . $coauthor->display_name . '</a>';
+									$prefix = ', ';
+				endforeach;
+			} else {
+				$authors = the_author_posts_link();
+			}
+			echo '<div class="authors-list"><span class="meta-label">By</span> ' . $authors . '</div>';
 		}
-		echo '<div class="authors-list"><span class="meta-label">By</span> ' . $authors . '</div>';
 	}
 endif;
 
