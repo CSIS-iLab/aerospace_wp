@@ -11,7 +11,9 @@
         headerChange = headerChange + adminBar;
     }
 
-    var entryContentTop = $( '.entry-content' ).offset().top;
+    if ( $( '.entry-content' ).length ) {
+        var entryContentTop = $( '.entry-content' ).offset().top;
+    }
 
     // Add class to header on scroll
     var previousScroll = 0;
