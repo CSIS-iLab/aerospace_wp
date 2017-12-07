@@ -242,3 +242,22 @@ function set_accordion_shortcode_defaults($atts) {
     return $atts;
 }
 add_filter('shortcode_atts_accordion', 'set_accordion_shortcode_defaults', 10, 3);
+
+
+/**
+ * Make links pushed to Algolia relative.
+ *
+ * @param array   $shared_attributes Attributes to push.
+ * @param WP_Post $post Post object.
+ * @return array Updated Attributes array.
+ */
+function aerospace_algolia_shared_attributes( array $shared_attributes, WP_Post $post ) {
+
+    $shared_attributes['permalink'] = wp_make_link_relative( get_post_permalink( $post ) );
+    if ( has_post_thumbnail( $post ) ) {
+        $shared_attributes['images']['thumbnail']['url'] = wp_make_link_relative( get_the_post_thumbnail_url( $post ) );
+    }
+    return $shared_attributes;
+}
+add_filter( 'algolia_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
+add_filter( 'algolia_searchable_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
