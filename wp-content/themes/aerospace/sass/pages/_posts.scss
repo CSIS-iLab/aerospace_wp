@@ -41,7 +41,7 @@
             &::after {
                 content: "";
                 position: absolute;
-                top: -1rem;
+                top: -1.5rem;
                 right: calc(#{$size__highlights-max-width} + 0.55rem);
                 height: 100%;
                 width: 3px;
@@ -58,7 +58,7 @@
         margin-bottom: 1rem;
 
         @include breakpoint("medium") {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .entry-title {
@@ -117,6 +117,7 @@
         margin-bottom: 3rem;
 
         &-post-body {
+            margin-bottom: 4rem;
             margin: 0 auto;
             @include postBodyMaxWidth();
         }
@@ -267,7 +268,7 @@
         .share-container {
             max-width: -moz-fit-content;
             max-width: fit-content;
-            
+
             @include breakpoint("medium") {
                 padding-left: 1rem;
             }
