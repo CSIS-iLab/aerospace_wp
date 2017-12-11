@@ -4,8 +4,9 @@
  * Handles toggling the navigation menu for small screens and enables TAB key
  * navigation support for dropdown menus.
  */
-(function() {
-    var container, button, close, menu, overlay, links, i, len;
+(function($) {
+
+    var container, button, close, menu, overlay, links, i, len, breakpoint;
 
     container = document.getElementById('site-navigation');
     if (!container) {
@@ -49,32 +50,63 @@
         toggleMenu();
     };
 
-
     function toggleMenu() {
+        breakpoint = getComputedStyle(document.body).getPropertyValue("--breakpoint").replace(/\"/g, '');
         if (-1 !== container.className.indexOf('toggled')) {
-            container.className = container.className.replace(' toggled', '');
-            document.body.className = document.body.className.replace(' toggled', '');
-            overlay.className = overlay.className.replace(' toggled', '');
-            button.setAttribute('aria-expanded', 'false');
-            menu.setAttribute('aria-expanded', 'false');
+            closeMenu();
         } else {
-            container.className += ' toggled';
-            overlay.className += ' toggled';
-            document.body.className += ' toggled';
-            button.setAttribute('aria-expanded', 'true');
-            menu.setAttribute('aria-expanded', 'true');
+            openMenu();
         }
     };
 
-    overlay.onclick = function() {
-        if (container.className.indexOf('toggled')) {
-            container.className = container.className.replace(' toggled', '');
-            document.body.className = document.body.className.replace(' toggled', '');
-            overlay.className = overlay.className.replace(' toggled', '');
-            button.setAttribute('aria-expanded', 'false');
-            menu.setAttribute('aria-expanded', 'false');
+    $(window).resize(function() {
+        breakpoint = getComputedStyle(document.body).getPropertyValue("--breakpoint").replace(/\"/g, '');
+        closeMenu();
+    }).resize();
+
+
+    function closeMenu() {
+        breakpoint = getComputedStyle(document.body).getPropertyValue("--breakpoint").replace(/\"/g, '');
+        container.className = container.className.replace(' toggled', '');
+        document.body.className = document.body.className.replace(' toggled', '');
+        overlay.className = overlay.className.replace(' toggled', '');
+        button.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-expanded', 'false');
+
+        if (breakpoint == "xsmall" || breakpoint == "small") {
+            $(".menu-item-has-children").removeClass("open");
+            $(".menu-item-has-children .submenu-container").slideUp("fast");
+        } else {
+            $(".menu-item-has-children .submenu-container").slideDown("fast");
+            $(".menu-item-has-children").addClass("open");
         }
     }
+
+    function openMenu() {
+        container.className += ' toggled';
+        overlay.className += ' toggled';
+        document.body.className += ' toggled';
+        button.setAttribute('aria-expanded', 'true');
+        menu.setAttribute('aria-expanded', 'true');
+        
+    }
+
+    overlay.onclick = function() {
+        if ($("#site-navigation").hasClass("toggled")) {
+            closeMenu();
+        }
+    }
+
+
+    $(".menu-item-has-children").on("click", function() {
+        $this = $(this);
+        if ($("#site-navigation").hasClass("toggled")) {
+            //console.log("click")
+            $(".submenu-container", $this).slideToggle("fast");
+            $(".menu-item-has-children").toggleClass("open");
+        }
+    })
+
 
     // Get all the link elements within the menu.
     links = menu.getElementsByTagName('a');
@@ -138,4 +170,4 @@
             }
         }
     }(container));
-})();
+})(jQuery);
