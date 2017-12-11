@@ -4,9 +4,12 @@
 
 .addtoany_list {
 	position: relative;
-	line-height: inherit !important;
+	line-height: normal !important;
 	min-height: 1px;
 
+	@include breakpoint("medium") {
+		line-height: inherit !important;
+	}
 
 	.entry-share &::after {
 		content: "";
@@ -99,7 +102,11 @@
 		line-height: inherit !important;
 		display: inline-block;
 		vertical-align: middle;
-		@include fontSize(20px);
+		@include fontSize(32px);
+
+		@include breakpoint("medium") {
+			@include fontSize(20px);
+		}
 	}
 }
 
