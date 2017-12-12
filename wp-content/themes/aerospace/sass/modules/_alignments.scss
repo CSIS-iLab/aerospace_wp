@@ -1,6 +1,7 @@
 .alignleft {
 	display: inline;
 	float: left;
+	margin-right: 0.5rem;
 
 	@include breakpoint("small") {
 		margin-right: 1.5em;
@@ -24,6 +25,7 @@
 .alignright {
 	display: inline;
 	float: right;
+	margin-left: 0.5rem;
 
 	@include breakpoint("small") {
 		margin-left: 1.5em;

@@ -34,9 +34,14 @@ textarea {
 
 %page-title {
 	font-family: $font__abel;
-	@include fontSize(52px);
-	line-height: 0.92;
+	@include fontSize(36px);
+	line-height: 1;
 	color: $dark-blue;
+
+	@include breakpoint("medium") {
+		@include fontSize(52px);
+		line-height: 0.92;
+	}
 }
 
 %page-description {

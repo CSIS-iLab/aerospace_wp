@@ -114,10 +114,9 @@
     }
 
     .entry-content {
-        margin-bottom: 3rem;
+        margin-bottom: 4rem;
 
         &-post-body {
-            margin-bottom: 4rem;
             margin: 0 auto;
             @include postBodyMaxWidth();
         }
@@ -470,7 +469,7 @@
     }
 
     .entry-content {
-        margin: 0.75rem 0 0.75rem 0;
+        margin: 0.75rem 0;
 
         p {
             @extend %list;
@@ -483,21 +482,27 @@
         border-top: 1px solid $blue-gray;
 
         & > * {
-            padding-right: 0.5rem;
+            padding-right: 0;
             @include fontSize(14px);
-            line-height: 1.81;
+            line-height: 1;
+            display: inline-block;
 
             @include breakpoint("small") {
+                padding-right: 0.5rem;
                 display: inline-block;
+            }
+
+            @include breakpoint("medium") {
+                line-height: 1.81;
             }
         }
 
        & > *:not(:first-child) {
-            padding-left: 0.7rem;
+            padding-left: 0.25rem;
             position: relative;
 
             @include breakpoint("small") {
-                padding-left: 0.5rem;
+                padding-left: 0.7rem;
             }
 
             &::before {

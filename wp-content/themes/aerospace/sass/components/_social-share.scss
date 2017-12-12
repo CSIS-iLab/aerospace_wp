@@ -102,7 +102,7 @@
 		line-height: inherit !important;
 		display: inline-block;
 		vertical-align: middle;
-		@include fontSize(32px);
+		@include fontSize(26px);
 
 		@include breakpoint("medium") {
 			@include fontSize(20px);

@@ -14,13 +14,13 @@ if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
     $thumbnail_size = 6;
 } elseif ( isset( $post->isFeaturedMain ) && ! $post->isFeaturedMain ) {
     $classes = 'row card-format';
-    $thumbnail_size = 4; 
+    $thumbnail_size = 4;
 } elseif ( $is_featured ) {
     $classes = 'row featured card-format';
     $thumbnail_size = 6;
 } else {
     $classes = 'row card-format';
-    $thumbnail_size = 4; 
+    $thumbnail_size = 4;
 }
 
 ?>
@@ -52,8 +52,15 @@ if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
         </div><!-- .entry-content -->
 
         <footer class="entry-footer">
-            <?php aerospace_post_format( $post->ID ); ?>
-            <?php aerospace_entry_primary_cats(); ?>
+            <?php
+            if ( wp_is_mobile() ) {
+                echo '<span style="color: #b5bdc1;">/</span>' . aerospace_post_format( $post->ID );
+                aerospace_entry_primary_cats();
+            } else {
+                aerospace_post_format( $post->ID );
+                aerospace_entry_primary_cats();
+            }
+            ?>
         </footer><!-- .entry-footer -->
     </div>
 </article><!-- #post-<?php the_ID(); ?> -->
