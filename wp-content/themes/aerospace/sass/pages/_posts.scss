@@ -41,7 +41,7 @@
             &::after {
                 content: "";
                 position: absolute;
-                top: -1rem;
+                top: -1.5rem;
                 right: calc(#{$size__highlights-max-width} + 0.55rem);
                 height: 100%;
                 width: 3px;
@@ -58,7 +58,7 @@
         margin-bottom: 1rem;
 
         @include breakpoint("medium") {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .entry-title {
@@ -114,7 +114,7 @@
     }
 
     .entry-content {
-        margin-bottom: 3rem;
+        margin-bottom: 4rem;
 
         &-post-body {
             margin: 0 auto;
@@ -267,7 +267,7 @@
         .share-container {
             max-width: -moz-fit-content;
             max-width: fit-content;
-            
+
             @include breakpoint("medium") {
                 padding-left: 1rem;
             }
@@ -469,7 +469,7 @@
     }
 
     .entry-content {
-        margin: 0.75rem 0 1.25rem 0;
+        margin: 0.75rem 0;
 
         p {
             @extend %list;
@@ -492,10 +492,11 @@
         }
 
        & > *:not(:first-child) {
+            padding-left: 0;
             position: relative;
 
             @include breakpoint("small") {
-                padding-left: 0.5rem;
+                padding-left: 0.7rem;
             }
 
             &::before {

@@ -105,7 +105,7 @@
 				left: 0;
 				right: 0;
 				background-color: $dark-blue;
-				padding: 1rem 1.75rem 0.25rem 1rem;
+				padding: 1rem 1rem 0.25rem 1rem;
 
 			}
 
@@ -150,12 +150,14 @@
 		.addtoany_list {
 			border-top: 1px solid $dark-blue-gray;
 			margin-top: 0.5rem;
+			padding-top: 0.5rem;
 			display: flex;
 			justify-content: space-between;
 
 			@include breakpoint("medium") {
 				border-top: 0;
 				margin-top: 0;
+				padding-top: 0;
 				display: block;
 				justify-content: unset;
 			}

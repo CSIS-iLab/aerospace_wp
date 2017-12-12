@@ -19,7 +19,7 @@ if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
     $author = get_queried_object();
     $img = coauthors_get_avatar( $author, 150 );
     $bio = $author->description;
-    $description = '<div class="row"><div class="col-xs-3 col-sm-2">' . $img . '</div><div class="col-xs col-sm"><p>' . $bio . '</p></div></div>';
+    $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . '</p></div></div></div>';
 }
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
