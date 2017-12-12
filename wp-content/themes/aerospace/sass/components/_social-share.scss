@@ -28,11 +28,6 @@
 	a {
 		margin-right: 0.75rem;
 		float: left;
-		font-size: 2rem;
-
-		@include breakpoint("medium") {
-			font-size: 1rem;
-		}
 
 		@include breakpoint("medium") {
 			.entry-share &:nth-child(5) {
@@ -102,7 +97,7 @@
 		line-height: inherit !important;
 		display: inline-block;
 		vertical-align: middle;
-		@include fontSize(32px);
+		@include fontSize(26px);
 
 		@include breakpoint("medium") {
 			@include fontSize(20px);
