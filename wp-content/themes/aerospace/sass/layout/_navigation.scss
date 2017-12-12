@@ -156,7 +156,8 @@
 
             .submenu-container {
                 display: flex;
-                
+                margin-right: 0px;
+
                 @include breakpoint("medium") {
                     visibility: visible;
                     opacity: 1;
@@ -195,8 +196,6 @@
                 float: unset;
             }
         }
-
-
 
         &.menu-item-has-children>a {
             pointer-events: none;
@@ -267,8 +266,6 @@
     }
 
     .submenu-container {
-        display: none;
-
         @include breakpoint("medium") {
             display: flex;
             position: absolute;
@@ -281,8 +278,6 @@
             opacity: 0;
             @include transition(visibility 0s, opacity .5s cubic-bezier(.33, 0, .2, 1));
         }
-
-
 
         .submenu-parent,
         .submenu-featured-post,
@@ -305,6 +300,10 @@
 
         .submenu-featured-post {
             order: 3;
+
+            .post-thumbnail a {
+                transition: none;
+            }
 
             .post-desc {
                 font-family: $font__abel;
