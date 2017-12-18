@@ -489,7 +489,6 @@
 
             @include breakpoint("small") {
                 padding-right: 0.5rem;
-                display: inline-block;
             }
 
             @include breakpoint("medium") {
@@ -497,8 +496,20 @@
             }
         }
 
+        .post-format::after {
+            content: "/";
+            font-family: $font__abel;
+            @include fontSize(14px);
+            color: $gray;
+            margin: 0 0.4rem;
+
+            @include breakpoint("small") {
+                content: "";
+            }
+        }
+
        & > *:not(:first-child) {
-            padding-left: 0.25rem;
+            padding-left: 0;
             position: relative;
 
             @include breakpoint("small") {

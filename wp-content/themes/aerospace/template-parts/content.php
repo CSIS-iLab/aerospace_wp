@@ -53,13 +53,8 @@ if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
 
         <footer class="entry-footer">
             <?php
-            if ( wp_is_mobile() ) {
-                echo '<span style="color: #b5bdc1;">/</span>' . aerospace_post_format( $post->ID );
-                aerospace_entry_primary_cats();
-            } else {
                 aerospace_post_format( $post->ID );
                 aerospace_entry_primary_cats();
-            }
             ?>
         </footer><!-- .entry-footer -->
     </div>
