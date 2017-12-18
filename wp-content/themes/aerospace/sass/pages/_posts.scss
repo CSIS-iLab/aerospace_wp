@@ -482,12 +482,29 @@
         border-top: 1px solid $blue-gray;
 
         & > * {
-            padding-right: 0.5rem;
+            padding-right: 0;
             @include fontSize(14px);
-            line-height: 1.81;
+            line-height: 1;
+            display: inline-block;
 
             @include breakpoint("small") {
-                display: inline-block;
+                padding-right: 0.5rem;
+            }
+
+            @include breakpoint("medium") {
+                line-height: 1.81;
+            }
+        }
+
+        .post-format::after {
+            content: "/";
+            font-family: $font__abel;
+            @include fontSize(14px);
+            color: $gray;
+            margin: 0 0.4rem;
+
+            @include breakpoint("small") {
+                content: "";
             }
         }
 
