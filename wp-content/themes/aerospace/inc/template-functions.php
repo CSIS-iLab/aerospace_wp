@@ -261,3 +261,18 @@ function aerospace_algolia_shared_attributes( array $shared_attributes, WP_Post 
 }
 add_filter( 'algolia_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
 add_filter( 'algolia_searchable_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
+
+add_filter( 'coauthors_guest_author_fields', 'aerospace_filter_guest_author_fields', 10, 2 );
+/**
+ * Add fields for Guest Author names.
+ */
+function aerospace_filter_guest_author_fields( $fields_to_return, $groups ) {
+    if ( in_array( 'all', $groups ) || in_array( 'contact-info', $groups ) ) {
+        $fields_to_return[] = array(
+            'key'      => 'twitter',
+            'label'    => 'Twitter',
+            'group'    => 'contact-info',
+        );
+    }
+    return $fields_to_return;
+}

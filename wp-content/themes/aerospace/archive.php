@@ -19,7 +19,11 @@ if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
     $author = get_queried_object();
     $img = coauthors_get_avatar( $author, 150 );
     $bio = $author->description;
-    $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . '</p></div></div></div>';
+    $twitter = $author->twitter;
+    if ( $twitter ) {
+        $twitter = ' <a href="https://twitter.com/' . $twitter . '" target="_blank" rel="nofollow"><i class="icon-twitter"></i>@' . $twitter .'</a>';
+    }
+    $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . $twitter . '</p></div></div></div>';
 }
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
