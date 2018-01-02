@@ -72,10 +72,6 @@
 			border-bottom: 1px solid $blue-gray;
 			margin-bottom: 1rem;
 
-			.related-post-img {
-				left: calc(50% + 1rem);
-			}
-
 			@include breakpoint("medium") {
 				border-bottom: 0;
 				margin-bottom: 0;
@@ -97,22 +93,6 @@
 			.related-post-img {
 				visibility: visible;
 				opacity: 1;
-			}
-		}
-
-		&-img {
-			display: none;
-
-			@include breakpoint("medium") {
-				display: block;
-				position: absolute;
-				right: calc(50% + 1rem);
-				width: calc(50% - 1rem);
-				height: 100%;
-				overflow: hidden;
-				visibility: hidden;
-				opacity: 0;
-				@include transition(visibility 0s, opacity .2s ease-in-out);
 			}
 		}
 

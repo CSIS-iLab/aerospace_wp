@@ -389,9 +389,7 @@ if ( ! function_exists( 'aerospace_related_content' ) ) :
 			foreach( $rel as $post ) : setup_postdata($post);
 				if ($post->post_status != 'trash') {
 					echo '<div class="related-post col-xs-12 col-md">';
-					echo '<div class="related-post-img"><a href="'.get_permalink().'">';
-					the_post_thumbnail('medium-large');
-					echo '</a></div><div class="related-post-content">';
+					echo '<div class="related-post-content">';
 					echo '<a href="'.get_permalink().'" class="related-post-title">';
 					the_title();
 					echo '</a>';
