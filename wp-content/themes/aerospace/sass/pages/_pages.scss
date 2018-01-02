@@ -114,7 +114,8 @@ h3.about-team {
 		}
 
 		&-title,
-		&-team {
+		&-team,
+		&-twitter {
 			@include fontSize(14px);
 			line-height: 1.43;
 		}
@@ -127,6 +128,11 @@ h3.about-team {
 		&-team {
 			color: $dark-gray;
 			font-style: italic;
+		}
+
+		&-twitter {
+			color: $dark-gray;
+			a { box-shadow: none; }
 		}
 	}
 }
