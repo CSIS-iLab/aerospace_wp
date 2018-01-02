@@ -100,6 +100,7 @@ function post_build_meta_box( $post ) {
 	    <h3><?php esc_html_e( 'Disable Excerpt & Highlights', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="disable_highlights" value="1" <?php checked( $current_disable_highlights, '1' ); ?> /> Yes, disable the excerpt and highlights
+			<p class="howto">Note: If "Download Report URL" field is filled out, that button will show even if the highlights are disabled.</p>
 		</p>
 		<h3><?php esc_html_e( 'Disable Feature Image', 'aerospace' ); ?></h3>
 		<p>
