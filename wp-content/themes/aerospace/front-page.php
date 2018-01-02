@@ -81,7 +81,7 @@ get_header(); ?>
 					<?php
 						$latest_post_args = array(
 							'post_status' => 'publish',
-							'numberposts' => 2,
+							'numberposts' => 3,
 							'exclude' => array(
 								$feature_post1,
 								$feature_post2,
