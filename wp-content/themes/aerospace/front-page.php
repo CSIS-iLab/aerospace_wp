@@ -149,7 +149,7 @@ get_header(); ?>
 
 						$data_desc = get_option( 'aerospace_homepage_data_desc' );
 						echo '<div class="col-xs-12 col-sm"><p>' . $data_desc . '</p></div>';
-						echo '</div><div class="row">';
+						echo '</div><div class="row bottom-md">';
 
 						foreach($featured_data as $post) : setup_postdata($post);
 							get_template_part( 'template-parts/hp-featured' );
