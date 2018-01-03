@@ -17,7 +17,7 @@ if ( get_archive_top_content() ) {
 // Author Archives
 if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
     $author = get_queried_object();
-    $img = coauthors_get_avatar( $author, 150 );
+    $img = coauthors_get_avatar( $author, 350 );
     $bio = $author->description;
     $twitter = $author->twitter;
     if ( $twitter ) {
