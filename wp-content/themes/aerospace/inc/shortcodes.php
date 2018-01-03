@@ -170,3 +170,26 @@ function shortcode_aircraft( $atts ) {
 	return '<img src="' . get_template_directory_uri() . '/img/aircraft-icon.svg" class="img-aircraft" alt="Aerospace" title="Aerospace" />';
 }
 add_shortcode( 'aircraft', 'shortcode_aircraft' );
+
+/**
+ * Adds link to external publication.
+ * @param  string $title Title of publication.
+ * @param  string $URL   URL of publication.
+ * @return string        HTML of link.
+ */
+function shortcode_publication( $atts ) {
+	// Attributes
+	$atts = shortcode_atts(
+	 	array(
+		 	'url' => null,
+			'title' => null,
+	 	),
+		$atts,
+		'publication'
+	);
+	$title = $atts['title'];
+	$url = $atts['url'];
+
+	return '<div class="post-external-publication"><a href="' . esc_url( $url ) . '" target="_blank" rel="nofollow">' . esc_html( 'Read the full article in', 'aerospace') . ' <span class="post-external-publication-title">' . esc_attr( $title ) . '</span><i class="icon-external-open"></i></a></div>';
+}
+add_shortcode( 'publication', 'shortcode_publication' );

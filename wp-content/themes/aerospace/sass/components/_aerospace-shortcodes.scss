@@ -38,3 +38,21 @@
     max-height: 15px;
     margin-left: 5px;
 }
+
+/*----------  External Publications  ----------*/
+.post-external-publication {
+	max-width: 60%;
+	margin: 1.5rem auto;
+	background-color: $off-white;
+	padding: 1rem;
+	font-family: $font__abel;
+	text-align: center;
+
+	a {
+		box-shadow: none;
+	}
+
+	&-title {
+		font-style: italic;
+	}
+}
