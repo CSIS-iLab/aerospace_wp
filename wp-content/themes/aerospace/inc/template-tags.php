@@ -237,6 +237,30 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'aerospace_authors_twitter_list' ) ) :
+	/**
+	 * Return list of authors' names or twitter handles if they have one.
+	 */
+	function aerospace_authors_twitter_list() {
+		if ( in_array( get_post_type(), array( 'post' ), true ) ) {
+			if ( function_exists( 'coauthors_posts_links' ) ) {
+				$prefix = $authors = '';
+				foreach ( get_coauthors() as $coauthor ) :
+					$name = $coauthor->display_name;
+					if ( $coauthor->twitter ) {
+						$name = '@' . $coauthor->twitter;
+					}
+					$authors .= $prefix . $name;
+					$prefix = ', ';
+				endforeach;
+			} else {
+				$authors = the_author();
+			}
+			return $authors;
+		}
+	}
+endif;
+
 if ( ! function_exists( 'aerospace_post_format' ) ) :
 	/**
 	 * Returns HTML with post format.
