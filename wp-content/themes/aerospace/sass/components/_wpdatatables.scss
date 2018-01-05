@@ -1,0 +1,100 @@
+/*=====================================
+=            WP DataTables            =
+=====================================*/
+
+/*----------  Table  ----------*/
+.wpDataTablesWrapper .wpDataTable {
+	> thead > tr > th {
+		display: table-cell;
+		background-color: $line-gray !important;
+		font-weight: normal !important;
+		border: 0 !important;
+		border-right: 1px solid $blue-gray !important;
+
+		&:last-of-type {
+			border-right: 0 !important;
+		}
+	}
+
+	thead th.sorting_asc,
+	thead th.sorting_desc,
+	thead th.sorting:hover {
+		background-color: $color__background-table-sorted !important;
+	}
+
+	tr.odd td {
+		background-color: $white !important;
+	}
+
+	tr.even td {
+		background-color: $off-white !important;
+	}
+
+	tr.odd,
+	tr.even {
+		td.sorting_1 {
+			background-color: $color__background-table-sorted !important;
+		}
+
+		&:hover td { background-color: $color__background-table-row-hover !important; }
+	}
+
+	tr td:first-child {
+		border-left: 0;
+	}
+
+	tr td {
+		border-left-color: $line-gray !important;
+		border-bottom-color: $blue-gray !important;
+		border-right: 0 !important;
+		border-top: 0 !important;
+	}
+
+	tfoot {
+		td {
+			padding-top: 4px !important;
+			padding-bottom: 4px !important;
+		}
+		.form-control {
+			font-size: 12px !important;
+		}
+	}
+}
+
+/*----------  Form Elements  ----------*/
+.wpDataTablesWrapper {
+	label {
+		font-weight: normal !important;
+	}
+}
+
+.wpdt-c .form-control {
+	font-size: 16px !important;
+}
+
+/*----------  Info  ----------*/
+.wpDataTablesWrapper .dataTables_info {
+	margin-top: 0 !important;
+	font-size: 12px !important;
+}
+
+/*----------  Pagination  ----------*/
+.wpDataTablesWrapper .paging_full_numbers {
+	margin-top: 0 !important;
+	line-height: 12px !important;
+	height: 12px !important;
+
+	a {
+		line-height: 1 !important;
+	}
+
+	span a {
+		font-size: 12px !important;
+	}
+
+	.paginate_button:before
+	{
+		font-size: 10px !important;
+	}
+}
+
