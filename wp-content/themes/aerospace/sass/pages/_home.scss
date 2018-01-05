@@ -142,7 +142,7 @@
     		margin-right: 0;
 
     		@include breakpoint("medium") {
-    			padding: 2rem;
+    			padding: 2rem 2rem 2.5rem 2rem;
     			margin-left: -0.5rem;
     			margin-right: -0.5rem;
     		}
@@ -228,7 +228,7 @@
     		margin-bottom: 3rem;
 
     		@include breakpoint("medium") {
-    			margin-bottom: 4rem;
+    			margin-bottom: 3.5rem;
     		}
 
     		.calendar-container {
