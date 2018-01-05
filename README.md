@@ -32,6 +32,7 @@ To update dependencies, run `composer update`.
 - Related
 - Search by Aloglia
 - TinyMCE Advanced
+- WP DataTables (Premium)
 - Yoast SEO
 
 ### PHP Codesniffer
