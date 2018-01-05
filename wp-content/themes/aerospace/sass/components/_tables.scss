@@ -6,13 +6,12 @@ table {
 	font-family: $font__abel;
 
 	thead {
-		border: 1px solid $dark-blue;
-		border-bottom: 0;
+		border: 0;
 
 		th {
 			display: none;
-			background-color: $dark-blue;
-			color: $white;
+			background-color: $line-gray;
+			color: $black;
 			@include fontSize(20px);
 			font-weight: normal;
 
@@ -49,12 +48,12 @@ table {
 	td {
 		border: 1px solid $blue-gray;
 		letter-spacing: 0.5px;
-		font-family: $font__abel;
+		font-family: $font__source;
 		@include fontSize(16px);
 	}
 
-	tbody tr:nth-child(even) { background-color: $white; }
-	tbody tr:nth-child(odd) { background-color: $off-white; }
+	tbody tr:nth-child(even) { background-color: $off-white; }
+	tbody tr:nth-child(odd) { background-color: $white; }
 
 	&.plain {
 		tbody tr:nth-child(even) { background-color: $white; }
