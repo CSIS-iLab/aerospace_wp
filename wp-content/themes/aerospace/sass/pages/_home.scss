@@ -207,9 +207,11 @@
     }
 
     .feature-secondary-sidebar {
+        margin-top: 2rem;
     	padding-bottom: 2rem;
 
     	@include breakpoint("medium") {
+            margin-top: 0;
     		padding: 0 3rem;
     	}
 
