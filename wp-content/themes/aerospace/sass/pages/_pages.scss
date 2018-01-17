@@ -161,3 +161,13 @@ h3.about-team {
 		}
 	}
 }
+
+/*----------  Subscription/Event Forms  ----------*/
+
+//Dropdown Options
+.dropdown-form {
+	width: 90%;
+	@include breakpoint("medium") {
+		width: 510px;
+	}
+}
