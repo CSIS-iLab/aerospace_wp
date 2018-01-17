@@ -34,6 +34,7 @@ function post_build_meta_box( $post ) {
 	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
 	$current_report_cover_url = get_post_meta( $post->ID, '_post_report_cover_url', true );
+	$current_disable_post_bottom_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
 
 
 	?>
@@ -106,6 +107,10 @@ function post_build_meta_box( $post ) {
 		<p>
 			<input type="checkbox" name="disable_feature_img" value="1" <?php checked( $current_disable_feature_img, '1' ); ?> /> Yes, disable the feature image
 		</p>
+		<h3><?php esc_html_e( 'Disable Icon at Bottom of Post?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="disable_post_bottom_icon" value="1" <?php checked( $current_disable_post_bottom_icon, '1' ); ?> /> Yes, disable the plane icon at the bottom of the post
+		</p>
 	</div>
 	<?php
 }
@@ -167,6 +172,12 @@ function post_save_meta_box_data( $post_id ) {
 		update_post_meta( $post_id, '_post_disable_feature_img', sanitize_text_field( $_POST['disable_feature_img'] ) );
 	} else {
 		update_post_meta( $post_id, '_post_disable_feature_img', '' );
+	}
+	// Disable Icon at Bottom of posts.
+	if ( isset( $_REQUEST['disable_post_bottom_icon'] ) ) {
+		update_post_meta( $post_id, '_post_disable_post_bottom_icon', sanitize_text_field( $_POST['disable_post_bottom_icon'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_disable_post_bottom_icon', '' );
 	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );
