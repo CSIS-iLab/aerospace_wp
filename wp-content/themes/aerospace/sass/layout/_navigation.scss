@@ -284,8 +284,17 @@
         .submenu-featured-post {
             order: 3;
 
-            .post-thumbnail a {
-                transition: none;
+            .post-thumbnail {
+                margin-bottom: 0.5rem;
+
+                a {
+                    transition: none;
+                }
+
+                img {
+                    max-height: 180px;
+                    object-fit: cover;
+                }
             }
 
             .post-desc {
