@@ -163,11 +163,27 @@ h3.about-team {
 }
 
 /*----------  Subscription/Event Forms  ----------*/
+.googleforms {
+	.required { color: $orange; }
+	select {
+		width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		box-shadow: none;
+		padding-right: 2rem;
 
-//Dropdown Options
-.dropdown-form {
-	width: 90%;
-	@include breakpoint("medium") {
-		width: 510px;
+		@include breakpoint("medium") {
+			width: 60%;
+			padding-right: 0.6rem;
+		}
+	}
+
+	input[type="text"],
+	textarea {
+		width: 100%;
+
+		@include breakpoint("medium") {
+			width: 60%;
+		}
 	}
 }
