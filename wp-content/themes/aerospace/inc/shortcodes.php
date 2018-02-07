@@ -111,7 +111,7 @@ function aerospace_shortcode_data( $atts ) {
 	$data_post_url = get_permalink( $atts['id'] );
 
 	// Fallback Image
-	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallbackImgDisabled', true );
+	$fallbackImgDisabled = get_post_meta( $atts['id'], '_data_fallback_img_disabled', true );
 
 	if( $fallbackImgDisabled ) {
 		$fallback_img = null;

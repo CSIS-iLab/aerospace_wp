@@ -56,3 +56,37 @@
 		font-style: italic;
 	}
 }
+
+/*----------  Full Width Content  ----------*/
+.fullWidthFeatureContent {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    text-align: center;
+
+    .fullWidthInner {
+        margin: 0 auto;
+
+        // On small screens, we always want to override the inline styles and set a max width of less than the full width.
+        &[style] {
+        	@media screen and (max-width: $breakpoint-medium) {
+        		max-width: 90% !important;
+        	}
+        }
+    }
+
+    .overlay-isActive & {
+        position: static;
+    }
+
+    @include breakpoint("medium") {
+        .sharing-shareBtns.isVisible {
+            max-width: $size__content-max-width;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
