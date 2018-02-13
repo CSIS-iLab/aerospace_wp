@@ -119,15 +119,16 @@ if ( ! function_exists( 'aerospace_entry_data_categories' ) ) :
 endif;
 
 if ( ! function_exists( 'exclude_post_categories' ) ) :
-		/**
-		 * Creates function to filter out primary category id from catlist
-		 */
-		function exclude_post_categories($excl='', $spacer='') {
-			$categories = get_the_category($post->ID);
-			if (!empty($categories)) {
-				$exclude = $excl;
-				$exclude = explode(",", $exclude);
-				$thecount = count(get_the_category()) - count($exclude);
+	/**
+	 * Creates function to filter out primary category id from catlist
+	 */
+	function exclude_post_categories($excl='', $spacer='') {
+		$categories = get_the_category($post->ID);
+		if (!empty($categories)) {
+			$exclude = $excl;
+			$exclude = explode(",", $exclude);
+			$thecount = count(get_the_category()) - count($exclude);
+			if ( $exclude[0] ) {
 				foreach ($categories as $cat) {
 					$html = '';
 					if (!in_array($cat->cat_ID, $exclude)) {
@@ -142,7 +143,8 @@ if ( ! function_exists( 'exclude_post_categories' ) ) :
 				}
 			}
 		}
-	endif;
+	}
+endif;
 
 	if ( ! function_exists( 'aerospace_entry_primary_cats' ) ) :
 	/**
@@ -160,6 +162,7 @@ if ( ! function_exists( 'exclude_post_categories' ) ) :
 				$wpseo_primary_term = new WPSEO_Primary_Term( 'category', get_the_id() );
 				$wpseo_primary_term = $wpseo_primary_term->get_primary_term();
 				$term = get_term( $wpseo_primary_term );
+
 				if (is_wp_error($term)) {
 				// Default to first category (not Yoast) if an error is returned
 					$category_display = $category[0]->name;
