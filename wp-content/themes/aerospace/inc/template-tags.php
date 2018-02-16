@@ -364,7 +364,7 @@ endif;
 		}
 	endif;
 
-	if ( ! function_exists( 'aerospace_post_sources' ) ) :
+if ( ! function_exists( 'aerospace_post_sources' ) ) :
 	/**
 	 * Returns HTML with source info if it exists.
 	 *
@@ -372,33 +372,53 @@ endif;
 	 */
 	function aerospace_post_sources( $id ) {
 		$post_type = get_post_type();
-		if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) ) {
+		if ( in_array( $post_type, array( 'post', 'aerospace101', 'data' ), true ) ) {
 			$sources = get_post_meta( $id, '_post_sources', true );
+
+			$colmd = 'col-md';
+			$icon = '';
+			$collapsible = '';
+
+			if ( in_array( $post_type, array( 'aerospace101', 'data' ) ) ) {
+				$colmd = 'col-md-12';
+				$icon = '<i class="icon-arrow-right"></i> ';
+				$collapsible = ' collapsible-content-container';
+			}
 
 			if ( '' !== $sources ) {
 				$sources = apply_filters('meta_content', $sources);
-				printf( '<div class="entry-sources col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Sources', 'aerospace') . '</h4>%1$s</div>', $sources); // WPCS: XSS OK.
+				printf( '<div class="entry-sources col-xs-12 %2$s%4$s"><h4 class="subheading">%3$s' . esc_html( 'Sources', 'aerospace') . '</h4><div class="collapsible-content">%1$s</div></div>', $sources, $colmd, $icon, $collapsible); // WPCS: XSS OK.
 			}
 		}
 	}
 endif;
 
 if ( ! function_exists( 'aerospace_post_footnotes' ) ) :
-		/**
-		 * Returns HTML with post footnotes if they exist.
-		 *
-		 */
-		function aerospace_post_footnotes() {
-			global $footnoteCopy;
+/**
+ * Returns HTML with post footnotes if they exist.
+ *
+ */
+	function aerospace_post_footnotes() {
+		if ( class_exists( 'easyFootnotes' ) ) {
+			global $easyFootnotes;
+			$footnotes = $easyFootnotes->easy_footnote_after_content('');
+
 			$post_type = get_post_type();
-			if ( in_array( $post_type, array( 'post', 'aerospace101' ), true ) && $footnoteCopy != '' ) {
+			if ( in_array( $post_type, array( 'post', 'aerospace101', 'data' ), true ) && $footnotes != '' ) {
+			$colmd = 'col-md';
+			if ( in_array( $post_type, array( 'aerospace101', 'data' ) ) ) {
+				$colmd = 'col-md-12';
+				$icon = '<i class="icon-arrow-right"></i> ';
+				$collapsible = ' collapsible-content-container';
+			}
 
-						printf( '<div class="entry-footnotes col-xs-12 col-md"><h4 class="subheading">' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnoteCopy); // WPCS: XSS OK.
-					}
-				}
-			endif;
+			printf( '<div class="entry-footnotes col-xs-12 %2$s"><h4 class="subheading">' . esc_html( 'Footnotes', 'aerospace') . '</h4><ol class="easy-footnotes-wrapper">%1$s</ol></div>', $footnotes, $colmd); // WPCS: XSS OK.
+			}
+		}
+	}
+endif;
 
-			if ( ! function_exists( 'aerospace_related_content' ) ) :
+if ( ! function_exists( 'aerospace_related_content' ) ) :
 	/**
 	 * Displays related content to the current post
 	 * @param  Array $rel Array of related posts

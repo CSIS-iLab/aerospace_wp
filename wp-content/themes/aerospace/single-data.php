@@ -76,16 +76,17 @@ get_header(); ?>
 
 			<footer class="entry-footer">
 				<section class="footer-top content-padding row">
-					<div class="entry-citation col-xs-12 col-md-5">
+					<div class="entry-citation col-xs-12 col-md-9">
 						<?php aerospace_citation(); ?>
 					</div>
-					<div class="entry-data-source col-xs-12 col-md-5">
-						<?php aerospace_data_source( $post->ID ); ?>
-					</div>
-					<div class="entry-share col-xs-12 col-md-2">
+					<div class="entry-share col-xs-12 col-md-3">
 						<?php get_template_part( 'components/share-inline' ); ?>
 					</div>
 				</section>
+				<section class="footer-middle content-padding row">
+					<?php aerospace_post_footnotes(); ?>
+		    		<?php aerospace_post_sources( $post->ID ); ?>
+		    	</section>
 				<?php aerospace_return_to_archive(); ?>
 				<?php get_template_part( 'components/explore-more' ); ?>
 			</footer><!-- .entry-footer -->
