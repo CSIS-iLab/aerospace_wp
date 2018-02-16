@@ -112,5 +112,11 @@ a.btn {
 			@include fontSize(12px);
 			margin-right: 0.3rem;
 		}
+
+		.entry-content-post-body & {
+			max-width: -moz-fit-content;
+			max-width: fit-content;
+			margin: 0 auto;
+		}
 	}
 }
