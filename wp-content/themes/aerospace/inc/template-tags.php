@@ -734,29 +734,6 @@ if ( ! function_exists( 'aerospace_return_to_archive' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'aerospace_data_source' ) ) :
-	/**
-	 * Returns HTML with data source info and URL if it exists.
-	 *
-	 * @param  int $id Post ID.
-	 */
-	function aerospace_data_source( $id ) {
-		$post_type = get_post_type();
-		if ( 'data' === $post_type ) {
-			$sources = get_post_meta( $id, '_data_source', true );
-			$url = get_post_meta( $id, '_data_source_url', true );
-
-			if ( '' !== $url ) {
-				$url = '<a href="' . esc_url( $url ) . '" class="data-sources-view">' . esc_html__( 'View', 'aerospace' ) . '<i class="icon-external-open"></i></a>';
-			}
-
-			if ( '' !== $sources ) {
-				printf( '<div class="data-sources"><span class="meta-label">' . esc_html( 'Data Source', 'aerospace') . '</span><p>%1$s%2$s</p></div>', $sources, $url ); // WPCS: XSS OK.
-			}
-		}
-	}
-endif;
-
 if ( ! function_exists( 'aerospace_sort_filter' ) ) :
 	/**
 	 * Returns HTML with Sort options for archives and search.
