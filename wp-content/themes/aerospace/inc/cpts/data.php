@@ -85,7 +85,8 @@ function data_build_meta_box( $post ) {
 	wp_nonce_field( basename( __FILE__ ), 'data_meta_box_nonce' );
 
 	// Retrieve current value of fields.
-	$current_source = get_post_meta( $post->ID, '_data_source', true );
+	$current_data_source = get_post_meta( $post->ID, '_data_source', true );
+	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_url = get_post_meta( $post->ID, '_data_url', true );
 	$current_width = get_post_meta( $post->ID, '_data_width', true );
 	$current_full_width = get_post_meta( $post->ID, '_data_full_width', true );
@@ -154,7 +155,27 @@ function data_build_meta_box( $post ) {
 
 		<h3><?php esc_html_e( 'Source', 'aerospace' ); ?></h3>
 		<p>
-			<textarea rows="5" name="source" style="width: 100%;"><?php echo esc_textarea( $current_source ); ?></textarea>
+			<textarea rows="5" name="data_source" style="width: 100%;"><?php echo esc_textarea( $current_data_source ); ?></textarea>
+		</p>
+
+		<h3><?php esc_html_e( 'Sources', 'aerospace' ); ?></h3>
+		<p>
+			<?php
+				wp_editor(
+					$current_sources,
+					'post_sources',
+					array(
+						'media_buttons' => false,
+						'textarea_name' => 'sources',
+						'teeny' => false,
+						'tinymce' => array(
+							'menubar' => false,
+							'toolbar1' => 'bold,italic,underline,strikethrough,subscript,superscript,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink',
+							'toolbar2' => false,
+						),
+					)
+				);
+			?>
 		</p>		
 
 		<h3><?php esc_html_e( 'Source URL', 'aerospace' ); ?></h3>
@@ -190,8 +211,8 @@ function data_save_meta_box_data( $post_id ){
 	}
 
 	// Source.
-	if ( isset( $_REQUEST['source'] ) ) { // Input var okay.
-		update_post_meta( $post_id, '_data_source', sanitize_textarea_field( wp_unslash( $_POST['source'] ) ) ); // Input var okay.
+	if ( isset( $_REQUEST['data_source'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_data_source', sanitize_textarea_field( wp_unslash( $_POST['data_source'] ) ) ); // Input var okay.
 	}
 	// URL
 	if ( isset( $_REQUEST['url'] ) ) { // Input var okay.
@@ -240,6 +261,10 @@ function data_save_meta_box_data( $post_id ){
 	// Twitter Pic
 	if ( isset( $_REQUEST['twitter_pic_url'] ) ) {
 		update_post_meta( $post_id, '_data_twitter_pic_url', esc_url( $_POST['twitter_pic_url'] ) );
+	}
+	// Sources.
+	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
 	}
 }
 add_action( 'save_post_data', 'data_save_meta_box_data' );

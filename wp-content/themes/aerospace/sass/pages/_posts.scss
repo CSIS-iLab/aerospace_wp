@@ -308,6 +308,29 @@
             p {
                 margin-bottom: 0.75rem;
             }
+
+            &.collapsible-content-container {
+                .subheading {
+                    margin-bottom: 0;
+                    cursor: pointer;
+
+                    &.expanded { margin-bottom: 1rem;}
+                }
+                i {
+
+                    &::before {
+                        transform: none;
+                        @include transition( transform 400ms ease-in-out );
+                    }
+
+                    &.rotated::before {
+                        transform: rotate(90deg);
+                    }
+                }
+                .collapsible-content {
+                    display: none;
+                }
+            }
         }
 
         .entry-footnotes {
@@ -358,7 +381,6 @@
             margin-bottom: 0;
         }
     }
-
 }
 
 // Card Format for archives & search results.

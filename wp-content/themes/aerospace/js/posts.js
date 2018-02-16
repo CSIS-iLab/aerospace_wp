@@ -16,8 +16,19 @@
 	        })
 	    }
     }
-
     highlightsClick();
+
+    function expandCollapsibleContent() {
+      var collapsibleContent = $(".collapsible-content-container .subheading");
+      if ( collapsibleContent.length ) {
+          collapsibleContent.on("click", function() {
+            $(this).toggleClass('expanded');
+            $(this).siblings(".collapsible-content").slideToggle();
+            $(this).children("i").toggleClass('rotated');
+          })
+      }
+    }
+    expandCollapsibleContent();
 
     $(window).resize(function () {
 		breakpoint = getComputedStyle(document.body).getPropertyValue("--breakpoint").replace(/\"/g, '');

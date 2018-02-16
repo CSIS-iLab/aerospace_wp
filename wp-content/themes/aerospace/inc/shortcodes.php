@@ -193,3 +193,24 @@ function shortcode_publication( $atts ) {
 	return '<div class="post-external-publication"><a href="' . esc_url( $url ) . '" target="_blank" rel="nofollow">' . esc_html( 'Read the full article in', 'aerospace') . ' <span class="post-external-publication-title">' . esc_attr( $title ) . '</span><i class="icon-external-open"></i></a></div>';
 }
 add_shortcode( 'publication', 'shortcode_publication' );
+
+/**
+ * Adds button to download PDF
+ * @return string        HTML of link.
+ */
+function shortcode_download( $atts ) {
+	// Attributes
+	$atts = shortcode_atts(
+	 	array(
+		 	'label' => 'Download PDF',
+			'url' => null,
+	 	),
+		$atts,
+		'download'
+	);
+	$label = $atts['label'];
+	$url = $atts['url'];
+
+	return '<a href="' . esc_url( $url ) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i> ' . $label . '</a>';
+}
+add_shortcode( 'download', 'shortcode_download' );

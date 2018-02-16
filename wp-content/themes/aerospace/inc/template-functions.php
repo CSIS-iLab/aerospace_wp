@@ -204,7 +204,7 @@ if ( class_exists( 'easyFootnotes' ) ) {
         $content = preg_replace('#<ol[^>]*class="easy-footnotes-wrapper"[^>]*>.*?</ol>#is', '', $content);
         return $content;
     }
-    add_filter('the_content', 'aerospace_remove_easy_footnotes', 30);
+    add_filter('the_content', 'aerospace_remove_easy_footnotes', 20);
 }
 
 /**

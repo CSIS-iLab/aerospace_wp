@@ -143,7 +143,7 @@
      });
        }
    });
-       editor.addButton('publication', {
+    editor.addButton('publication', {
         text: 'External Publication',
         tooltip: 'Insert External Publication Link',
         onclick: function() {
@@ -169,6 +169,40 @@
                 ],
                 onsubmit: function( e ) {
                     editor.insertContent( '[publication title="' + e.data.title + '" url="' + e.data.url + '"]');
+                }
+            });
+        }
+    });
+    editor.addButton('download', {
+        text: 'Download',
+        tooltip: 'Insert Download PDF Button',
+        onclick: function() {
+            editor.windowManager.open( {
+                title: 'Insert Download PDF Button',
+                width: 400,
+                height: 100,
+                body: [
+                {
+                    type: 'textbox',
+                    multiline: false,
+                    name: 'label',
+                    label: 'Button Label',
+                    placeholder: 'Download PDF'
+                },
+                {
+                    type: 'textbox',
+                    multiline: false,
+                    name: 'url',
+                    label: 'PDF URL',
+                    placeholder: 'The URL to the PDF'
+                }
+                ],
+                onsubmit: function( e ) {
+                  var label = ''
+                  if ( e.data.label ) {
+                    label = ' label="' + e.data.label + '"'
+                  }
+                  editor.insertContent( '[download' + label + ' url="' + e.data.url + '"]');
                 }
             });
         }
