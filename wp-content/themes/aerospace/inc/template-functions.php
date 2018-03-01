@@ -271,3 +271,30 @@ function aerospace_filter_guest_author_fields( $fields_to_return, $groups ) {
     }
     return $fields_to_return;
 }
+
+/**
+ * Only use Photon for images belonging to our site.
+ *
+ * @see https://wordpress.org/support/?p=8513006
+ *
+ * @param bool         $skip      Should Photon ignore that image.
+ * @param string       $image_url Image URL.
+ * @param array|string $args      Array of Photon arguments.
+ * @param string|null  $scheme    Image scheme. Default to null.
+ */
+function jeherve_photon_only_allow_local( $skip, $image_url, $args, $scheme ) {
+    // Get the site URL, without any protocol.
+    $site_url = preg_replace( '~^(?:f|ht)tps?://~i', '', get_site_url() );
+ 
+    /**
+     * If the image URL is from our site,
+     * return default value (false, unless another function overwrites).
+     * Otherwise, do not use Photon with it.
+     */
+    if ( strpos( $image_url, $site_url ) ) {
+        return $skip;
+    } else {
+        return true;
+    }
+}
+add_filter( 'jetpack_photon_skip_for_url', 'jeherve_photon_only_allow_local', 9, 4 );
