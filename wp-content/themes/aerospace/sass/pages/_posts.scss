@@ -651,4 +651,29 @@
             @include fontSize(24px);
         }
     }
+
+    /*----------  Multimedia Post  ----------*/
+    &:not(.post_types-multimedia) .multimedia-post { display: none; }
+    &.post_types-multimedia .multimedia-post {
+        position: absolute;
+        left: 0.5rem;
+        top: 0.25rem;
+
+        i {
+            @include fontSize(20px);
+            color: $primary-blue;
+            background-color: transparentize($white, 0.3);
+            border-radius: 50%;
+
+            &::before {
+                margin-right: 0;
+                padding-top: 0.2rem;
+            }
+        }
+    }
+
+    &.post_types-multimedia.featured .multimedia-post i {
+        @include fontSize(34px);
+    }
+
 }
