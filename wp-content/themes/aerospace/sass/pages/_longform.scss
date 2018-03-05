@@ -1,0 +1,177 @@
+/*================================
+=            Longform            =
+================================*/
+
+%fullWidth {
+    position: relative;
+    left: 50%;
+    right: 50%;
+    width: 100vw;
+    min-height: 80vh;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.post-template-single-longform {
+    .site-content {
+        background-color: $off-white;
+    }
+
+    .hentry {
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .content-padding {
+        @include contentWidth(2rem, 2rem, 4rem);
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .entry-header {
+        @extend %fullWidth;
+        background-color: $dark-blue;
+        background-position: center center;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+    }
+
+    .title-container {
+        position: relative;
+        z-index: 5;
+        border-bottom: 0;
+
+        .entry-title {
+            position: relative;
+            color: $white;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+
+            &::after {
+                display: block;
+                content: "";
+                border-bottom: 2px solid $orange;
+                height: 2px;
+                width: 0;
+                bottom: 0;
+                left: -2rem;
+                position: absolute;
+            }
+        }
+
+        p {
+            color: $white;
+            margin-right: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .entry-meta-bottom {
+            display: inline-block;
+            border-top: 1px solid $gray;
+            padding: 1.5rem 3rem 1rem 0;
+        }
+
+        &.aos-animate .entry-title::after {
+            width: calc(100% + 2rem);
+            transition: width 2s ;
+            transition-delay: 1.5s;
+        }
+    }
+
+    .posted-on,
+    .authors-list {
+        display: block;
+        color: $white;
+    }
+
+    .authors-list a,
+    .authors-list a:visited {
+        color: $white;
+        box-shadow: none;
+    }
+
+    .cat-links {
+        &::before {
+            @extend .meta-label;
+            content: 'Topics';
+        }
+        ul {
+            margin-left: 0;
+        }
+
+        li a {
+            color: $white;
+        }
+    }
+
+    p.thumbnail-caption {
+        @extend .meta-label;
+        text-transform: none;
+        color: $gray;
+        margin-bottom: 0;
+    }
+
+    .entry-content {
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+
+        &-post-body {
+            margin: 0 auto;
+            @include postBodyMaxWidth();
+        }
+    }
+
+    /*----------  Section Overlay  ----------*/
+    .section-overlay {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        display: block;
+        background-color: $color__longform-overlay;
+    }
+
+    /*----------  Section Header  ----------*/
+    .longform-section-header {
+        @extend %fullWidth;
+        background-color: $dark-blue;
+        background-position: center center;
+        background-size: cover;
+        margin-top: 7rem;
+        margin-bottom: 4rem;
+        border-top: 3rem solid $off-white;
+
+        .section-content {
+            position: relative;
+            z-index: 5;
+            max-width: 700px;
+            margin: 40vh auto 5rem;
+
+            &::before {
+                display: block;
+                content: "";
+                border-left: 2px solid $orange;
+                height: 0px;
+                width: 5px;
+                position: absolute;
+                left: -1rem;
+            }
+        }
+
+        .section-overlay.aos-animate + .section-content::before {
+            height: 100%;
+            transition: height 2s;
+        }
+
+        h2,
+        p {
+            color: $white;
+        }
+
+        h2 {
+            margin: 0 0 1rem;
+        }
+    }
+}

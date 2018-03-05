@@ -68,6 +68,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   ## Data
   ## Aerospace101
   ## Search
+  ## Longform
 # Vendors
 --------------------------------------------------------------*/
 
@@ -129,10 +130,12 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
   'pages/events',
   'pages/data',
   'pages/aerospace101',
-  'pages/search';
+  'pages/search',
+  'pages/longform';
 
 /*----------  Vendors  ----------*/
 @import
   'vendors/flexbox/flexbox-main',
   'vendors/flexbox/flexbox-helpers',
-  'vendors/fontello/fontello';
+  'vendors/fontello/fontello',
+  'vendors/aos/aos';
