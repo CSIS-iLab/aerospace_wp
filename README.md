@@ -31,6 +31,7 @@ To update dependencies, run `composer update`.
 - Menu Item Custom Fields
 - Related
 - Search by Aloglia
+- SVG Support
 - TinyMCE Advanced
 - WP DataTables (Premium)
 - Yoast SEO

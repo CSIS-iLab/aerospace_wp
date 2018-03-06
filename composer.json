@@ -27,6 +27,7 @@
 				"wpackagist-plugin/jetpack": "*",
 				"wpackagist-plugin/search-by-algolia-instant-relevant-results": "*",
 				"wpackagist-plugin/regenerate-thumbnails": "*",
-				"wpackagist-plugin/related": "*"
+				"wpackagist-plugin/related": "*",
+				"wpackagist-plugin/svg-support": "*"
 		}
 }
