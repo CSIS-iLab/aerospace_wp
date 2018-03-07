@@ -98,6 +98,10 @@
 	@include fontSize(16px);
 	max-width: 300px;
 
+	@include breakpoint("medium") {
+		max-width: 350px;
+	}
+
 	&.aligncenter {
 		margin-bottom: 1.5rem;
 	}
@@ -135,6 +139,9 @@
 	border-top: 2px solid $orange;
 	max-width: 300px;
 
+	@include breakpoint("medium") {
+		max-width: 350px;
+	}
 
 	&.aligncenter {
 		margin-bottom: 1.5rem;

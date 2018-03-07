@@ -37,11 +37,72 @@ function longform_section_header( $atts , $content = null ) {
 	}
 
 	return '<div class="longform-section-header"' . $image_url_html . '>
-		<div class="section-overlay' . $theme_class . '" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-anchor=".section-content" data-aos-offset="200" data-aos-duration="600"></div>
-		<div class="section-content" data-aos="fade" data-aos-delay="300" data-aos-easing="ease-in-quad" data-aos-duration="600">
-			<h2>' . $atts['title'] . '</h2>' . do_shortcode($content) . $image_caption_html . '
+		<div class="longform-section-overlay' . $theme_class . '" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-anchor=".section-content" data-aos-offset="200" data-aos-duration="600"></div>
+		<div class="section-content">
+			<h2 class="section-title">' . $atts['title'] . '</h2>' . do_shortcode($content) . $image_caption_html . '
 		</div>
 	</div>';
 }
 add_shortcode( 'lf-section-header', 'longform_section_header' );
+
+/**
+ * Shortcode for displaying post-first-sentence
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Full width embedded content
+ */
+function longform_section_explainer( $atts , $content = null ) {
+	$atts = shortcode_atts(
+	 	array(
+	 		'id' => null,
+			'title' => null,
+			'image' => null,
+			'image_classes' => null,
+			'source' => null,
+			'align' => null,
+			'theme' => 'dark'
+	 	),
+		$atts,
+		'lf-section-explainer'
+	);
+
+	if ( $atts['id'] ) {
+		$id = ' id="' . $atts['id'] . '"';
+	}
+
+	if ( 'light' == $atts['theme'] ) {
+		$theme_class = ' section-light';
+	} else {
+		$theme_class = '';
+	}
+
+	$image_attrs = array();
+	if ( $atts['image_classes'] ) {
+		$image_attrs['class'] = $atts['image_classes'];
+	}
+
+	if ( $atts['image'] ) {
+		if ( $atts['source'] ) {
+			$image_caption = '<figcaption class="wp-caption-text">' . esc_html_x( 'Source: ', 'aerospace' ) . $atts['source'] . '</figcaption>';
+		}
+
+		$image_html = '<figure class="section-img" data-aos="fade" data-aos-duration="200">' . wp_get_attachment_image( $atts['image'], 'full', false, $image_attrs) . $image_caption . '</figure>';
+	}
+
+	if ( 'left' == $atts['align'] ) {
+		$section_alignment = ' section-left';
+	} elseif ( 'right' == $atts['align'] ) {
+		$section_alignment = ' section-right';
+	}
+
+	return '<div class="longform-section-explainer' . $section_alignment . '"' . $id . '>
+		<div class="longform-section-overlay' . $theme_class . '" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
+		<div class="section-content content-padding">' . $image_html . '
+			<div class="section-text">
+				<h3 class="section-title">' . $atts['title'] . '</h3>' . do_shortcode($content)  . '
+			</div>
+		</div>
+	</div>';
+}
+add_shortcode( 'lf-section-explainer', 'longform_section_explainer' );
 

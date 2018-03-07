@@ -17,7 +17,7 @@ get_header(); ?>
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<header class="entry-header row" style="background-image:url(<?php echo $featured_img_url; ?>);">
-				<div class="section-overlay" data-aos="fade" data-aos-delay="800" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
+				<div class="longform-section-overlay" data-aos="fade" data-aos-delay="800" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 				<div class="title-container content-padding col-xs-12" data-aos="fade" data-aos-delay="1200" data-aos-easing="ease-in-quad" data-aos-duration="600">
 					<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 					<?php the_excerpt(); ?>

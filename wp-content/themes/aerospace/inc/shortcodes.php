@@ -224,21 +224,21 @@ add_shortcode( 'download', 'shortcode_download' );
 function shortcode_aside( $atts, $content = null ) {
 	$atts = shortcode_atts(
 	 	array(
-			'direction' => 'left',
+			'align' => 'left',
 	 	),
 		$atts,
 		'aside'
 	);
 
-	if ( 'right' == $atts['direction'] ) {
-		$direction_class = ' alignright';
-	} elseif ( 'left' == $atts['direction'] ) {
-		$direction_class = ' alignleft';
-	} elseif ( 'center' == $atts['direction'] ) {
-		$direction_class = ' aligncenter';
+	if ( 'right' == $atts['align'] ) {
+		$align_class = ' alignright';
+	} elseif ( 'left' == $atts['align'] ) {
+		$align_class = ' alignleft';
+	} elseif ( 'center' == $atts['align'] ) {
+		$align_class = ' aligncenter';
 	}
 
-	return '<aside class="post-aside' . $direction_class . '">' . do_shortcode( $content ) . '</aside>';
+	return '<aside class="post-aside' . $align_class . '">' . do_shortcode( $content ) . '</aside>';
 }
 add_shortcode( 'aside', 'shortcode_aside' );
 
@@ -251,7 +251,7 @@ add_shortcode( 'aside', 'shortcode_aside' );
 function shortcode_external_analysis( $atts ) {
 	$atts = shortcode_atts(
 	 	array(
-			'direction' => 'left',
+			'align' => 'left',
 			'organization' => null,
 			'title' => null,
 			'url' => null
@@ -264,12 +264,12 @@ function shortcode_external_analysis( $atts ) {
 		return;
 	}
 
-	if ( 'right' == $atts['direction'] ) {
-		$direction_class = ' alignright';
-	} elseif ( 'left' == $atts['direction'] ) {
-		$direction_class = ' alignleft';
-	} elseif ( 'center' == $atts['direction'] ) {
-		$direction_class = ' aligncenter';
+	if ( 'right' == $atts['align'] ) {
+		$align_class = ' alignright';
+	} elseif ( 'left' == $atts['align'] ) {
+		$align_class = ' alignleft';
+	} elseif ( 'center' == $atts['align'] ) {
+		$align_class = ' aligncenter';
 	}
 
 	$organization = esc_html( 'Read more about this topic', 'aerospace' );
@@ -279,6 +279,6 @@ function shortcode_external_analysis( $atts ) {
 
 	$link = '<a href="' . esc_url( $atts['url'] ) . '" target="_blank">"' . esc_html( $atts['title'] ) . '"<i class="icon icon-external-open"></i></a>';
 
-	return '<aside class="external-analysis' . $direction_class . '"><p>' . $organization . '</p><p class="external-link">' . $link . '</p></aside>';
+	return '<aside class="external-analysis' . $align_class . '"><p>' . $organization . '</p><p class="external-link">' . $link . '</p></aside>';
 }
 add_shortcode( 'external-analysis', 'shortcode_external_analysis' );
