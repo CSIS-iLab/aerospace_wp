@@ -100,8 +100,8 @@ function longform_section_explainer( $atts , $content = null ) {
 		$section_alignment = ' section-right';
 	}
 
-	return '<div class="longform-section-explainer' . $section_alignment . '"' . $id . '>
-		<div class="longform-section-overlay' . $theme_class . '" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
+	return '<div class="longform-section-explainer' . $section_alignment . $theme_class . '"' . $id . '>
+		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 		<div class="section-content content-padding">' . $image_html . '
 			<div class="section-text">
 				<h3 class="section-title">' . $atts['title'] . '</h3>' . do_shortcode($content)  . '

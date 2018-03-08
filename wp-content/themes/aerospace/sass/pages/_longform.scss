@@ -12,6 +12,11 @@
 }
 
 .post-template-single-longform {
+    @include breakpoint("small") {
+        .site-header { height: 0; }
+        .header-top { display: none; }
+    }
+
     .site-content {
         background-color: $off-white;
     }
@@ -42,6 +47,14 @@
         z-index: 5;
         border-bottom: 0;
 
+        .section-text {
+            padding: 0 2rem;
+
+            @include breakpoint("medium") {
+                padding: 0;
+            }
+        }
+
         .entry-title {
             position: relative;
             color: $white;
@@ -54,9 +67,13 @@
                 border-bottom: 2px solid $orange;
                 height: 2px;
                 width: 0;
-                bottom: 0;
-                left: -2rem;
                 position: absolute;
+                bottom: 0;
+                left: -1rem;
+
+                @include breakpoint("medium") {
+                    left: -2rem;
+                }
             }
         }
 
@@ -73,16 +90,26 @@
         }
 
         &.aos-animate .entry-title::after {
-            width: calc(100% + 2rem);
+            width: calc(100% + 1rem);
             transition: width 2s ;
             transition-delay: 1.5s;
+
+            @include breakpoint("medium") {
+                width: calc(100% + 2rem);
+            }
         }
+    }
+
+    .meta-label {
+        color: $blue-gray;
+        line-height: 1.2;
     }
 
     .posted-on,
     .authors-list {
         display: block;
         color: $white;
+        line-height: 1.5;
     }
 
     .authors-list a,
@@ -92,6 +119,8 @@
     }
 
     .cat-links {
+        line-height: 1.3;
+
         &::before {
             @extend .meta-label;
             content: 'Topics';
@@ -113,8 +142,13 @@
     }
 
     .entry-content {
-        margin-top: 4rem;
-        margin-bottom: 4rem;
+        margin-top: $size__longform-margin-sm;
+        margin-bottom: $size__longform-margin-sm;
+
+        @include breakpoint("medium") {
+            margin-top: $size__longform-margin-md;
+            margin-bottom: $size__longform-margin-md;
+        }
 
         &-post-body {
             margin: 0 auto;
@@ -133,7 +167,7 @@
     display: block;
     background-color: $color__longform-overlay;
 
-    &.section-light {
+    .section-light & {
         background-color: rgba($white, 0.6);
     }
 }
@@ -144,16 +178,27 @@
     background-color: $dark-blue;
     background-position: center center;
     background-size: cover;
-    margin-top: 7rem;
-    margin-bottom: 4rem;
+    margin-top: 4rem;
+    margin-bottom: $size__longform-margin-sm;
     border-top: 3rem solid $off-white;
-    padding: 40vh 0 5rem;
+    padding: 20vh 0 5rem;
+
+    @include breakpoint("medium") {
+        margin-top: 7rem;
+        margin-bottom: $size__longform-margin-md;
+        padding-top: 40vh;
+    }
 
     .section-content {
         position: relative;
         z-index: 5;
         max-width: 700px;
         margin: 0 auto;
+        padding: 0 2rem 0 4rem;
+
+        @include breakpoint("medium") {
+            padding: 0;
+        }
 
         &::before {
             display: block;
@@ -162,7 +207,11 @@
             height: 0px;
             width: 5px;
             position: absolute;
-            left: -1rem;
+            left: 2rem;
+
+            @include breakpoint("medium") {
+                left: -1rem;
+            }
         }
     }
 
@@ -187,12 +236,38 @@
     background-color: $dark-blue;
     background-position: center center;
     background-size: cover;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
+    margin-top: $size__longform-margin-sm;
+    margin-bottom: $size__longform-margin-sm;
     padding: 4rem 0;
     @include fontSize(16px);
     font-weight: 300;
     color: $white;
+
+    @include breakpoint("medium") {
+        margin-top: $size__longform-margin-md;
+        margin-bottom: $size__longform-margin-md;
+    }
+
+    &:not(.section-light) {
+        a,
+        .view-post a {
+            color: $white;
+        }
+
+        .view-post.view-more {
+            a {
+                color: $orange;
+                &:hover { color: $dark-orange; }
+            }
+            .view-post-verb {
+                color: $white;
+            }
+        }
+    }
+
+    .view-post {
+        @include fontSize(18px);
+    }
 
     .section-content {
         position: relative;
@@ -220,6 +295,17 @@
         :last-child { margin-bottom: 0; }
     }
 
+    .section-img,
+    .section-text {
+        padding-left: 2rem;
+        padding-right: 2rem;
+
+        @include breakpoint("medium") {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
     .section-title {
         @include fontSize(24px);
         color: $white;
@@ -236,30 +322,53 @@
         .section-content {
             display: flex;
             align-items: center;
+            flex-direction: column;
+
+            @include breakpoint("medium") {
+                flex-direction: row;
+            }
+        }
+
+        .section-img,
+        .section-text {
+            flex: 0 1 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+
+            @include breakpoint("medium") {
+                padding-left: 0;
+                padding-right: 0;
+            }
         }
 
         .section-img {
-            flex: 0 1 auto;
-            flex-basis: $figure-width;
-            max-width: $figure-width;
+            @include breakpoint("medium") {
+                flex-basis: $figure-width;
+                max-width: $figure-width;
+            }
         }
 
         .section-text {
-            flex: 0 1 auto;
-            flex-basis: calc(100% - #{$figure-width} - #{$text-margin});
-            max-width: calc(100% - #{$figure-width} - #{$text-margin});
-            margin-left: $text-margin;
+            @include breakpoint("medium") {
+                flex-basis: calc(100% - #{$figure-width} - #{$text-margin});
+                max-width: calc(100% - #{$figure-width} - #{$text-margin});
+                margin-left: $text-margin;
+            }
         }
     }
 
     &.section-right {
         .section-content {
-            flex-direction: row-reverse;
+            @include breakpoint("medium") {
+                flex-direction: row-reverse;
+            }
         }
 
         .section-text {
-            margin-left: 0;
-            margin-right: $text-margin;
+            @include breakpoint("medium") {
+                margin-left: 0;
+                margin-right: $text-margin;
+            }
         }
     }
 }
@@ -270,24 +379,42 @@
 
     @extend %fullWidth;
     position: relative;
-    height: 100%;
-    min-height: 100vh;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    background-size: cover;
-    background-attachment: fixed;
+    margin-top: $size__longform-margin-sm;
+    margin-bottom: $size__longform-margin-sm;
+    padding-top: 15rem;
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+    @include breakpoint("medium") {
+        height: 100%;
+        min-height: 100vh;
+        margin-top: $size__longform-margin-md;
+        margin-bottom: $size__longform-margin-md;
+        padding-top: 0;
+        background-size: cover;
+        background-attachment: fixed;
+    }
 
     .section-content {
         position: relative;
-        width: $overlay-width;
-        min-height: calc(100vh - 8rem);
-        padding: 4rem;
+        padding: 2rem;
+
+        @include breakpoint("medium") {
+            width: $overlay-width;
+            min-height: calc(100vh - 8rem);
+            padding: 4rem;
+        }
 
         &:not(.section-light) {
             background-color: $dark-blue;
             color: $white;
 
             #{headings(1,5)} {
+                color: $white;
+            }
+
+            a,
+            .view-post a {
                 color: $white;
             }
         }

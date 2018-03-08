@@ -18,42 +18,65 @@ function shortcode_first( $atts , $content = null ) {
 add_shortcode( 'first', 'shortcode_first' );
 
 /**
- * Adds inline social sharing component to podcasts, stats, and interactives embedded in posts via shortcode
- * @param  string $title Title to be used by social media
- * @param  string $URL   URL to be used by social media
- * @return string        HTML of share button
+ * Adds styled link to specific post
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Styled Link
  */
  function shortcode_view( $atts ) {
-	 // Attributes
-	 $atts = shortcode_atts(
-		 	array(
-			 	'id' => null,
-				'title' => null,
-		 	),
-			$atts,
-			'view'
-	 );
-	 $title = $atts['title'];
-	 $post_title = get_the_title($atts['id']);
-	 $post_url = get_the_permalink($atts['id']);
-	 $post_type = ucwords(get_post_type($atts['id']));
+	// Attributes
+	$atts = shortcode_atts(
+	 	array(
+		 	'id' => null,
+			'title' => null
+	 	),
+		$atts,
+		'view'
+	);
+	$title = $atts['title'];
+	$post_title = get_the_title($atts['id']);
+	$post_url = get_the_permalink($atts['id']);
+	$post_type = ucwords(get_post_type($atts['id']));
 
-	 if (empty($title)) {
-	 	if ($post_type == 'Post') {
-	 		$title = 'Read';
-	 	} elseif ($post_type == 'Data') {
-	 		$title = 'Interact';
-	 	} elseif ($post_type == 'Aerospace101') {
-	 		$title = 'Learn';
-	 	} elseif ($post_type == 'Events') {
+	if (empty($title)) {
+		if ($post_type == 'Post') {
+			$title = 'Read';
+		} elseif ($post_type == 'Data') {
+			$title = 'Interact';
+		} elseif ($post_type == 'Aerospace101') {
+			$title = 'Learn';
+		} elseif ($post_type == 'Events') {
 			$title = 'Watch';
 		}
-	 }
+	}
 
-	 return "<div class='view-post'><i class='icon-eye'></i><a href='" . esc_url( $post_url ) . "'><span class='view-post-verb'>" . esc_attr( $title ) . "</span> \"" . esc_attr( $post_title ) . "\"</a></div>";
+	return "<div class='view-post'><i class='icon-eye'></i><a href='" . esc_url( $post_url ) . "'><span class='view-post-verb'>" . esc_attr( $title ) . "</span> \"" . esc_attr( $post_title ) . "\"</a></div>";
 
 }
 add_shortcode( 'view', 'shortcode_view' );
+
+/**
+ * Adds styled link to provided URL
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Styled Link
+ */
+ function shortcode_explore( $atts ) {
+	// Attributes
+	$atts = shortcode_atts(
+		 	array(
+				'title' => null,
+				'url' => null,
+				'verb' => 'Explore'
+		 	),
+			$atts,
+			'explore'
+	);
+
+	return "<div class='view-post view-more'><a href='" . esc_url( $atts['url'] ) . "'><span class='view-post-verb'>" . esc_attr( $atts['verb'] ) . "</span> " . esc_attr( $atts['title'] ) . "<i class='icon-long-arrow-right'></i></a></div>";
+
+}
+add_shortcode( 'explore', 'shortcode_explore' );
 
 /**
  * Shortcode for displaying enclosed content at the full width of the browser

@@ -20,13 +20,15 @@ get_header();
 			<header class="entry-header row" style="background-image:url(<?php echo $featured_img_url; ?>);">
 				<div class="longform-section-overlay" data-aos="fade" data-aos-delay="800" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 				<div class="title-container content-padding col-xs-12" data-aos="fade" data-aos-delay="1200" data-aos-easing="ease-in-quad" data-aos-duration="600">
-					<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-					<?php the_excerpt(); ?>
-					<div class="entry-meta-bottom">
-						<?php aerospace_posted_on(); ?>
-						<?php aerospace_authors_list(); ?>
-						<?php aerospace_entry_primary_cats(); ?>
-						<p class="thumbnail-caption"><?php esc_html_e( 'Image Caption.', 'aerospace' ); ?> <?php the_post_thumbnail_caption(); ?></p>
+					<div class="section-text">
+						<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+						<?php the_excerpt(); ?>
+						<div class="entry-meta-bottom">
+							<?php aerospace_posted_on(); ?>
+							<?php aerospace_authors_list(); ?>
+							<?php aerospace_entry_primary_cats(); ?>
+							<p class="thumbnail-caption"><?php esc_html_e( 'Image Caption.', 'aerospace' ); ?> <?php the_post_thumbnail_caption(); ?></p>
+						</div>
 					</div>
 				</div>
 			</header><!-- .entry-header -->

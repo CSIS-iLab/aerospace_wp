@@ -13,6 +13,11 @@ $email = get_option( 'aerospace_email' );
 $twitter = get_option( 'aerospace_twitter' );
 $newsletter_url = get_option( 'aerospace_newsletter_url' );
 
+if ( is_page_template( 'single-longform.php' ) ) {
+    $header_class = ' is-small';
+    $header_bottom_class = ' is-sticky';
+}
+
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -28,7 +33,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
 <div id="page" class="site">
     <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'aerospace'); ?></a>
 
-    <header id="masthead" class="site-header">
+    <header id="masthead" class="site-header<?php echo $header_class; ?>">
         <div id="stars-container">
             <div class="stars stars1"></div>
             <div class="stars stars2"></div>
@@ -61,7 +66,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 <?php endif; ?>
             </div>
         </div>
-        <div class="header-bottom-container">
+        <div class="header-bottom-container<?php echo $header_bottom_class; ?>">
         <div class="content-wrapper row flex-center__y header-bottom">
             <div class="col-xs-8 col-md-2 site-branding-minimal">
                 <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">

@@ -20,12 +20,14 @@
     $(window).scroll(function() {
         var currentScroll = $(this).scrollTop();
 
-        if (currentScroll > headerChange) {
-            $(".site-header").addClass("is-small");
-            $(".header-bottom-container").addClass("is-sticky");
-        } else {
-            $(".site-header").removeClass("is-small");
-            $(".header-bottom-container").removeClass("is-sticky");
+        if ( ! $('body').hasClass('post-template-single-longform') ) {
+            if (currentScroll > headerChange ) {
+                $(".site-header").addClass("is-small");
+                $(".header-bottom-container").addClass("is-sticky");
+            } else {
+                $(".site-header").removeClass("is-small");
+                $(".header-bottom-container").removeClass("is-sticky");
+            }
         }
 
         // If we're on a single post page, we need to swap out the menu bar for the header-post-bar once we reach the entry content, but go back to the navigation when we scroll up.
