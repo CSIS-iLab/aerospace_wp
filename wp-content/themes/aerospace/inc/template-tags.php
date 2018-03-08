@@ -892,3 +892,22 @@ if ( ! function_exists( 'aerospace_event_add_to_calendar' ) ) :
 		}
 	}
 endif;
+
+if ( ! function_exists( 'aerospace_post_custom_css' ) ) :
+	/**
+	 * Adds inline CSS if post has custom CSS defined.
+	 *
+	 * @param  int $id Post ID.
+	 */
+	function aerospace_post_custom_css( $id ) {
+		if ( 'post' === get_post_type() ) {
+			$custom_css = get_post_meta( $id, '_post_custom_css', true );
+
+			if ( '' === $custom_css ) {
+				return;
+			}
+
+			return $custom_css;
+		}
+	}
+endif;

@@ -134,6 +134,7 @@ add_action('widgets_init', 'aerospace_widgets_init');
  */
 function aerospace_scripts()
 {
+    global $post;
     wp_enqueue_style('aerospace-style', get_stylesheet_uri());
 
     wp_enqueue_script('aerospace-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true);
@@ -166,6 +167,8 @@ function aerospace_scripts()
           easing: "ease-in-sine",
           delay: 100,
         });');
+
+        wp_add_inline_style( 'aerospace-style', aerospace_post_custom_css( $post->ID ) );
     }
 
     // ASP Archive Page

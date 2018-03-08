@@ -108,7 +108,7 @@
     p.thumbnail-caption {
         @extend .meta-label;
         text-transform: none;
-        color: $gray;
+        color: $blue-gray;
         margin-bottom: 0;
     }
 
@@ -264,46 +264,45 @@
     }
 }
 
-.style-svg.world-map {
-    g path {
-        transition: all .8s ease-in-out;
-    }
-    g#White_Fill path {
-        .aos-init + .section-content & {
-            fill: transparent;
-            transition-delay: .5s;
+/*----------  Text Overlay  ----------*/
+.longform-text-overlay {
+    $overlay-width: 33%;
+
+    @extend %fullWidth;
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    background-size: cover;
+    background-attachment: fixed;
+
+    .section-content {
+        position: relative;
+        width: $overlay-width;
+        min-height: calc(100vh - 8rem);
+        padding: 4rem;
+
+        &:not(.section-light) {
+            background-color: $dark-blue;
+            color: $white;
+
+            #{headings(1,5)} {
+                color: $white;
+            }
         }
 
-        .aos-animate + .section-content & {
-            fill: $white;
-        }
-    }
-
-    g#Orange_Fill path {
-        .aos-init + .section-content & {
-            fill: transparent;
-            transition-delay: 1.25s;
-            stroke: $white;
+        &.section-light {
+            background-color: $white;
+            color: $black;
         }
 
-        .aos-animate + .section-content & {
-            fill: $orange;
-            stroke: $orange;
+        &.section-right {
+            margin-left: calc(100% - #{$overlay-width});
         }
-    }
-}
 
-#satellite .longform-section-overlay.aos-animate + .section-content svg#Layer path {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: dash 5s linear forwards 1;
-}
-
-@keyframes dash {
-    from {
-        stroke-dashoffset: 1000;
-    }
-    to {
-        stroke-dashoffset: 0;
+        #{headings(1,5)} {
+            margin: 0 0 1rem;
+        }
     }
 }

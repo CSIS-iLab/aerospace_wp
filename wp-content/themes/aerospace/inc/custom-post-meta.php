@@ -35,8 +35,7 @@ function post_build_meta_box( $post ) {
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
 	$current_report_cover_url = get_post_meta( $post->ID, '_post_report_cover_url', true );
 	$current_disable_post_bottom_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
-
-
+	$current_custom_css = get_post_meta( $post->ID, '_post_custom_css', true );
 	?>
 	<div class='inside'>
 
@@ -111,6 +110,14 @@ function post_build_meta_box( $post ) {
 		<p>
 			<input type="checkbox" name="disable_post_bottom_icon" value="1" <?php checked( $current_disable_post_bottom_icon, '1' ); ?> /> Yes, disable the plane icon at the bottom of the post
 		</p>
+
+		<?php if ( current_user_can('administrator') ) { ?>
+		<h3><?php esc_html_e( 'Custom CSS', 'aerospace' ); ?></h3>
+		<p>
+			<textarea rows="5" name="custom_css" id="custom_css" style="width: 100%;"><?php echo esc_textarea( $current_custom_css ); ?></textarea>
+		</p>
+		<?php } ?>
+
 	</div>
 	<?php
 }
@@ -179,6 +186,16 @@ function post_save_meta_box_data( $post_id ) {
 	} else {
 		update_post_meta( $post_id, '_post_disable_post_bottom_icon', '' );
 	}
+	// Custom CSS.
+	if ( current_user_can('administrator') && isset( $_REQUEST['custom_css'] ) ) { // Input var okay.
+		if ( class_exists( 'Jetpack_Custom_CSS_Enhancements' ) ) {
+			$jetpack = new Jetpack_Custom_CSS_Enhancements();
+			$cleanCSS = $jetpack->sanitize_css($_POST['custom_css']);
+			update_post_meta( $post_id, '_post_custom_css', $cleanCSS ); // Input var okay.
+		} else {
+			update_post_meta( $post_id, '_post_custom_css', '' ); // Input var okay.
+		}
+	}
 }
 add_action( 'save_post', 'post_save_meta_box_data' );
 
@@ -194,3 +211,25 @@ add_filter( 'meta_content', 'wpautop' );
 add_filter( 'meta_content', 'shortcode_unautop' );
 add_filter( 'meta_content', 'prepend_attachment' );
 add_filter( 'meta_content', 'do_shortcode' );
+
+add_action( 'admin_enqueue_scripts', function() {
+    if ( 'post' !== get_current_screen()->id ) {
+        return;
+    }
+ 
+    // Enqueue code editor and settings for manipulating HTML.
+    $settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+ 
+    // Bail if user disabled CodeMirror.
+    if ( false === $settings ) {
+        return;
+    }
+ 
+    wp_add_inline_script(
+        'code-editor',
+        sprintf(
+            'jQuery( function() { wp.codeEditor.initialize( "custom_css", %s ); } );',
+            wp_json_encode( $settings )
+        )
+    );
+} );

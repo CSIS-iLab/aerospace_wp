@@ -10,7 +10,8 @@ if ( has_post_thumbnail() ) {
 	$featured_img_url = get_the_post_thumbnail_url();
 }
 
-get_header(); ?>
+get_header();
+?>
 
 <div id="primary" class="content-area">
 	<main id="main" class="site-main content-wrapper">
