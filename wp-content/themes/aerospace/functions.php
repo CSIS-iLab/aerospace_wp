@@ -169,6 +169,10 @@ function aerospace_scripts()
         });');
 
         wp_add_inline_style( 'aerospace-style', aerospace_post_custom_css( $post->ID ) );
+
+        if ( is_page_template( 'single-longform.php' ) ) {
+            wp_enqueue_script('aerospace-toc', get_template_directory_uri() . '/js/table-of-contents.js', array('jquery'), '20180319', true);
+        }
     }
 
     // ASP Archive Page

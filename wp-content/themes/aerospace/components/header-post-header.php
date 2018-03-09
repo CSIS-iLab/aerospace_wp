@@ -8,7 +8,7 @@
 ?>
 
 <div class="col-xs-12 col-md header-post-header">
-	<div class="col-xs-1 col-md-4 header-post-header-share">
+	<div class="col-xs-1 col-md-5 col-lg-4 header-post-header-share">
 		<div class="share-icon">
 			<i class="icon-share-nodes"></i>
 		</div>
@@ -24,7 +24,7 @@
 			?>
 		</div>
 	</div>
-	<div class="header-post-header-title col-xs-10 col-md-8">
+	<div class="header-post-header-title col-xs-10 col-md-7 col-lg-8">
 		<?php
 		echo '<span class="meta-label">';
 		esc_html_e( 'Now Reading:', 'aerospace' );

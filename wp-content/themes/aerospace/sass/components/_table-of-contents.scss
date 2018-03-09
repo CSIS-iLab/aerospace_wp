@@ -2,40 +2,83 @@
 =            Table of Contents            =
 =========================================*/
 
-.toc-heading {
-	font-family: $font__abel;
-	@include fontSize(20px);
-	line-height: 1.25;
-	font-weight: normal;
-	color: $primary-blue;
-	margin: 1rem 0 0 0;
-	text-transform: uppercase;
-}
+.toc-container {
+	position: relative;
+	order: 3;
 
-.toc-desc {
-	@include fontSize(16px);
-	font-style: italic;
-	color: $dark-gray;
-	margin: 0;
-}
+	.toc-menu-link {
+		background-color: transparent;
+		margin: 0;
+		padding: 0;
 
-.toc-read-publication {
-	@include fontSize(16px);
-	line-height: 2.03;
-	text-transform: uppercase;
-	margin-bottom: 2rem;
+		i::before {
+			transform: none;
+            @include transition( transform .2s ease-in-out );
+		}
 
-	a {
-		color: $primary-blue;
-		box-shadow: none !important;
+		&.isExpanded i::before {
+			transform: rotate(90deg);
+		}
 	}
 
-	p + & { margin-top: -1rem; }
+	.toc-list {
+		position: absolute;
+		top: calc(100% + 0.55rem);
+		right: 0;
+		visibility: hidden;
+		opacity: 0;
+		background-color: $dark-blue;
+		margin: 0;
+		padding: 1rem 2rem;
+		list-style: none;
+		text-align: left;
+		@include transition(visibility 0s, opacity .2s cubic-bezier(.33, 0, .2, 1));
 
-	i {
+		@include breakpoint("medium") {
+			white-space: nowrap;
+		}
+
+		&.isActive {
+			visibility: visible;
+			opacity: 1;
+		}
+
 		&::before {
-			width: 0.5rem;
-			margin: 0;
+			content: '';
+			position: absolute;
+			left: 1rem;
+			display: block;
+			width: 2px;
+			height: calc(100% - 2rem);
+			background-color: $blue-gray;
+		}
+
+		li {
+			margin-bottom: 0;
+			padding: 0.5rem 0;
+		}
+
+		a {
+			position: relative;
+			color: $blue-gray;
+
+			&:hover {
+				color: $orange;
+			}
+
+			&.isActive {
+				color: $white;
+
+				&::before {
+					content: '';
+					position: absolute;
+					left: -1rem;
+					display: block;
+					width: 2px;
+					height: 100%;
+					background-color: $orange;
+				}
+			}
 		}
 	}
 }

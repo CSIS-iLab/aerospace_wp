@@ -17,6 +17,12 @@
         .header-top { display: none; }
     }
 
+    @include breakpoint("medium") {
+        .header-search-form {
+            display: inline-block;
+        }
+    }
+
     .site-content {
         background-color: $off-white;
     }
