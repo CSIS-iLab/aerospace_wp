@@ -3,13 +3,30 @@
 =========================================*/
 
 .toc-container {
-	position: relative;
-	order: 3;
+	position: fixed;
+	bottom: 9px;
+	right: 3rem;
+	z-index: 15;
+
+	@include breakpoint("medium") {
+		position: relative;
+		order: 3;
+		bottom: unset;
+		right: unset;
+		z-index: initial;
+	}
 
 	.toc-menu-link {
 		background-color: transparent;
 		margin: 0;
 		padding: 0;
+		color: $blue-gray;
+		@include fontSize(14px);
+
+		@include breakpoint("medium") {
+			color: $white;
+			@include fontSize(16px);
+		}
 
 		i::before {
 			transform: none;
@@ -17,13 +34,18 @@
 		}
 
 		&.isExpanded i::before {
-			transform: rotate(90deg);
+			transform: rotate(-90deg);
+
+			@include breakpoint("medium") {
+				transform: rotate(90deg);
+			}
 		}
 	}
 
 	.toc-list {
-		position: absolute;
-		top: calc(100% + 0.55rem);
+		position: fixed;
+		bottom: 2.5rem;
+		left: 0;
 		right: 0;
 		visibility: hidden;
 		opacity: 0;
@@ -35,7 +57,10 @@
 		@include transition(visibility 0s, opacity .2s cubic-bezier(.33, 0, .2, 1));
 
 		@include breakpoint("medium") {
-			white-space: nowrap;
+			position: absolute;
+			top: calc(100% + 0.55rem);
+			left: unset;
+			bottom: unset;
 		}
 
 		&.isActive {

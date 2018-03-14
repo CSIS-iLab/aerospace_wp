@@ -58,8 +58,22 @@
 	
 	// Toggle TOC
 	$(".toc-menu-link").on('click', function() {
+		if ( $(".share-container").hasClass("is-active") ) {
+			$(".share-container").removeClass('is-active');
+		}
 		$(this).toggleClass('isExpanded');
 		$(this).siblings('.toc-list').toggleClass('isActive');
 	})
+
+	// Close menu if user clicks outside of the menu container element and the menu is open
+	$(document).click(function(event) { 
+	  if(!$(event.target).closest('.toc-menu-link').length) {
+	      if($('.toc-menu-link').hasClass('isExpanded')) {
+	        // Close Jump to Menu
+			$(".toc-menu-link").removeClass("isExpanded");
+			$(".toc-menu-link").siblings('.toc-list').removeClass('isActive');
+	      }
+	  }        
+	});
 
 })(jQuery);

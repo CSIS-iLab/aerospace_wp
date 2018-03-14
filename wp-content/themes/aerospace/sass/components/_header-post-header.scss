@@ -53,7 +53,7 @@
 	&-title {
 		@include fontSize(14px);
 		font-weight: 300;
-		line-height: 1.43;
+		line-height: 1.6;
 		color: $dark-gray;
 		text-overflow: ellipsis;
 		overflow: hidden;
@@ -62,6 +62,14 @@
 		@include breakpoint("medium") {
 			@include fontSize(18px);
 			color: $white;
+		}
+
+		.post-template-single-longform & {
+			padding-right: 6rem;
+
+			@include breakpoint("medium") {
+				padding-right: 0.5rem;
+			}
 		}
 	}
 
