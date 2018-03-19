@@ -266,10 +266,10 @@ function shortcode_aside( $atts, $content = null ) {
 add_shortcode( 'aside', 'shortcode_aside' );
 
 /**
- * Shortcode for displaying an aside block in posts.
+ * Shortcode for displaying link to external analysis in posts.
  * @param  array $atts    Modifying arguments
  * @param  string $content Embedded content
- * @return string          Aside block
+ * @return string          External analysis block
  */
 function shortcode_external_analysis( $atts ) {
 	$atts = shortcode_atts(
