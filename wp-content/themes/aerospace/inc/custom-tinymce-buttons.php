@@ -32,6 +32,7 @@ if ( ! function_exists( 'aerospace_add_buttons' ) ) {
 	 */
 	function aerospace_add_buttons( $plugin_array ) {
 		$plugin_array['aerospace'] = get_template_directory_uri() . '/js/tinymce.js';
+		$plugin_array['aerospace-longform'] = get_template_directory_uri() . '/js/tinymce-longform.js';
 		return $plugin_array;
 	}
 }
@@ -43,7 +44,7 @@ if ( ! function_exists( 'aerospace_register_buttons' ) ) {
 	 * @return Array          Updated buttons array.
 	 */
 	function aerospace_register_buttons( $buttons ) {
-        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'note', 'publication', 'download');
+        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'explore', 'note', 'publication', 'download', 'aside', 'external-analysis', 'lf-section-header');
         return $buttons;
 	}
 }
