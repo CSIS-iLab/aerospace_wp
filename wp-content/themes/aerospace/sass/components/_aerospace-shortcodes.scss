@@ -171,6 +171,7 @@
 
 	.external-link {
 		margin-bottom: 0;
+		@include fontSize(18px);
 	}
 }
 

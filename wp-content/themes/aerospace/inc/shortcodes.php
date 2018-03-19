@@ -300,7 +300,7 @@ function shortcode_external_analysis( $atts ) {
 		$organization .= esc_html( ' via ', 'aerospace' ) . $atts['organization'];
 	}
 
-	$link = '<a href="' . esc_url( $atts['url'] ) . '" target="_blank">"' . esc_html( $atts['title'] ) . '"<i class="icon icon-external-open"></i></a>';
+	$link = '<a href="' . esc_url( $atts['url'] ) . '" target="_blank" class="external-link">"' . esc_html( $atts['title'] ) . '"</a>';
 
 	return '<aside class="external-analysis' . $align_class . '"><p>' . $organization . '</p><p class="external-link">' . $link . '</p></aside>';
 }

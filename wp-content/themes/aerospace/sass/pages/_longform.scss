@@ -87,6 +87,7 @@
             color: $white;
             margin-right: 2rem;
             margin-bottom: 1.5rem;
+            font-weight: 300;
         }
 
         .entry-meta-bottom {
@@ -178,7 +179,7 @@
     background-color: $color__longform-overlay;
 
     .section-light & {
-        background-color: rgba($white, 0.6);
+        background-color: $color__longform-overlay-light-section-header;
     }
 }
 
@@ -197,6 +198,17 @@
         margin-top: 7rem;
         margin-bottom: $size__longform-margin-md;
         padding-top: 40vh;
+    }
+
+    &:not(.section-light) {
+        .section-title,
+        p {
+            color: $white;
+        }
+
+        p.thumbnail-caption {
+            color: $blue-gray;
+        }
     }
 
     .section-content {
@@ -230,20 +242,24 @@
         transition: height 2s;
     }
 
-    .section-title,
-    p {
-        color: $white;
-    }
-
     .section-title {
         margin: 0 0 1rem;
+        color: $black;
+    }
+
+    p {
+        font-weight: 300;
+    }
+
+    p.thumbnail-caption {
+        color: $gray;
     }
 }
 
 /*----------  Explainer  ----------*/
 .longform-section-explainer {
     @extend %fullWidth;
-    background-color: $dark-blue;
+    background-color: $color__longform-overlay-light;
     background-position: center center;
     background-size: cover;
     margin-top: $size__longform-margin-sm;
@@ -251,7 +267,6 @@
     padding: 4rem 0;
     @include fontSize(16px);
     font-weight: 300;
-    color: $white;
 
     @include breakpoint("medium") {
         margin-top: $size__longform-margin-md;
@@ -259,6 +274,18 @@
     }
 
     &:not(.section-light) {
+        background-color: $dark-blue;
+        color: $white;
+
+        .section-title {
+            color: $white;
+        }
+
+        .wp-caption-text {
+            color: $blue-gray;
+            border-left-color: $dark-blue-gray;
+        }
+
         a,
         .view-post a {
             color: $white;
@@ -291,8 +318,8 @@
 
     .wp-caption-text {
         border-left-width: 1px;
+        border-left-color: $black;
         @include fontSize(14px);
-        color: $blue-gray;
         font-style: italic;
         max-width: 700px;
         margin: 1rem auto 0;
@@ -303,6 +330,11 @@
         margin: 0 auto;
 
         :last-child { margin-bottom: 0; }
+
+        p {
+            @include fontSize(18px);
+            font-weight: 300;
+        }
     }
 
     .section-img,
@@ -318,7 +350,6 @@
 
     .section-title {
         @include fontSize(24px);
-        color: $white;
         margin: 0 0 1rem;
 
         &:empty { margin-bottom: 0; }
@@ -411,6 +442,11 @@
 
         @include breakpoint("medium") {
             width: $overlay-width;
+            min-height: calc(100vh - 4rem);
+            padding: 2rem;
+        }
+
+        @include breakpoint("large") {
             min-height: calc(100vh - 8rem);
             padding: 4rem;
         }
