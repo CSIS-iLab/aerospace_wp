@@ -402,4 +402,13 @@ a {
 	.entry-content & {
 		@extend %box-shadow-link;
 	}
+
+	&.external-link {
+		&::after {
+			content: '\f39c';
+			font-family: 'asp';
+			margin-left: 0.25rem;
+			margin-right: 0.25rem;
+		}
+	}
 }
