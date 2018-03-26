@@ -151,6 +151,13 @@ endif;
 	 * Show Yoast Primary Category first in category list.
 	 */
 	function aerospace_entry_primary_cats() {
+		global $post;
+		$disable_categories = get_post_meta( $post->ID, '_post_disable_post_categories', true );
+
+		if ( $disable_categories ) {
+			return;
+		}
+
 		$category = get_the_category();
 		$useCatLink = true;
 		// If post has a category assigned.
@@ -217,6 +224,13 @@ if ( ! function_exists( 'aerospace_authors_list_extended' ) ) :
 	 * Prints HTML with short author list.
 	 */
 	function aerospace_authors_list_extended() {
+		global $post;
+		$disable_authors = get_post_meta( $post->ID, '_post_disable_post_authors', true );
+
+		if ( $disable_authors ) {
+			return;
+		}
+
 		if ( function_exists( 'coauthors_posts_links' ) ) {
 			$authors = '<h3 class="subheading-lg">' . esc_html__( 'About the Authors' , 'aerospace' ) . '</h3>';
 			foreach ( get_coauthors() as $coauthor ) :

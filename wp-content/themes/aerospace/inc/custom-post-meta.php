@@ -35,6 +35,8 @@ function post_build_meta_box( $post ) {
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
 	$current_report_cover_url = get_post_meta( $post->ID, '_post_report_cover_url', true );
 	$current_disable_post_bottom_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
+	$current_disable_post_authors = get_post_meta( $post->ID, '_post_disable_post_authors', true );
+	$current_disable_post_categories = get_post_meta( $post->ID, '_post_disable_post_categories', true );
 	$current_custom_css = get_post_meta( $post->ID, '_post_custom_css', true );
 	?>
 	<div class='inside'>
@@ -109,6 +111,14 @@ function post_build_meta_box( $post ) {
 		<h3><?php esc_html_e( 'Disable Icon at Bottom of Post?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="disable_post_bottom_icon" value="1" <?php checked( $current_disable_post_bottom_icon, '1' ); ?> /> Yes, disable the plane icon at the bottom of the post
+		</p>
+		<h3><?php esc_html_e( 'Disable Authors Listing at bottom of Post?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="disable_post_authors" value="1" <?php checked( $current_disable_post_authors, '1' ); ?> /> Yes, disable the authors listing at the bottom of the post
+		</p>
+		<h3><?php esc_html_e( 'Disable Categories Display?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="disable_post_categories" value="1" <?php checked( $current_disable_post_categories, '1' ); ?> /> Yes, disable displaying the post's categories
 		</p>
 
 		<?php if ( current_user_can('administrator') ) { ?>
@@ -185,6 +195,18 @@ function post_save_meta_box_data( $post_id ) {
 		update_post_meta( $post_id, '_post_disable_post_bottom_icon', sanitize_text_field( $_POST['disable_post_bottom_icon'] ) );
 	} else {
 		update_post_meta( $post_id, '_post_disable_post_bottom_icon', '' );
+	}
+	// Disable Authors at Bottom of the post.
+	if ( isset( $_REQUEST['disable_post_authors'] ) ) {
+		update_post_meta( $post_id, '_post_disable_post_authors', sanitize_text_field( $_POST['disable_post_authors'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_disable_post_authors', '' );
+	}
+	// Disable Category Listing
+	if ( isset( $_REQUEST['disable_post_categories'] ) ) {
+		update_post_meta( $post_id, '_post_disable_post_categories', sanitize_text_field( $_POST['disable_post_categories'] ) );
+	} else {
+		update_post_meta( $post_id, '_post_disable_post_categories', '' );
 	}
 	// Custom CSS.
 	if ( current_user_can('administrator') && isset( $_REQUEST['custom_css'] ) ) { // Input var okay.
