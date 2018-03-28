@@ -44,7 +44,7 @@ if ( ! function_exists( 'aerospace_register_buttons' ) ) {
 	 * @return Array          Updated buttons array.
 	 */
 	function aerospace_register_buttons( $buttons ) {
-        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'explore', 'note', 'publication', 'download', 'aside', 'external-analysis', 'lf-section-header');
+        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'explore', 'note', 'publication', 'download', 'aside', 'external-analysis', 'lf-section-header', 'lf-section-explainer', 'lf-text-overlay');
         return $buttons;
 	}
 }
