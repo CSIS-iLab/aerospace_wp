@@ -201,7 +201,7 @@
             {
               type: 'listbox',
               name: 'align',
-              label: 'Alignment',
+              label: 'Image Alignment',
               'values': [{
                   text: 'None',
                   value: null
@@ -318,10 +318,7 @@
               type: 'listbox',
               name: 'align',
               label: 'Alignment',
-              'values': [{
-                  text: 'None',
-                  value: null
-                },
+              'values': [
                 {
                   text: 'Left',
                   value: 'left'
