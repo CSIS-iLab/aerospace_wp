@@ -617,7 +617,11 @@
     }
 
     /*----------  Read More  ----------*/
-    .read-article { display: none; }
+    .read-article {  
+        left: 100%;
+        @include transition(left .3s);
+   
+}
     .entry-thumbnail:hover .read-article {
         display: flex;
         position: absolute;
@@ -632,6 +636,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        @include transition(left .3s);
 
         i {
             display: block;
