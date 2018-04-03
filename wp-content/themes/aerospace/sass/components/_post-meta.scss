@@ -45,7 +45,7 @@
 
 .entry-report-thumbnail {
     position: relative;
-    a:after {
+    a:before {
         display: block;
         visibility: visible;
         opacity: 1;
@@ -56,19 +56,22 @@
         font-family: "asp";
         font-size: 1em;
         position: absolute;
+        text-align: center;
         top: 0;
         right: 0;
+        margin:auto;
+        height: 3rem;
+        width: 3rem;
+        line-height: 2;
+        @include transition(all .3s ease-in-out);
     }
-    &:hover {
-        text-align: center;
-        a:before {
-            display: table-cell;
+    a:after {
+         display: table-cell;
             visibility: visible;
             opacity: 1;
             color: white;
             height: 50%;
             width: 100%;
-            background-color: rgba($orange, .9);
             content: "View Online";
             font-family: $font__abel;
             font-size: 1.5em;
@@ -77,22 +80,22 @@
             top: 0;
             right: 0;
             padding-top: calc(50% - .1em);
-        }
+            opacity: 0;
+    }
+    &:hover {
+        text-align: center;
         a:after {
-            display: table-cell;
-            visibility: visible;
-            opacity: 1;
-            color: white;
-            top: 50%;
-            height: 50%;
+           opacity: 1;
+            @include transition(all .3s ease-in-out);
+            transition-delay: .2s;
+        }
+        a:before {
+            height: 100%;
             width: 100%;
-            background-color: rgba($orange, .9);
-            content: "\F2F5";
-            font-family: "asp";
-            font-size: 2em;
-            position: absolute;
-         
-            right: 0;
+            padding-top: 65%;
+            font-size: 2rem;
+            background-color: rgba(214,110,66,0.9);
+            @include transition(all .3s ease-in-out);
         }
     }
 }
