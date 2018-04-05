@@ -44,7 +44,33 @@ if ( ! function_exists( 'aerospace_register_buttons' ) ) {
 	 * @return Array          Updated buttons array.
 	 */
 	function aerospace_register_buttons( $buttons ) {
-        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'explore', 'note', 'publication', 'download', 'aside', 'external-analysis', 'lf-section-header', 'lf-section-explainer', 'lf-text-overlay');
+        array_push( $buttons, 'first', 'fullWidth', 'interactive', 'view', 'explore', 'note', 'publication', 'download', 'aside', 'external-analysis', 'lf-section-header', 'lf-section-explainer', 'lf-text-overlay', 'lf-toc');
         return $buttons;
+	}
+}
+
+add_action ( 'after_wp_tiny_mce', 'aerospace_tinymce_extra_vars' );
+if ( !function_exists( 'aerospace_tinymce_extra_vars' ) ) {
+	function aerospace_tinymce_extra_vars() {
+		// Get list of Posts
+		$args = array(
+			'posts_per_page' => -1,
+			'post_type' => array('post'),
+			'orderby' => 'title',
+			'order' => 'asc'
+		);
+		$posts = get_posts( $args );
+		$postList = "";
+		foreach($posts as $post) {
+			$format = "{text: '" .  esc_html($post->post_title) . "', value: '" . $post->ID . "'},";
+			if ( $post->post_type == 'post' ) {
+				$postList .= $format;
+			}
+		}
+		$postList = "[".$postList."]";
+		?>
+		<script type="text/javascript">
+			var tinyMCE_posts = <?php echo $postList; ?>;
+		</script><?php
 	}
 }

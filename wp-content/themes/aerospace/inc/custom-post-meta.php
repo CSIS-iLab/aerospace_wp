@@ -26,10 +26,12 @@ function post_build_meta_box( $post ) {
 	// Make sure the form request comes from WordPress.
 	wp_nonce_field( basename( __FILE__ ), 'post_meta_box_nonce' );
 	// Retrieve current value of fields.
+	$current_longform_chapter_title = get_post_meta( $post->ID, '_post_longform_chapter_title', true );
+	$current_longform_report_url = get_post_meta( $post->ID, '_post_longform_report_url', true );
 	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
-    $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+  	$current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
 	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
@@ -40,7 +42,6 @@ function post_build_meta_box( $post ) {
 	$current_custom_css = get_post_meta( $post->ID, '_post_custom_css', true );
 	?>
 	<div class='inside'>
-
 		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Yes, this post is featured
@@ -120,6 +121,15 @@ function post_build_meta_box( $post ) {
 		<p>
 			<input type="checkbox" name="disable_post_categories" value="1" <?php checked( $current_disable_post_categories, '1' ); ?> /> Yes, disable displaying the post's categories
 		</p>
+		<h3><?php esc_html_e( 'Longform Chapter Title', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="longform_chapter_title" value="<?php echo esc_textarea( $current_longform_chapter_title ); ?>" />
+		</p>
+		<h3><?php esc_html_e( 'Longform Report URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="longform_report_url" value="<?php echo esc_attr( $current_longform_report_url ); ?>" />
+			<p class="howto"><?php esc_html_e( 'Note: Should only be filled out for the Main longform post.', 'aerospace' ); ?></p>
+		</p>
 
 		<?php if ( current_user_can('administrator') ) { ?>
 		<h3><?php esc_html_e( 'Custom CSS', 'aerospace' ); ?></h3>
@@ -151,7 +161,10 @@ function post_save_meta_box_data( $post_id ) {
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-
+	// Longform Chapter Title.
+	if ( isset( $_REQUEST['longform_chapter_title'] ) ) { // Input var okay.
+		update_post_meta( $post_id, '_post_longform_chapter_title', wp_kses_post( wp_unslash( $_POST['longform_chapter_title'] ) ) );
+	}
 	// Article Highlights.
 	if ( isset( $_REQUEST['highlights'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_highlights', wp_kses_post( wp_unslash( $_POST['highlights'] ) ) ); // Input var okay.
@@ -159,6 +172,10 @@ function post_save_meta_box_data( $post_id ) {
 	// Sources.
 	if ( isset( $_REQUEST['sources'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_post_sources', wp_kses_post( wp_unslash( $_POST['sources'] ) ) ); // Input var okay.
+	}
+	// Longform Report URL
+	if ( isset( $_REQUEST['longform_report_url'] ) ) {
+		update_post_meta( $post_id, '_post_longform_report_url', esc_attr( $_POST['longform_report_url'] ) );
 	}
 	// Report Cover URL
 	if ( isset( $_REQUEST['report_cover_url'] ) ) {
@@ -238,15 +255,15 @@ add_action( 'admin_enqueue_scripts', function() {
     if ( 'post' !== get_current_screen()->id ) {
         return;
     }
- 
+
     // Enqueue code editor and settings for manipulating HTML.
     $settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
- 
+
     // Bail if user disabled CodeMirror.
     if ( false === $settings ) {
         return;
     }
- 
+
     wp_add_inline_script(
         'code-editor',
         sprintf(

@@ -42,7 +42,7 @@ function longform_section_header( $atts , $content = null ) {
 	}
 
 	return '<div class="longform-section-header' . $theme_class . '"' . $id . $image_url_html . '>
-		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-anchor=".section-content" data-aos-offset="200" data-aos-duration="600"></div>
+		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 		<div class="section-content">
 			<h2 class="section-title toc-link">' . $atts['title'] . '</h2>' . do_shortcode($content) . $image_caption_html . '
 		</div>
@@ -158,4 +158,65 @@ function longform_section_text_overlay( $atts , $content = null ) {
 	</div>';
 }
 add_shortcode( 'lf-text-overlay', 'longform_section_text_overlay' );
+
+/**
+ * Shortcode for longform table of contents.
+ * @param  array $atts    Modifying arguments
+ * @param  string $content Embedded content
+ * @return string          Longform Table of Contents
+ */
+function longform_table_of_contents( $atts , $content = null ) {
+	global $post;
+	$atts = shortcode_atts(
+	 	array(
+	 		'main' => null,
+			'chapters' => null
+	 	),
+		$atts,
+		'lf-toc'
+	);
+
+	if ( !$atts['main'] || !$atts['chapters'] ) {
+		return;
+	}
+
+	$main_title = get_the_title($atts['main']);
+	$main_url = get_the_permalink($atts['main']);
+	$main_image = get_the_post_thumbnail($atts['main'], 'large');
+	$report_url = get_post_meta( $atts['main'], '_post_longform_report_url', true );
+
+	if ( $report_url ) {
+		$report_html = esc_html_x( 'Read the', 'aerospace' ) . ' <a href="' . esc_url( $report_url ) . '">' . esc_html_x( 'Full Report', 'aerospace' ) . '</a>';
+	}
+
+	$chapter_ids = explode( ',', $atts['chapters'] );
+	$chapters_html = '';
+	foreach( $chapter_ids as $id ) {
+		$active = '';
+		if ( $id == $post->ID ) {
+			$active = ' class="active"';
+		}
+
+		$title = get_post_meta( $id, '_post_longform_chapter_title', true );
+		if (!$title) {
+			$title = get_the_title( $id );
+		}
+
+		$chapters_html .= '<li><a href="' . esc_url( get_permalink( $id ) ) . '"' . $active . '>' . $title . '</a></li>';
+	}
+
+
+	return '<div class="longform-toc row">
+		<div class="longform-toc-main col-xs-12 col-sm-5">
+			<a href="' . esc_url( $main_url ) . '">' . $main_image . '</a>
+			<a href="' . esc_url( $main_url ) . '" class="main-title">' . $main_title . '</a>
+		' . $report_html . '
+		</div>
+		<div class="longform-toc-chapters col-xs-12 col-sm">
+			<span class="meta-label">' . esc_html_x( 'Chapter Navigation', 'aerospace' ) . '</span>
+			<ul class="longform-toc-chapters-list">' . $chapters_html . '</ul>
+		</div>
+	</div>';
+}
+add_shortcode( 'lf-toc', 'longform_table_of_contents' );
 

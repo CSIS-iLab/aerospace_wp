@@ -201,7 +201,7 @@
             {
               type: 'listbox',
               name: 'align',
-              label: 'Alignment',
+              label: 'Image Alignment',
               'values': [{
                   text: 'None',
                   value: null
@@ -318,10 +318,7 @@
               type: 'listbox',
               name: 'align',
               label: 'Alignment',
-              'values': [{
-                  text: 'None',
-                  value: null
-                },
+              'values': [
                 {
                   text: 'Left',
                   value: 'left'
@@ -360,6 +357,42 @@
               alignAttr = ' align="' + e.data.align + '"'
             }
             editor.insertContent('[lf-text-overlay' + imageAttr + idAttr + themeAttr + alignAttr + ']<br />' + e.data.content + '<br />[/lf-text-overlay]');
+          }
+        });
+      }
+    });
+
+    editor.addButton('lf-toc', {
+      text: 'LF ToC',
+      tooltip: 'Insert Table of Contents for Longform',
+      onclick: function() {
+        editor.windowManager.open({
+          title: 'Insert Table of Contents for Longform',
+          body: [
+            {
+              type: 'listbox',
+              name: 'main',
+              label: 'Main Post in Series',
+              values: tinyMCE_posts
+            },
+            {
+              type: 'textbox',
+              name: 'chapters',
+              label: 'Chapters in Series',
+              placeholder: 'Comma separated list of post IDs'
+            }
+          ],
+          onsubmit: function(e) {
+            var mainAttr = '';
+            if ( mainAttr ) {
+              mainAttr = ' main="' + e.data.main + '"';
+            }
+
+            var chaptersAttr = '';
+            if ( chaptersAttr ) {
+              chaptersAttr = ' chapters="' + e.data.chapters + '"';
+            }
+            editor.insertContent('[lf-toc' + mainAttr + chaptersAttr + ']');
           }
         });
       }
