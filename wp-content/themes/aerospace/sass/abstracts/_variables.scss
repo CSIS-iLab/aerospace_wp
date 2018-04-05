@@ -67,7 +67,7 @@ $color__email: $orange;
 
 $color__longform-overlay: rgba(22, 56, 79, 0.8);
 $color__longform-overlay-light: #DCE0E2;
-$color__longform-overlay-light-section-header: rgba($color__longform-overlay-light, 0.9);
+$color__longform-overlay-light-section-header: rgba($color__longform-overlay-light, 0.8);
 
 /*==================================
 =            Typography            =
@@ -101,7 +101,7 @@ $size__homepage-block-height-mobile: 10.3rem;
 
 $size__header-mobile-height: 50px;
 $size__header-sm-height: 50px;
-$size__header-lg-height: 300px;
+$size__header-lg-height: 300px; 
 $size__footer-height: 314px;
 
 $size__content-max-width-sm: 687px;
@@ -132,3 +132,4 @@ $img__header-bg: $theme_folder + 'img/header-background.png';
 $img__header-sm: $theme_folder + 'img/header-background-mobile.png';
 $img__footer-bg: $theme_folder + 'img/footer-lg.png';
 $img__hp-aerospace101-bg: $theme_folder + 'img/homepage-101-graphic.png';
+
