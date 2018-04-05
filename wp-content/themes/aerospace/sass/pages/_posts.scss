@@ -220,8 +220,7 @@
             line-height: 1.5;
 
             @include breakpoint("medium") {
-                padding-left: 0rem;
-                font-size: .95rem
+                padding-left: 1.2rem;
             }
         }
 
@@ -617,11 +616,7 @@
     }
 
     /*----------  Read More  ----------*/
-    .read-article {  
-        left: 100%;
-        @include transition(left .3s);
-   
-}
+    .read-article { display: none; }
     .entry-thumbnail:hover .read-article {
         display: flex;
         position: absolute;
@@ -636,7 +631,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        @include transition(left .3s);
 
         i {
             display: block;

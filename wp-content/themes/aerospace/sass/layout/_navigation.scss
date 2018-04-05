@@ -355,17 +355,8 @@
                 @include breakpoint("medium") {
                     padding-left: 0;
                     @include fontSize(20px);
-                    font-weight:normal;
-                    color: $off-white;
-                    letter-spacing: 0rem;
-                    @include transition(all .1s);
-                
+                    font-weight: normal;
                 }
-                &:hover {
-                    color: $white;
-                     @include transition(all .1s);
-                }
-                
             }
 
             .submenu-desc {

@@ -5,8 +5,6 @@
  * @package Aerospace
  */
 
-$report_download = get_post_meta( $id, '_post_download_url', true );
-
 $disable_highlights = get_post_meta( $id, '_post_disable_highlights', true );
 
 $highlights = get_post_meta( $id, '_post_highlights', true );
@@ -22,8 +20,7 @@ $content = apply_filters('meta_content', $content);
 ?>
 
 <div class="entry-highlights">
-	<?php if ( $report_download != "" ) { 
-	aerospace_report_download( $id ); } ?>
+	<?php aerospace_report_download( $id ); ?>
 	<?php if ( ! $disable_highlights ) { ?>
 	<div class="entry-highlights-title">
 		<i class="icon-arrow-right"></i> 
