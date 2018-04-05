@@ -183,6 +183,11 @@ function longform_table_of_contents( $atts , $content = null ) {
 	$main_title = get_the_title($atts['main']);
 	$main_url = get_the_permalink($atts['main']);
 	$main_image = get_the_post_thumbnail($atts['main'], 'large');
+	$report_url = get_post_meta( $atts['main'], '_post_longform_report_url', true );
+
+	if ( $report_url ) {
+		$report_html = esc_html_x( 'Read the', 'aerospace' ) . ' <a href="' . esc_url( $report_url ) . '">' . esc_html_x( 'Full Report', 'aerospace' ) . '</a>';
+	}
 
 	$chapter_ids = explode( ',', $atts['chapters'] );
 	$chapters_html = '';
@@ -191,7 +196,13 @@ function longform_table_of_contents( $atts , $content = null ) {
 		if ( $id == $post->ID ) {
 			$active = ' class="active"';
 		}
-		$chapters_html .= '<li><a href="' . esc_url( get_permalink( $id ) ) . '"' . $active . '>' . get_the_title( $id ) . '</a></li>';
+
+		$title = get_post_meta( $id, '_post_longform_chapter_title', true );
+		if (!$title) {
+			$title = get_the_title( $id );
+		}
+
+		$chapters_html .= '<li><a href="' . esc_url( get_permalink( $id ) ) . '"' . $active . '>' . $title . '</a></li>';
 	}
 
 
@@ -199,7 +210,7 @@ function longform_table_of_contents( $atts , $content = null ) {
 		<div class="longform-toc-main col-xs-12 col-sm-5">
 			<a href="' . esc_url( $main_url ) . '">' . $main_image . '</a>
 			<a href="' . esc_url( $main_url ) . '" class="main-title">' . $main_title . '</a>
-		' . esc_html_x( 'Read the', 'aerospace' ) . ' <a href="">' . esc_html_x( 'Full Report', 'aerospace' ) . '</a>
+		' . $report_html . '
 		</div>
 		<div class="longform-toc-chapters col-xs-12 col-sm">
 			<span class="meta-label">' . esc_html_x( 'Chapter Navigation', 'aerospace' ) . '</span>
