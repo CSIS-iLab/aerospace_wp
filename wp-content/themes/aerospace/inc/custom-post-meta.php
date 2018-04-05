@@ -31,7 +31,7 @@ function post_build_meta_box( $post ) {
 	$current_highlights = get_post_meta( $post->ID, '_post_highlights', true );
 	$current_sources = get_post_meta( $post->ID, '_post_sources', true );
 	$current_download_url = get_post_meta( $post->ID, '_post_download_url', true );
-  $current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
+  	$current_view_url = get_post_meta( $post->ID, '_post_view_url', true );
 	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
 	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
@@ -42,10 +42,6 @@ function post_build_meta_box( $post ) {
 	$current_custom_css = get_post_meta( $post->ID, '_post_custom_css', true );
 	?>
 	<div class='inside'>
-		<h3><?php esc_html_e( 'Longform Chapter Title', 'aerospace' ); ?></h3>
-		<p>
-			<input type="text" class="large-text" name="longform_chapter_title" value="<?php echo esc_textarea( $current_longform_chapter_title ); ?>" />
-		</p>
 		<h3><?php esc_html_e( 'Is Featured?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Yes, this post is featured
@@ -91,11 +87,6 @@ function post_build_meta_box( $post ) {
 				);
 			?>
 		</p>
-		<h3><?php esc_html_e( 'Longform Report URL', 'aerospace' ); ?></h3>
-			<p>
-					<input type="text" class="large-text" name="longform_report_url" value="<?php echo esc_attr( $current_longform_report_url ); ?>" />
-					<p class="howto">Note: Should only be filled out for the Main longform post.</p>
-			</p>
 		<h3><?php esc_html_e( 'Report Cover URL', 'aerospace' ); ?></h3>
 	    <p>
 	        <input type="text" class="large-text" name="report_cover_url" value="<?php echo esc_attr( $current_report_cover_url ); ?>" />
@@ -129,6 +120,15 @@ function post_build_meta_box( $post ) {
 		<h3><?php esc_html_e( 'Disable Categories Display?', 'aerospace' ); ?></h3>
 		<p>
 			<input type="checkbox" name="disable_post_categories" value="1" <?php checked( $current_disable_post_categories, '1' ); ?> /> Yes, disable displaying the post's categories
+		</p>
+		<h3><?php esc_html_e( 'Longform Chapter Title', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="longform_chapter_title" value="<?php echo esc_textarea( $current_longform_chapter_title ); ?>" />
+		</p>
+		<h3><?php esc_html_e( 'Longform Report URL', 'aerospace' ); ?></h3>
+		<p>
+			<input type="text" class="large-text" name="longform_report_url" value="<?php echo esc_attr( $current_longform_report_url ); ?>" />
+			<p class="howto"><?php esc_html_e( 'Note: Should only be filled out for the Main longform post.', 'aerospace' ); ?></p>
 		</p>
 
 		<?php if ( current_user_can('administrator') ) { ?>
