@@ -42,7 +42,7 @@ function longform_section_header( $atts , $content = null ) {
 	}
 
 	return '<div class="longform-section-header' . $theme_class . '"' . $id . $image_url_html . '>
-		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-anchor=".section-content" data-aos-offset="200" data-aos-duration="600"></div>
+		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 		<div class="section-content">
 			<h2 class="section-title toc-link">' . $atts['title'] . '</h2>' . do_shortcode($content) . $image_caption_html . '
 		</div>
