@@ -46,6 +46,11 @@
         background-size: cover;
         display: flex;
         align-items: center;
+
+        p.thumbnail-caption {
+            padding-top: 1.5rem;
+        }
+
     }
 
     .title-container {
@@ -416,7 +421,7 @@
 
 /*----------  Text Overlay  ----------*/
 .longform-text-overlay {
-    $overlay-width: 33%;
+    $overlay-width: 40%;
 
     @extend %fullWidth;
     position: relative;
@@ -466,8 +471,12 @@
         }
 
         &.section-light {
-            background-color: $white;
+            background-color: $color__longform-overlay-light;
             color: $black;
+
+            p.thumbnail-caption {
+                color: $gray;
+            }
         }
 
         &.section-right {
