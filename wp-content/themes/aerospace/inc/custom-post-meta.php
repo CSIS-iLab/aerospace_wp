@@ -256,6 +256,10 @@ add_action( 'admin_enqueue_scripts', function() {
         return;
     }
 
+    if ( !current_user_can('administrator') ) {
+        return;
+    }
+
     // Enqueue code editor and settings for manipulating HTML.
     $settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
 
