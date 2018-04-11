@@ -17,6 +17,7 @@ function longform_section_header( $atts , $content = null ) {
 	 	array(
 	 		'id' => null,
 			'title' => null,
+			'toc' => null,
 			'image' => null,
 			'theme' => 'dark'
 	 	),
@@ -41,10 +42,15 @@ function longform_section_header( $atts , $content = null ) {
 		$theme_class = '';
 	}
 
+	$toc = '';
+	if ( $atts['toc'] ) {
+		$toc = '<span class="toc-title">' . $atts['toc'] . '</span>';
+	}
+
 	return '<div class="longform-section-header' . $theme_class . '"' . $id . $image_url_html . '>
 		<div class="longform-section-overlay" data-aos="fade" data-aos-delay="100" data-aos-easing="ease-in-quad" data-aos-offset="200" data-aos-duration="600"></div>
 		<div class="section-content">
-			<h2 class="section-title toc-link">' . $atts['title'] . '</h2>' . do_shortcode($content) . $image_caption_html . '
+			<h2 class="section-title toc-link">' . esc_html( $atts['title'] ) . $toc . '</h2>' . do_shortcode($content) . $image_caption_html . '
 		</div>
 	</div>';
 }

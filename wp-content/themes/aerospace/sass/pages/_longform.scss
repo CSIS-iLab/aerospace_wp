@@ -193,6 +193,7 @@
     background-color: $dark-blue;
     background-position: center center;
     background-size: cover;
+    background-repeat: no-repeat;
     margin-top: 4rem;
     margin-bottom: $size__longform-margin-sm;
     border-top: 3rem solid $off-white;
@@ -205,6 +206,8 @@
     }
 
     &:not(.section-light) {
+        color: $white;
+
         .section-title,
         p {
             color: $white;
@@ -257,6 +260,8 @@
         color: $black;
     }
 
+    .toc-title { display: none; }
+
     p {
         font-weight: 300;
     }
@@ -272,6 +277,7 @@
     background-color: $color__longform-overlay-light;
     background-position: center center;
     background-size: cover;
+    background-repeat: no-repeat;
     margin-top: $size__longform-margin-sm;
     margin-bottom: $size__longform-margin-sm;
     padding: 4rem 0;

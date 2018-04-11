@@ -42,6 +42,13 @@
               placeholder: 'Section Title'
             },
             {
+              type: 'textbox',
+              multiline: false,
+              name: 'toc',
+              label: 'ToC Title',
+              placeholder: 'Optional. Will be used in the "Sections" navigation.'
+            },
+            {
               type: 'container',
               label: 'Background Image',
               name: 'background-image-container',
@@ -102,6 +109,10 @@
             },
           ],
           onsubmit: function(e) {
+            var tocAttr = ''
+            if ( e.data.toc ) {
+              tocAttr = ' toc="' + e.data.toc + '"'
+            }
             var imageAttr = ''
             if ( e.data.image ) {
               imageAttr = ' image="' + e.data.image + '"'
@@ -114,7 +125,7 @@
             if ( e.data.theme ) {
               themeAttr = ' theme="' + e.data.theme + '"'
             }
-            editor.insertContent('[lf-section-header title="' + e.data.title + '"' + imageAttr + idAttr + themeAttr + ']<br />' + e.data.content + '<br />[/lf-section-header]');
+            editor.insertContent('[lf-section-header title="' + e.data.title + '"' + tocAttr + imageAttr + idAttr + themeAttr + ']<br />' + e.data.content + '<br />[/lf-section-header]');
           }
         });
       }
@@ -384,12 +395,12 @@
           ],
           onsubmit: function(e) {
             var mainAttr = '';
-            if ( mainAttr ) {
+            if ( e.data.main ) {
               mainAttr = ' main="' + e.data.main + '"';
             }
 
             var chaptersAttr = '';
-            if ( chaptersAttr ) {
+            if ( e.data.chapters ) {
               chaptersAttr = ' chapters="' + e.data.chapters + '"';
             }
             editor.insertContent('[lf-toc' + mainAttr + chaptersAttr + ']');

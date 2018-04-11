@@ -3,6 +3,10 @@
 	var counter = 0;
 	$(".toc-link").each(function() {
 		var text = $(this).text();
+		if ( $(this).children('.toc-title').length > 0 ) {
+			text = $(this).children('.toc-title').text();
+		}
+
 		var ID = $(this).attr('id');
 		var hash;
 

@@ -51,6 +51,13 @@
 	@include center-block;
 }
 
+.aligncenter,
+.alignnone {
+	img {
+		width: 100%;
+	}
+}
+
 .alignleft,
 .alignright {
 	&.wp-caption {
