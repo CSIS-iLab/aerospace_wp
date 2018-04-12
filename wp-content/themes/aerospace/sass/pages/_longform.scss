@@ -216,6 +216,21 @@
         p.thumbnail-caption {
             color: $blue-gray;
         }
+
+        a,
+        .view-post a {
+            color: $white;
+        }
+
+        .view-post.view-more {
+            a {
+                color: $orange;
+                &:hover { color: $dark-orange; }
+            }
+            .view-post-verb {
+                color: $white;
+            }
+        }
     }
 
     .section-content {
@@ -253,6 +268,10 @@
             height: 100%;
             transition: height 2s;
         }
+    }
+
+    .view-post {
+        @include fontSize(18px);
     }
 
     .section-title {
