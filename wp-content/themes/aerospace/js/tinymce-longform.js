@@ -125,7 +125,7 @@
             if ( e.data.theme ) {
               themeAttr = ' theme="' + e.data.theme + '"'
             }
-            editor.insertContent('[lf-section-header title="' + e.data.title + '"' + tocAttr + imageAttr + idAttr + themeAttr + ']<br />' + e.data.content + '<br />[/lf-section-header]');
+            editor.insertContent('[lf-section-header title="' + e.data.title + '"' + tocAttr + imageAttr + idAttr + themeAttr + ']<br /><br />' + e.data.content + '<br /><br />[/lf-section-header]');
           }
         });
       }
@@ -228,6 +228,11 @@
               ]
             },
             {
+              type: 'checkbox',
+              name: 'toc',
+              label: 'Include in ToC'
+            },
+            {
               type: 'textbox',
               multiline: true,
               name: 'content',
@@ -262,7 +267,11 @@
             if ( e.data.source ) {
               sourceAttr = ' source=\'' + e.data.source + '\''
             }
-            editor.insertContent('[lf-section-explainer title="' + e.data.title + '"' + imageAttr + imageClassesAttr + idAttr + themeAttr + alignAttr + sourceAttr + ']<br />' + e.data.content + '<br />[/lf-section-explainer]');
+            var tocAttr = ''
+            if ( e.data.toc ) {
+              tocAttr = ' toc="true"'
+            }
+            editor.insertContent('[lf-section-explainer title="' + e.data.title + '"' + imageAttr + imageClassesAttr + idAttr + themeAttr + alignAttr + sourceAttr + tocAttr + ']<br /><br />' + e.data.content + '<br /><br />[/lf-section-explainer]');
           }
         });
       }
@@ -367,7 +376,7 @@
             if ( e.data.align ) {
               alignAttr = ' align="' + e.data.align + '"'
             }
-            editor.insertContent('[lf-text-overlay' + imageAttr + idAttr + themeAttr + alignAttr + ']<br />' + e.data.content + '<br />[/lf-text-overlay]');
+            editor.insertContent('[lf-text-overlay' + imageAttr + idAttr + themeAttr + alignAttr + ']<br /><br />' + e.data.content + '<br /><br />[/lf-text-overlay]');
           }
         });
       }
@@ -391,6 +400,12 @@
               name: 'chapters',
               label: 'Chapters in Series',
               placeholder: 'Comma separated list of post IDs'
+            },
+            {
+              type: 'textbox',
+              name: 'heading',
+              label: 'Nav Heading',
+              placeholder: 'Chapter Navigation'
             }
           ],
           onsubmit: function(e) {
@@ -398,12 +413,15 @@
             if ( e.data.main ) {
               mainAttr = ' main="' + e.data.main + '"';
             }
-
             var chaptersAttr = '';
             if ( e.data.chapters ) {
               chaptersAttr = ' chapters="' + e.data.chapters + '"';
             }
-            editor.insertContent('[lf-toc' + mainAttr + chaptersAttr + ']');
+            var headingAttr = '';
+            if ( e.data.heading ) {
+              headingAttr = ' heading="' + e.data.heading + '"';
+            }
+            editor.insertContent('[lf-toc' + mainAttr + chaptersAttr + headingAttr + ']');
           }
         });
       }

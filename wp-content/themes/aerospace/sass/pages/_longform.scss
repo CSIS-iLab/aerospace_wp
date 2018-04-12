@@ -506,9 +506,20 @@
     margin-bottom: 2rem;
     font-family: $font__abel;
 
+    .longform-section-header &,
+    .longform-section-explainer & {
+        margin-left: 0.1rem;
+    }
+
     @include breakpoint("small") {
         margin-top: 4rem;
         margin-bottom: 4rem;
+
+        .longform-section-header &,
+        .longform-section-explainer & {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
     }
 
     a {
@@ -521,7 +532,6 @@
 
         @include breakpoint("small") {
             border-bottom: 0;
-            border-right: 3px solid $line-gray;
             padding-right: 1rem !important;
             padding-bottom: 0;
         }
@@ -558,6 +568,14 @@
         @include breakpoint("small") {
             padding-top: 0;
             padding-left: 1rem !important;
+            border-left: 3px solid $line-gray;
+        }
+
+        .longform-section-header:not(.section-light) &,
+        .longform-section-explainer:not(.section-light) & {
+            border-left: 3px solid $dark-blue-gray;
+            padding-left: 1rem;
+            padding-top: 0;
         }
 
         .meta-label {
@@ -581,6 +599,19 @@
                     font-weight: 500;
                     color: $dark-blue;
                 }
+
+                .longform-section-header:not(.section-light) &,
+                .longform-section-explainer:not(.section-light) & {
+                    color: $white;
+
+                    &:hover {
+                        color: $orange;
+                    }
+
+                    &.active {
+                        color: $white;
+                    }
+                } 
             }
         }
     }

@@ -245,13 +245,11 @@ sub, sup {
 
 %blockquote-source {
 	display: block;
-	text-align: right;
-	@include fontSize(14px);
-	line-height: 2.07;
-	letter-spacing: 0.4px;
-	color: $dark-gray;
-	text-transform: uppercase;
-	margin-top: 5px;
+	@include fontSize(18px);
+	line-height: 1.4;
+	font-weight: 600;
+	font-style: normal;
+	margin-top: 1.5rem;
 	margin-bottom: 0;
 }
 
@@ -273,6 +271,15 @@ blockquote {
 
 	cite {
 		@extend %blockquote-source;
+
+		.source-desc {
+			display: block;
+			font-style: italic;
+
+			.easy-footnote {
+				font-style: normal;
+			}
+		}
 	}
 }
 

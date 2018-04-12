@@ -95,8 +95,8 @@
       onclick: function() {
         editor.windowManager.open({
           title: 'Insert View Link',
-          width: 400,
-          height: 100,
+          width: 600,
+          height: 125,
           body: [{
               type: 'textbox',
               multiline: false,
@@ -105,19 +105,27 @@
               placeholder: 'Optional Title Attribute'
             },
             {
-              type: 'textbox',
-              multiline: false,
+              type: 'listbox',
               name: 'id',
-              label: 'Post ID',
-              placeholder: 'Insert Post ID'
+              label: 'Post',
+              values: tinyMCE_posts
+            },
+            {
+              type: 'checkbox',
+              name: 'window',
+              label: 'Open Link in New Window'
             }
           ],
           onsubmit: function(e) {
-            if (e.data.title == '') {
-              editor.insertContent('[view id="' + e.data.id + '"]');
-            } else {
-              editor.insertContent('[view id="' + e.data.id + '" title="' + e.data.title + '"]');
+            var titleAttr = ''
+            if ( e.data.title ) {
+              titleAttr = ' title="' + e.data.title + '"'
             }
+            var windowAttr = ''
+            if ( e.data.window ) {
+              windowAttr = ' window="' + e.data.window + '"'
+            }
+            editor.insertContent('[view id="' + e.data.id + '"' + titleAttr + windowAttr + ']');
           }
         });
       }
@@ -130,7 +138,7 @@
         editor.windowManager.open({
           title: 'Insert Explore Link',
           width: 400,
-          height: 150,
+          height: 175,
           body: [{
               type: 'textbox',
               multiline: false,
@@ -151,6 +159,11 @@
               name: 'verb',
               label: 'Verb Prefix',
               placeholder: 'Explore'
+            },
+            {
+              type: 'checkbox',
+              name: 'window',
+              label: 'Open Link in New Window'
             }
           ],
           onsubmit: function(e) {
@@ -158,7 +171,11 @@
             if (e.data.verb) {
               exploreAttr = ' verb="' + e.data.verb + '"'
             }
-            editor.insertContent('[explore url="' + e.data.url + '" title="' + e.data.title + '"' + exploreAttr + ']');
+            var windowAttr = ''
+            if ( e.data.window ) {
+              windowAttr = ' window="' + e.data.window + '"'
+            }
+            editor.insertContent('[explore url="' + e.data.url + '" title="' + e.data.title + '"' + exploreAttr + windowAttr + ']');
           }
         });
       }

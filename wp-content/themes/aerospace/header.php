@@ -109,7 +109,7 @@ if ( is_page_template( 'single-longform.php' ) ) {
                 get_template_part( 'components/header-post-header' );
             }
             ?>
-            <div class="col-xs-2 col-md-1 search-container">
+            <div class="col-xs-2 col-md search-container">
                 <?php get_template_part( 'components/search-inline' ); ?>
             </div>
             <?php

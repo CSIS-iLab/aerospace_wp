@@ -14,6 +14,8 @@
 		bottom: unset;
 		right: unset;
 		z-index: initial;
+		max-width: -moz-fit-content !important;
+        max-width: fit-content !important;
 	}
 
 	.toc-menu-link {
@@ -61,6 +63,7 @@
 			top: calc(100% + 0.55rem);
 			left: unset;
 			bottom: unset;
+			min-width: 200px;
 		}
 
 		&.isActive {

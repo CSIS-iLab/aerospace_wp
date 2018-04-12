@@ -28,7 +28,8 @@ add_shortcode( 'first', 'shortcode_first' );
 	$atts = shortcode_atts(
 	 	array(
 		 	'id' => null,
-			'title' => null
+			'title' => null,
+			'window' => null,
 	 	),
 		$atts,
 		'view'
@@ -50,7 +51,12 @@ add_shortcode( 'first', 'shortcode_first' );
 		}
 	}
 
-	return "<div class='view-post'><i class='icon-eye'></i><a href='" . esc_url( $post_url ) . "'><span class='view-post-verb'>" . esc_attr( $title ) . "</span> \"" . esc_attr( $post_title ) . "\"</a></div>";
+	$window = '';
+	if ( $atts['window'] ) {
+		$window = ' target="_blank"';
+	}
+
+	return "<div class='view-post'><i class='icon-eye'></i><a href='" . esc_url( $post_url ) . "'" . $window . "><span class='view-post-verb'>" . esc_attr( $title ) . "</span> \"" . esc_attr( $post_title ) . "\"</a></div>";
 
 }
 add_shortcode( 'view', 'shortcode_view' );
@@ -67,13 +73,19 @@ add_shortcode( 'view', 'shortcode_view' );
 		 	array(
 				'title' => null,
 				'url' => null,
-				'verb' => 'Explore'
+				'verb' => 'Explore',
+				'window' => null
 		 	),
 			$atts,
 			'explore'
 	);
 
-	return "<div class='view-post view-more'><a href='" . esc_url( $atts['url'] ) . "'><span class='view-post-verb'>" . esc_attr( $atts['verb'] ) . "</span> " . esc_attr( $atts['title'] ) . "<i class='icon-long-arrow-right'></i></a></div>";
+	$window = '';
+	if ( $atts['window'] ) {
+		$window = ' target="_blank"';
+	}
+
+	return "<div class='view-post view-more'><a href='" . esc_url( $atts['url'] ) . "'" . $window . "><span class='view-post-verb'>" . esc_attr( $atts['verb'] ) . "</span> " . esc_attr( $atts['title'] ) . "<i class='icon-long-arrow-right'></i></a></div>";
 
 }
 add_shortcode( 'explore', 'shortcode_explore' );

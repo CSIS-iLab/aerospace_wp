@@ -11,6 +11,8 @@
 
     @include breakpoint("medium") {
         font-size: 1em;
+        max-width: -moz-fit-content;
+        max-width: fit-content;
     }
 
     &.is-hidden {
