@@ -33,7 +33,7 @@ function longform_section_header( $atts , $content = null ) {
 		$image_url = wp_get_attachment_url( $atts['image'] );
 		$image_url_html = ' style="background-image:url(\'' . $image_url . '\');"';
 		$image_caption = wp_get_attachment_caption( $atts['image'] );
-		$image_caption_html = '<p class="thumbnail-caption">' . esc_html_x( 'Source: ', 'aerospace' ) . $image_caption . '</p>';
+		$image_caption_html = '<p class="thumbnail-caption">' . esc_html_x( 'Image Source: ', 'aerospace' ) . $image_caption . '</p>';
 	}
 
 	if ( 'light' == $atts['theme'] ) {
@@ -95,7 +95,7 @@ function longform_section_explainer( $atts , $content = null ) {
 
 	if ( $atts['image'] ) {
 		if ( $atts['source'] ) {
-			$image_caption = '<figcaption class="wp-caption-text">' . esc_html_x( 'Source: ', 'aerospace' ) . $atts['source'] . '</figcaption>';
+			$image_caption = '<figcaption class="wp-caption-text">' . esc_html_x( 'Image Source: ', 'aerospace' ) . $atts['source'] . '</figcaption>';
 		}
 
 		$image_html = '<figure class="section-img" data-aos="fade" data-aos-duration="200">' . wp_get_attachment_image( $atts['image'], 'full', false, $image_attrs) . $image_caption . '</figure>';
@@ -155,7 +155,7 @@ function longform_section_text_overlay( $atts , $content = null ) {
 		$image_url = wp_get_attachment_url( $atts['image'] );
 		$image_url_html = ' style="background-image:url(\'' . $image_url . '\');"';
 		$image_caption = wp_get_attachment_caption( $atts['image'] );
-		$image_caption_html = '<p class="thumbnail-caption">' . esc_html_x( 'Source: ', 'aerospace' ) . $image_caption . '</p>';
+		$image_caption_html = '<p class="thumbnail-caption">' . esc_html_x( 'Image Source: ', 'aerospace' ) . $image_caption . '</p>';
 	}
 
 	if ( 'left' == $atts['align'] ) {

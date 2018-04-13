@@ -27,7 +27,7 @@ get_header();
 							<?php aerospace_posted_on(); ?>
 							<?php aerospace_authors_list(); ?>
 							<?php aerospace_entry_primary_cats(); ?>
-							<p class="thumbnail-caption"><?php esc_html_e( 'Source: ', 'aerospace' ); ?> <?php the_post_thumbnail_caption(); ?></p>
+							<p class="thumbnail-caption"><?php esc_html_e( 'Image Source: ', 'aerospace' ); ?> <?php the_post_thumbnail_caption(); ?></p>
 						</div>
 					</div>
 				</div>
