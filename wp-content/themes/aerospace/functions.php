@@ -160,7 +160,7 @@ function aerospace_scripts()
 
         wp_enqueue_script('aerospace-share', get_template_directory_uri() . '/js/social-share.js', array('jquery'), '20171206', true);
 
-        wp_enqueue_script('aerospace-aos', 'https://cdn.rawgit.com/michalsnik/aos/2.0.1/dist/aos.js', array(), '20180305', true);
+        wp_enqueue_script('aerospace-aos', get_template_directory_uri() . '/js/aos.min.js', array(), '20180305', true);
         wp_add_inline_script('aerospace-aos', 'AOS.init({
           offset: 200,
           duration: 400,
