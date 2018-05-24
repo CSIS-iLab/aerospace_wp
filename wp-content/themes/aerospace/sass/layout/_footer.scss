@@ -96,5 +96,10 @@
 
 	.footer-copyright {
 		@extend %body-small-gray;
+
+		a {
+			color: $blue-gray;
+			&:hover { color: $white; }
+		}
 	}
 }

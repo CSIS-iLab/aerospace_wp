@@ -51,7 +51,7 @@ $newsletter_url = get_option( 'aerospace_newsletter_url' );
                 ?>
             </div>
             <div class="footer-copyright col-xs-12">
-                <p>&copy; <?php echo esc_html( date( 'Y' ) ); ?> by the Center for Strategic and International Studies. All rights reserved.</p>
+                <p>&copy; <?php echo esc_html( date( 'Y' ) ); ?> by the Center for Strategic and International Studies. All rights reserved. | <a href="https://www.csis.org/privacy-policy" target="_blank" rel="nofollow">Privacy Policy</a></p>
             </div>
         </div><!-- .site-info -->
     </footer><!-- #colophon -->
