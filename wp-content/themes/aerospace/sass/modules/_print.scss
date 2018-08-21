@@ -2,123 +2,160 @@
 =            Print Stylesheets            =
 =========================================*/
     
-    @media print {
-        *,
-        *:before,
-        *:after {
-            background: transparent !important;
-            color: #000 !important; // Black prints faster: h5bp.com/s
-            box-shadow: none !important;
-            text-shadow: none !important;
-            filter: none !important;
-            -ms-filter: none !important;
-        }
-        body {
-        	padding: 0px !important;
-            font-size: 12pt;
-            margin: 25mm 25mm 25mm 25mm;
+@media print {
+    *,
+    *:before,
+    *:after {
+        background: transparent !important;
+        color: #000 !important; // Black prints faster: h5bp.com/s
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+    body {
+    	padding: 0px !important;
+        font-size: 12pt;
+        margin: 5mm 0;
 
-            &:before {
-            	content: 'ChinaPower Project';
-            	margin-bottom: 1cm;
-            	font-size: 24pt;
-            	display: block;
-            }
-
-            &:after {
-
-            	content: 'Printed from ChinaPower Project, ©2017 by the Center for Strategic and International Studies. All rights reserved.';
-            	margin-top: 1cm;
-            	font-size: 12pt;
-            }
+        &:before {
+        	content: 'Aerospace Security';
+        	margin-bottom: 0.5cm;
+        	font-size: 24pt;
+        	display: block;
         }
 
-        h2,
-        h3 {
-            page-break-after: avoid;
-        }
+        &:after {
 
-        article {
-          
+        	content: 'Printed from Aerospace Security, ©2018 by the Center for Strategic and International Studies. All rights reserved.';
+        	margin-top: 0.5cm;
+        	font-size: 12pt;
         }
-       
-        img,
-        blockquote {
-            page-break-inside: avoid;
-        }
+    }
 
-        h1.entry-title,
-        h1.page-title
-        {
-        	font-size: 30px !important;
-        }
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
 
-        .site-header,
-        .post-nav,
-        .site-footer,
-        .header-searchFormContainer,
-        .header-navOverlay,
-        .sharing-inline,
-        .img-cpp,
-        .tags-heading:before,
-        #btn-copy,
-        .relatedContent-img,
-        aside {
-            display: none !important;
-        }
+    article {
+      
+    }
+   
+    img,
+    blockquote {
+        page-break-inside: avoid;
+    }
 
-        .entry-header .featureImg {
-            background: transparent !important;
-            height: auto !important;
+    h1.entry-title,
+    h1.page-title
+    {
+    	font-size: 30px !important;
+    }
 
-        }
+    .site-header,
+    .post-nav,
+    .site-footer,
+    .header-searchFormContainer,
+    .header-navOverlay,
+    .sharing-inline,
+    .img-cpp,
+    .tags-heading:before,
+    #btn-copy,
+    .relatedContent-img,
+    .entry-meta-top,
+    .author-img-mobile,
+    .single .entry-highlights-title i,
+    .entry-share,
+    .explore-more-container .subheading-lg,
+    .btn-download,
+    .img-aircraft,
+    aside {
+        display: none !important;
+    }
 
-        .entry-header .featureImg .entry-title {
-            text-align: left !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        .single-post article.post .entry-content {
-            padding: 0 !important;
-        }
-
-        table th,
-        td 
-        {
-            display: table-cell !important;
-        }
-
-        table th,
-        table thead 
-        {
-            border: 0 !important;
-        }
-
-        blockquote {
-            border-top-color: $black;
-            border-bottom-color: $black;
-            width: 85%;
-        }
-
-        article a[href^=http].sourceLink:after {
-            content: " <" attr(href) "> ";
-        }
-
-        .content-wrapper {
-            max-width: initial !important;
-            margin: 0 auto !important;
-            padding: 0 !important;
-        }
-
-        .entry-footer .col-xs-12 {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
-
-        .post-dataSources-container {
-            margin: 0 !important;
-        }
-
+    .entry-header .featureImg {
+        background: transparent !important;
+        height: auto !important;
 
     }
+
+    .entry-header .featureImg .entry-title {
+        text-align: left !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .single-post article.post .entry-content {
+        padding: 0 !important;
+    }
+
+    .single .hentry {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .single .entry-highlights-title {
+        padding: 0 0 0.5rem 0;
+    }
+
+    .single .entry-highlights-content {
+        display: block;
+        padding: 0;
+    }
+
+    .single .title-container {
+        border: 0;
+
+        .entry-meta-bottom {
+            border: 0;
+        }
+    }
+
+    .single .footer-middle {
+        margin-top: 0;
+    }
+
+    table th,
+    td 
+    {
+        display: table-cell !important;
+    }
+
+    table th,
+    table thead 
+    {
+        border: 0 !important;
+    }
+
+    blockquote {
+        border-top-color: $black;
+        border-bottom-color: $black;
+        width: 85%;
+        float: none;
+        max-width: unset;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    article a[href^=http].sourceLink:after {
+        content: " <" attr(href) "> ";
+    }
+
+    .content-wrapper {
+        max-width: initial !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+
+    .entry-footer .col-xs-12 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .post-dataSources-container {
+        margin: 0 !important;
+    }
+
+
+}

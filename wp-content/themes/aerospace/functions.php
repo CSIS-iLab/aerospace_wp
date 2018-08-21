@@ -137,6 +137,8 @@ function aerospace_scripts()
     global $post;
     wp_enqueue_style('aerospace-style', get_stylesheet_uri());
 
+    wp_enqueue_style('aerospace-print-styles', get_template_directory_uri() . '/print.css');
+
     wp_enqueue_script('aerospace-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true);
 
     wp_enqueue_script('aerospace-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true);
