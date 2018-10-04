@@ -25,6 +25,7 @@
         padding: 0;
         margin: 0;
         background-color: transparent;
+        color: $white;
 
         @include breakpoint("medium") {
             display: none;
