@@ -11,7 +11,7 @@
  * @param  array $classes Classes for the body element.
  * @return array
  */
-function aerospace_body_classes( $classes ) 
+function aerospace_body_classes( $classes )
 {
     // Adds a class of hfeed to non-singular pages.
     if (! is_singular() ) {
@@ -25,7 +25,7 @@ add_filter('body_class', 'aerospace_body_classes');
 /**
  * Add a pingback url auto-discovery header for singularly identifiable articles.
  */
-function aerospace_pingback_header() 
+function aerospace_pingback_header()
 {
     if (is_singular() && pings_open() ) {
         echo '<link rel="pingback" href="', esc_url(get_bloginfo('pingback_url')), '">';
@@ -116,7 +116,7 @@ function aerospace_img_caption_shortcode_filter($val, $attr, $content = null)
     }
 
     return '<figure ' . $id . 'class="wp-caption ' . esc_attr($align) . '" >'
-    . do_shortcode( $content ) . '<figcaption ' . $capid 
+    . do_shortcode( $content ) . '<figcaption ' . $capid
     . 'class="wp-caption-text">' . $caption . '</figcaption></figure>';
 }
 add_filter('img_caption_shortcode', 'aerospace_img_caption_shortcode_filter',10,3);
@@ -160,9 +160,9 @@ add_filter('the_content', 'aerospace_the_content_shortcode_fix');
 function aerospace_switch_to_relative_url($html, $id, $caption, $title, $align, $url, $size, $alt)
 {
     $imageurl = wp_get_attachment_image_src($id, $size);
-    $relativeurl = wp_make_link_relative($imageurl[0]);   
+    $relativeurl = wp_make_link_relative($imageurl[0]);
     $html = str_replace($imageurl[0],$relativeurl,$html);
-          
+
     return $html;
 }
 add_filter('image_send_to_editor','aerospace_switch_to_relative_url',10,8);
@@ -272,6 +272,14 @@ function aerospace_filter_guest_author_fields( $fields_to_return, $groups ) {
     return $fields_to_return;
 }
 
+function aerospace_algolia_author_shared_attributes( array $shared_attributes, WP_Post $post ) {
+
+    $shared_attributes['permalink'] = wp_make_link_relative( get_post_permalink( $post ) );
+    return $shared_attributes;
+}
+add_filter( 'algolia_post_guest-author_shared_attributes', 'aerospace_algolia_author_shared_attributes', 10, 2 );
+add_filter( 'algolia_searchable_post_guest-author_shared_attributes', 'aerospace_algolia_author_shared_attributes', 10, 2 );
+
 /**
  * Only use Photon for images belonging to our site.
  *
@@ -285,7 +293,7 @@ function aerospace_filter_guest_author_fields( $fields_to_return, $groups ) {
 function jeherve_photon_only_allow_local( $skip, $image_url, $args, $scheme ) {
     // Get the site URL, without any protocol.
     $site_url = preg_replace( '~^(?:f|ht)tps?://~i', '', get_site_url() );
- 
+
     /**
      * If the image URL is from our site,
      * return default value (false, unless another function overwrites).
