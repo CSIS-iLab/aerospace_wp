@@ -249,15 +249,20 @@ add_filter('shortcode_atts_accordion', 'set_accordion_shortcode_defaults', 10, 3
 function aerospace_algolia_shared_attributes( array $shared_attributes, WP_Post $post ) {
 
     $shared_attributes['permalink'] = wp_make_link_relative( get_post_permalink( $post ) );
+
     if ( has_post_thumbnail( $post ) ) {
         $shared_attributes['images']['thumbnail']['url'] = wp_make_link_relative( get_the_post_thumbnail_url( $post ) );
     }
+
+    if ( $post->post_type === 'guest-author' ) {
+        $shared_attributes['permalink_author'] = '/author/' . sanitize_title( $post->post_title );
+    }
+
     return $shared_attributes;
 }
 add_filter( 'algolia_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
 add_filter( 'algolia_searchable_post_shared_attributes', 'aerospace_algolia_shared_attributes', 10, 2 );
 
-add_filter( 'coauthors_guest_author_fields', 'aerospace_filter_guest_author_fields', 10, 2 );
 /**
  * Add fields for Guest Author names.
  */
@@ -271,14 +276,7 @@ function aerospace_filter_guest_author_fields( $fields_to_return, $groups ) {
     }
     return $fields_to_return;
 }
-
-function aerospace_algolia_author_shared_attributes( array $shared_attributes, WP_Post $post ) {
-
-    $shared_attributes['permalink'] = wp_make_link_relative( get_post_permalink( $post ) );
-    return $shared_attributes;
-}
-add_filter( 'algolia_post_guest-author_shared_attributes', 'aerospace_algolia_author_shared_attributes', 10, 2 );
-add_filter( 'algolia_searchable_post_guest-author_shared_attributes', 'aerospace_algolia_author_shared_attributes', 10, 2 );
+add_filter( 'coauthors_guest_author_fields', 'aerospace_filter_guest_author_fields', 10, 2 );
 
 /**
  * Only use Photon for images belonging to our site.
