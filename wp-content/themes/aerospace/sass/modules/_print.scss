@@ -1,7 +1,7 @@
 /*=========================================
 =            Print Stylesheets            =
 =========================================*/
-    
+
 @media print {
     *,
     *:before,
@@ -27,7 +27,7 @@
 
         &:after {
 
-        	content: 'Printed from Aerospace Security, ©2018 by the Center for Strategic and International Studies. All rights reserved.';
+        	content: 'Printed from Aerospace Security, ©2019 by the Center for Strategic and International Studies. All rights reserved.';
         	margin-top: 0.5cm;
         	font-size: 12pt;
         }
@@ -39,9 +39,9 @@
     }
 
     article {
-      
+
     }
-   
+
     img,
     blockquote {
         page-break-inside: avoid;
@@ -117,13 +117,13 @@
     }
 
     table th,
-    td 
+    td
     {
         display: table-cell !important;
     }
 
     table th,
-    table thead 
+    table thead
     {
         border: 0 !important;
     }
