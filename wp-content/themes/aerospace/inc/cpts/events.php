@@ -43,7 +43,7 @@ function aerospace_cpt_events() {
 		'label'                 => __( 'Event', 'aerospace' ),
 		'description'           => __( 'Events', 'aerospace' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'excerpt' ),
+		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
 		'taxonomies'            => array( 'post_tag' ),
 		'hierarchical'          => false,
 		'public'                => true,
