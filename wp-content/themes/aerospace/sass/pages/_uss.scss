@@ -75,6 +75,10 @@ body.page #post-896 {
       margin: 2rem auto 0;
       overflow: hidden;
 
+      @media screen and (min-width: 62em) {
+        width: 75%;
+      }
+
       h2 {
         width: -moz-fit-content;
         width: fit-content;
@@ -103,6 +107,7 @@ body.page #post-896 {
 
   #course-apply {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 
@@ -167,42 +172,44 @@ body.page #post-896 {
     }
   }
 
-  h2:not(.entry-title) {
-    position: relative;
-    position: relative;
-    width: -moz-fit-content;
-    width: fit-content;
-    margin: 1rem auto;
-    padding: 1rem;
-    color: $dark-blue;
+  #apply {
+    h2 {
+      position: relative;
+      position: relative;
+      width: -moz-fit-content;
+      width: fit-content;
+      margin: 1rem auto;
+      padding: 1rem;
+      color: $dark-blue;
 
-    &::after {
-      position: absolute;
-      top: 50%;
-      left: 100%;
-      display: block;
-      width: calc(50vw - 100% + 24rem);
-      height: 6px;
-      background-color: $dark-blue;
-      content: "";
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        display: block;
+        width: calc(50vw - 100% + 24rem);
+        height: 6px;
+        background-color: $dark-blue;
+        content: "";
 
-      @media screen and (min-width: 62em) {
-        width: calc(100vw - 100% + 12rem);
+        @media screen and (min-width: 62em) {
+          width: calc(100vw - 100% + 12rem);
+        }
       }
-    }
 
-    &::before {
-      position: absolute;
-      top: 50%;
-      right: 100%;
-      display: block;
-      width: calc(50vw - 100% + 24rem);
-      height: 6px;
-      background-color: $dark-blue;
-      content: "";
+      &::before {
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        display: block;
+        width: calc(50vw - 100% + 24rem);
+        height: 6px;
+        background-color: $dark-blue;
+        content: "";
 
-      @media screen and (min-width: 62em) {
-        width: calc(100vw - 100% + 12rem);
+        @media screen and (min-width: 62em) {
+          width: calc(100vw - 100% + 12rem);
+        }
       }
     }
   }
