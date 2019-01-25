@@ -217,3 +217,23 @@ body.page #post-896 {
     }
   }
 }
+
+.googleforms {
+  margin: 0 auto;
+  max-width: 67%;
+}
+
+.googleforms p > input:not(.button),
+.googleforms p > textarea {
+  width: 100% !important;
+  display: inline-block;
+}
+input[type="submit"] {
+  width: unset !important;
+}
+@media screen and (min-width: 48em) {
+  .googleforms {
+    margin: auto;
+    max-width: 67%;
+  }
+}
