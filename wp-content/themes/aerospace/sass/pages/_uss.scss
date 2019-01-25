@@ -111,12 +111,15 @@ body.page #post-896 {
     justify-content: center;
     align-items: center;
 
+    h2 {
+      margin: 0 3rem;
+    }
+
     .btn {
       color: $white;
-      background-color: $secondary-blue;
 
       &:hover {
-        background-color: $color__background-button-blue-hover;
+        background-color: $secondary-blue;
       }
     }
   }
