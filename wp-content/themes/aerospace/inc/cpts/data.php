@@ -43,7 +43,7 @@ function aerospace_cpt_data() {
 		'label'                 => __( 'Data', 'aerospace' ),
 		'description'           => __( 'Data', 'aerospace' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+		'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author' ),
 		'taxonomies'            => array( 'category', 'post_tag' ),
 		'hierarchical'          => false,
 		'public'                => true,
@@ -209,7 +209,7 @@ function data_save_meta_box_data( $post_id ){
 	} else {
 		update_post_meta( $post_id, '_post_is_featured', 0 );
 	}
-	
+
 	// URL
 	if ( isset( $_REQUEST['url'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_data_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) ); // Input var okay.

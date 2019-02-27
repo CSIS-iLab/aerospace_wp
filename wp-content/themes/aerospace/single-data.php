@@ -39,6 +39,7 @@ get_header(); ?>
 					<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
 					<div class="entry-meta-bottom">
 						<?php aerospace_last_updated() ?>
+						<?php aerospace_authors_list(); ?>
 					</div>
 				</div>
 			</header><!-- .entry-header -->

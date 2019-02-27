@@ -28,6 +28,7 @@ $thumbnail_size = 3;
 	            the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
 	            ?>
 	            <div class="entry-meta">
+									<?php aerospace_authors_list(); ?>
 	                <?php aerospace_last_updated(); ?>
 	                <?php aerospace_entry_categories(); ?>
 	                <?php aerospace_entry_tags(); ?>
