@@ -96,6 +96,8 @@ function data_build_meta_box( $post ) {
 	$current_img_url = get_post_meta( $post->ID, '_data_img_url', true );
 	$current_content_placement = get_post_meta( $post->ID, '_data_content_placement', true );
 	$current_twitter_pic_url = get_post_meta( $post->ID, '_data_twitter_pic_url', true );
+	$current_is_featured = get_post_meta( $post->ID, '_post_is_featured', true );
+
 
 	if ( ! $current_content_placement ) {
 		$current_content_placement = 'above';
@@ -103,6 +105,10 @@ function data_build_meta_box( $post ) {
 
 	?>
 	<div class='inside'>
+		<h3><?php _e( 'Is Featured?', 'aerospace' ); ?></h3>
+		<p>
+			<input type="checkbox" name="is_featured" value="1" <?php checked( $current_is_featured, '1' ); ?> /> Is Featured?
+		</p>
 
 		<h3><?php esc_html_e( 'Content Placement', 'aerospace' ); ?></h3>
 		<p>
@@ -169,7 +175,7 @@ function data_build_meta_box( $post ) {
 					)
 				);
 			?>
-		</p>		
+		</p>
 
 		<h3><?php esc_html_e( 'Twitter Pic URL', 'aerospace' ); ?></h3>
 		<p>
@@ -197,7 +203,13 @@ function data_save_meta_box_data( $post_id ){
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-
+	// Is Featured?
+	if ( isset( $_REQUEST['is_featured'] ) ) {
+		update_post_meta( $post_id, '_post_is_featured', intval( wp_unslash( $_POST['is_featured'] ) ) );
+	} else {
+		update_post_meta( $post_id, '_post_is_featured', 0 );
+	}
+	
 	// URL
 	if ( isset( $_REQUEST['url'] ) ) { // Input var okay.
 		update_post_meta( $post_id, '_data_url', esc_url_raw( wp_unslash( $_POST['url'] ) ) ); // Input var okay.
