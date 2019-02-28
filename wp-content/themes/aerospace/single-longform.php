@@ -2,7 +2,7 @@
 /**
  * Template Name: Longform
  * Template Post Type: post
- * 
+ *
  * @package Aerospace
  */
 
@@ -55,10 +55,8 @@ get_header();
 			</div><!-- .entry-content -->
 
 			<footer class="entry-footer">
-				<section class="footer-top content-padding row">
-					<div class="entry-citation col-xs-12 col-md-9">
-						<?php aerospace_citation(); ?>
-					</div>
+				<section class="footer-top content-padding row">>
+					<div class="col-xs-12 col-md-9"></div>
 					<div class="entry-share col-xs-12 col-md-3">
 						<?php get_template_part( 'components/share-inline' ); ?>
 					</div>

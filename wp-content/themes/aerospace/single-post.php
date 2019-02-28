@@ -57,9 +57,7 @@ get_header(); ?>
 
 			<footer class="entry-footer">
 				<section class="footer-top content-padding row">
-					<div class="entry-citation col-xs-12 col-md-9">
-						<?php aerospace_citation(); ?>
-					</div>
+					<div class="col-xs-12 col-md-9"></div>
 					<div class="entry-share col-xs-12 col-md-3">
 						<?php get_template_part( 'components/share-inline' ); ?>
 					</div>
