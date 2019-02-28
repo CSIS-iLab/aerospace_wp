@@ -210,10 +210,14 @@ if (! function_exists('aerospace_authors_list')) :
      */
     function aerospace_authors_list()
     {
-        if (in_array(get_post_type(), array( 'post', 'aerospace101' ), true)) {
+
+        if (in_array(get_post_type(), array( 'post', 'aerospace101', 'data' ), true)) {
             if (function_exists('coauthors_posts_links')) {
                 $prefix = $authors = '';
                 foreach (get_coauthors() as $coauthor) :
+                  if ($coauthor->user_login=="csisaerospace"){
+                    return;
+                  }
                     $authors .= $prefix . '<a href="' . get_author_posts_url($coauthor->ID, $coauthor->user_nicename) . '">' . $coauthor->display_name . '</a>';
                 $prefix = ', ';
                 endforeach;
