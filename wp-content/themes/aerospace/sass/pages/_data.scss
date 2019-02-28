@@ -29,7 +29,7 @@
 	.entry-footer .return-to-archive {
 		margin-top: 2rem;
 	}
-	
+
 }
 
 /*----------  Archives  ----------*/
@@ -132,6 +132,10 @@
 				}
 			}
 		}
+
+		.entry-header .entry-meta .authors-list {
+      display: block;
+    }
 
 		.entry-meta .posted-on,
 		.cat-links li,
