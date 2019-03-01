@@ -30,8 +30,8 @@ if ( is_author() ) {
       $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . $twitter . '</p></div></div></div>';
 }
 
-
   $wp_query->query_vars['post_type'] = array('post','data','aerospace101');
+  $wp_query->query_vars['orderby'] = 'modified';
 
   $archive_query = get_posts($wp_query->query_vars);
 
