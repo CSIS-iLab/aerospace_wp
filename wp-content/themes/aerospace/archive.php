@@ -7,6 +7,7 @@
  * @package Aerospace
  */
 
+$archive_query = get_posts($wp_query->query_vars);
 
 if ( get_archive_top_content() ) {
     $description = get_archive_top_content();
@@ -15,15 +16,26 @@ if ( get_archive_top_content() ) {
 }
 
 // Author Archives
-if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
-    $author = get_queried_object();
-    $img = coauthors_get_avatar( $author, 350 );
-    $bio = $author->description;
-    $twitter = $author->twitter;
-    if ( $twitter ) {
-        $twitter = ' <a href="https://twitter.com/' . $twitter . '" target="_blank" rel="nofollow"><i class="icon-twitter"></i>@' . $twitter .'</a>';
-    }
-    $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . $twitter . '</p></div></div></div>';
+if ( is_author() ) {
+
+  $author = get_queried_object();
+
+  if ( function_exists( 'coauthors_posts_links' ) ) {
+      $img = coauthors_get_avatar( $author, 350 );
+      $bio = $author->description;
+      $twitter = $author->twitter;
+      if ( $twitter ) {
+          $twitter = ' <a href="https://twitter.com/' . $twitter . '" target="_blank" rel="nofollow"><i class="icon-twitter"></i>@' . $twitter .'</a>';
+      }
+      $description = '<div class="authors-list-extended"><div class="entry-author row"><div class="author-img col-xs-3 col-md-2">' . $img . '</div><div class="author-bio col-xs"><div class="author-img-mobile">' . $img . '</div><p>' . $bio . $twitter . '</p></div></div></div>';
+}
+
+
+  $wp_query->query_vars['post_type'] = array('post','data','aerospace101');
+
+  $archive_query = get_posts($wp_query->query_vars);
+
+
 }
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
@@ -31,6 +43,7 @@ $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $desc
 if ( get_archive_bottom_content() ) {
     $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
 }
+
 
 get_header(); ?>
 
@@ -45,7 +58,7 @@ get_header(); ?>
                         <?php echo $description; ?>
                     </div>
                     <div class="archive-pages-top row">
-                        <?php if (have_posts() ) : ?>
+                        <?php if (count($archive_query) ) : ?>
                         <div class="col-xs-12 col-sm archives-meta-left">
                             <?php aerospace_post_num(); ?>
                         </div>
@@ -62,18 +75,19 @@ get_header(); ?>
             </header><!-- .page-header -->
 
     <?php
-    if (have_posts() ) : ?>
+
+    if ( count($archive_query) ) : ?>
         <?php
         /* Start the Loop */
-        while ( have_posts() ) : the_post();
-
+        foreach ( $archive_query as $post ) : setup_postdata( $post );
             if ( is_author() ) {
                 get_template_part('template-parts/content', 'search');
             } else {
                 get_template_part('template-parts/content', get_post_type());
             }
 
-        endwhile;
+        endforeach;
+        wp_reset_postdata();
         ?>
         <footer class="archive-pages-bottom row">
             <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
@@ -86,7 +100,6 @@ get_header(); ?>
         </footer>
         <?php
         else :
-
             get_template_part('template-parts/content', 'none');
 
         endif; ?>
