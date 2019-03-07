@@ -7,7 +7,12 @@
  * @package Aerospace
  */
 
-get_header(); ?>
+get_header();
+
+$feature_post2 = get_option( 'aerospace_homepage_featured_post_2' );
+$feature_post3 = get_option( 'aerospace_homepage_featured_post_3' );
+
+?>
 
 <div id="primary" class="content-area">
 	<main id="main" class="site-main content-wrapper" role="main">
@@ -38,9 +43,6 @@ get_header(); ?>
 		<section class="feature-secondary row">
 			<section class="feature-secondary-posts col-xs-12 col-md-8">
 				<?php
-					$feature_post2 = get_option( 'aerospace_homepage_featured_post_2' );
-					$feature_post3 = get_option( 'aerospace_homepage_featured_post_3' );
-
 					if( $feature_post2 || $feature_post3 ) {
 						echo '<h4 class="subheading">' . esc_html__( 'Recommended Articles', 'aerospace' ) . '</h4>';
 						$featuredPostsArgs = array(

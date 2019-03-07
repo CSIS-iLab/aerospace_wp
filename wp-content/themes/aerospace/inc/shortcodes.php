@@ -183,7 +183,6 @@ function aerospace_social_share($title = "", $post_url = "", $data_post_url = ""
 		'linkname' => $title . ' ' . $twitter_pic_url,
 		'linkurl' => $post_url
 	);
-	echo $URL;
 	$output = '<div class="sharing-inline">';
 	$output .= '<div class="col-xs-12 col-md-6 sharing-inline-share"><span class="meta-label">Share</span>';
 	ob_start();

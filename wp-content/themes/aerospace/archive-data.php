@@ -15,6 +15,7 @@ if ( get_archive_top_content() ) {
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
 
+$description_extra = '';
 if ( get_archive_bottom_content() ) {
     $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
 }
