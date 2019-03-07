@@ -294,3 +294,14 @@ require get_template_directory() . '/inc/custom-tinymce-buttons.php';
  * Remove AddToAny Default CSS
  */
 add_action( 'wp_enqueue_scripts', function() { wp_dequeue_style( 'addtoany' ); }, 21 );
+
+/**
+ * CoAuthors Plus has a broken filter for titles. Remove this once it's been addressed by the plugin.
+ */
+if( class_exists('CoAuthors_Plus' ) ) {
+  global $coauthors_plus;
+  remove_filter( 'get_the_archive_title', 
+  array( $coauthors_plus, 'filter_author_archive_title' ), 
+  10 );
+}
+
