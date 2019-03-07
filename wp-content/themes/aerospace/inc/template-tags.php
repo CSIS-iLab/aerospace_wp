@@ -504,6 +504,8 @@ if (! function_exists('aerospace_report_download')) :
                 $report_cover_url = get_post_meta($id, '_post_report_cover_url', true);
                 $download_url = get_post_meta($id, '_post_download_url', true);
                 $view_url = get_post_meta($id, '_post_view_url', true);
+                $view = '';
+                $download = '';
 
                 if ('' !== $download_url) {
                     $download = '<a href="' . esc_url($download_url) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i>' . esc_html('Download PDF', 'aerospace') . '</a>';
