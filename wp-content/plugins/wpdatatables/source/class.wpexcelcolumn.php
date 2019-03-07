@@ -67,9 +67,9 @@ class WDTExcelColumn {
 
         if( $cell_editor_type == 'wdt.dropdown' || $cell_editor_type == 'wdt.multi-select' ) {
             if ($this->wdtColumn->getPossibleValuesType() === 'read') {
-                $colJsDefinition->source = WDTColumn::getColumnDistinctValues($this->wdtColumn, false, false);
+                $colJsDefinition->source = WDTColumn::getPossibleValuesRead($this->wdtColumn, false, false);
             } elseif ($this->wdtColumn->getPossibleValuesType() === 'list') {
-                $colJsDefinition->source = $this->wdtColumn->getPossibleValues();
+                $colJsDefinition->source = $this->wdtColumn->getPossibleValuesList();
             }
         }
 

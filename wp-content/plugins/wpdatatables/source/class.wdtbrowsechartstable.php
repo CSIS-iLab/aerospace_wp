@@ -65,6 +65,14 @@ class WDTBrowseChartsTable extends WP_List_Table {
 
         $query = "SELECT COUNT(*) FROM {$wpdb->prefix}wpdatacharts";
 
+        if (isset($_REQUEST['s'])) {
+            if (is_numeric($_REQUEST['s'])){
+                $query .= " WHERE id LIKE '" . sanitize_text_field($_POST['s']) . "'";
+            }else{
+                $query .= " WHERE title LIKE '%" . sanitize_text_field($_POST['s']) . "%'";
+            }
+        }
+
         $count = $wpdb->get_var($query);
 
         return $count;
@@ -81,7 +89,11 @@ class WDTBrowseChartsTable extends WP_List_Table {
                     FROM {$wpdb->prefix}wpdatacharts ";
 
         if (isset($_REQUEST['s'])) {
-            $query .= " WHERE title LIKE '%" . sanitize_text_field($_POST['s']) . "%' ";
+            if (is_numeric($_REQUEST['s'])){
+                $query .= " WHERE id LIKE '" . sanitize_text_field($_POST['s']) . "'";
+            }else{
+                $query .= " WHERE title LIKE '%" . sanitize_text_field($_POST['s']) . "%'";
+            }
         }
 
         if (isset($_REQUEST['orderby'])) {
@@ -277,6 +289,12 @@ class WDTBrowseChartsTable extends WP_List_Table {
                 break;
             case 'highcharts_3d_donut_chart':
                 return '<span class="wdt-chart-type bgm-gray">' . __('3D Donut Chart', 'wpdatatables') . '</span>';
+                break;
+            case 'highcharts_treemap_chart':
+                return '<span class="wdt-chart-type bgm-gray">' . __('Treemap Chart', 'wpdatatables') . '</span>';
+                break;
+            case 'highcharts_treemap_level_chart':
+                return '<span class="wdt-chart-type bgm-gray">' . __('Treemap level Chart', 'wpdatatables') . '</span>';
                 break;
             case 'chartjs_line_chart':
                 return '<span class="wdt-chart-type bgm-gray">' . __('Line Chart', 'wpdatatables') . '</span>';

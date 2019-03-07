@@ -121,6 +121,12 @@ var WDTColumn = function (column, parent_table) {
     this.possibleValuesAddEmpty = 0;
 
     /**
+     * Possible values AJAX loading
+     * @type {number}
+     */
+    this.possibleValuesAjax = 10;
+
+    /**
      * Toggle calculate total for numeric columns
      * @type {int}
      */
@@ -191,13 +197,6 @@ var WDTColumn = function (column, parent_table) {
      * @type {string}
      */
     this.filterDefaultValue = null;
-
-    /**
-     * Default Value Possible Values
-     * @type {string}
-     */
-    this.defaultValueValues = null;
-
 
     /**
      * Editor input type for editable tables
@@ -291,7 +290,6 @@ var WDTColumn = function (column, parent_table) {
         this.dateInputFormat = column.dateInputFormat || '';
         this.decimalPlaces = column.decimalPlaces;
         this.defaultSortingColumn = column.defaultSortingColumn || 0;
-        this.defaultValueValues = column.defaultValueValues || null;
         this.display_header = column.display_header || null;
         this.editingDefaultValue = column.editingDefaultValue || null;
         this.editingNonEmpty = column.input_mandatory || 0;
@@ -317,6 +315,7 @@ var WDTColumn = function (column, parent_table) {
         this.pos = column.pos || 0;
         this.possibleValuesAddEmpty = column.possibleValuesAddEmpty || 0;
         this.possibleValuesType = column.possibleValuesType || null;
+        this.possibleValuesAjax = column.possibleValuesAjax || 10;
         this.skip_thousands_separator = column.skip_thousands_separator || 0;
         this.sorting = typeof column.sorting !== 'undefined' ? column.sorting : 1;
         this.text_after = column.text_after || null;
@@ -921,6 +920,10 @@ WDTColumn.prototype.renderConditionalFormattingBlock = function (formattingRule)
     }).change();
 
     $block.find('select.formatting-rule-if-clause').selectpicker('refresh');
+
+    if(jQuery.inArray($block.find('.formatting-rule-cell-value').val(), ['%LAST_WEEK%','%THIS_WEEK%','%NEXT_WEEK%','%LAST_30_DAYS%','%LAST_MONTH%','%NEXT_MONTH%','%THIS_MONTH%']) !== -1){
+        $block.find('.formatting-rule-if-clause').prop('disabled', true).selectpicker('val','');
+    }
 };
 
 /**
@@ -1002,6 +1005,7 @@ WDTColumn.prototype.fillInputs = function () {
 
     jQuery('#wdt-column-values').selectpicker('val', this.possibleValuesType).change();
     jQuery('#wdt-column-values-list').tagsinput('removeAll');
+    jQuery('#wdt-possible-values-ajax').selectpicker('val', this.possibleValuesAjax).change();
     if (this.possibleValuesType == 'list') {
         jQuery('#wdt-column-values-list').tagsinput('add', this.valuesList);
     } else if (this.possibleValuesType == 'foreignkey') {
@@ -1009,6 +1013,7 @@ WDTColumn.prototype.fillInputs = function () {
         jQuery('#wdt-connected-table-show-column').html(this.foreignKeyRule.displayColumnName);
         jQuery('#wdt-connected-table-value-column').html(this.foreignKeyRule.storeColumnName);
         jQuery('div.wdt-foreign-rule-display').show();
+        jQuery('.wdt-possible-values-ajax-block').hide();
     }
     jQuery('#wdt-column-values-add-empty').prop('checked', this.possibleValuesAddEmpty);
 
@@ -1057,16 +1062,29 @@ WDTColumn.prototype.fillInputs = function () {
 
             if (this.filterDefaultValue) {
                 if (jQuery.inArray(this.filter_type, ['text', 'number']) != -1) {
-                    jQuery('#wdt-filter-default-value').val(this.filterDefaultValue);
+                    if (typeof this.filterDefaultValue === 'object') {
+                        jQuery('#wdt-filter-default-value').val(this.filterDefaultValue.value);
+                    } else {
+                        jQuery('#wdt-filter-default-value').val(this.filterDefaultValue);
+                    }
                 } else if (jQuery.inArray(this.filter_type, ['number-range', 'date-range', 'datetime-range', 'time-range']) != -1) {
                     var filterDefaultValues = this.filterDefaultValue.split('|');
                     jQuery('#wdt-filter-default-value-from').val(filterDefaultValues[0]);
                     jQuery('#wdt-filter-default-value-to').val(filterDefaultValues[1]);
                     this.filterDefaultValue = filterDefaultValues.join('|');
                 } else {
-                    this.filterDefaultValue = jQuery.inArray(this.filter_type, ['checkbox', 'multiselect']) != -1 ? this.filterDefaultValue.split('|') : this.filterDefaultValue;
+
+                    if (jQuery.inArray(this.filter_type, ['checkbox', 'select', 'multiselect']) != -1) {
+                        if (typeof this.filterDefaultValue === 'object')
+                            this.filterDefaultValue = this.filterDefaultValue.value;
+                        else
+                            this.filterDefaultValue = this.filterDefaultValue.split('|');
+                    }
+
                     jQuery('#wdt-filter-default-value-selectpicker').selectpicker('val', this.filterDefaultValue);
-                    this.filterDefaultValue = this.filterDefaultValue.join('|');
+                    if (this.filterDefaultValue instanceof Array) {
+                        this.filterDefaultValue = this.filterDefaultValue.join('|');
+                    }
                 }
             } else {
                 jQuery('#wdt-filter-default-value').val('');
@@ -1085,8 +1103,12 @@ WDTColumn.prototype.fillInputs = function () {
         jQuery('#wdt-column-not-null').prop('checked', this.editingNonEmpty);
         if (this.editingDefaultValue) {
             if (jQuery.inArray(this.editor_type, ['selectbox', 'multi-selectbox']) != -1) {
-                this.editingDefaultValue = this.editor_type == 'multi-selectbox' ? this.editingDefaultValue.split('|') : this.editingDefaultValue;
-                jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue);
+                if(typeof this.editingDefaultValue === 'object') {
+                    jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue.value);
+                } else {
+                    this.editingDefaultValue = this.editor_type == 'multi-selectbox' && !$.isArray(this.editingDefaultValue) ? this.editingDefaultValue.split('|') : this.editingDefaultValue;
+                    jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue);
+                }
             } else {
                 jQuery('#wdt-editing-default-value').val(this.editingDefaultValue);
             }
@@ -1224,6 +1246,7 @@ WDTColumn.prototype.applyChanges = function () {
         this.valuesList = jQuery('#wdt-column-values-list').val().replace(/,/g, '|');
     }
     this.possibleValuesAddEmpty = jQuery('#wdt-column-values-add-empty').is(':checked') ? 1 : 0;
+    this.possibleValuesAjax = jQuery('#wdt-possible-values-ajax').val();
     this.calculateTotal = ( jQuery('#wdt-column-calc-total').is(':checked') && ( this.type == 'int' || this.type == 'float' || this.type == 'formula') ) ? 1 : 0;
     this.calculateAvg = ( jQuery('#wdt-column-calc-avg').is(':checked') && ( this.type == 'int' || this.type == 'float' || this.type == 'formula') ) ? 1 : 0;
     this.calculateMax = ( jQuery('#wdt-column-calc-max').is(':checked') && ( this.type == 'int' || this.type == 'float' || this.type == 'formula') ) ? 1 : 0;
@@ -1263,7 +1286,7 @@ WDTColumn.prototype.applyChanges = function () {
         }
     }
 
-    this.editor_type = jQuery('#wdt-column-editor-input-type').val();
+    this.editor_type = this.type === 'formula' ? 'none' : jQuery('#wdt-column-editor-input-type').val();
     this.editingNonEmpty = jQuery('#wdt-column-not-null').is(':checked') ? 1 : 0;
 
     if (jQuery.inArray(this.editor_type, ['selectbox', 'multi-selectbox']) != -1) {
@@ -1295,7 +1318,6 @@ WDTColumn.prototype.getJSON = function () {
         dateInputFormat: this.dateInputFormat,
         decimalPlaces: this.decimalPlaces,
         defaultSortingColumn: this.defaultSortingColumn,
-        defaultValueValues: this.defaultValueValues,
         display_header: this.display_header,
         editingDefaultValue: this.editingDefaultValue,
         editingNonEmpty: this.editingNonEmpty,
@@ -1320,6 +1342,7 @@ WDTColumn.prototype.getJSON = function () {
         pos: this.pos,
         possibleValuesAddEmpty: this.possibleValuesAddEmpty,
         possibleValuesType: this.possibleValuesType,
+        possibleValuesAjax: this.type === 'string' ? this.possibleValuesAjax : -1,
         skip_thousands_separator: this.skip_thousands_separator,
         sorting: this.sorting,
         text_after: this.text_after,

@@ -22,51 +22,6 @@ var wpdatatable_plugin_config = {
         }
     },
 
-    setMysqlHost: function ( host ) {
-        if( wdt_current_config.wdtMySqlHost != host ){
-            wdt_current_config.wdtMySqlHost = host;
-        }
-        if( jQuery('#wdt-my-sql-host').val() != host ){
-            jQuery('#wdt-my-sql-host').val( host );
-        }
-    },
-
-    setMysqlDb: function ( db ) {
-        if( wdt_current_config.wdtMySqlDB != db ){
-            wdt_current_config.wdtMySqlDB = db;
-        }
-        if( jQuery('#wdt-my-sql-db').val() != db ){
-            jQuery('#wdt-my-sql-db').val( db );
-        }
-    },
-
-    setMysqlUser: function ( user ) {
-        if( wdt_current_config.wdtMySqlUser != user ){
-            wdt_current_config.wdtMySqlUser = user;
-        }
-        if( jQuery('#wdt-my-sql-user').val() != user ){
-            jQuery('#wdt-my-sql-user').val( user );
-        }
-    },
-
-    setMysqlPass: function ( pass ) {
-        if( wdt_current_config.wdtMySqlPwd != pass ){
-            wdt_current_config.wdtMySqlPwd = pass;
-        }
-        if( jQuery('#wdtMySqlPwd').val() != pass ){
-            jQuery('#wdtMySqlPwd').val( pass );
-        }
-    },
-
-    setMysqlPort: function ( port ) {
-        if( wdt_current_config.wdtMySqlPort != port ){
-            wdt_current_config.wdtMySqlPort = port;
-        }
-        if( jQuery('#wdt-my-sql-port').val() != port ){
-            jQuery('#wdt-my-sql-port').val( port );
-        }
-    },
-
     setLanguage: function( language ){
         if( wdt_current_config.wdtInterfaceLanguage != language ){
             wdt_current_config.wdtInterfaceLanguage = language;
@@ -121,6 +76,15 @@ var wpdatatable_plugin_config = {
         }
     },
 
+    setCSVDelimiter: function ( wdtCSVDelimiter ) {
+        if( wdt_current_config.wdtCSVDelimiter != wdtCSVDelimiter ){
+            wdt_current_config.wdtCSVDelimiter = wdtCSVDelimiter;
+        }
+        if( jQuery('#wdt-csv-delimiter').val() != wdtCSVDelimiter ){
+            jQuery('#wdt-csv-delimiter').selectpicker( 'val', wdtCSVDelimiter );
+        }
+    },
+
     setRenderPosition: function ( renderPosition ) {
         if( wdt_current_config.wdtRenderFilter != renderPosition ){
             wdt_current_config.wdtRenderFilter = renderPosition;
@@ -172,6 +136,12 @@ var wpdatatable_plugin_config = {
             jQuery('#wdt-include-bootstrap').prop( 'checked', includeBootstrap );
         }
     },
+    setIncludeBootstrapBackEnd: function (includeBootstrapBackEnd) {
+        wdt_current_config.wdtIncludeBootstrapBackEnd = includeBootstrapBackEnd;
+        if( jQuery('#wdt-include-bootstrap-back-end').val() != includeBootstrapBackEnd ){
+            jQuery('#wdt-include-bootstrap-back-end').prop( 'checked', includeBootstrapBackEnd );
+        }
+    },
 
     setParseShortcodes: function ( wdtParseShortcodes ) {
         wdt_current_config.wdtParseShortcodes = wdtParseShortcodes;
@@ -208,6 +178,20 @@ var wpdatatable_plugin_config = {
                 default:
                     jQuery('input[data-name=' + settingName + ']').closest('.color-picker').colorpicker('setValue', settingValue);
             }
+        }
+    },
+
+    setBorderRemoval: function ( borderRemoval ) {
+        wdt_current_config.wdtBorderRemoval = borderRemoval;
+        if( jQuery('#wdt-remove-borders').val() != borderRemoval ){
+            jQuery('#wdt-remove-borders').prop( 'checked', borderRemoval );
+        }
+    },
+
+    setBorderRemovalHeader: function ( borderRemoval ) {
+        wdt_current_config.wdtBorderRemovalHeader = borderRemoval;
+        if( jQuery('#wdt-remove-borders-header').val() != borderRemoval ){
+            jQuery('#wdt-remove-borders-header').prop( 'checked', borderRemoval );
         }
     },
 

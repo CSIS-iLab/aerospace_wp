@@ -20,6 +20,15 @@ var duplicate_table_id = '';
         });
 
         /**
+         * Search tables and charts in backend by enter
+         */
+        $("input#search_id-search-input").on("keydown",function (e) {
+            if(e.keyCode == 13) {
+                $("button#search-submit").click();
+            }
+        });
+
+        /**
          * Bulk action alert
          */
         $('#doaction, #doaction2').click( function(e) {

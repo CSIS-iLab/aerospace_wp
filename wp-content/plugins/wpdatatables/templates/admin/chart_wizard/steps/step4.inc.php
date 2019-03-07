@@ -146,7 +146,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <input type="number" name="border-width" id="border-width"
-                                               class="form-control input-sm" value=""/>
+                                               class="form-control input-sm" value="0"/>
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <input type="number" name="border-radius" id="border-radius"
-                                               class="form-control input-sm" value=""/>
+                                               class="form-control input-sm" value="0"/>
                                     </div>
                                 </div>
                             </div>

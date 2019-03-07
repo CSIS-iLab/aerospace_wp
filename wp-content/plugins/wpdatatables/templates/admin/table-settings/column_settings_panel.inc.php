@@ -450,13 +450,22 @@
                                         <div class="select">
                                             <select class="selectpicker" id="wdt-date-input-format">
                                                 <option value=""></option>
-                                                <option value="d/m/Y">15/07/2005 (d/m/Y)</option>
-                                                <option value="m/d/Y">07/15/2005 (m/d/Y)</option>
-                                                <option value="d.m.Y">15.07.2005 (d.m.Y)</option>
-                                                <option value="m.d.Y">07.15.2005 (m.d.Y)</option>
-                                                <option value="d-m-Y">15-07-2005 (d-m-Y)</option>
-                                                <option value="m-d-Y">07-15-2005 (m-d-Y)</option>
-                                                <option value="d M Y">15 July 2005 (d Mon Y)</option>
+                                                <option value="d/m/Y"> 15/07/2005 (d/m/Y)</option>
+                                                <option value="m/d/Y"> 07/15/2005 (m/d/Y)</option>
+                                                <option value="Y/m/d"> 2005/15/07 (Y/m/d)</option>
+                                                <option value="d.m.Y"> 15.07.2005 (d.m.Y)</option>
+                                                <option value="m.d.Y"> 07.15.2005 (m.d.Y)</option>
+                                                <option value="d-m-Y"> 15-07-2005 (d-m-Y)</option>
+                                                <option value="m-d-Y"> 07-15-2005 (m-d-Y)</option>
+                                                <option value="Y-m-d"> 2005-07-15 (Y-m-d)</option>
+                                                <option value="d.m.y"> 15.07.05 (d.m.y)</option>
+                                                <option value="m.d.y"> 07.15.05 (m.d.y)</option>
+                                                <option value="d-m-y"> 15-07-05 (d-m-y)</option>
+                                                <option value="m-d-y"> 07-15-05 (m-d-y)</option>
+                                                <option value="d M Y"> 15 July 2005 (d Mon Y)</option>
+                                                <option value="m/Y"> 07/2005 (m/Y)</option>
+                                                <option value="M Y"> July 2005 (Mon Y)</option>
+                                                <option value="Y">2005 (Y)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -504,10 +513,10 @@
                                 <div class="col-sm-6 wdt-foreign-rule-display p-r-0">
                                     <div class="form-group">
                                         <div class="well">
-                                            <strong>Table:</strong> <span id="wdt-connected-table-name"> -</span>,
-                                            <strong>Show column:</strong> <span
+                                            <strong><?php _e('Table', 'wpdatatables'); ?>:</strong> <span id="wdt-connected-table-name"> -</span>,
+                                            <strong><?php _e('Show column', 'wpdatatables'); ?>:</strong> <span
                                                     id="wdt-connected-table-show-column"> -</span>,
-                                            <strong>Value from column:</strong> <span
+                                            <strong><?php _e('Value from column', 'wpdatatables'); ?>:</strong> <span
                                                     id="wdt-connected-table-value-column"> -</span>
                                         </div>
                                     </div>
@@ -529,6 +538,29 @@
                                         <label for="wdt-column-values-add-empty" class="ts-helper"></label>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="col-sm-6 wdt-possible-values-ajax-block">
+                                <h4 class="c-black m-b-20">
+                                    <?php _e('Number of possible values to load', 'wpdatatables'); ?>
+                                    <i class="zmdi zmdi-help-outline" data-toggle="tooltip" data-placement="right"
+                                       title="<?php _e('Define here how many possible values per page will be loaded in selectbox filters and editor inputs. It is recommended not to be set to All if you have more than 50 possible values for this column. This option is not working when Cascade Filtering option from Powerful Filters add-on is enabled.', 'wpdatatables'); ?>"></i>
+                                </h4>
+
+                                <div class="form-group">
+                                    <div class="fg-line">
+                                        <div class="select">
+                                            <select class="selectpicker" id="wdt-possible-values-ajax">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                                <option value="-1"><?php _e('All', 'wpdatatables'); ?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -913,7 +945,7 @@
                                 <div class="form-group wdt-filter-default-value-selectpicker-block" hidden="hidden">
                                     <div class="fg-line">
                                         <div class="select">
-                                            <select class="selectpicker" id="wdt-filter-default-value-selectpicker">
+                                            <select class="selectpicker" id="wdt-filter-default-value-selectpicker" data-live-search="true">
 
                                             </select>
                                         </div>
@@ -1015,7 +1047,7 @@
                                 <div class="form-group wdt-editing-default-value-selectpicker-block" hidden="hidden">
                                     <div class="fg-line">
                                         <div class="select">
-                                            <select class="selectpicker" id="wdt-editing-default-value-selectpicker">
+                                            <select class="selectpicker" id="wdt-editing-default-value-selectpicker" data-live-search="true">
 
                                             </select>
                                         </div>

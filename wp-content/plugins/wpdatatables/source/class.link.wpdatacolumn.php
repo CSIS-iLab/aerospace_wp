@@ -63,14 +63,18 @@ class LinkWDTColumn extends WDTColumn
                     $formattedValue = '';
                 }
             } else {
-                if ($this->getLinkButtonAttribute() == 1 && $content !== '') {
-                    $buttonLabel = $this->getLinkButtonLabel() !== '' ? $this->getLinkButtonLabel() : $content;
-                    $formattedValue = "<a href='{$content}' target='{$targetAttribute}'><button class='{$buttonClass}'>{$buttonLabel}</button></a>";
-                } else {
-                    if($content == ''){
-                        return null;
-                    }else {
-                        $formattedValue = "<a href='{$content}' target='{$targetAttribute}'>{$content}</a>";
+                if($this->getLinkButtonAttribute() == 1 && $content === null ){
+                    $formattedValue = "<a href='{$content}' target='{$targetAttribute}'>{$content}</a>";
+                }else {
+                    if ($this->getLinkButtonAttribute() == 1 && $content !== '') {
+                        $buttonLabel = $this->getLinkButtonLabel() !== '' ? $this->getLinkButtonLabel() : $content;
+                        $formattedValue = "<a href='{$content}' target='{$targetAttribute}'><button class='{$buttonClass}'>{$buttonLabel}</button></a>";
+                    } else {
+                        if ($content == '') {
+                            return null;
+                        } else {
+                            $formattedValue = "<a href='{$content}' target='{$targetAttribute}'>{$content}</a>";
+                        }
                     }
                 }
             }

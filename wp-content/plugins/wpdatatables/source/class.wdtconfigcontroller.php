@@ -33,7 +33,7 @@ class WDTConfigController {
             sanitize_text_field($tableData->var3) : '';
 
         // trying to generate/validate the WPDataTable config
-        $res = WDTConfigController::tryCreateTable($tableData->table_type, $tableData->content);
+        $res = self::tryCreateTable($tableData->table_type, $tableData->content, $tableData->connection);
 
         if (empty($res->error)) {
             // If the table can be created by wpDataTables performing the save to DB
@@ -48,7 +48,7 @@ class WDTConfigController {
                     self::saveColumns($tableData->columns, $res->table, $tableData->id);
 
                     $wpDataTable = WPDataTable::loadWpDataTable($tableData->id);
-                    $tableData = self::loadTableFromDB($tableData->id);
+                    $tableData = self::loadTableFromDB($tableData->id, false);
 
                     if (count($wpDataTable->getDataRows()) > 2000) {
                         $tableData->server_side = 1;
@@ -57,13 +57,18 @@ class WDTConfigController {
                         $tableData->content = WDTTools::pathToUrl($tableData->content);
                     }
                     $tableData->editor_roles = !empty($tableData->editor_roles) ? explode(",", $tableData->editor_roles) : '';
-                    foreach ($tableData->columns as &$column) {
-                        $column->defaultValueValues = $wpDataTable->getColumn($column->orig_header)->getDefaultValues();
+
+                    // Return Filter and Editing Default value when Foreign key is set
+                    foreach ($tableData->columns as $column) {
+                        if (!empty($column->foreignKeyRule) && !($column->filter_type == 'text')) {
+                            $column->filterDefaultValue = $wpDataTable->getColumn($column->orig_header)->getFilterDefaultValue();
+                            $column->editingDefaultValue = $wpDataTable->getColumn($column->orig_header)->getEditingDefaultValue();
+                        }
                     }
 
                     $res->table = $tableData;
                     $res->wdtJsonConfig = json_decode($wpDataTable->getJsonDescription());
-                    $res->wdtHtml = $wpDataTable->generateTable();
+                    $res->wdtHtml = $wpDataTable->generateTable($tableData->connection);
 
                 } catch (Exception $e) {
                     $res->error = $e->getMessage();
@@ -95,20 +100,22 @@ class WDTConfigController {
             if (count($wpDataTable->getDataRows()) > 2000) {
                 $tableData->server_side = 1;
             }
-            if ($tableData->table_type == 'csv' || $tableData->table_type == 'xls') {
+            if ($tableData->table_type === 'csv' || $tableData->table_type === 'xls') {
                 $tableData->content = WDTTools::pathToUrl($tableData->content);
             }
-            $tableData->editor_roles = !empty($tableData->editor_roles) ? explode(",", $tableData->editor_roles) : '';
-            foreach ($tableData->columns as &$column) {
-                $column->defaultValueValues = $wpDataTable->getColumn($column->orig_header)->getDefaultValues();
-                if ($column->defaultValueValues) {
-                    sort($column->defaultValueValues);
+            $tableData->editor_roles = !empty($tableData->editor_roles) ? explode(',', $tableData->editor_roles) : '';
+
+            // Return Filter and Editing Default value when Foreign key is set
+            foreach ($tableData->columns as $column) {
+                if (!empty($column->foreignKeyRule)) {
+                    $column->filterDefaultValue = $wpDataTable->getColumn($column->orig_header)->getFilterDefaultValue();
+                    $column->editingDefaultValue = $wpDataTable->getColumn($column->orig_header)->getEditingDefaultValue();
                 }
             }
 
             $res->table = $tableData;
             $res->wdtJsonConfig = json_decode($wpDataTable->getJsonDescription());
-            $res->wdtHtml = $wpDataTable->generateTable();
+            $res->wdtHtml = $wpDataTable->generateTable($tableData->connection);
         } catch (Exception $e) {
             $res->error = $e->getMessage();
         }
@@ -122,12 +129,12 @@ class WDTConfigController {
      * @return array|null|bool|object|stdClass
      * @throws Exception
      */
-    public static function loadTableFromDB($tableId) {
+    public static function loadTableFromDB($tableId, $loadFromCache = true) {
         global $wpdb;
 
         do_action('wpdatatables_before_get_table_metadata', $tableId);
 
-        if (!isset(self::$_tableConfigCache[$tableId])) {
+        if (!isset(self::$_tableConfigCache[$tableId]) || $loadFromCache === false) {
 
             $tableQuery = $wpdb->prepare(
                 'SELECT * FROM ' . $wpdb->prefix . 'wpdatatables WHERE id = %d',
@@ -157,6 +164,7 @@ class WDTConfigController {
             $table->global_search = (isset($advancedSettings->global_search)) ? $advancedSettings->global_search : 1;
             $table->showRowsPerPage = (isset($advancedSettings->showRowsPerPage)) ? $advancedSettings->showRowsPerPage : 1;
             $table->clearFilters = (isset($advancedSettings->clearFilters)) ? $advancedSettings->clearFilters : 0;
+            $table->connection = (isset($table->connection)) ? $table->connection : null;
 
             $table = self::sanitizeTableConfig($table);
 
@@ -243,6 +251,7 @@ class WDTConfigController {
             'title' => $table->title,
             'show_title' => $table->show_title,
             'table_type' => $table->table_type,
+            'connection' => $table->connection,
             'content' => $table->content,
             'sorting' => $table->sorting,
             'fixed_layout' => $table->fixed_layout,
@@ -359,6 +368,12 @@ class WDTConfigController {
 
         $table->columns = WDTConfigController::sanitizeColumnsConfig($table->columns);
 
+        if (isset($table->cascadeFiltering) && $table->cascadeFiltering === 1) {
+            foreach ($table->columns as &$column) {
+                $column->possibleValuesAjax = -1;
+            }
+        }
+
         if (($table->table_type == 'csv') || ($table->table_type == 'xls')) {
             $table->content = WDTTools::urlToPath($table->content);
         }
@@ -385,9 +400,17 @@ class WDTConfigController {
                 $column->decimalPlaces = isset($column->decimalPlaces) ? (int)$column->decimalPlaces : get_option('wdtDecimalPlaces');
                 $column->defaultSortingColumn = (int)$column->defaultSortingColumn;
                 $column->display_header = sanitize_text_field($column->display_header);
-                $column->editingDefaultValue = sanitize_text_field($column->editingDefaultValue);
+                if (is_object($column->editingDefaultValue)) {
+                    $column->editingDefaultValue = sanitize_text_field($column->editingDefaultValue->value);
+                } else {
+                    $column->editingDefaultValue = sanitize_text_field($column->editingDefaultValue);
+                }
+                if (is_object($column->filterDefaultValue)) {
+                    $column->filterDefaultValue = sanitize_text_field($column->filterDefaultValue->value);
+                } else {
+                    $column->filterDefaultValue = is_array($column->filterDefaultValue) ? array_map('sanitize_text_field', $column->filterDefaultValue) : sanitize_text_field($column->filterDefaultValue);
+                }
                 $column->exactFiltering = (int)$column->exactFiltering;
-                $column->filterDefaultValue = is_array($column->filterDefaultValue) ? array_map('sanitize_text_field', $column->filterDefaultValue) : sanitize_text_field($column->filterDefaultValue);
                 $column->filterLabel = sanitize_text_field($column->filterLabel);
                 $column->formula = sanitize_text_field($column->formula);
                 $column->hide_on_mobiles = (int)$column->hide_on_mobiles;
@@ -401,6 +424,7 @@ class WDTConfigController {
                 $column->linkButtonClass = sanitize_text_field($column->linkButtonClass);
                 $column->pos = (int)$column->pos;
                 $column->possibleValuesAddEmpty = (int)$column->possibleValuesAddEmpty;
+                $column->possibleValuesAjax = (int)$column->possibleValuesAjax;
                 $column->possibleValuesType = sanitize_text_field($column->possibleValuesType);
                 $column->skip_thousands_separator = (int)$column->skip_thousands_separator;
                 $column->sorting = (int)$column->sorting;
@@ -432,11 +456,11 @@ class WDTConfigController {
      * @param $content - Content for creating the table (path to source or a MySQL query)
      * @return stdClass Object which has an 'error' property in case there were problems, or a 'table' on success
      */
-    public static function tryCreateTable($type, $content) {
+    public static function tryCreateTable($type, $content, $connection = null) {
 
         global $wdtVar1, $wdtVar2, $wdtVar3;
 
-        $tbl = new WPDataTable();
+        $tbl = new WPDataTable($connection);
         WPDataTable::$wdt_internal_idcount = 0;
         $result = new stdClass();
 
@@ -473,9 +497,11 @@ class WDTConfigController {
 
     /**
      * Save the columns for the table in DB
+     *
      * @param $frontendColumns array of column config objects in front-end format
      * @param $table WPDataTable object that is generated from the data source
      * @param $tableId int ID of the table
+     * @throws Exception
      */
     public static function saveColumns($frontendColumns, $table, $tableId) {
         global $wpdb;
@@ -520,9 +546,29 @@ class WDTConfigController {
             // Change column type in database structure, if column type is changes on the frontend
             if ($table->getTableType() == 'manual' && $columnsTypesArray[$column->getOriginalHeader()] != $columnConfig['column_type']) {
 
+                $vendor = Connection::getVendor($table->connection);
+                $isMySql = $vendor === Connection::$MYSQL;
+                $isMSSql = $vendor === Connection::$MSSQL;
+                $isPostgreSql = $vendor === Connection::$POSTGRESQL;
+
+                if ($isMySql) {
+                    $columnIntType = 'INT(11)';
+                    $columnDateTimeType = 'DATETIME';
+                }
+
+                if ($isMSSql) {
+                    $columnIntType = 'INT';
+                    $columnDateTimeType = 'DATETIME';
+                }
+
+                if ($isPostgreSql) {
+                    $columnIntType = 'INT';
+                    $columnDateTimeType = 'TIMESTAMP';
+                }
+
                 switch ($columnConfig['column_type']) {
                     case 'int':
-                        $newType = 'INT(11)';
+                        $newType = $columnIntType;
                         break;
                     case 'float':
                         $newType = 'DECIMAL(16,4)';
@@ -531,7 +577,7 @@ class WDTConfigController {
                         $newType = 'date';
                         break;
                     case 'datetime':
-                        $newType = 'datetime';
+                        $newType = $columnDateTimeType;
                         break;
                     case 'time':
                         $newType = 'time';
@@ -540,14 +586,38 @@ class WDTConfigController {
                         $newType = 'VARCHAR(255)';
                 }
 
-                $mySqlTable = substr($table->getTableContent(), strpos($table->getTableContent(), 'FROM') + 5);
-                $alterQuery = "ALTER TABLE {$mySqlTable} MODIFY COLUMN {$columnConfig['orig_header']} {$newType}";
+                $table_config = wdtConfigController::loadTableFromDB($tableId);
+                $mysql_table_name = $table_config->mysql_table_name;
+                $alterQuery = "ALTER TABLE {$mysql_table_name} MODIFY COLUMN {$columnConfig['orig_header']} {$newType}";
+                $alterQueryNull = '';
+                if (in_array($newType ,['date','datetime','time'])
+                    && !in_array($columnsTypesArray[$column->getOriginalHeader()], ['date','datetime'])){
+                    $alterQueryNull= "UPDATE {$mysql_table_name} SET {$columnConfig['orig_header']} = null";
+                }
 
-                if (!get_option('wdtUseSeparateCon')) {
+                if ($isMySql) {
+                    $alterQuery = "ALTER TABLE {$mysql_table_name} MODIFY COLUMN {$columnConfig['orig_header']} {$newType}";
+                }
+
+                if ($isMSSql) {
+                    $alterQuery = "ALTER TABLE {$mysql_table_name} MODIFY COLUMN {$columnConfig['orig_header']} {$newType}";
+                }
+
+                if ($isPostgreSql) {
+                    $alterQuery = "ALTER TABLE {$mysql_table_name} ALTER COLUMN {$columnConfig['orig_header']} SET DATA TYPE {$newType}";
+                }
+
+                if (!Connection::isSeparate($table->connection)) {
                     $wpdb->query($alterQuery);
+                    if (!empty($alterQueryNull)) {
+                        $wpdb->query($alterQueryNull);
+                    }
                 } else {
-                    $sql = new PDTSql(WDT_MYSQL_HOST, WDT_MYSQL_DB, WDT_MYSQL_USER, WDT_MYSQL_PASSWORD, WDT_MYSQL_PORT);
+                    $sql = Connection::create($table->connection);
                     $sql->doQuery($alterQuery);
+                    if ($alterQueryNull) {
+                        $sql->doQuery($alterQueryNull);
+                    }
                 }
             }
 
@@ -685,6 +755,8 @@ class WDTConfigController {
             $feColumn ? $feColumn->decimalPlaces : -1;
         $columnConfig['advanced_settings']['possibleValuesAddEmpty'] =
             $feColumn ? $feColumn->possibleValuesAddEmpty : 0;
+        $columnConfig['advanced_settings']['possibleValuesAjax'] =
+            $feColumn ? $feColumn->possibleValuesAjax : 10;
         $columnConfig['advanced_settings']['calculateAvg'] =
             $feColumn ? $feColumn->calculateAvg : 0;
         $columnConfig['advanced_settings']['calculateMax'] =
@@ -851,6 +923,8 @@ class WDTConfigController {
             $advancedSettings->decimalPlaces : -1;
         $feColumn->possibleValuesAddEmpty = isset($advancedSettings->possibleValuesAddEmpty) ?
             $advancedSettings->possibleValuesAddEmpty : 0;
+        $feColumn->possibleValuesAjax = isset($advancedSettings->possibleValuesAjax) ?
+            $advancedSettings->possibleValuesAjax : 0;
         $feColumn->calculateAvg = isset($advancedSettings->calculateAvg) ?
             $advancedSettings->calculateAvg : 0;
         $feColumn->calculateMax = isset($advancedSettings->calculateMax) ?
@@ -881,7 +955,7 @@ class WDTConfigController {
             $advancedSettings->linkButtonClass : null;
 
 
-        if ($feColumn->possibleValuesType == 'foreignkey') {
+        if ($feColumn->possibleValuesType === 'foreignkey') {
             if (!isset($feColumn->foreignKeyRule)) {
                 $feColumn->foreignKeyRule = new stdClass();
             }

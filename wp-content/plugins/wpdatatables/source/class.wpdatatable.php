@@ -1,9 +1,17 @@
 <?php
 
-defined('ABSPATH') or die('Access denied.');
-
+use jlawrence\eos\Parser;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Ods;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+
+
+defined('ABSPATH') or die('Access denied.');
+
 
 /**
  * Main engine of wpDataTables plugin
@@ -73,6 +81,7 @@ class WPDataTable {
     private $_aggregateFuncsRes = array();
     private $_ajaxReturn = false;
     private $_clearFilters = false;
+    public $connection;
     public static $allowedTableTypes = array('xls', 'csv', 'manual', 'mysql', 'json', 'google_spreadsheet', 'xml', 'serialized');
 
     /**
@@ -431,9 +440,8 @@ class WPDataTable {
             throw new WDTException('Incorrect column index');
         }
 
-        if (!is_numeric($key)) {
-            $key = array_search($key, array_keys($this->_wdtNamedColumns));
-        }
+        $key = array_search($key, array_keys($this->_wdtNamedColumns));
+
         $this->_defaultSortColumn = $key;
     }
 
@@ -478,7 +486,7 @@ class WPDataTable {
     }
 
     public function setDisplayLength($length) {
-        if (!in_array($length, array(5, 10, 20, 25, 30, 50, 100, 200, -1))) {
+        if (!in_array($length, array(1, 5, 10, 20, 25, 30, 50, 100, 200, -1))) {
             return false;
         }
         $this->_lengthDisplay = $length;
@@ -534,11 +542,12 @@ class WPDataTable {
         $this->_showRowsPerPage = (bool)$showRowsPerPage;
     }
 
-    public function __construct() {
+    public function __construct($connection = null) {
         //[<-- Full version -->]//
         // connect to MySQL if enabled
-        if (WDT_ENABLE_MYSQL && get_option('wdtUseSeparateCon')) {
-            $this->_db = new PDTSql(WDT_MYSQL_HOST, WDT_MYSQL_DB, WDT_MYSQL_USER, WDT_MYSQL_PASSWORD, WDT_MYSQL_PORT);
+        if (WDT_ENABLE_MYSQL && (Connection::isSeparate($connection))) {
+            $this->_db = Connection::create($connection);
+            $this->connection = $connection;
         }
         //[<--/ Full version -->]//
         if (self::$wdt_internal_idcount == 0) {
@@ -582,7 +591,7 @@ class WPDataTable {
                 if (!isset($this->_wdtNamedColumns[$key])) {
                     continue;
                 }
-                $possibleValues = $this->_wdtNamedColumns[$key]->getPossibleValues();
+                $possibleValues = $this->_wdtNamedColumns[$key]->getPossibleValuesList();
                 if (empty($possibleValues)) {
                     $this->_wdtNamedColumns[$key]->setPossibleValues($value);
                 }
@@ -785,28 +794,30 @@ class WPDataTable {
 
     public function createColumnsFromArr($headerArr, $wdtParameters, $wdtColumnTypes) {
         foreach ($headerArr as $key) {
-            $dataColumnProperties = array();
-            $dataColumnProperties['title'] = isset($wdtParameters['columnTitles'][$key]) ? $wdtParameters['columnTitles'][$key] : $key;
-            $dataColumnProperties['width'] = !empty($wdtParameters['columnWidths'][$key]) ? $wdtParameters['columnWidths'][$key] : '';
-            $dataColumnProperties['sorting'] = isset($wdtParameters['sorting'][$key]) ? $wdtParameters['sorting'][$key] : true;
-            $dataColumnProperties['decimalPlaces'] = isset($wdtParameters['decimalPlaces'][$key]) ? $wdtParameters['decimalPlaces'][$key] : get_option('wdtDecimalPlaces');
-            $dataColumnProperties['orig_header'] = $key;
-            $dataColumnProperties['exactFiltering'] = !empty($wdtParameters['exactFiltering'][$key]) ? $wdtParameters['exactFiltering'][$key] : false;
-            $dataColumnProperties['filterLabel'] = isset($wdtParameters['filterLabel'][$key]) ? $wdtParameters['filterLabel'][$key] : null;
-            $dataColumnProperties['checkboxesInModal'] = isset($wdtParameters['checkboxesInModal'][$key]) ? $wdtParameters['checkboxesInModal'][$key] : null;
-            $dataColumnProperties['filterDefaultValue'] = isset($wdtParameters['filterDefaultValue'][$key]) ? $wdtParameters['filterDefaultValue'][$key] : null;
-            $dataColumnProperties['possibleValuesType'] = !empty($wdtParameters['possibleValuesType'][$key]) ? $wdtParameters['possibleValuesType'][$key] : 'read';
-            $dataColumnProperties['possibleValuesAddEmpty'] = !empty($wdtParameters['possibleValuesAddEmpty'][$key]) ? $wdtParameters['possibleValuesAddEmpty'][$key] : false;
-            $dataColumnProperties['foreignKeyRule'] = isset($wdtParameters['foreignKeyRule'][$key]) ? $wdtParameters['foreignKeyRule'][$key] : '';
-            $dataColumnProperties['editingDefaultValue'] = isset($wdtParameters['editingDefaultValue'][$key]) ? $wdtParameters['editingDefaultValue'][$key] : '';
-            $dataColumnProperties['linkTargetAttribute'] = isset($wdtParameters['linkTargetAttribute'][$key]) ? $wdtParameters['linkTargetAttribute'][$key] : '';
-            $dataColumnProperties['linkButtonAttribute'] = isset($wdtParameters['linkButtonAttribute'][$key]) ? $wdtParameters['linkButtonAttribute'][$key] : false;
-            $dataColumnProperties['linkButtonLabel'] = isset($wdtParameters['linkButtonLabel'][$key]) ? $wdtParameters['linkButtonLabel'][$key] : '';
-            $dataColumnProperties['linkButtonClass'] = isset($wdtParameters['linkButtonClass'][$key]) ? $wdtParameters['linkButtonClass'][$key] : '';
-            $dataColumnProperties['parentTable'] = $this;
+            $dataColumnProperties =                             array();
+            $dataColumnProperties['title'] =                    isset($wdtParameters['columnTitles'][$key]) ? $wdtParameters['columnTitles'][$key] : $key;
+            $dataColumnProperties['width'] =                    !empty($wdtParameters['columnWidths'][$key]) ? $wdtParameters['columnWidths'][$key] : '';
+            $dataColumnProperties['sorting'] =                  isset($wdtParameters['sorting'][$key]) ? $wdtParameters['sorting'][$key] : true;
+            $dataColumnProperties['decimalPlaces'] =            isset($wdtParameters['decimalPlaces'][$key]) ? $wdtParameters['decimalPlaces'][$key] : get_option('wdtDecimalPlaces');
+            $dataColumnProperties['orig_header'] =              $key;
+            $dataColumnProperties['exactFiltering'] =           !empty($wdtParameters['exactFiltering'][$key]) ? $wdtParameters['exactFiltering'][$key] : false;
+            $dataColumnProperties['filterLabel'] =              isset($wdtParameters['filterLabel'][$key]) ? $wdtParameters['filterLabel'][$key] : null;
+            $dataColumnProperties['checkboxesInModal'] =        isset($wdtParameters['checkboxesInModal'][$key]) ? $wdtParameters['checkboxesInModal'][$key] : null;
+            $dataColumnProperties['filterDefaultValue'] =       isset($wdtParameters['filterDefaultValue'][$key]) ? $wdtParameters['filterDefaultValue'][$key] : null;
+            $dataColumnProperties['possibleValuesType'] =       !empty($wdtParameters['possibleValuesType'][$key]) ? $wdtParameters['possibleValuesType'][$key] : 'read';
+            $dataColumnProperties['possibleValuesAddEmpty'] =   !empty($wdtParameters['possibleValuesAddEmpty'][$key]) ? $wdtParameters['possibleValuesAddEmpty'][$key] : false;
+            $dataColumnProperties['possibleValuesAjax'] =       !empty($wdtParameters['possibleValuesAjax'][$key]) ? $wdtParameters['possibleValuesAjax'][$key] : 10;
+            $dataColumnProperties['foreignKeyRule'] =           isset($wdtParameters['foreignKeyRule'][$key]) ? $wdtParameters['foreignKeyRule'][$key] : '';
+            $dataColumnProperties['editingDefaultValue'] =      isset($wdtParameters['editingDefaultValue'][$key]) ? $wdtParameters['editingDefaultValue'][$key] : '';
+            $dataColumnProperties['linkTargetAttribute'] =      isset($wdtParameters['linkTargetAttribute'][$key]) ? $wdtParameters['linkTargetAttribute'][$key] : '';
+            $dataColumnProperties['linkButtonAttribute'] =      isset($wdtParameters['linkButtonAttribute'][$key]) ? $wdtParameters['linkButtonAttribute'][$key] : false;
+            $dataColumnProperties['linkButtonLabel'] =          isset($wdtParameters['linkButtonLabel'][$key]) ? $wdtParameters['linkButtonLabel'][$key] : '';
+            $dataColumnProperties['linkButtonClass'] =          isset($wdtParameters['linkButtonClass'][$key]) ? $wdtParameters['linkButtonClass'][$key] : '';
+            $dataColumnProperties['parentTable'] =              $this;
 
             /** @var WDTColumn $tableColumnClass */
             $tableColumnClass = static::$_columnClass;
+            $dataColumn = NULL;
 
             if (isset($wdtColumnTypes[$key])) {
                 /** @var WDTColumn $dataColumn */
@@ -826,7 +837,7 @@ class WPDataTable {
                 }
             }
 
-            if ($dataColumn->getPossibleValuesType() == 'foreignkey' && $dataColumn->getForeignKeyRule() != null) {
+            if ($dataColumn != null && $dataColumn->getPossibleValuesType() == 'foreignkey' && $dataColumn->getForeignKeyRule() != null) {
                 $foreignKeyData = $this->joinWithForeignWpDataTable($dataColumn->getOriginalHeader(), $dataColumn->getForeignKeyRule(), $this->getDataRows());
                 $this->_dataRows = $foreignKeyData['dataRows'];
                 $dataColumn->setPossibleValues($foreignKeyData['distinctValues']);
@@ -1028,7 +1039,7 @@ class WPDataTable {
 
             $formula = $this->getColumn($column_key)->getFormula();
             $headersInFormula = $this->detectHeadersInFormula($formula);
-	        $headers = WDTTools::sanitizeHeaders($headersInFormula);
+            $headers = WDTTools::sanitizeHeaders($headersInFormula);
             foreach ($this->_dataRows as &$row) {
                 try {
                     $row[$column_key] =
@@ -1258,6 +1269,131 @@ class WPDataTable {
     }
 
     /**
+     * Return LIKE expression for given vendor
+     *
+     * @param string $vendor
+     * @param string $table
+     * @param string $column
+     * @param string $pattern
+     * @return string
+     */
+    private function getLikeExpression($vendor, $table, $column, $pattern) {
+        if ($vendor === Connection::$MYSQL) {
+            //$search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . $columnSearch . "%' ";
+            return "$table.$column LIKE '$pattern'";
+        }
+
+        if ($vendor === Connection::$MSSQL) {
+            return "$table.$column LIKE '$pattern'";
+        }
+
+        if ($vendor === Connection::$POSTGRESQL) {
+            return "LOWER(CAST($table.$column AS TEXT)) LIKE LOWER('$pattern') ";
+        }
+    }
+
+    /**
+     * Return LIKE expression for given vendor
+     *
+     * @param string $vendor
+     * @param string $filterType
+     * @param string $value
+     * @return string
+     */
+    private function getDateTimeExpression($vendor, $filterType, $value) {
+        $wpDateFormat = get_option('wdtDateFormat');
+
+        $date_format = '';
+
+        if ($vendor === Connection::$MYSQL) {
+            if ($filterType != 'time-range') {
+                $date_format = str_replace('m', '%m', $wpDateFormat);
+                $date_format = str_replace('M', '%M', $date_format);
+                $date_format = str_replace('Y', '%Y', $date_format);
+                $date_format = str_replace('y', '%y', $date_format);
+                $date_format = str_replace('d', '%d', $date_format);
+            }
+            if ($filterType == 'datetime-range'
+                || $filterType == 'time-range'
+            ) {
+                $date_format .= ' ' . get_option('wdtTimeFormat');
+                $date_format = str_replace('H', '%H', $date_format);
+                $date_format = str_replace('h', '%h', $date_format);
+                $date_format = str_replace('i', '%i', $date_format);
+                $date_format = str_replace('A', '%p', $date_format);
+            }
+
+            return "STR_TO_DATE('$value', '$date_format')";
+        }
+
+        if ($vendor === Connection::$MSSQL) {
+            $type = $filterType === 'time-range' ? 'time' : 'datetime';
+
+            switch($wpDateFormat) {
+                case ('d/m/Y'):
+                    return "CONVERT($type, '$value', 103)";
+                case ('m/d/Y'):
+                    return "CONVERT($type, '$value', 101)";
+                case ('d.m.Y'):
+                    return "CONVERT($type, '$value', 104)";
+                case ('m.d.Y'):
+                    return "CONVERT($type, REPLACE ('$value', '.' , '/') , 101)";
+                case ('d-m-Y'):
+                    return "CONVERT($type, '$value', 105)";
+                case ('m-d-Y'):
+                    return "CONVERT($type, '$value', 110)";
+                case ('d.m.y'):
+                    return "CONVERT($type, '$value', 4)";
+                case ('m.d.y'):
+                    return "CONVERT($type, REPLACE ('$value', '.' , '-'), 10)";
+                case ('d-m-y'):
+                    return "CONVERT($type, '$value', 5)";
+                case ('m-d-y'):
+                    return "CONVERT($type, '$value', 10)";
+                case ('d M Y'):
+                    return "CONVERT($type, '$value', 106)";
+            }
+        }
+
+        if ($vendor === Connection::$POSTGRESQL) {
+            $type = $filterType === 'time-range' ? '::TIME' : '';
+
+            if ($filterType != 'time-range') {
+                $date_format = str_replace('M', 'Mon', $wpDateFormat);
+                $date_format = str_replace('m', 'MM', $date_format);
+                $date_format = str_replace('Y', 'YYYY', $date_format);
+                $date_format = str_replace('y', 'YY', $date_format);
+                $date_format = str_replace('d', 'DD', $date_format);
+            }
+
+            if ($filterType == 'datetime-range'
+                || $filterType == 'time-range'
+            ) {
+                $date_format .= ' ' . get_option('wdtTimeFormat');
+                $date_format = str_replace('H', 'HH24', $date_format);
+                $date_format = str_replace('h', 'HH12', $date_format);
+                $date_format = str_replace('i', 'MI', $date_format);
+
+                if (substr($value, -2) === 'AM') {
+                    $date_format = str_replace('A', 'AM', $date_format);
+                }
+
+                if (substr($value, -2) === 'PM') {
+                    $date_format = str_replace('A', 'PM', $date_format);
+                }
+            }
+
+            if ($filterType === 'time-range' && strlen(explode(':', $value)[0]) === 1) {
+                $value = '0' . $value;
+            }
+
+            $date_format = trim($date_format);
+
+            return "to_timestamp('$value', '$date_format')$type";
+        }
+    }
+
+    /**
      * Return aggregate function results
      *
      * @param $columnKey
@@ -1275,11 +1411,16 @@ class WPDataTable {
     public function queryBasedConstruct($query, $queryParams = array(), $wdtParameters = array(), $init_read = false) {
         global $wdtVar1, $wdtVar2, $wdtVar3, $wpdb;
 
-        require_once(WDT_ROOT_PATH . 'lib/PHPSQLParser/autoloader.php');
-        \PHPSQLParser\Autoloader::register();
+
+        $vendor = Connection::getVendor($this->connection);
+        $isMySql = $vendor === Connection::$MYSQL;
+        $isMSSql = $vendor === Connection::$MSSQL;
+        $isPostgreSql = $vendor === Connection::$POSTGRESQL;
+
+        $leftSysIdentifier = Connection::getLeftColumnQuote($vendor);
+        $rightSysIdentifier = Connection::getRightColumnQuote($vendor);
 
         $query = wdtSanitizeQuery($query);
-        $query = str_replace('`', '', $query);
         $query = WDTTools::applyPlaceholders($query);
 
         $parser = new PHPSQLParser(false, true);
@@ -1292,14 +1433,31 @@ class WPDataTable {
         $foreignKeyJoin = '';
         $parsedOrderBy = '';
         $parsedLimit = '';
+        $msSqlParsedLimit = '';
+        $postgreSqlParsedLimit = '';
         $parsedSearch = '';
+        $msSqlParsedSearch = '';
+        $postgreSqlParsedSearch = '';
         $parsedOnlyOwnRows = '';
 
         $tableName = $parsedQuery['FROM'][0]['table'];
 
         // Adding limits if necessary
-        if (!empty($wdtParameters['limit']) && (strpos(strtolower($query), 'limit') === false)) {
-            $parsedLimit = $parser->parse(' LIMIT ' . $wdtParameters['limit'], true);
+        if (!empty($wdtParameters['limit']) &&
+            (strpos(strtolower($query), 'limit') === false) &&
+            empty($wdtParameters['disable_limit'])
+        ) {
+            if ($isMySql) {
+                $parsedLimit = $parser->parse(' LIMIT ' . $wdtParameters['limit'], true);
+            }
+
+            if ($isPostgreSql) {
+                $postgreSqlParsedLimit = " LIMIT {$wdtParameters['limit']}";
+            }
+
+            if ($isMSSql) {
+                $msSqlParsedLimit = " OFFSET 0 ROWS FETCH NEXT {$wdtParameters['limit']} ROWS ONLY";
+            }
         }
 
         // Server-side requests
@@ -1307,15 +1465,39 @@ class WPDataTable {
 
             if (!isset($_POST['draw'])) {
                 if (empty($wdtParameters['disable_limit'])) {
-                    $parsedLimit = $parser->parse(' LIMIT ' . $this->getDisplayLength(), true);
+                    if ($isMySql) {
+                        $parsedLimit = $parser->parse(' LIMIT ' . $this->getDisplayLength(), true);
+                    }
+
+                    if ($isPostgreSql) {
+                        $postgreSqlParsedLimit = " LIMIT {$this->getDisplayLength()}";
+                    }
+
+                    if ($isMSSql) {
+                        $msSqlParsedLimit = " OFFSET 0 ROWS FETCH NEXT {$this->getDisplayLength()} ROWS ONLY";
+                    }
                 }
             } else {
                 // Server-side params
                 $aColumns = array_keys($wdtParameters['columnTitles']);
 
-                if (isset($_POST['start']) && $_POST['length'] != '-1') {
-                    $parsedLimit = $parser->parse("LIMIT " . addslashes($_POST['start']) . ", " .
-                        addslashes($_POST['length']), true);
+                if (isset($_POST['start']) &&
+                    $_POST['length'] != '-1' &&
+                    empty($wdtParameters['disable_limit'])
+                    ) {
+                    if ($isMySql) {
+                        $parsedLimit = $parser->parse("LIMIT " . addslashes($_POST['start']) . ", " .
+                            addslashes($_POST['length']), true);
+                    }
+
+                    if ($isPostgreSql) {
+                        $postgreSqlParsedLimit = ' LIMIT ' . addslashes($_POST['length']) . ' OFFSET ' . addslashes($_POST['start']);
+                    }
+
+                    if ($isMSSql) {
+                        $msSqlParsedLimit = ' OFFSET ' . addslashes($_POST['start']) . ' ROWS FETCH NEXT ' .
+                            addslashes($_POST['length']) . ' ROWS ONLY';
+                    }
                 }
 
                 // Adding sort parameters for AJAX if necessary
@@ -1337,11 +1519,11 @@ class WPDataTable {
                                 usort($sortedForeignRows, function ($a, $b, $displayColumn) {
                                     return $a[$displayColumn['orig_header']] > $b[$displayColumn['orig_header']];
                                 });
-                                $sortedForeignRows = implode(array_column($sortedForeignRows, $storeColumn['orig_header']), ', ');
+                                $sortedForeignRows = implode(array_map($sortedForeignRows, $storeColumn['orig_header']), ', ');
                                 $orderBy .= 'FIELD (' . $columnName . ', ' . $sortedForeignRows . ') ' . addslashes($_POST['order'][$i]['dir']) . ', ';
                             }
                         } else {
-                            $orderBy .= '`' . $aColumns[$_POST['order'][$i]['column']] . "` " . addslashes($_POST['order'][$i]['dir']) . ", ";
+                            $orderBy .= $leftSysIdentifier . $aColumns[$_POST['order'][$i]['column']] . "{$rightSysIdentifier} " . addslashes($_POST['order'][$i]['dir']) . ", ";
                         }
                     }
 
@@ -1350,7 +1532,17 @@ class WPDataTable {
                         $orderBy = "";
                     }
 
-                    $parsedOrderBy = $parser->parse($orderBy);
+                    if ($vendor === Connection::$MYSQL) {
+                        $parsedOrderBy = $parser->parse($orderBy);
+                    }
+
+                    if ($vendor === Connection::$MSSQL) {
+                        $msSqlParsedOrderBy = ' ' . $orderBy;
+                    }
+
+                    if ($vendor === Connection::$POSTGRESQL) {
+                        $postgreSqlParsedOrderBy = ' ' . $orderBy;
+                    }
                 }
 
                 // Global search
@@ -1363,7 +1555,7 @@ class WPDataTable {
                                 continue;
                             } else {
                                 if (is_null($wdtParameters['foreignKeyRule'][$_POST['columns'][$i]['name']])) {
-                                    $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . addslashes($_POST['search']['value']) . "%' OR ";
+                                    $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, '%' . addslashes($_POST['search']['value']) . '%') . ' OR ';
                                 } else {
                                     $foreignKeyRule = $wdtParameters['foreignKeyRule'][$_POST['columns'][$i]['name']];
                                     $joinedTable = WPDataTable::loadWpDataTable($foreignKeyRule->tableId);
@@ -1373,9 +1565,9 @@ class WPDataTable {
                                     $filteredValues = preg_grep('~' . preg_quote(strtolower($_POST['search']['value']), '~') . '~', $distinctValues);
 
                                     if (!empty($filteredValues)) {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` IN (" . implode(', ', array_keys($filteredValues)) . ")  OR ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} IN (" . implode(', ', array_keys($filteredValues)) . ")  OR ";
                                     } else {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '" . addslashes($_POST['search']['value']) . "' OR ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '" . addslashes($_POST['search']['value']) . "' OR ";
                                     }
                                 }
 
@@ -1388,82 +1580,91 @@ class WPDataTable {
 
                 // Individual column filtering
                 for ($i = 0; $i < count($aColumns); $i++) {
-                    if ($_POST['columns'][$i]['searchable'] == true &&
-                        isset($_POST['columns'][$i]['search']) && $_POST['columns'][$i]['search']['value'] != '' &&
-                        $_POST['columns'][$i]['search']['value'] != '~'
-                    ) {
+
+                    $columnSearchFromTable = false;
+                    $columnSearchFromDefaultValue = false;
+
+                	if (isset($_POST['columns'][$i]['search']) &&
+	                    $_POST['columns'][$i]['search']['value'] != '' &&
+	                    $_POST['columns'][$i]['search']['value'] != '|') {
+                		$columnSearchFromTable = true;
+	                }
+	                if (($_POST['draw'] == 1 || $columnSearchFromTable == true) &&
+                        (isset($wdtParameters['filterDefaultValue'][$i]) &&
+	                    $wdtParameters['filterDefaultValue'][$i] !== '' &&
+	                    $wdtParameters['filterDefaultValue'][$i] !== '|' )) {
+                		$columnSearchFromDefaultValue = true;
+	                }
+                    if ($_POST['columns'][$i]['searchable'] == true && ($columnSearchFromTable || $columnSearchFromDefaultValue)) {
+
+                        //Apply placeholders when they are set in filter ​predefined value
+                        $wdtParameters['filterDefaultValue'][$i]=  WDTTools::applyPlaceholders($wdtParameters['filterDefaultValue'][$i]);
+
+                    	$columnSearch = $columnSearchFromTable ? $_POST['columns'][$i]['search']['value'] : $wdtParameters['filterDefaultValue'][$i];
                         if (!empty($search)) {
                             $search .= ' AND ';
                         }
                         if (isset($wdtParameters['filterTypes'][$aColumns[$i]])) {
                             switch ($wdtParameters['filterTypes'][$aColumns[$i]]) {
                                 case 'number-range':
-                                    list($left, $right) = explode('~', $_POST['columns'][$i]['search']['value']);
+                                    list($left, $right) = explode('|', $columnSearch);
                                     if ($left !== '') {
                                         $left = (float)$left;
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` >= $left ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} >= $left ";
                                     }
                                     if ($right !== '') {
                                         $right = (float)$right;
                                         if (!empty($search) && $left !== '') {
                                             $search .= ' AND ';
                                         }
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` <= $right ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} <= $right ";
                                     }
                                     break;
                                 case 'date-range':
                                 case 'time-range':
                                 case 'datetime-range':
-                                    list($left, $right) = explode('~', $_POST['columns'][$i]['search']['value']);
-                                    $date_format = '';
-                                    if ($wdtParameters['filterTypes'][$aColumns[$i]] != 'time-range') {
-                                        $date_format = str_replace('m', '%m', get_option('wdtDateFormat'));
-                                        $date_format = str_replace('M', '%M', $date_format);
-                                        $date_format = str_replace('Y', '%Y', $date_format);
-                                        $date_format = str_replace('y', '%y', $date_format);
-                                        $date_format = str_replace('d', '%d', $date_format);
-                                    }
-                                    if ($wdtParameters['filterTypes'][$aColumns[$i]] == 'datetime-range'
-                                        || $wdtParameters['filterTypes'][$aColumns[$i]] == 'time-range'
-                                    ) {
-                                        $date_format .= ' ' . get_option('wdtTimeFormat');
-                                        $date_format = str_replace('H', '%H', $date_format);
-                                        $date_format = str_replace('h', '%h', $date_format);
-                                        $date_format = str_replace('i', '%i', $date_format);
-                                        $date_format = str_replace('A', '%p', $date_format);
-                                    }
+                                    list($left, $right) = explode('|', $columnSearch);
+
                                     if ($left && $right) {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` BETWEEN STR_TO_DATE('$left', '$date_format') AND STR_TO_DATE('$right', '$date_format') ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} BETWEEN {$this->getDateTimeExpression($vendor, $wdtParameters['filterTypes'][$aColumns[$i]], $left)} AND {$this->getDateTimeExpression($vendor, $wdtParameters['filterTypes'][$aColumns[$i]], $right)} ";
                                     } elseif ($left) {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` >= STR_TO_DATE('$left', '$date_format') ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} >= {$this->getDateTimeExpression($vendor, $wdtParameters['filterTypes'][$aColumns[$i]], $left)} ";
                                     } elseif ($right) {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` <= STR_TO_DATE('$right', '$date_format') ";
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} <= {$this->getDateTimeExpression($vendor, $wdtParameters['filterTypes'][$aColumns[$i]], $right)} ";
                                     }
                                     break;
                                 case 'select':
-                                    if ($_POST['columns'][$i]['search']['value'] == 'possibleValuesAddEmpty') {
-                                        $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '' OR `" . $aColumns[$i] . "` IS NULL";
+                                    if ($columnSearch == 'possibleValuesAddEmpty') {
+                                        $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '' OR {$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} IS NULL";
                                     } else {
                                         if ($wdtParameters['exactFiltering'][$aColumns[$i]] == 1) {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '" . addslashes($_POST['columns'][$i]['search']['value']) . "' ";
+                                            $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '" . $columnSearch . "' ";
                                         } else {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . addslashes($_POST['columns'][$i]['search']['value']) . "%' ";
+                                            $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, '%' . $columnSearch . '%');
                                         }
                                     }
                                     break;
                                 case 'checkbox':
                                 case 'multiselect':
                                     if ($wdtParameters['exactFiltering'][$aColumns[$i]] == 1) {
-                                        $checkboxSearches = explode('$|^', $_POST['columns'][$i]['search']['value']);
                                         // Trim regex parts for first and last one
-                                        $checkboxSearches[0] = substr($checkboxSearches[0], 1);
-                                        if (count($checkboxSearches) > 1) {
-                                            $checkboxSearches[count($checkboxSearches) - 1] = substr($checkboxSearches[count($checkboxSearches) - 1], 0, -1);
+                                        if (strpos($columnSearch, '$') !== false) {
+                                            $checkboxSearches = explode('$|^', $columnSearch);
+                                            $checkboxSearches[0] = substr($checkboxSearches[0], 1);
+                                            if (count($checkboxSearches) > 1) {
+                                                $checkboxSearches[count($checkboxSearches) - 1] = substr($checkboxSearches[count($checkboxSearches) - 1], 0, -1);
+                                            } else {
+                                                $checkboxSearches[0] = substr($checkboxSearches[0], 0, -1);
+                                            }
                                         } else {
-                                            $checkboxSearches[0] = substr($checkboxSearches[0], 0, -1);
+                                            $checkboxSearches = explode('|', $columnSearch);
                                         }
                                     } else {
-                                        $checkboxSearches = explode('|', $_POST['columns'][$i]['search']['value']);
+                                        if (strpos($columnSearch, '||')) {
+                                            $checkboxSearches = preg_split('/(?<!\|)\|(?!\|)/', $columnSearch);
+                                        } else {
+                                            $checkboxSearches = explode('|', $columnSearch);
+                                        }
                                     }
                                     $j = 0;
                                     $search .= " (";
@@ -1473,9 +1674,9 @@ class WPDataTable {
                                         }
 
                                         if ($wdtParameters['exactFiltering'][$aColumns[$i]] == 1) {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '" . addslashes($checkboxSearch) . "' ";
+                                            $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '" . $checkboxSearch . "' ";
                                         } else {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . addslashes($checkboxSearch) . "%' ";
+                                            $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, '%' . $checkboxSearch . '%');
                                         }
 
                                         $j++;
@@ -1486,12 +1687,12 @@ class WPDataTable {
                                 case 'number':
                                     if (is_null($wdtParameters['foreignKeyRule'][$_POST['columns'][$i]['name']])) {
                                         if ($wdtParameters['exactFiltering'][$aColumns[$i]] == 1) {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '" . addslashes($_POST['columns'][$i]['search']['value']) . "' ";
+                                            $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '" . $columnSearch . "' ";
                                         } else {
                                             if ($wdtParameters['filterTypes'][$aColumns[$i]] == 'number') {
-                                                $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '" . addslashes($_POST['columns'][$i]['search']['value']) . "%' ";
+                                                $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, $columnSearch . '%');
                                             } else {
-                                                $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . addslashes($_POST['columns'][$i]['search']['value']) . "%' ";
+                                                $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, '%' . $columnSearch . '%');
                                             }
                                         }
                                     } else {
@@ -1501,28 +1702,37 @@ class WPDataTable {
                                         $distinctValues = array_map('strtolower', $distinctValues);
 
                                         if ($wdtParameters['exactFiltering'][$aColumns[$i]] == 1) {
-                                            $filteredValues = preg_grep('~^' . preg_quote(strtolower($_POST['columns'][$i]['search']['value']), null) . '$~', $distinctValues);
+                                            $filteredValues = preg_grep('~^' . preg_quote(strtolower($columnSearch), null) . '$~', $distinctValues);
                                         } else {
-                                            $filteredValues = preg_grep('~' . preg_quote(strtolower($_POST['columns'][$i]['search']['value']), '~') . '~', $distinctValues);
+                                            $filteredValues = preg_grep('~' . preg_quote(strtolower($columnSearch), '~') . '~', $distinctValues);
                                         }
 
                                         if (!empty($filteredValues)) {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` IN (" . implode(', ', array_keys($filteredValues)) . ")";
+                                            $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} IN (" . implode(', ', array_keys($filteredValues)) . ")";
                                         } else {
-                                            $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` = '" . addslashes($_POST['columns'][$i]['search']['value']) . "' ";
+                                            $search .= $leftSysIdentifier . $tableName . "{$rightSysIdentifier}.{$leftSysIdentifier}" . $aColumns[$i] . "{$rightSysIdentifier} = '" . $columnSearch . "' ";
                                         }
                                     }
                                     break;
                                 default:
-                                    $search .= '`' . $tableName . '`.`' . $aColumns[$i] . "` LIKE '%" . addslashes($_POST['columns'][$i]['search']['value']) . "%' ";
+                                    $search .= $this->getLikeExpression($vendor, $leftSysIdentifier . $tableName . $rightSysIdentifier, $leftSysIdentifier . $aColumns[$i] . $rightSysIdentifier, '%' . $columnSearch . '%');
                             }
                         }
                     }
                 }
 
                 if ($search) {
-                    $search = 'WHERE ' . $search;
-                    $parsedSearch = $parser->parse($search);
+                    if ($isMySql) {
+                        $parsedSearch = $parser->parse('WHERE ' . $search);
+                    }
+
+                    if ($isMSSql) {
+                        $msSqlParsedSearch = ' ' . $search;
+                    }
+
+                    if ($isPostgreSql) {
+                        $postgreSqlParsedSearch = ' ' . $search;
+                    }
                 }
 
             }
@@ -1531,7 +1741,7 @@ class WPDataTable {
 
         // Add the filtering by user ID column, if requested
         if ($this->_onlyOwnRows) {
-            $userIdColumnCondition = 'WHERE `' . $this->_userIdColumn . '` = ' . get_current_user_id();
+            $userIdColumnCondition = "WHERE {$leftSysIdentifier}" . $this->_userIdColumn . "{$rightSysIdentifier} = " . get_current_user_id();
             $parsedOnlyOwnRows = $parser->parse($userIdColumnCondition);
         }
 
@@ -1542,14 +1752,25 @@ class WPDataTable {
              * 1. Forming the query
              */
 
-            array_unshift($parsedQuery['SELECT'], array(
-                    'expr_type' => 'reserved',
-                    'alias' => '',
-                    'base_expr' => 'SQL_CALC_FOUND_ROWS',
-                    'sub_tree' => '',
-                    'delim' => ''
-                )
-            );
+            if ($isMySql) {
+                array_unshift($parsedQuery['SELECT'], array(
+                        'expr_type' => 'reserved',
+                        'alias' => '',
+                        'base_expr' => 'SQL_CALC_FOUND_ROWS',
+                        'sub_tree' => '',
+                        'delim' => ''
+                    )
+                );
+            } else if ($isMSSql || $isPostgreSql) {
+                array_unshift($parsedQuery['SELECT'], array(
+                        'expr_type' => 'reserved',
+                        'alias' => '',
+                        'base_expr' => 'COUNT(*) OVER() as count',
+                        'sub_tree' => '',
+                        'delim' => ','
+                    )
+                );
+            }
 
             if ($foreignKeyJoin) {
 
@@ -1575,22 +1796,25 @@ class WPDataTable {
                 }
             }
 
-            if ($parsedOrderBy) {
-                if (isset($parsedQuery['ORDER'])) {
-                    array_unshift($parsedQuery['ORDER'], $parsedOrderBy['ORDER'][0]);
-                } else {
-                    $parsedQuery = array_merge($parsedQuery, $parsedOrderBy);
+            if ($vendor === Connection::$MYSQL) {
+                if ($parsedOrderBy) {
+                    if (isset($parsedQuery['ORDER'])) {
+                        array_unshift($parsedQuery['ORDER'], $parsedOrderBy['ORDER'][0]);
+                    } else {
+                        $parsedQuery = array_merge($parsedQuery, $parsedOrderBy);
+                    }
+                }
+
+                if ($parsedSearch) {
+                    if (isset($parsedQuery['WHERE'])) {
+                        array_push($parsedQuery['WHERE'], ['expr_type' => 'operator', 'base_expr' => 'AND', 'sub_tree' => false]);
+                        $parsedQuery['WHERE'] = array_merge($parsedQuery['WHERE'], $parsedSearch['WHERE']);
+                    } else {
+                        $parsedQuery['WHERE'] = $parsedSearch['WHERE'];
+                    }
                 }
             }
 
-            if ($parsedSearch) {
-                if (isset($parsedQuery['WHERE'])) {
-                    array_push($parsedQuery['WHERE'], ['expr_type' => 'operator', 'base_expr' => 'AND', 'sub_tree' => false]);
-                    $parsedQuery['WHERE'] = array_merge($parsedQuery['WHERE'], $parsedSearch['WHERE']);
-                } else {
-                    $parsedQuery['WHERE'] = $parsedSearch['WHERE'];
-                }
-            }
 
             if ($parsedOnlyOwnRows) {
                 if (isset($parsedQuery['WHERE'])) {
@@ -1601,8 +1825,10 @@ class WPDataTable {
                 }
             }
 
-            if ($parsedLimit) {
-                $parsedQuery = array_merge($parsedQuery, $parsedLimit);
+            if ($isMySql) {
+                if ($parsedLimit) {
+                    $parsedQuery = array_merge($parsedQuery, $parsedLimit);
+                }
             }
 
             /**
@@ -1610,24 +1836,39 @@ class WPDataTable {
              */
             // The main query
             $query = $creator->create($parsedQuery);
+
+            // Add Limit Rule if Vendor is MSSQL
+            if ($isMSSql) {
+                $query .= ($msSqlParsedSearch ? (($parsedOnlyOwnRows ? ' AND ' : ' WHERE ') . $msSqlParsedSearch) : '') . $msSqlParsedOrderBy . $msSqlParsedLimit;
+            }
+
+            // Add Limit Rule if Vendor is PostgreSQL
+            if ($isPostgreSql) {
+                $query .= ($postgreSqlParsedSearch ? (($parsedOnlyOwnRows ? ' AND ' : ' WHERE ') . $postgreSqlParsedSearch) : '') . $postgreSqlParsedOrderBy . $postgreSqlParsedLimit;
+            }
+
             $query = apply_filters('wpdatatables_filter_mysql_query', $query, $this->getWpId());
 
-            if (get_option('wdtUseSeparateCon')) {
+            if (Connection::isSeparate($this->connection)) {
                 $main_res_dataRows = $this->_db->getAssoc($query, $queryParams);
             } else {
                 // querying using the WP driver otherwise
                 $main_res_dataRows = $wpdb->get_results($query, ARRAY_A);
             }
             // result length after filtering
-            if (get_option('wdtUseSeparateCon')) {
-                $resultLength = $this->_db->getField('SELECT FOUND_ROWS()');
+            if (Connection::isSeparate($this->connection)) {
+                if ($isMySql) {
+                    $resultLength = $this->_db->getField('SELECT FOUND_ROWS()');
+                } elseif(($isMSSql  || $isPostgreSql) && $main_res_dataRows) {
+                    $resultLength = $main_res_dataRows[0]['count'];
+                }
             } else {
                 // querying using the WP driver otherwise
                 $resultLength = $wpdb->get_row('SELECT FOUND_ROWS()', ARRAY_A);
                 $resultLength = $resultLength['FOUND_ROWS()'];
             }
             // total data length
-            if (get_option('wdtUseSeparateCon')) {
+            if (Connection::isSeparate($this->connection)) {
                 $totalLengthQuery = 'SELECT COUNT(*) FROM ' . $tableName;
                 // If "Only own rows" options is defined, do not count other user's rows
                 if (isset($userIdColumnCondition)) {
@@ -1652,104 +1893,52 @@ class WPDataTable {
             $output = array(
                 "draw" => (int)$_POST['draw'],
                 "recordsTotal" => $totalLength,
-                "recordsFiltered" => $resultLength,
+                "recordsFiltered" => $resultLength ? $resultLength : 0,
                 "data" => array()
             );
 
-            // create the supplementary array of column objects
-            // which we will use for formatting
-            $colObjs = array();
-            foreach ($wdtParameters['data_types'] as $dataColumn_key => $dataColumn_type) {
-                $tableColumnClass = static::$_columnClass;
-                $colObjs[$dataColumn_key] = $tableColumnClass::generateColumn($dataColumn_type, array('title' => $wdtParameters['columnTitles'][$dataColumn_key], 'decimalPlaces' => $wdtParameters['decimalPlaces'][$dataColumn_key], 'linkTargetAttribute' => $wdtParameters['linkTargetAttribute'][$dataColumn_key], 'linkButtonAttribute' => $wdtParameters['linkButtonAttribute'][$dataColumn_key],'linkButtonLabel' => $wdtParameters['linkButtonLabel'][$dataColumn_key],'linkButtonClass' => $wdtParameters['linkButtonClass'][$dataColumn_key]));
-                $colObjs[$dataColumn_key]->setInputType($wdtParameters['input_types'][$dataColumn_key]);
-                $colObjs[$dataColumn_key]->setParentTable($this);
-                if ($dataColumn_type == 'int') {
-                    if (in_array($dataColumn_key, $wdtParameters['skip_thousands']) || ($dataColumn_key == $wdtParameters['idColumn'])) {
-                        $colObjs[$dataColumn_key]->setShowThousandsSeparator(false);
-                        $this->addColumnsThousandsSeparator($dataColumn_key, 0);
-                    } else {
-                        $this->addColumnsThousandsSeparator($dataColumn_key, 1);
-                    }
-                }
-            }
-            // reformat output array and reorder as user wanted
-            if (!empty($main_res_dataRows)) {
-                foreach ($wdtParameters['foreignKeyRule'] as $columnKey => $foreignKeyRule) {
-                    if ($foreignKeyRule != null) {
-                        $foreignKeyData = $this->joinWithForeignWpDataTable($columnKey, $foreignKeyRule, $main_res_dataRows);
-                        $main_res_dataRows = $foreignKeyData['dataRows'];
-                    }
-                }
+            // Create the supplementary array of column objects
+            $colObjs = $this->prepareColumns($wdtParameters);
 
-                foreach ($main_res_dataRows as $res_row) {
-                    $row = array();
-                    foreach ($wdtParameters['columnOrder'] as $dataColumn_key) {
-                        if ($wdtParameters['data_types'][$dataColumn_key] == 'formula') {
-                            try {
-                                $headers = array();
-                                $headersInFormula = $this->detectHeadersInFormula($wdtParameters['columnFormulas'][$dataColumn_key], array_keys($wdtParameters['data_types']));
-	                            $headers = WDTTools::sanitizeHeaders($headersInFormula);
-                                $formulaVal =
-                                    self::solveFormula(
-                                        $wdtParameters['columnFormulas'][$dataColumn_key],
-                                        $headers,
-                                        $res_row
-                                    );
-                                $row[$dataColumn_key] = apply_filters(
-                                    'wpdatatables_filter_cell_output',
-                                    $colObjs[$dataColumn_key]->returnCellValue($formulaVal),
-                                    $this->_wpId,
-                                    $dataColumn_key
-                                );
-                            } catch (Exception $e) {
-                                $row[$dataColumn_key] = 0;
-                            }
-                        } else {
-                            $row[$dataColumn_key] = apply_filters('wpdatatables_filter_cell_output', $colObjs[$dataColumn_key]->returnCellValue($res_row[$dataColumn_key]), $this->_wpId, $dataColumn_key);
-                        }
-                    }
-                    $output['data'][] = $this->formatAjaxQueryResultRow($row);
-                }
-            }
+            // reformat output array and reorder as user wanted
+            $output['data'] = $this->prepareOutputData($main_res_dataRows, $wdtParameters, $colObjs);
 
             // If aggregate functions are requested
             $sumColumns = $this->getSumColumns();
             $avgColumns = $this->getAvgColumns();
             $maxColumns = $this->getMaxColumns();
             $minColumns = $this->getMinColumns();
+
             if (!empty($sumColumns) || !empty($avgColumns) || !empty($maxColumns) || !empty($minColumns)) {
                 // Remove the LIMIT, ORDER BY and JOIN from query
                 $functionsParsedQuery = $parsedQuery;
                 unset($functionsParsedQuery['LIMIT']);
                 unset($functionsParsedQuery['ORDER']);
                 $functionsParsedQuery['FROM'] = array_slice($functionsParsedQuery['FROM'], 0, 1);
-                foreach ($functionsParsedQuery['SELECT'] as &$column) {
-                    if (strpos($column['base_expr'], '.') != false) {
-                        $column['base_expr'] = ltrim(strstr($column['base_expr'], '.'), '.');
-                    }
-                }
-                $functionsQuery = $creator->create($functionsParsedQuery);
 
                 if (!empty($sumColumns) || !empty($avgColumns)) {
-                    $sumFunctionQuery = $functionsQuery;
+                    $functionsParsedQuery['SELECT'] = [];
                     $output['sumAvgColumns'] = array_unique(array_merge($this->getSumColumns(), $this->getAvgColumns()), SORT_REGULAR);
                     $output['sumFooterColumns'] = $this->getSumFooterColumns();
                     $output['avgFooterColumns'] = $this->getAvgFooterColumns();
-                    // generate the query for sum
-                    if (strpos($query, '*') === false) {
-                        foreach ($output['sumAvgColumns'] as $columnTitle) {
-                            $sumFunctionQuery = preg_replace("/{$columnTitle}/", 'SUM(`' . $columnTitle . '`) AS `' . $columnTitle . '`', $sumFunctionQuery, 1);
+
+                    foreach ($output['sumAvgColumns'] as $key => $columnTitle) {
+                        array_unshift($functionsParsedQuery['SELECT'], array(
+                                'expr_type' => 'colref',
+                                'base_expr' => 'SUM(' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier . ') 
+                                                 AS ' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier,
+                                'delim' => ','
+                            )
+                        );
+                        if ($columnTitle === end($output['sumAvgColumns'])) {
+                            $functionsParsedQuery['SELECT'][$key]['delim'] = '';
                         }
-                    } else {
-                        $selectSumArr = array();
-                        foreach ($output['sumAvgColumns'] as $columnTitle) {
-                            $selectSumArr[] = 'SUM(`' . $columnTitle . '`) AS `' . $columnTitle . '`';
-                        }
-                        $sumFunctionQuery = preg_replace('/\*/', implode($selectSumArr, ', '), $functionsQuery, 1);
                     }
+
+                    $sumFunctionQuery = $creator->create($functionsParsedQuery);
+
                     // execute query
-                    if (get_option('wdtUseSeparateCon')) {
+                    if (Connection::isSeparate($this->connection)) {
                         $sumRow = $this->_db->getRow($sumFunctionQuery, $queryParams);
                     } else {
                         // querying using the WP driver otherwise
@@ -1776,21 +1965,24 @@ class WPDataTable {
                     $output['avgFooterColumns'] = array_flip($output['avgFooterColumns']);
                 }
                 if (!empty($minColumns)) {
-                    $minFunctionQuery = $functionsQuery;
+                    $functionsParsedQuery['SELECT'] = [];
                     $output['minColumns'] = $this->getMinColumns();
                     $output['minFooterColumns'] = $this->getMinFooterColumns();
-                    if (strpos($query, '*') === FALSE) {
-                        foreach ($output['minColumns'] as $columnTitle) {
-                            $minFunctionQuery = preg_replace("/{$columnTitle}/", 'MIN(`' . $columnTitle . '`) AS `' . $columnTitle . '`', $minFunctionQuery, 1);
+                    foreach ($output['minColumns'] as $key => $columnTitle) {
+                        array_unshift($functionsParsedQuery['SELECT'], array(
+                                'expr_type' => 'colref',
+                                'base_expr' => 'MIN(' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier . ') 
+                                                 AS ' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier,
+                                'delim' => ','
+                            )
+                        );
+                        if ($columnTitle === end($output['minColumns'])) {
+                            $functionsParsedQuery['SELECT'][$key]['delim'] = '';
                         }
-                    } else {
-                        $selectMinArr = array();
-                        foreach ($output['minColumns'] as $columnTitle) {
-                            $selectMinArr[] = 'MIN(`' . $columnTitle . '`) AS `' . $columnTitle . '`';
-                        }
-                        $minFunctionQuery = preg_replace('/\*/', implode($selectMinArr, ', '), $functionsQuery, 1);
                     }
-                    if (get_option('wdtUseSeparateCon')) {
+
+                    $minFunctionQuery = $creator->create($functionsParsedQuery);
+                    if (Connection::isSeparate($this->connection)) {
                         $minRow = $this->_db->getRow($minFunctionQuery, $queryParams);
                     } else {
                         $minRow = $wpdb->get_row($minFunctionQuery, ARRAY_A);
@@ -1805,21 +1997,24 @@ class WPDataTable {
                     $output['minFooterColumns'] = array_flip($output['minFooterColumns']);
                 }
                 if (!empty($maxColumns)) {
-                    $maxFunctionQuery = $functionsQuery;
+                    $functionsParsedQuery['SELECT'] = [];
                     $output['maxColumns'] = $this->getMaxColumns();
                     $output['maxFooterColumns'] = $this->getMaxFooterColumns();
-                    if (strpos($query, '*') === FALSE) {
-                        foreach ($output['maxColumns'] as $columnTitle) {
-                            $maxFunctionQuery = preg_replace("/{$columnTitle}/", 'MAX(`' . $columnTitle . '`) AS `' . $columnTitle . '`', $maxFunctionQuery, 1);
+                    foreach ($output['maxColumns'] as $key => $columnTitle) {
+                        array_unshift($functionsParsedQuery['SELECT'], array(
+                                'expr_type' => 'colref',
+                                'base_expr' => 'MAX(' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier . ') 
+                                                 AS ' . $leftSysIdentifier . $columnTitle . $rightSysIdentifier,
+                                'delim' => ','
+                            )
+                        );
+                        if ($columnTitle === end($output['maxColumns'])) {
+                            $functionsParsedQuery['SELECT'][$key]['delim'] = '';
                         }
-                    } else {
-                        $selectMaxArr = array();
-                        foreach ($output['maxColumns'] as $columnTitle) {
-                            $selectMaxArr[] = 'MAX(`' . $columnTitle . '`) AS `' . $columnTitle . '`';
-                        }
-                        $maxFunctionQuery = preg_replace('/\*/', implode($selectMaxArr, ', '), $functionsQuery, 1);
                     }
-                    if (get_option('wdtUseSeparateCon')) {
+
+                    $maxFunctionQuery = $creator->create($functionsParsedQuery);
+                    if (Connection::isSeparate($this->connection)) {
                         $maxRow = $this->_db->getRow($maxFunctionQuery, $queryParams);
                     } else {
                         $maxRow = $wpdb->get_row($maxFunctionQuery, ARRAY_A);
@@ -1841,8 +2036,10 @@ class WPDataTable {
             return json_encode($output);
         } else {
 
-            if ($parsedLimit) {
-                $parsedQuery = array_merge($parsedQuery, $parsedLimit);
+            if ($isMySql) {
+                if ($parsedLimit) {
+                    $parsedQuery = array_merge($parsedQuery, $parsedLimit);
+                }
             }
 
             if ($parsedOnlyOwnRows) {
@@ -1856,8 +2053,22 @@ class WPDataTable {
 
             $query = $creator->create($parsedQuery);
 
+            // Add Limit Rule if Vendor is MSSQL
+            if ($isMSSql) {
+                if ($msSqlParsedLimit) {
+                    $defaultOrder = isset($parsedQuery['ORDER']) ? '' : ' ORDER BY(SELECT NULL) ';
+                    $query .= $defaultOrder . $msSqlParsedLimit;
+                }
+            }
+
+            if ($isPostgreSql) {
+                if ($postgreSqlParsedLimit) {
+                    $query .= $postgreSqlParsedLimit;
+                }
+            }
+
             // Getting the query result
-            if (get_option('wdtUseSeparateCon')) {
+            if (Connection::isSeparate($this->connection)) {
                 $query = apply_filters('wpdatatables_filter_mysql_query', $query, $this->getWpId());
                 $res_dataRows = $this->_db->getAssoc($query, $queryParams);
                 $mysql_error = $this->_db->getLastError();
@@ -1890,6 +2101,91 @@ class WPDataTable {
     }
 
     /**
+     * Create the supplementary array of column objects
+     * which we will use for formatting
+     * @param $wdtParameters
+     * @return array
+     */
+    public function prepareColumns($wdtParameters) {
+        $colObjs = array();
+        foreach ($wdtParameters['data_types'] as $dataColumn_key => $dataColumn_type) {
+            $tableColumnClass = static::$_columnClass;
+            $colObjs[$dataColumn_key] = $tableColumnClass::generateColumn($dataColumn_type,
+                array(
+                    'title' => $wdtParameters['columnTitles'][$dataColumn_key],
+                    'decimalPlaces' => $wdtParameters['decimalPlaces'][$dataColumn_key],
+                    'linkTargetAttribute' => $wdtParameters['linkTargetAttribute'][$dataColumn_key],
+                    'linkButtonAttribute' => $wdtParameters['linkButtonAttribute'][$dataColumn_key],
+                    'linkButtonLabel' => $wdtParameters['linkButtonLabel'][$dataColumn_key],
+                    'linkButtonClass' => $wdtParameters['linkButtonClass'][$dataColumn_key]
+                )
+            );
+            $colObjs[$dataColumn_key]->setInputType($wdtParameters['input_types'][$dataColumn_key]);
+            $colObjs[$dataColumn_key]->setParentTable($this);
+            if ($dataColumn_type == 'int') {
+                if (in_array($dataColumn_key, $wdtParameters['skip_thousands']) || ($dataColumn_key == $wdtParameters['idColumn'])) {
+                    $colObjs[$dataColumn_key]->setShowThousandsSeparator(false);
+                    $this->addColumnsThousandsSeparator($dataColumn_key, 0);
+                } else {
+                    $this->addColumnsThousandsSeparator($dataColumn_key, 1);
+                }
+            }
+        }
+        return $colObjs;
+    }
+
+    /**
+     * Reformat output array and reorder as user wanted
+     * @param $main_res_dataRows
+     * @param $wdtParameters
+     * @param $colObjs
+     * @return mixed
+     */
+    public function prepareOutputData($main_res_dataRows, $wdtParameters, $colObjs) {
+        $output = [];
+        if (!empty($main_res_dataRows)) {
+            foreach ($wdtParameters['foreignKeyRule'] as $columnKey => $foreignKeyRule) {
+                if ($foreignKeyRule != null) {
+                    $foreignKeyData = $this->joinWithForeignWpDataTable($columnKey, $foreignKeyRule, $main_res_dataRows);
+                    $main_res_dataRows = $foreignKeyData['dataRows'];
+                }
+            }
+
+            foreach ($main_res_dataRows as $res_row) {
+                $row = array();
+                foreach ($wdtParameters['columnOrder'] as $dataColumn_key) {
+                    if ($wdtParameters['data_types'][$dataColumn_key] == 'formula') {
+                        try {
+                            $headers = array();
+                            $headersInFormula = $this->detectHeadersInFormula($wdtParameters['columnFormulas'][$dataColumn_key], array_keys($wdtParameters['data_types']));
+                            $headers = WDTTools::sanitizeHeaders($headersInFormula);
+                            $formulaVal =
+                                self::solveFormula(
+                                    $wdtParameters['columnFormulas'][$dataColumn_key],
+                                    $headers,
+                                    $res_row
+                                );
+                            $row[$dataColumn_key] = apply_filters(
+                                'wpdatatables_filter_cell_output',
+                                $colObjs[$dataColumn_key]->returnCellValue($formulaVal),
+                                $this->_wpId,
+                                $dataColumn_key
+                            );
+                        } catch (Exception $e) {
+                            $row[$dataColumn_key] = 0;
+                        }
+                    } else {
+                        $row[$dataColumn_key] = apply_filters('wpdatatables_filter_cell_output', $colObjs[$dataColumn_key]->returnCellValue($res_row[$dataColumn_key]), $this->_wpId, $dataColumn_key);
+                    }
+                }
+                $output[] = $this->formatAjaxQueryResultRow($row);
+            }
+        }
+        return $output;
+    }
+
+
+    /**
      * Formatting row data structure for ajax display table
      * @param $row - key => value pairs as column name and cell value of a row
      * @return array
@@ -1909,9 +2205,6 @@ class WPDataTable {
     public function XMLBasedConstruct($xml, $wdtParameters = array()) {
         if (!$xml) {
             throw new WDTException('File you provided cannot be found.');
-        }
-        if (strpos($xml, '.xml') === false) {
-            throw new WDTException('Non-XML file provided!');
         }
         $xml = WDTTools::applyPlaceholders($xml);
         $XMLObject = simplexml_load_file($xml);
@@ -1933,18 +2226,20 @@ class WPDataTable {
         if (!file_exists($xls_url)) {
             throw new WDTException('Provided file ' . stripcslashes($xls_url) . ' does not exist!');
         }
-        require_once WDT_ROOT_PATH . '/lib/phpExcel/PHPExcel.php';
+
         $format = 'xls';
         if (strpos(strtolower($xls_url), '.xlsx')) {
-            $objReader = new PHPExcel_Reader_Excel2007();
+            $objReader = new Xlsx();
         } elseif (strpos(strtolower($xls_url), '.xls')) {
-            $objReader = new PHPExcel_Reader_Excel5();
+            $objReader = new Xls();
         } elseif (strpos(strtolower($xls_url), '.ods')) {
             $format = 'ods';
-            $objReader = new PHPExcel_Reader_OOCalc();
+            $objReader = new Ods();
         } elseif (strpos(strtolower($xls_url), '.csv')) {
             $format = 'csv';
-            $objReader = new PHPExcel_Reader_CSV();
+            $objReader = new Csv();
+            $csvDelimiter = stripcslashes(get_option('wdtCSVDelimiter')) ? stripcslashes(get_option('wdtCSVDelimiter')) : WDTTools::detectCSVDelimiter($xls_url);
+            $objReader->setDelimiter($csvDelimiter);
         } else {
             throw new WDTException('File format not supported!');
         }
@@ -1965,13 +2260,14 @@ class WPDataTable {
             if (max($dataRows[$row]) !== null) {
                 ++$r;
                 foreach ($headingsArray as $dataColumnIndex => $dataColumnHeading) {
+                    $dataColumnHeading = trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $dataColumnHeading)));
                     $namedDataArray[$r][$dataColumnHeading] = $dataRows[$row][$dataColumnIndex];
                     $currentDateFormat = isset($wdtParameters['dateInputFormat'][$dataColumnHeading]) ? $wdtParameters['dateInputFormat'][$dataColumnHeading] : null;
                     if (!empty($wdtParameters['data_types'][$dataColumnHeading]) && in_array($wdtParameters['data_types'][$dataColumnHeading], array('date', 'datetime', 'time'))) {
-                        if ($format === 'xls') {
+                        if ($format === 'xls' || $format === 'ods') {
                             $cell = $objPHPExcel->getActiveSheet()->getCell($dataColumnIndex . '' . $row);
-                            if (PHPExcel_Shared_Date::isDateTime($cell) && $cell->getValue() !== null) {
-                                $namedDataArray[$r][$dataColumnHeading] = PHPExcel_Shared_Date::ExcelToPHP($cell->getValue());
+                            if (Date::isDateTime($cell) && $cell->getValue() !== null) {
+                                $namedDataArray[$r][$dataColumnHeading] = Date::excelToTimestamp($cell->getValue());
                             } else {
                                 $namedDataArray[$r][$dataColumnHeading] = WDTTools::wdtConvertStringToUnixTimestamp($dataRows[$row][$dataColumnIndex], $currentDateFormat);
                             }
@@ -2003,7 +2299,7 @@ class WPDataTable {
      * Generates table HTML
      * @return string
      */
-    public function generateTable() {
+    public function generateTable($connection) {
         /** @noinspection PhpUnusedLocalVariableInspection */
         $tableContent = $this->renderWithJSAndStyles();
 
@@ -2035,9 +2331,16 @@ class WPDataTable {
         if (get_option('wdtNumbersAlign')) {
             $returnData .= "table.wpDataTable td.numdata { text-align: right !important; }\n";
         }
+
+        if (get_option('wdtBorderRemoval')) {
+            $returnData .= ".wpDataTablesWrapper table.wpDataTable > tbody > tr > td{ border: none !important; }\n";
+        }
+        if (get_option('wdtBorderRemovalHeader')) {
+            $returnData .= ".wpDataTablesWrapper table.wpDataTable > thead > tr > th{ border: none !important; }\n";
+        }
         $returnData .= "</style>\n";
 
-        $returnData .= wdtRenderScriptStyleBlock();
+        $returnData .= wdtRenderScriptStyleBlock($connection);
         return $returnData;
     }
 
@@ -2078,44 +2381,46 @@ class WPDataTable {
 
         WDTTools::wdtUIKitEnqueue();
 
-        wp_enqueue_script('wdt-common', WDT_ROOT_URL . 'assets/js/wpdatatables/admin/common.js', array(), false, true);
+        wp_enqueue_script('wdt-common', WDT_ROOT_URL . 'assets/js/wpdatatables/admin/common.js', array(), WDT_CURRENT_VERSION, true);
         if (get_option('wdtMinifiedJs')) {
-            wp_enqueue_style('wdt-wpdatatables', WDT_CSS_PATH . 'wdt.frontend.min.css');
+            wp_enqueue_style('wdt-wpdatatables', WDT_CSS_PATH . 'wdt.frontend.min.css', array(),WDT_CURRENT_VERSION);
 
-            wp_enqueue_script('wdt-wpdatatables', WDT_JS_PATH . 'wpdatatables/wdt.frontend.min.js', array('wdt-common'), false, true);
+            wp_enqueue_script('wdt-wpdatatables', WDT_JS_PATH . 'wpdatatables/wdt.frontend.min.js', array('wdt-common'), WDT_CURRENT_VERSION, true);
+            wp_localize_script('wdt-wpdatatables', 'wdt_ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ));
         } else {
-            wp_enqueue_style('wdt-wpdatatables', WDT_CSS_PATH . 'wpdatatables.min.css');
-            wp_enqueue_style('wdt-table-tools', WDT_CSS_PATH . 'TableTools.css');
-            wp_enqueue_style('wdt-datatables-responsive', WDT_CSS_PATH . 'datatables.responsive.css');
+            wp_enqueue_style('wdt-wpdatatables', WDT_CSS_PATH . 'wpdatatables.min.css', array(),WDT_CURRENT_VERSION);
+            wp_enqueue_style('wdt-table-tools', WDT_CSS_PATH . 'TableTools.css', array(),WDT_CURRENT_VERSION);
+            wp_enqueue_style('wdt-datatables-responsive', WDT_CSS_PATH . 'datatables.responsive.css', array(),WDT_CURRENT_VERSION);
 
             if (WDT_INCLUDE_DATATABLES_CORE) {
-                wp_enqueue_script('wdt-datatables', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.min.js', array(), false, true);
+                wp_enqueue_script('wdt-datatables', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.min.js', array(), WDT_CURRENT_VERSION, true);
             }
             if ($this->filterEnabled()) {
-                wp_enqueue_script('wdt-advanced-filter', WDT_JS_PATH . 'wpdatatables/wdt.columnFilter.js', array(), false, true);
+                wp_enqueue_script('wdt-advanced-filter', WDT_JS_PATH . 'wpdatatables/wdt.columnFilter.js', array(), WDT_CURRENT_VERSION, true);
+                wp_localize_script('wdt-advanced-filter', 'wdt_ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ));
             }
             if ($this->groupingEnabled()) {
-                wp_enqueue_script('wdt-row-grouping', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.rowGrouping.js', array('jquery', 'wdt-datatables'), false, true);
+                wp_enqueue_script('wdt-row-grouping', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.rowGrouping.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true);
             }
             if ($this->TTEnabled() || $this->isEditable()) {
-                wp_enqueue_script('wdt-buttons', WDT_JS_PATH . 'export-tools/dataTables.buttons.min.js', array('jquery', 'wdt-datatables'), false, true);
+                wp_enqueue_script('wdt-buttons', WDT_JS_PATH . 'export-tools/dataTables.buttons.min.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true);
                 if ($this->TTEnabled()) {
-                    wp_enqueue_script('wdt-buttons-html5', WDT_JS_PATH . 'export-tools/buttons.html5.min.js', array('jquery', 'wdt-datatables'), false, true);
-                    !empty($this->_tableToolsConfig['print']) ? wp_enqueue_script('wdt-button-print', WDT_JS_PATH . 'export-tools/buttons.print.min.js', array('jquery', 'wdt-datatables'), false, true) : null;
-                    !empty($this->_tableToolsConfig['columns']) ? wp_enqueue_script('wdt-button-vis', WDT_JS_PATH . 'export-tools/buttons.colVis.min.js', array('jquery', 'wdt-datatables'), false, true) : null;
+                    wp_enqueue_script('wdt-buttons-html5', WDT_JS_PATH . 'export-tools/buttons.html5.min.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true);
+                    !empty($this->_tableToolsConfig['print']) ? wp_enqueue_script('wdt-button-print', WDT_JS_PATH . 'export-tools/buttons.print.min.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true) : null;
+                    !empty($this->_tableToolsConfig['columns']) ? wp_enqueue_script('wdt-button-vis', WDT_JS_PATH . 'export-tools/buttons.colVis.min.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true) : null;
                 }
                 if ($this->isEditable()) {
-                    wp_enqueue_script('wdt-jquery-mask-money', WDT_JS_PATH . 'maskmoney/jquery.maskMoney.js', array('jquery'), false, true);
+                    wp_enqueue_script('wdt-jquery-mask-money', WDT_JS_PATH . 'maskmoney/jquery.maskMoney.js', array('jquery'), WDT_CURRENT_VERSION, true);
                     if ($this->inlineEditingEnabled()) {
-                        wp_enqueue_script('wdt-inline-editing', WDT_JS_PATH . 'wpdatatables/wdt.inlineEditing.js', array(), false, true);
+                        wp_enqueue_script('wdt-inline-editing', WDT_JS_PATH . 'wpdatatables/wdt.inlineEditing.js', array(), WDT_CURRENT_VERSION, true);
                     }
                 }
             }
             if ($this->isResponsive()) {
-                wp_enqueue_script('wdt-responsive', WDT_JS_PATH . 'responsive/datatables.responsive.js', array(), false, true);
+                wp_enqueue_script('wdt-responsive', WDT_JS_PATH . 'responsive/datatables.responsive.js', array(), WDT_CURRENT_VERSION, true);
             }
-            wp_enqueue_script('wdt-funcs-js', WDT_JS_PATH . 'wpdatatables/wdt.funcs.js', array('jquery', 'wdt-datatables', 'wdt-common'), false, true);
-            wp_enqueue_script('wdt-wpdatatables', WDT_JS_PATH . 'wpdatatables/wpdatatables.js', array('jquery', 'wdt-datatables'), false, true);
+            wp_enqueue_script('wdt-funcs-js', WDT_JS_PATH . 'wpdatatables/wdt.funcs.js', array('jquery', 'wdt-datatables', 'wdt-common'), WDT_CURRENT_VERSION, true);
+            wp_enqueue_script('wdt-wpdatatables', WDT_JS_PATH . 'wpdatatables/wpdatatables.js', array('jquery', 'wdt-datatables'), WDT_CURRENT_VERSION, true);
         }
 
         $skin = get_option('wdtBaseSkin');
@@ -2136,13 +2441,13 @@ class WPDataTable {
                 $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/material.css';
                 break;
         }
-        wp_enqueue_style('wdt-skin', $renderSkin);
+        wp_enqueue_style('wdt-skin', $renderSkin, array(), WDT_CURRENT_VERSION);
         wp_enqueue_style('dashicons');
 
         wp_enqueue_script('underscore');
-        !empty($this->_tableToolsConfig['excel']) ? wp_enqueue_script('wdt-js-zip', WDT_JS_PATH . 'export-tools/jszip.min.js', array('jquery'), false, true) : null;
-        !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-pdf-make', WDT_JS_PATH . 'export-tools/pdfmake.min.js', array('jquery'), false, true) : null;
-        !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-vfs-fonts', WDT_JS_PATH . 'export-tools/vfs_fonts.js', array('jquery'), false, true) : null;
+        !empty($this->_tableToolsConfig['excel']) ? wp_enqueue_script('wdt-js-zip', WDT_JS_PATH . 'export-tools/jszip.min.js', array('jquery'), WDT_CURRENT_VERSION, true) : null;
+        !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-pdf-make', WDT_JS_PATH . 'export-tools/pdfmake.min.js', array('jquery'), WDT_CURRENT_VERSION, true) : null;
+        !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-vfs-fonts', WDT_JS_PATH . 'export-tools/vfs_fonts.js', array('jquery'), WDT_CURRENT_VERSION, true) : null;
 
         if ($this->isEditable()) {
             wp_enqueue_media();
@@ -2180,6 +2485,7 @@ class WPDataTable {
             'foreignKeyRule' => array(),
             'possibleValues' => array(),
             'possibleValuesAddEmpty' => array(),
+            'possibleValuesAjax' => array(),
             'possibleValuesType' => array(),
             'sorting' => array(),
             'userIdColumnHeader' => NULL,
@@ -2188,6 +2494,8 @@ class WPDataTable {
             'linkButtonLabel' => array(),
             'linkButtonClass' => array()
         );
+
+
 
         if ($tableData) {
             foreach ($tableData->columns as $column) {
@@ -2220,6 +2528,7 @@ class WPDataTable {
                 $returnArray['foreignKeyRule'][$column->orig_header] = isset($column->foreignKeyRule) ? $column->foreignKeyRule : null;
                 $returnArray['possibleValues'][$column->orig_header] = isset($column->valuesList) ? $column->valuesList : null;
                 $returnArray['possibleValuesAddEmpty'][$column->orig_header] = isset($column->possibleValuesAddEmpty) ? $column->possibleValuesAddEmpty : null;
+                $returnArray['possibleValuesAjax'][$column->orig_header] = isset($column->possibleValuesAjax) ? $column->possibleValuesAjax : null;
                 $returnArray['possibleValuesType'][$column->orig_header] = isset($column->possibleValuesType) ? $column->possibleValuesType : null;
                 $returnArray['sorting'][$column->orig_header] = isset($column->sorting) ? $column->sorting : null;
                 $returnArray['linkTargetAttribute'][$column->orig_header]= isset($column->linkTargetAttribute) ? $column->linkTargetAttribute : null;
@@ -2258,13 +2567,7 @@ class WPDataTable {
             $vars[$sanitizedHeader] = (float)$row[$origHeader];
         }
 
-        require_once(WDT_ROOT_PATH . '/lib/eos/Parser.php');
-        require_once(WDT_ROOT_PATH . '/lib/eos/Math.php');
-        require_once(WDT_ROOT_PATH . '/lib/eos/Trig.php');
-        require_once(WDT_ROOT_PATH . '/lib/eos/Stack.php');
-        require_once(WDT_ROOT_PATH . '/lib/eos/AdvancedFunctions.php');
-
-        $parser = new \jlawrence\eos\Parser();
+        $parser = new Parser();
         return $parser->solve($formula, $vars);
     }
 
@@ -2276,7 +2579,7 @@ class WPDataTable {
     public function calcFormulaPreview($formula) {
         $headers = array();
         $headersInFormula = $this->detectHeadersInFormula($formula);
-	    $headers = WDTTools::sanitizeHeaders($headersInFormula);
+        $headers = WDTTools::sanitizeHeaders($headersInFormula);
 
         $count = count($this->_dataRows) > 5 ? 5 : count($this->_dataRows);
         $result = __('Unable to calculate', 'wpdatatables');
@@ -2353,6 +2656,9 @@ class WPDataTable {
         }
         if (isset($columnData['possibleValuesAddEmpty'])) {
             $params['possibleValuesAddEmpty'] = $columnData['possibleValuesAddEmpty'];
+        }
+        if (isset($columnData['possibleValuesAjax'])) {
+            $params['possibleValuesAjax'] = $columnData['possibleValuesAjax'];
         }
         if (isset($columnData['foreignKeyRule'])) {
             $params['foreignKeyRule'] = $columnData['foreignKeyRule'];
@@ -2455,6 +2761,21 @@ class WPDataTable {
             default:
                 // Solution for addons
                 if (has_action('wpdatatables_generate_' . $tableData->table_type)) {
+                    //Check if Server-side processing is integrated in Add-on
+                    if (isset(json_decode($tableData->advanced_settings, true)[$tableData->table_type]['hasServerSideIntegration'])) {
+                        if (!empty($tableData->server_side)) {
+                            $this->enableServerProcessing();
+                            if (!empty($tableData->auto_refresh)) {
+                                $this->setAutoRefresh((int)$tableData->auto_refresh);
+                            }
+                        }
+                        if (!empty($tableData->editable)) {
+                            $editor_roles = isset($tableData->editor_roles) ? $tableData->editor_roles : '';
+                            if (wdtCurrentUserCanEdit($editor_roles, $this->getWpId())) {
+                                $this->enableEditing();
+                            }
+                        }
+                    }
                     do_action(
                         'wpdatatables_generate_' . $tableData->table_type,
                         $this,
@@ -2568,7 +2889,7 @@ class WPDataTable {
         // Define all column-dependent rendering rules
         foreach ($columnData as $key=>$column) {
 
-	        $this->column_id = $key;
+            $this->column_id = $key;
             // Set filter types
             $this->getColumn($column->orig_header)->setFilterType($column->filter_type);
             // Set CSS class
@@ -2654,11 +2975,11 @@ class WPDataTable {
                 ->setNotNull((bool)$column->input_mandatory);
 
             // Get display before/after and color
-	        if (sanitize_html_class(strtolower(str_replace(' ', '-', $column->orig_header))) === '') {
-		        $cssColumnHeader = 'column-' . $this->column_id;
-	        } else {
-		        $cssColumnHeader = 'column-' . sanitize_html_class( strtolower( str_replace( ' ', '-', $column->orig_header ) ) );
-	        }
+            if (sanitize_html_class(strtolower(str_replace(' ', '-', $column->orig_header))) === '') {
+                $cssColumnHeader = 'column-' . $this->column_id;
+            } else {
+                $cssColumnHeader = 'column-' . sanitize_html_class( strtolower( str_replace( ' ', '-', $column->orig_header ) ) );
+            }
             if ($column->text_before != '') {
                 $this->_columnsCSS .= "\n#{$this->getId()} > tbody > tr > td.{$cssColumnHeader}:not(:empty):before,
                                        \n#{$this->getId()} > tbody > tr.row-detail ul li.{$cssColumnHeader} span.columnValue:before
@@ -2700,6 +3021,7 @@ class WPDataTable {
 
         $obj = new stdClass();
         $obj->tableId = $this->getId();
+        $obj->tableType = $this->getTableType();
         $obj->selector = '#' . $this->getId();
         //[<-- Full version -->]//
         $obj->responsive = $this->isResponsive();
@@ -2741,7 +3063,7 @@ class WPDataTable {
         //[<--/ Full version -->]//
         if ($this->paginationEnabled()) {
             $obj->dataTableParams->bPaginate = true;
-            $obj->dataTableParams->aLengthMenu = json_decode('[[10,25,50,100,-1],[10,25,50,100,"All"]]');
+            $obj->dataTableParams->aLengthMenu = json_decode('[[1,5,10,25,50,100,-1],[1,5,10,25,50,100,"All"]]');
             $obj->dataTableParams->iDisplayLength = (int)$this->getDisplayLength();
         } else {
             $obj->dataTableParams->bPaginate = false;
@@ -2822,6 +3144,7 @@ class WPDataTable {
                         'extend' => 'colvis',
                         'className' => 'DTTT_button DTTT_button_colvis',
                         'text' => __('Columns', 'wpdatatables')
+
                     );
             }
             if (!empty($this->_tableToolsConfig['print'])) {
@@ -2926,6 +3249,11 @@ class WPDataTable {
             if (isset($wdtVar3) && $wdtVar3 !== '') {
                 $obj->dataTableParams->ajax['url'] .= '&wdt_var3=' . urlencode($wdtVar3);
             }
+            if (isset($_GET['wdt_column_filter']) && $_GET['wdt_column_filter'] !== '') {
+                foreach ($_GET['wdt_column_filter'] as $fltColKey => $fltDefVal) {
+                    $obj->dataTableParams->ajax['url'] .= '&wdt_column_filter['. urlencode($fltColKey) .']=' . urlencode($fltDefVal);
+                }
+            }
             $obj->fnServerData = true;
         } else {
             $obj->serverSide = false;
@@ -2989,6 +3317,8 @@ class WPDataTable {
      * @param $foreignKeyRule
      * @param $dataRows
      * @return mixed
+     * @throws Exception
+     * @throws WDTException
      */
     public function joinWithForeignWpDataTable($columnKey, $foreignKeyRule, $dataRows) {
         $joinedTable = self::loadWpDataTable($foreignKeyRule->tableId);
@@ -3012,29 +3342,54 @@ class WPDataTable {
      * @return array
      */
     public function getDistinctValuesForColumns($foreignKeyRule) {
-	    global $wdtVar1, $wdtVar2, $wdtVar3, $wpdb;
+        global $wdtVar1, $wdtVar2, $wdtVar3, $wpdb;
 
         $distinctValues = array();
         $storeColumnName = $foreignKeyRule->storeColumnName;
         $displayColumnName = $foreignKeyRule->displayColumnName;
         $tableType = $this->getTableType();
 
-        if ($tableType == 'mysql' || $tableType == 'manual') {
+        if ($tableType === 'mysql' || $tableType === 'manual') {
             $tableContent = $this->getTableContent();
 
-	        $tableContent = WDTTools::applyPlaceholders($tableContent);
+            $tableContent = WDTTools::applyPlaceholders($tableContent);
 
             if ($this->getOnlyOwnRows()) {
-	            if (strpos($tableContent, 'WHERE') !== false) {
-		            $tableContent .= ' AND ' . $this->_userIdColumn . '=' . get_current_user_id();
-	            } else {
-		            $tableContent .= ' WHERE ' . $this->_userIdColumn . '=' . get_current_user_id();
-	            }
+                if (strpos($tableContent, 'WHERE') !== false) {
+                    $tableContent .= ' AND ' . $this->_userIdColumn . '=' . get_current_user_id();
+                } else {
+                    $tableContent .= ' WHERE ' . $this->_userIdColumn . '=' . get_current_user_id();
+                }
             }
 
-            $distValuesQuery = "SELECT(`$storeColumnName`) AS `$storeColumnName`, (`$displayColumnName`) AS `$displayColumnName` FROM ($tableContent) tbl GROUP BY $storeColumnName ORDER BY $displayColumnName";
+            $vendor = Connection::getVendor($this->connection);
 
-            if (!get_option('wdtUseSeparateCon')) {
+            $columnQuoteStart = Connection::getLeftColumnQuote($vendor);
+            $columnQuoteEnd = Connection::getRightColumnQuote($vendor);
+
+            $isMySql = $vendor === Connection::$MYSQL;
+            $isMSSql = $vendor === Connection::$MSSQL;
+            $isPostgreSql = $vendor === Connection::$POSTGRESQL;
+
+            $groupBy = '';
+
+            if ($isMySql) {
+                $groupBy = "{$columnQuoteStart}{$storeColumnName}{$columnQuoteEnd}";
+            }
+
+            if ($isMSSql) {
+                $groupBy = "{$columnQuoteStart}{$storeColumnName}{$columnQuoteEnd}, {$columnQuoteStart}{$displayColumnName}{$columnQuoteEnd}";
+            }
+
+            if ($isPostgreSql) {
+                $groupBy = "({$columnQuoteStart}{$storeColumnName}{$columnQuoteEnd}, {$columnQuoteStart}{$displayColumnName}{$columnQuoteEnd})";
+            }
+
+
+
+            $distValuesQuery = "SELECT({$columnQuoteStart}{$storeColumnName}{$columnQuoteEnd}) AS {$columnQuoteStart}{$storeColumnName}{$columnQuoteEnd}, ({$columnQuoteStart}{$displayColumnName}{$columnQuoteEnd}) AS {$columnQuoteStart}{$displayColumnName}{$columnQuoteEnd} FROM ($tableContent) tbl GROUP BY $groupBy ORDER BY {$columnQuoteStart}{$displayColumnName}{$columnQuoteEnd}";
+
+            if (!(Connection::isSeparate($this->connection))) {
                 global $wpdb;
                 $mySqlResult = $wpdb->get_results($distValuesQuery);
 
@@ -3042,10 +3397,10 @@ class WPDataTable {
                     $distinctValues[$dataRow->$storeColumnName] = $dataRow->$displayColumnName;
                 }
             } else {
-                $sql = new PDTSql(WDT_MYSQL_HOST, WDT_MYSQL_DB, WDT_MYSQL_USER, WDT_MYSQL_PASSWORD, WDT_MYSQL_PORT);
-                $mySqlResult = $sql->getArray($distValuesQuery);
+                $sql = Connection::create($this->connection);
+                $mySqlResult = $sql->getAssoc($distValuesQuery);
 
-                foreach ($mySqlResult as $dataRow) {
+                foreach ($mySqlResult ?: [] as $dataRow) {
                     $distinctValues[$dataRow[$storeColumnName]] = $dataRow[$displayColumnName];
                 }
             }
@@ -3063,6 +3418,7 @@ class WPDataTable {
      * Delete table by ID
      * @param $tableId
      * @return bool
+     * @throws Exception
      */
     public static function deleteTable($tableId) {
         global $wpdb;
@@ -3079,10 +3435,10 @@ class WPDataTable {
 
         if (!empty($table->table_type)) {
             if ($table->table_type == 'manual') {
-                if (!get_option('wdtUseSeparateCon')) {
+                if (!(Connection::isSeparate($table->connection))) {
                     $wpdb->query("DROP TABLE {$table->mysql_table_name}");
                 } else {
-                    $sql = new PDTSql(WDT_MYSQL_HOST, WDT_MYSQL_DB, WDT_MYSQL_USER, WDT_MYSQL_PASSWORD, WDT_MYSQL_PORT);
+                    $sql = Connection::create($table->connection);
                     $sql->doQuery("DROP TABLE {$table->mysql_table_name}");
                 }
             }
@@ -3101,7 +3457,9 @@ class WPDataTable {
      */
     public static function getAllTables() {
         global $wpdb;
-        $query = "SELECT id, title, table_type, server_side FROM {$wpdb->prefix}wpdatatables ORDER BY id";
+
+        $query = "SELECT id, title, IF(table_type = 'mysql', 'SQL', table_type) AS table_type, connection, server_side FROM {$wpdb->prefix}wpdatatables ORDER BY id";
+
         $allTables = $wpdb->get_results($query, ARRAY_A);
         return $allTables;
     }
@@ -3113,7 +3471,8 @@ class WPDataTable {
      * @param null $tableView
      * @param bool $disableLimit
      * @return WPDataTable|WPExcelDataTable|bool
-     * @throws \WDTException
+     * @throws Exception
+     * @throws WDTException
      */
     public static function loadWpDataTable($tableId, $tableView = null, $disableLimit = false) {
         $tableData = WDTConfigController::loadTableFromDB($tableId);
@@ -3122,7 +3481,7 @@ class WPDataTable {
             $tableData->disable_limit = $disableLimit;
         }
 
-        $wpDataTable = $tableView === 'excel' ? new WPExcelDataTable() : new self();
+        $wpDataTable = $tableView === 'excel' ? new WPExcelDataTable($tableData->connection) : new self($tableData->connection);
         $wpDataTable->setWpId($tableId);
 
         $columnDataPrepared = $wpDataTable->prepareColumnData($tableData);

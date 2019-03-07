@@ -10,6 +10,23 @@
 
 <div class="card wdt-table-settings">
 
+    <?php
+        // set connection if $connection is not set with GET parameter
+        if ($connection === null) {
+            if (Connection::enabledSeparate()) {
+                foreach (Connection::getAll() as $wdtSeparateConnection) {
+                    if ($wdtSeparateConnection['default']) {
+                        $connection = $wdtSeparateConnection['id'];
+                    }
+                }
+            } else {
+                $connection === '';
+            }
+        }
+    ?>
+
+    <input type="hidden" id="wdt-table-connection" value="<?php echo $connection; ?>" />
+
     <!-- Preloader -->
     <?php include WDT_TEMPLATE_PATH . 'admin/common/preloader.inc.php'; ?>
     <!-- /Preloader -->
@@ -104,7 +121,7 @@
                                     <div class="select">
                                         <select class="selectpicker" id="wdt-table-type">
                                             <option value=""><?php _e('Select a data source type', 'wpdatatables'); ?></option>
-                                            <option value="mysql"><?php _e('MySQL query', 'wpdatatables'); ?></option>
+                                            <option value="mysql"><?php _e('SQL query', 'wpdatatables'); ?></option>
                                             <option value="csv"><?php _e('CSV file', 'wpdatatables'); ?></option>
                                             <option value="xls"><?php _e('Excel file', 'wpdatatables'); ?></option>
                                             <option value="google_spreadsheet"><?php _e('Google Spreadsheet', 'wpdatatables'); ?></option>
@@ -140,7 +157,9 @@
                             <!-- /input URL or path -->
                         </div>
 
-                        <div class="col-sm-6 mysql-settings-block hidden">
+                        <?php do_action('wdt_add_data_source_elements'); ?>
+
+                        <div class="col-sm-6 hidden wdt-server-side-processing">
                             <!-- Server side processing toggle -->
                             <h4 class="c-black m-b-20">
                                 <?php _e('Server-side processing', 'wpdatatables'); ?>
@@ -150,13 +169,12 @@
                             <div class="toggle-switch" data-ts-color="blue">
                                 <label for="wdt-server-side"
                                        class="ts-label"><?php _e('Enable server-side processing', 'wpdatatables'); ?></label>
-                                <input id="wdt-server-side" type="checkbox" hidden="hidden" checked="checked">
+                                <input id="wdt-server-side" class="wdt-server-side" type="checkbox" hidden="hidden" checked="checked">
                                 <label for="wdt-server-side" class="ts-helper"></label>
                             </div>
                             <!-- /Server side processing toggle -->
                         </div>
 
-                        <?php do_action('wdt_add_data_source_elements'); ?>
 
                     </div>
                     <!-- /.row -->
@@ -165,9 +183,11 @@
                         <div class="col-sm-6 hidden mysql-settings-block">
 
                             <h4 class="c-black m-b-20">
-                                <?php _e('MySQL Query', 'wpdatatables'); ?>
+                                <?php _e('SQL Query', 'wpdatatables'); ?>
                                 <i class="zmdi zmdi-help-outline" data-toggle="tooltip" data-placement="right"
-                                   title="<?php _e('Enter the text of your MySQL query here - please make sure it returns actual data first. You can use a number of placeholders to make the dataset in the table flexible and be able to return different sets of data by calling it with different shortcodes.', 'wpdatatables'); ?>"></i>
+                                   title="<?php _e('Enter the text of your SQL query here - please make sure it returns actual data first. You can use a number of placeholders to make the dataset in the table flexible and be able to return different sets of data by calling it with different shortcodes.', 'wpdatatables'); ?>"></i>
+                                <div class="" data-placement="top" style="color: gray; float: right;"><?php echo Connection::enabledSeparate() ? Connection::getName($connection) : '' ?>
+                                </div>
                             </h4>
                             <pre id="wdt-mysql-query" style="width: 100%; height: 250px"></pre>
                         </div>
@@ -309,6 +329,8 @@
                                 <div class="fg-line">
                                     <div class="select">
                                         <select class="form-control selectpicker" id="wdt-rows-per-page">
+                                            <option value="1">1</option>
+                                            <option value="5">5</option>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -357,7 +379,7 @@
                         <div class="col-sm-4 m-b-20 wdt-scrollable-block">
 
                             <h4 class="c-black m-b-20">
-                                Scrollable
+                                <?php _e('Scrollable', 'wpdatatables'); ?>
                                 <i class="zmdi zmdi-help-outline" data-popover-content="#scrollable-hint"
                                    data-toggle="html-popover" data-trigger="hover" data-placement="right"></i>
                             </h4>
@@ -575,8 +597,7 @@
                             <!-- Hidden popover with image hint -->
                             <div class="hidden" id="global-search-hint">
                                 <div class="popover-heading">
-                                    <?php _e('Global sear
-                                                ch', 'wpdatatables'); ?>
+                                    <?php _e('Global search', 'wpdatatables'); ?>
                                 </div>
 
                                 <div class="popover-body">
@@ -970,7 +991,7 @@
 
                     <div class="row">
                         <div class="col-md-12 m-b-20">
-                            <small><?php _e('Placeholders can be understood as predefined ‘search and replace‘ templates; that will be replaced with some actual values at the execution time; usually this is used for MySQL queries.', 'wpdatatables'); ?></small>
+                            <small><?php _e('Placeholders can be understood as predefined ‘search and replace‘ templates; that will be replaced with some actual values at the execution time; usually this is used for MySQL queries, but you can use it for XMl,JSON and PHP serialized array. ', 'wpdatatables'); ?></small>
                         </div>
                     </div>
 
@@ -1095,6 +1116,40 @@
 
                             <div class="fg-line form-group">
                                 <input id="wdt-post-id-placeholder" type="text" value="" class="form-control input-sm"
+                                       placeholder="<?php _e('Default for table generation', 'wpdatatables'); ?>">
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4 m-b-20">
+
+                            <h4 class="c-black m-b-20">
+                                %CURRENT_USER_FIRST_NAME%
+                                <i class="zmdi zmdi-help-outline" data-toggle="tooltip" data-placement="right"
+                                   title="<?php _e('This placeholder will be replaced with the First Name of currently logged in user. Provide a value here to be used for table generation', 'wpdatatables'); ?>"></i>
+                            </h4>
+
+                            <div class="fg-line form-group">
+                                <?php $wdt_current_user = wp_get_current_user(); ?>
+                                <input id="wdt-user-first-name-placeholder" type="text"
+                                       value="<?php echo $wdt_current_user->first_name; ?>" class="form-control input-sm"
+                                       placeholder="<?php _e('Default for table generation', 'wpdatatables'); ?>">
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4 m-b-20">
+
+                            <h4 class="c-black m-b-20">
+                                %CURRENT_USER_LAST_NAME%
+                                <i class="zmdi zmdi-help-outline" data-toggle="tooltip" data-placement="right"
+                                   title="<?php _e('This placeholder will be replaced with the Last Name of currently logged in user. Provide a value here to be used for table generation', 'wpdatatables'); ?>"></i>
+                            </h4>
+
+                            <div class="fg-line form-group">
+                                <?php $wdt_current_user = wp_get_current_user(); ?>
+                                <input id="wdt-user-last-placeholder" type="text"
+                                       value="<?php echo $wdt_current_user->last_name; ?>" class="form-control input-sm"
                                        placeholder="<?php _e('Default for table generation', 'wpdatatables'); ?>">
                             </div>
 
