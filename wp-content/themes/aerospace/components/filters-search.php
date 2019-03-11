@@ -16,6 +16,11 @@ $categories_args = array(
 );
 
 $selected_post_types = get_query_var( 'post_type' );
+
+if (!is_array($selected_post_types)) {
+	$selected_post_types = array($selected_post_types);
+}
+
 $post_types_labels = array( 
 	'post' => 'Articles',
 	'aerospace101' => 'Aerospace 101',
@@ -23,8 +28,6 @@ $post_types_labels = array(
 	'events' => 'Events'
 );
 asort($post_types_labels);
-
-echo $selected_post_types;
 
 ?>
 

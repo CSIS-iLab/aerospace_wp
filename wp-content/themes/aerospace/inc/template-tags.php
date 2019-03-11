@@ -803,11 +803,13 @@ if (! function_exists('aerospace_sort_filter')) :
         if (is_search()) {
             $search = '?s=' . $wp->query_vars['s'];
 
-            if ($wp->query_vars['cat']) {
+            $cat = '';
+            if (isset($wp->query_vars['cat']) && $wp->query_vars['cat']) {
                 $cat = '&cat=' . $wp->query_vars['cat'];
             }
 
-            if ($wp->query_vars['post_type']) {
+            $post_type = '';
+            if (isset($wp->query_vars['post_type']) && $wp->query_vars['post_type']) {
                 $post_type = implode('&post_type[]=', $wp->query_vars['post_type']);
                 $post_type = '&post_type[]=' . $post_type;
             }
