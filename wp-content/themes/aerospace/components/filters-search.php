@@ -24,6 +24,8 @@ $post_types_labels = array(
 );
 asort($post_types_labels);
 
+echo $selected_post_types;
+
 ?>
 
 <label for="search-categories" class="filter-label"><?php esc_html_e( 'Filter by Category' , 'aerospace' ); ?></label>
