@@ -317,8 +317,7 @@ if (! function_exists('aerospace_post_format')) :
                 $post_format = $obj->labels->name;
             }
             if ($post_format) {
-                $is_featured = get_post_meta($id, '_post_is_featured', true);
-                printf('<div class="post-format">' . esc_html('%2$s') . esc_html('%1$s') . '</div>', $post_format, $is_featured); // WPCS: XSS OK.
+                printf('<div class="post-format">' . esc_html('%1$s') . '</div>', $post_format); // WPCS: XSS OK.
             }
         }
     }
