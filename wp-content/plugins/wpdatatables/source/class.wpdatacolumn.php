@@ -4,6 +4,7 @@ defined('ABSPATH') or die('Access denied.');
 
 class WDTColumn {
 
+    protected $_id = null;
     protected $_inputType = '';
     protected $_hiddenOnPhones = false;
     protected $_hiddenOnTablets = false;
@@ -31,6 +32,7 @@ class WDTColumn {
     protected $_checkboxesInModal = false;
     protected $_possibleValuesType;
     protected $_possibleValuesAddEmpty = false;
+    protected $_possibleValuesAjax = 10;
     protected $_foreignKeyRule;
     protected $_editingDefaultValue = null;
     protected $_parentTable = null;
@@ -38,6 +40,7 @@ class WDTColumn {
 
     /**
      * WDTColumn constructor.
+     *
      * @param array $properties
      */
     public function __construct($properties = array()) {
@@ -55,6 +58,7 @@ class WDTColumn {
         $this->setCheckboxesInModal(WDTTools::defineDefaultValue($properties, 'checkboxesInModal', false));
         $this->_possibleValuesType = WDTTools::defineDefaultValue($properties, 'possibleValuesType', '');
         $this->setPossibleValuesAddEmpty(WDTTools::defineDefaultValue($properties, 'possibleValuesAddEmpty', false));
+        $this->setPossibleValuesAjax(WDTTools::defineDefaultValue($properties, 'possibleValuesAjax', 10));
         $this->setEditingDefaultValue(WDTTools::defineDefaultValue($properties, 'editingDefaultValue', null));
         $this->setParentTable(WDTTools::defineDefaultValue($properties, 'parentTable', null));
         $this->setLinkButtonLabel(WDTTools::defineDefaultValue($properties, 'linkButtonLabel', null));
@@ -264,7 +268,7 @@ class WDTColumn {
     /**
      * @return array
      */
-    public function getPossibleValues() {
+    public function getPossibleValuesList() {
         return $this->_possibleValues;
     }
 
@@ -284,16 +288,51 @@ class WDTColumn {
 
     /**
      * @return string
+     * @throws WDTException
      */
     public function getFilterDefaultValue() {
         $value = $this->_filterDefaultValue;
-        if (is_array($value)) {
-            foreach ($value as &$singleValue) {
-                $singleValue = $this->applyPlaceholders($singleValue);
+
+        if ($value) {
+            if ($this->getForeignKeyRule()) {
+                $foreignKeyRule = $this->getForeignKeyRule();
+                $joinedTable = WPDataTable::loadWpDataTable($foreignKeyRule->tableId);
+                $distinctValues = $joinedTable->getDistinctValuesForColumns($foreignKeyRule);
+
+                $valueCopy = $value;
+                $value = [];
+                if (is_array($valueCopy)) {
+                    foreach ($valueCopy as $copy) {
+                        $copy = $this->applyPlaceholders($copy);
+
+                        $value[] = [
+                            'value' => $copy,
+                            'text' => $distinctValues[$copy]
+                        ];
+                    }
+                } else {
+                    $valueCopy = $this->applyPlaceholders($valueCopy);
+
+                    $value['value'] = $valueCopy;
+                    
+                    if ($this->getFilterType() == "text") {
+                        $key = array_search($valueCopy, $distinctValues);
+                        $value['text'] = $distinctValues[$key];
+                    }else {
+                        $value['text'] = $distinctValues[$valueCopy];
+                    }
+                }
+            } else {
+                if (is_array($value)) {
+                    foreach ($value as &$singleValue) {
+                        $singleValue = $this->applyPlaceholders($singleValue);
+                    }
+                } else {
+                    $value = $this->applyPlaceholders($value);
+                }
             }
-        } else {
-            $value = $this->applyPlaceholders($value);
         }
+
         return $value;
     }
 
@@ -374,6 +413,7 @@ class WDTColumn {
      * Set conditional formatting data for column and set
      * conditional formatting cell value to today's date if %TODAY%
      * placeholder is used
+     *
      * @param array $conditionalFormattingData
      */
     public function setConditionalFormattingData($conditionalFormattingData) {
@@ -439,14 +479,14 @@ class WDTColumn {
     /**
      * @return string
      */
-    public function getLinkButtonLabel(){
+    public function getLinkButtonLabel() {
         return $this->_linkButtonLabel;
     }
 
     /**
      * @param string $linkButtonLabel
      */
-    public function setLinkButtonLabel($linkButtonLabel){
+    public function setLinkButtonLabel($linkButtonLabel) {
         $this->_linkButtonLabel = $linkButtonLabel;
     }
 
@@ -493,6 +533,20 @@ class WDTColumn {
     }
 
     /**
+     * @return int
+     */
+    public function getPossibleValuesAjax() {
+        return $this->_possibleValuesAjax;
+    }
+
+    /**
+     * @param int $possibleValuesAjax
+     */
+    public function setPossibleValuesAjax($possibleValuesAjax) {
+        $this->_possibleValuesAjax = $possibleValuesAjax;
+    }
+
+    /**
      * @return mixed
      */
     public function getForeignKeyRule() {
@@ -507,10 +561,42 @@ class WDTColumn {
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getEditingDefaultValue() {
-        return $this->_editingDefaultValue;
+        $value = $this->_editingDefaultValue;
+
+        if ($value) {
+            if ($this->getForeignKeyRule()) {
+                $foreignKeyRule = $this->getForeignKeyRule();
+                $joinedTable = WPDataTable::loadWpDataTable($foreignKeyRule->tableId);
+                $distinctValues = $joinedTable->getDistinctValuesForColumns($foreignKeyRule);
+
+                $valueCopy = $value;
+                $value = [];
+                if (is_array($valueCopy)) {
+                    foreach ($valueCopy as $copy) {
+                        $value[] = [
+                            'value' => $copy,
+                            'text' => $distinctValues[$copy]
+                        ];
+                    }
+                } else {
+                    $value['value'] = $valueCopy;
+                    $value['text'] = $distinctValues[$valueCopy];
+                }
+            } else {
+                if (is_array($value)) {
+                    foreach ($value as &$singleValue) {
+                        $singleValue = $this->applyPlaceholders($singleValue);
+                    }
+                } else {
+                    $value = $this->applyPlaceholders($value);
+                }
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -546,30 +632,31 @@ class WDTColumn {
 
     /**
      * Get column type for Google Charts
+     *
      * @return string
      */
     public function getGoogleChartColumnType() {
         return 'string';
     }
 
-	public function hideOnTablets(){
-		$this->_hiddenOnTablets = true;
-	}
+    public function hideOnTablets() {
+        $this->_hiddenOnTablets = true;
+    }
 
-	public function showOnTablets(){
-		$this->_hiddenOnTablets = false;
-	}
+    public function showOnTablets() {
+        $this->_hiddenOnTablets = false;
+    }
 
-	public function getHiddenAttr(){
-		$hidden = array();
-		if($this->_hiddenOnPhones){
-			$hidden[] = 'phone';
-		}
-		if($this->_hiddenOnTablets){
-			$hidden[] = 'tablet';
-		}
-		return implode(',',$hidden);
-	}
+    public function getHiddenAttr() {
+        $hidden = array();
+        if ($this->_hiddenOnPhones) {
+            $hidden[] = 'phone';
+        }
+        if ($this->_hiddenOnTablets) {
+            $hidden[] = 'tablet';
+        }
+        return implode(',', $hidden);
+    }
 
     /**
      * @param $content
@@ -578,9 +665,9 @@ class WDTColumn {
     public function prepareCellOutput($content) {
         if (is_array($content)) {
             return $content['value'];
-        } else {
-            return $content;
         }
+
+        return $content;
     }
 
     /**
@@ -592,34 +679,32 @@ class WDTColumn {
     private function applyPlaceholders($value) {
         global $wdtVar1, $wdtVar2, $wdtVar3;
 
-        // Current user ID
-        if (strpos($value, '%CURRENT_USER_ID%') !== false) {
-            $value = str_replace('%CURRENT_USER_ID%', get_current_user_id(), $value);
-        }
-
-        // Current user login
-        if (strpos($value, '%CURRENT_USER_LOGIN%') !== false) {
-            $value = str_replace('%CURRENT_USER_LOGIN%', wp_get_current_user()->user_login, $value);
-        }
-
-        // Current post id
-        if (strpos($value, '%CURRENT_POST_ID%') !== false) {
-            $value = str_replace('%CURRENT_POST_ID%', get_post()->ID, $value);
-        }
-
-        // Shortcode VAR1
-        if (strpos($value, '%VAR1%') !== false) {
-            $value = str_replace('%VAR1%', $wdtVar1, $value);
-        }
-
-        // Shortcode VAR2
-        if (strpos($value, '%VAR2%') !== false) {
-            $value = str_replace('%VAR2%', $wdtVar2, $value);
-        }
-
-        // Shortcode VAR3
-        if (strpos($value, '%VAR3%') !== false) {
-            $value = str_replace('%VAR3%', $wdtVar3, $value);
+        if ($value && !is_array($value) && !is_object ($value)) {
+            // Current user ID
+            if (strpos($value, '%CURRENT_USER_ID%') !== false) {
+                $value = str_replace('%CURRENT_USER_ID%', get_current_user_id(), $value);
+            }// Current user login
+            if (strpos($value, '%CURRENT_USER_LOGIN%') !== false) {
+                $value = str_replace('%CURRENT_USER_LOGIN%', wp_get_current_user()->user_login, $value);
+            }// Current post id
+            if (strpos($value, '%CURRENT_POST_ID%') !== false) {
+                $value = str_replace('%CURRENT_POST_ID%', get_post()->ID, $value);
+            }// Current user first name
+            if (strpos($value, '%CURRENT_USER_FIRST_NAME%') !== false) {
+                $value = str_replace('%CURRENT_USER_FIRST_NAME%', wp_get_current_user()->first_name, $value);
+            }// Current user last name
+            if (strpos($value, '%CURRENT_USER_LAST_NAME%') !== false) {
+                $value = str_replace('%CURRENT_USER_LAST_NAME%', wp_get_current_user()->last_name, $value);
+            }// Shortcode VAR1
+            if (strpos($value, '%VAR1%') !== false) {
+                $value = str_replace('%VAR1%', $wdtVar1, $value);
+            }// Shortcode VAR2
+            if (strpos($value, '%VAR2%') !== false) {
+                $value = str_replace('%VAR2%', $wdtVar2, $value);
+            }// Shortcode VAR3
+            if (strpos($value, '%VAR3%') !== false) {
+                $value = str_replace('%VAR3%', $wdtVar3, $value);
+            }
         }
 
         return $value;
@@ -627,6 +712,7 @@ class WDTColumn {
 
     /**
      * Generates column object based on column type
+     *
      * @param string $wdtColumnType
      * @param array $properties
      * @return mixed
@@ -643,6 +729,7 @@ class WDTColumn {
 
     /**
      * Get JSON for a column
+     *
      * @return StdClass
      */
     public function getColumnJSON($columnID) {
@@ -658,9 +745,9 @@ class WDTColumn {
         $colJsDefinition->notNull = $this->_notNull;
         $colJsDefinition->conditionalFormattingRules = $this->getConditionalFormattingData();
         if (sanitize_html_class(strtolower(str_replace(' ', '-', $this->_orig_header)))) {
-	        $colJsDefinition->className = $this->getCSSClasses() . ' column-' . sanitize_html_class( strtolower( str_replace( ' ', '-', $this->_orig_header ) ) );
+            $colJsDefinition->className = $this->getCSSClasses() . ' column-' . sanitize_html_class(strtolower(str_replace(' ', '-', $this->_orig_header)));
         } else {
-	        $colJsDefinition->className = $this->getCSSClasses() . ' column-' . $columnID;
+            $colJsDefinition->className = $this->getCSSClasses() . ' column-' . $columnID;
         }
         if ($this->_width != '') {
             $colJsDefinition->sWidth = $this->_width;
@@ -671,7 +758,9 @@ class WDTColumn {
 
     /**
      * Get Filter definition for a column
+     *
      * @return stdClass
+     * @throws WDTException
      */
     public function getJSFilterDefinition() {
         /** @var WPDataTable $parentTable */
@@ -684,25 +773,58 @@ class WDTColumn {
         $jsFilterDef->values = null;
         if (in_array($this->getFilterType(), array('select', 'multiselect', 'checkbox')) || in_array($this->getInputType(), array('selectbox', 'multi-selectbox'))) {
             if ($this->_possibleValuesType === 'read' && $parentTable->serverSide()) {
-                $jsFilterDef->values = WDTColumn::getColumnDistinctValues($this, false, true);
-            } elseif ($this->_possibleValuesType === 'list') {
-                $jsFilterDef->values = $this->getPossibleValues();
-            } elseif ($this->_possibleValuesType === 'foreignkey' && $parentTable->serverSide()) {
-                foreach ($this->getPossibleValues() as $value => $label) {
+                if (has_filter('wpdatatables_possible_values_' . $parentTable->getTableType())) {
+                    $distValues = apply_filters('wpdatatables_possible_values_' . $parentTable->getTableType(), $this, false, true);
+                } else {
+                    $distValues = self::getPossibleValuesRead($this, false, true);
+                }
+                foreach ($distValues as $value) {
                     $distinctValue['value'] = $value;
-                    $distinctValue['label'] = $label;
+                    $distinctValue['label'] = $this->prepareCellOutput($value);
                     $jsFilterDef->values[] = $distinctValue;
+                }
+            } elseif ($this->_possibleValuesType === 'list') {
+                foreach ($this->getPossibleValuesList() as $value) {
+                    $distinctValue['value'] = $value;
+                    $distinctValue['label'] = $value;
+                    $jsFilterDef->values[] = $distinctValue;
+                }
+            } elseif ($this->_possibleValuesType === 'foreignkey' && $parentTable->serverSide()) {
+                $readValues = [];
+                if ($this->getParentTable()->getOnlyOwnRows()) {
+                    $readValues = self::getPossibleValuesRead($this, false, true);
+                }
+                foreach ($this->getPossibleValuesList() as $value => $label) {
+                    // If foreign key is used with "User can see only own rows"
+                    if ($this->getParentTable()->getOnlyOwnRows()) {
+                        if (in_array($value, $readValues, false)) {
+                            $distinctValue['value'] = $value;
+                            $distinctValue['label'] = $label;
+                            $jsFilterDef->values[] = $distinctValue;
+                        }
+                    } else {
+                        $distinctValue['value'] = $value;
+                        $distinctValue['label'] = $label;
+                        $jsFilterDef->values[] = $distinctValue;
+                    }
                 }
             }
         }
 
         if (($this->getFilterType() === 'select') && $parentTable->serverSide() && $this->getPossibleValuesAddEmpty()) {
-            array_unshift($jsFilterDef->values, 'possibleValuesAddEmpty');
+            array_unshift(
+                $jsFilterDef->values,
+                [
+                    'value' => 'possibleValuesAddEmpty',
+                    'label' => ' '
+                ]
+            );
         }
 
         $jsFilterDef->origHeader = $this->getOriginalHeader();
         $jsFilterDef->displayHeader = $this->getTitle();
         $jsFilterDef->possibleValuesAddEmpty = $this->getPossibleValuesAddEmpty();
+        $jsFilterDef->possibleValuesAjax = $this->getPossibleValuesAjax();
         $jsFilterDef->defaultValue = $this->getFilterDefaultValue();
         $jsFilterDef->exactFiltering = $this->getExactFiltering();
         $jsFilterDef->filterLabel = $this->getFilterLabel();
@@ -714,36 +836,50 @@ class WDTColumn {
 
     /**
      * Get Editing definition for a column
+     *
      * @return stdClass
      */
     public function getJSEditingDefinition() {
         $jsEditingDef = new stdClass();
 
+        $jsEditingDef->origHeader = $this->getOriginalHeader();
         $jsEditingDef->editorInputType = $this->getInputType();
         $jsEditingDef->defaultValue = $this->getEditingDefaultValue();
         $jsEditingDef->defaultValue = $this->applyPlaceholders($jsEditingDef->defaultValue);
+        $jsEditingDef->possibleValuesAjax = $this->getPossibleValuesAjax();
+        $jsEditingDef->mandatory = $this->isNotNull();
+        $jsEditingDef->displayHeader = $this->getTitle();
+        $jsEditingDef->foreignKeyRule = $this->getForeignKeyRule();
 
         return $jsEditingDef;
     }
 
     /**
-     * Get values that will be used in the in the Default Value Inputs
+     * Get possible values based on "Possible values for column" type
+     *
+     * Used to populate "Predefined value(s)" selectboxes in column settings and
+     * for loading for possible values with AJAX
+     *
      * @return array
      */
-    public function getDefaultValues() {
+    public function getPossibleValues() {
         /** @var WPDataTable $parentTable */
         $parentTable = $this->getParentTable();
         $values = array();
 
-        if (!in_array($this->getDataType(), array('date', 'datetime', 'time', 'formula'), true) && $this->getDataType() != '' && empty($this->_formula)) {
-            if ($this->_possibleValuesType == 'read' && $parentTable->serverSide()) {
-                $values = WDTColumn::getColumnDistinctValues($this, false, false);
-            } elseif ($this->_possibleValuesType == 'list' || ($this->_possibleValuesType == 'foreignkey' && $parentTable->serverSide() == false)) {
-                $values = $this->getPossibleValues();
-            } elseif ($this->_possibleValuesType == 'foreignkey') {
-                foreach ($this->getPossibleValues() as $value => $label) {
+        if (empty($this->_formula) && $this->getDataType() !== '' && !in_array($this->getDataType(), array('date', 'datetime', 'time', 'formula'), true)) {
+            if ($this->_possibleValuesType === 'read' && $parentTable->serverSide()) {
+                if (has_filter('wpdatatables_possible_values_' . $parentTable->getTableType())) {
+                    $values = apply_filters('wpdatatables_possible_values_' . $parentTable->getTableType(), $this, false, true);
+                } else {
+                    $values = self::getPossibleValuesRead($this, false, true);
+                }
+            } elseif ($this->_possibleValuesType === 'list' || ($this->_possibleValuesType === 'foreignkey' && $parentTable->serverSide() == false)) {
+                $values = $this->getPossibleValuesList();
+            } elseif ($this->_possibleValuesType === 'foreignkey') {
+                foreach ($this->getPossibleValuesList() as $value => $label) {
                     $distinctValue['value'] = $value;
-                    $distinctValue['label'] = $label;
+                    $distinctValue['text'] = $label;
                     $values[] = $distinctValue;
                 }
             } else {
@@ -759,17 +895,30 @@ class WDTColumn {
 
     /**
      * Get distinct values for a column
+     *
      * @param WDTColumn $column
-     * @param $tableData
-     * @param $filterByUserId
+     * @param           $tableData
+     * @param           $filterByUserId
      * @return array|bool
      */
-    public static function getColumnDistinctValues($column, $tableData = null, $filterByUserId) {
+    public static function getPossibleValuesRead($column, $tableData = null, $filterByUserId) {
         global $wdtVar1, $wdtVar2, $wdtVar3;
         $distValues = array();
         /** @var WPDataTable $parentTable */
         $parentTable = $column->getParentTable();
         $columnOrigHeader = $column->getOriginalHeader();
+
+        $vendor = Connection::getVendor($parentTable->connection);
+
+        $leftSysIdentifier = Connection::getLeftColumnQuote($vendor);
+        $rightSysIdentifier = Connection::getRightColumnQuote($vendor);
+
+        $isMySql = $vendor === Connection::$MYSQL;
+        $isMSSql = $vendor === Connection::$MSSQL;
+        $isPostgreSql = $vendor === Connection::$POSTGRESQL;
+
+        $where = 'WHERE 1=1';
+        $where .= isset($_POST['q']) ? " AND ({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) LIKE '%{$_POST['q']}%'" : '';
 
         $wdtVar1 = $wdtVar1 === '' && isset($tableData->var1) ? $tableData->var1 : $wdtVar1;
         $wdtVar2 = $wdtVar2 === '' && isset($tableData->var2) ? $tableData->var2 : $wdtVar2;
@@ -777,20 +926,33 @@ class WDTColumn {
 
         $tableContent = WDTTools::applyPlaceholders($parentTable->getTableContent());
 
-        $distValuesQuery = "SELECT DISTINCT(`$columnOrigHeader`) AS `$columnOrigHeader` FROM ( $tableContent ) tbl";
-
         if ($filterByUserId && $parentTable->getOnlyOwnRows() === true) {
-            $distValuesQuery .= ' WHERE `' . $parentTable->getUserIdColumn() . '` = ' . get_current_user_id();
+            $where .= " AND {$leftSysIdentifier}" . $parentTable->getUserIdColumn() . "{$rightSysIdentifier} = " . get_current_user_id();
         }
 
-        if (!get_option('wdtUseSeparateCon')) {
+        if ($isMySql) {
+            $limit = $column->getPossibleValuesAjax() !== -1 ? 'LIMIT ' . $column->getPossibleValuesAjax() : '';
+            $distValuesQuery = "SELECT DISTINCT({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) AS {$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier} FROM ( $tableContent ) tbl $where ORDER BY ({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) $limit";
+        }
+
+        if ($isMSSql) {
+            $limit = $column->getPossibleValuesAjax() !== -1 ? " OFFSET 0 ROWS FETCH NEXT {$column->getPossibleValuesAjax()} ROWS ONLY" : '';
+            $distValuesQuery = "SELECT DISTINCT({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) AS {$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier} FROM ( $tableContent ) tbl $where ORDER BY ({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) $limit";
+        }
+
+        if ($isPostgreSql) {
+            $limit = $column->getPossibleValuesAjax() !== -1 ? 'LIMIT ' . $column->getPossibleValuesAjax() : '';
+            $distValuesQuery = "SELECT DISTINCT({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) AS {$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier} FROM ( $tableContent ) tbl $where ORDER BY ({$leftSysIdentifier}{$columnOrigHeader}{$rightSysIdentifier}) $limit";
+        }
+
+        if (!(Connection::isSeparate($parentTable->connection))) {
             global $wpdb;
             $distValues = $wpdb->get_col($distValuesQuery);
             if ($wpdb->last_error) {
                 return false;
             }
         } else {
-            $sql = new PDTSql(WDT_MYSQL_HOST, WDT_MYSQL_DB, WDT_MYSQL_USER, WDT_MYSQL_PASSWORD, WDT_MYSQL_PORT);
+            $sql = Connection::create($parentTable->connection);
             $rows = $sql->getArray($distValuesQuery);
 
             if (!empty($rows)) {
@@ -800,14 +962,6 @@ class WDTColumn {
             }
         }
 
-        if ($column->getDataType() === 'float') {
-            $columnDecimalPlaces = $column->getDecimalPlaces();
-            foreach ($distValues as &$value) {
-                $value = number_format($value, $columnDecimalPlaces);
-            }
-        }
-
-        sort($distValues);
         // Filter array to remove NULL from the $distValues
         return array_values(array_filter($distValues, function ($value) {
             return ($value !== null && $value !== false && $value !== '');

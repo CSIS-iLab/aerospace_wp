@@ -12,6 +12,8 @@
 $email = get_option( 'aerospace_email' );
 $twitter = get_option( 'aerospace_twitter' );
 $newsletter_url = get_option( 'aerospace_newsletter_url' );
+$header_class = '';
+$header_bottom_class = '';
 
 if ( is_page_template( 'single-longform.php' ) ) {
     $header_class = ' is-small';

@@ -40,6 +40,7 @@ class WPDataChart {
     // Series
     private $_series = array();
     private $_curve_type = 'none';
+    private $_series_type = '';
     // Axes
     private $_show_grid = true;
     private $_highcharts_line_dash_style = 'Solid';
@@ -422,6 +423,19 @@ class WPDataChart {
      */
     public function getCurveType() {
         return $this->_curve_type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeriesType() {
+        return $this->_series_type;
+    }
+    /**
+     *  @param string $series_type
+     */
+    public function setSeriesType($series_type) {
+        $this->_series_type = $series_type;
     }
 
     // Axes
@@ -1171,6 +1185,7 @@ class WPDataChart {
         $chartObj->setTitle(sanitize_text_field($constructedChartData['chart_title']));
         $chartObj->setEngine(sanitize_text_field($constructedChartData['chart_engine']));
         $chartObj->setType(sanitize_text_field($constructedChartData['chart_type']));
+        $chartObj->setSeriesType(sanitize_text_field($constructedChartData['series_type']));
         $chartObj->setSelectedColumns(array_map('sanitize_text_field', $constructedChartData['selected_columns']));
         $chartObj->setRangeType(sanitize_text_field($constructedChartData['range_type']));
         if (isset($constructedChartData['range_data'])) {
@@ -1400,16 +1415,42 @@ class WPDataChart {
             $this->_render_data['options']['vAxis']['title'] = $this->_axes['minor']['label'];
         }
 
-        // Define series colors
-        if (!empty($this->_user_defined_series_data)) {
-            $seriesIndex = 0;
-            foreach ($this->_user_defined_series_data as $series_data) {
-                if (!empty($series_data['color'])) {
-                    $this->_render_data['options']['series'][(int)$seriesIndex] = array(
-                        'color' => $series_data['color']
-                    );
+        // Define series colors,type and yaxis
+        if ( $this->_type == 'highcharts_basic_column_chart'||
+             $this->_type == 'highcharts_line_chart' ||
+             $this->_type == 'highcharts_basic_bar_chart'||
+             $this->_type == 'highcharts_spline_chart'||
+             $this->_type == 'highcharts_basic_area_chart') {
+
+            if (!empty($this->_user_defined_series_data)) {
+                $seriesIndex = 0;
+                $i = 1;
+                foreach ($this->_user_defined_series_data as $series_data) {
+                    if (!empty($series_data['color']) || !empty($series_data['type']) || isset($series_data['yAxis'])){
+                        $this->_render_data['options']['series'][(int)$seriesIndex] = array(
+                            'color' => $series_data['color'],
+                            'type' => $series_data['type'],
+                            'yAxis' =>  $series_data['yAxis'] == 1 ? $i : 0
+                        );
+                        if ($series_data['yAxis']) {
+                            $i++;
+                        }
+                    }
+                    $seriesIndex++;
                 }
-                $seriesIndex++;
+            }
+        }else{
+            if (!empty($this->_user_defined_series_data)) {
+                $seriesIndex = 0;
+                foreach ($this->_user_defined_series_data as $series_data) {
+                    if (!empty($series_data['color']) || !empty($series_data['type'])){
+                        $this->_render_data['options']['series'][(int)$seriesIndex] = array(
+                            'color' => $series_data['color'],
+                            'label' => $series_data['label']
+                        );
+                    }
+                    $seriesIndex++;
+                }
             }
         }
 
@@ -1708,6 +1749,127 @@ class WPDataChart {
             'series' => array(),
             'xAxis' => array()
         );
+
+        if ($this->_type == 'highcharts_basic_column_chart') {
+            $this->setSeriesType('column');
+        }else if($this->_type == 'highcharts_line_chart'){
+            $this->setSeriesType('line');
+        }else if ($this->_type == 'highcharts_basic_bar_chart'){
+            $this->setSeriesType('bar');
+        }else if ($this->_type == 'highcharts_spline_chart'){
+            $this->setSeriesType('spline');
+        }else if ($this->_type == 'highcharts_basic_area_chart'){
+            $this->setSeriesType('area');
+        }
+
+        if ($this->_type == 'highcharts_treemap_chart') {
+            $data = [];
+            foreach ($this->_render_data['rows'] as $key => $row) {
+                $data[] = [
+                    'name' => $row[0],
+                    'value' => $row[1],
+                    'colorValue' => $row[1]
+                ];
+            };
+            $highchartsRender['series'] = array(
+                array(
+                    'type' => 'treemap',
+                    'layoutAlgorithm' => 'squarified',
+                    'name' => $this->_render_data['columns'][1]['label'],
+                    'data' => $data
+                )
+            );
+            unset($highchartsRender['xAxis']);
+            $highchartsRender['colorAxis'] = array(
+
+                'minColor' => '#FFFFBF',
+                'maxColor' => '#006837'
+            );
+        }
+        if ($this->_type == 'highcharts_treemap_level_chart') {
+            $data = [];
+
+            for ($i = 0; $i < count($this->_render_data['columns']); $i++) {
+
+                foreach ($this->_render_data['rows'] as $key => $row) {
+                    if ($i > 0) {
+                        if ($this->_render_data['columns'][$i]['type'] == 'number') {
+                            $column_name[$i - 1] = $this->_render_data['columns'][$i]['label'];
+                        }
+
+                    } else {
+                        $helperArr[] = $row[$i];
+                    }
+                };
+
+                foreach ($helperArr as $helperKey => $helperValue) {
+                    if ($i == 0) {
+                        $data[] = [
+                            'id' => 'id_' . $helperKey,
+                            'name' => $helperValue,
+                            'color' => '#006837'
+                        ];
+                    }
+
+                };
+
+            }
+            $row_numbers = $this->_render_data['rows'];
+            for ($y = 0; $y < count($row_numbers); $y++) {
+                for ($z = 0; $z < count($row_numbers[$y]) - 1; $z++) {
+
+                    $data[] = [
+                        'id' => 'id_' . $y . '_' . $z,
+                        'name' => $column_name[$z],
+                        'parent' => 'id_' . $y,
+                        'value' => $this->_render_data['rows'][$y][$z + 1],
+                        'colorValue' => $this->_render_data['rows'][$y][$z + 1],
+                    ];
+
+                }
+            }
+
+            $highchartsRender['colorAxis'] = array(
+                'minColor' => '#FFFFBF',
+                'maxColor' => '#006837'
+
+            );
+
+            $highchartsRender['series'] = array(
+                array(
+                    'type' => 'treemap',
+                    'layoutAlgorithm' => 'squarified',
+                    'allowDrillToNode' => true,
+                    'animationLimit' => 1000,
+                    'dataLabels' => [
+                        'enabled' => false
+                    ],
+                    'drillUpButton' => [
+                        'text' => '< Back'
+                    ],
+                    'levelIsConstant' => false,
+                    'levels' => [
+                        [
+                            'level' => 1,
+                            'dataLabels' => [
+                                'enabled' => true
+                            ],
+                            'borderWidth' => 0,
+                            'states' => [
+                                'hover' => [
+                                    'brightness' => 0.1
+                                ]
+                            ]
+                        ],
+
+                    ],
+                    'data' => $data,
+                )
+            );
+
+            unset($highchartsRender['xAxis']);
+        }
+
         if (!in_array(
             $this->_type,
             array(
@@ -1715,7 +1877,9 @@ class WPDataChart {
                 'highcharts_pie_with_gradient_chart',
                 'highcharts_donut_chart',
                 'highcharts_3d_pie_chart',
-                'highcharts_3d_donut_chart'
+                'highcharts_3d_donut_chart',
+                'highcharts_treemap_chart',
+                'highcharts_treemap_level_chart'
             )
         )
         ) {
@@ -1724,13 +1888,32 @@ class WPDataChart {
                     $highchartsRender['xAxis']['categories'] = array();
                 } else {
                     $seriesEntry = array(
+                        'type' => isset($this->_render_data['options']['series'][$i - 1]['type']) ?
+                            $this->_render_data['options']['series'][$i - 1]['type'] : '',
                         'name' => $this->_render_data['series'][$i - 1]['label'],
-                        'color' => isset($this->_render_data['options']['series'][$i - 1]) ?
+                        'color' => isset($this->_render_data['options']['series'][$i - 1]['color']) ?
                             $this->_render_data['options']['series'][$i - 1]['color'] : '',
                         'label' => $this->_render_data['series'][$i - 1]['label'],
                         'orig_header' => $this->_render_data['series'][$i - 1]['orig_header'],
                         'data' => array()
                     );
+                    if ( $this->getSeriesType() != '') {
+                        $seriesEntry['yAxis'] = isset($this->_render_data['options']['series'][$i - 1]['yAxis']) ? $this->_render_data['options']['series'][$i - 1]['yAxis'] : 0;
+
+                        if (isset($this->_render_data['options']['series'][$i - 1]['yAxis']) && $this->_render_data['options']['series'][$i - 1]['yAxis']) {
+                            $yAxis = [
+                                'title' => [
+                                    'text' => $this->_render_data['series'][$i - 1]['label']
+                                ],
+                                'opposite' => true
+                            ];
+                        } else {
+                            $yAxis = [];
+                        }
+
+                        $highchartsRender['yAxis'][] = $yAxis;
+
+                    }
                 }
                 foreach ($this->_render_data['rows'] as $row) {
                     if ($i == 0) {
@@ -1786,7 +1969,7 @@ class WPDataChart {
         $this->_highcharts_render_data['options']['chart']['backgroundColor'] = $this->getBackgroundColor();
         $this->_highcharts_render_data['options']['chart']['borderWidth'] = (int)$this->getBorderWidth();
         $this->_highcharts_render_data['options']['chart']['borderColor'] = $this->getBorderColor();
-        $this->_highcharts_render_data['options']['chart']['borderRadius'] = $this->getBorderRadius();
+        $this->_highcharts_render_data['options']['chart']['borderRadius'] = (int)$this->getBorderRadius();
         $this->_highcharts_render_data['options']['chart']['zoomType'] = $this->getZoomType();
         $this->_highcharts_render_data['options']['chart']['panning'] = $this->getPanning();
         $this->_highcharts_render_data['options']['chart']['panKey'] = $this->getPanKey();
@@ -1802,29 +1985,59 @@ class WPDataChart {
             $this->_highcharts_render_data['options']['xAxis']['lineColor'] = 'transparent';
             $this->_highcharts_render_data['options']['xAxis']['minorTickLength'] = 0;
             $this->_highcharts_render_data['options']['xAxis']['tickLength'] = 0;
-            $this->_highcharts_render_data['options']['yAxis']['lineWidth'] = 0;
-            $this->_highcharts_render_data['options']['yAxis']['gridLineWidth'] = 0;
-            $this->_highcharts_render_data['options']['yAxis']['minorGridLineWidth'] = 0;
-            $this->_highcharts_render_data['options']['yAxis']['lineColor'] = 'transparent';
-            $this->_highcharts_render_data['options']['yAxis']['labels'] = array('enabled' => false);
-            $this->_highcharts_render_data['options']['yAxis']['minorTickLength'] = 0;
-            $this->_highcharts_render_data['options']['yAxis']['tickLength'] = 0;
+            if ( $this->getSeriesType() != '') {
+                $this->_highcharts_render_data['options']['yAxis'][0]['lineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis'][0]['gridLineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis'][0]['minorGridLineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis'][0]['lineColor'] = 'transparent';
+                $this->_highcharts_render_data['options']['yAxis'][0]['labels'] = array('enabled' => false);
+                $this->_highcharts_render_data['options']['yAxis'][0]['minorTickLength'] = 0;
+                $this->_highcharts_render_data['options']['yAxis'][0]['tickLength'] = 0;
+            } else {
+                $this->_highcharts_render_data['options']['yAxis']['lineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis']['gridLineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis']['minorGridLineWidth'] = 0;
+                $this->_highcharts_render_data['options']['yAxis']['lineColor'] = 'transparent';
+                $this->_highcharts_render_data['options']['yAxis']['labels'] = array('enabled' => false);
+                $this->_highcharts_render_data['options']['yAxis']['minorTickLength'] = 0;
+                $this->_highcharts_render_data['options']['yAxis']['tickLength'] = 0;
+            }
         }
-        $this->_highcharts_render_data['options']['yAxis']['gridLineDashStyle'] = $this->getHighchartsLineDashStyle();
+        if ($this->getSeriesType() != '') {
+            $this->_highcharts_render_data['options']['yAxis'][0]['gridLineDashStyle'] = $this->getHighchartsLineDashStyle();
+        } else {
+            $this->_highcharts_render_data['options']['yAxis']['gridLineDashStyle'] = $this->getHighchartsLineDashStyle();
+        }
         if (!empty($this->_render_data['options']['hAxis']['title'])) {
             $this->_highcharts_render_data['options']['xAxis']['title']['text'] = $this->_render_data['options']['hAxis']['title'];
         }
         $this->_highcharts_render_data['options']['xAxis']['crosshair'] = $this->isHorizontalAxisCrosshair();
         if (!empty($this->_render_data['options']['vAxis']['title'])) {
-            $this->_highcharts_render_data['options']['yAxis']['title']['text'] = $this->_render_data['options']['vAxis']['title'];
+            if ($this->getSeriesType() != '') {
+                $this->_highcharts_render_data['options']['yAxis'][0]['title']['text'] = $this->_render_data['options']['vAxis']['title'];
+            } else {
+                $this->_highcharts_render_data['options']['yAxis']['title']['text'] = $this->_render_data['options']['vAxis']['title'];
+            }
         }
-        $this->_highcharts_render_data['options']['yAxis']['crosshair'] = $this->isVerticalAxisCrosshair();
+        if ($this->getSeriesType() != '') {
+            $this->_highcharts_render_data['options']['yAxis'][0]['crosshair'] = $this->isVerticalAxisCrosshair();
+        } else {
+            $this->_highcharts_render_data['options']['yAxis']['crosshair'] = $this->isVerticalAxisCrosshair();
+        }
 
         if ($this->getVerticalAxisMin() != '') {
-            $this->_highcharts_render_data['options']['yAxis']['min'] = $this->getVerticalAxisMin();
+            if ($this->getSeriesType() != '') {
+                $this->_highcharts_render_data['options']['yAxis'][0]['min'] = $this->getVerticalAxisMin();
+            } else {
+                $this->_highcharts_render_data['options']['yAxis']['min'] = $this->getVerticalAxisMin();
+            }
         }
         if ($this->getVerticalAxisMax() != '') {
-            $this->_highcharts_render_data['options']['yAxis']['max'] = $this->getVerticalAxisMax();
+            if ($this->getSeriesType() != '') {
+                $this->_highcharts_render_data['options']['yAxis'][0]['max'] = $this->getVerticalAxisMax();
+            } else {
+                $this->_highcharts_render_data['options']['yAxis']['max'] = $this->getVerticalAxisMax();
+            }
         }
         $this->_highcharts_render_data['options']['chart']['inverted'] = $this->isInverted();
 
@@ -1850,7 +2063,11 @@ class WPDataChart {
         $this->_highcharts_render_data['options']['tooltip']['valueSuffix'] = $this->getTooltipValueSuffix();
 
         // Legend
-        $this->_highcharts_render_data['options']['legend']['enabled'] = $this->getShowLegend();
+        if ($this->_highcharts_render_data['type'] == 'highcharts_treemap_level_chart') {
+            $this->_highcharts_render_data['options']['legend']['enabled']= false;
+        } else {
+            $this->_highcharts_render_data['options']['legend']['enabled'] = $this->getShowLegend();
+        }
         $this->_highcharts_render_data['options']['legend']['backgroundColor'] = $this->getLegendBackgroundColor();
         $this->_highcharts_render_data['options']['legend']['title']['text'] = $this->getLegendTitle();
         $this->_highcharts_render_data['options']['legend']['layout'] = $this->getLegendLayout();
@@ -1898,7 +2115,12 @@ class WPDataChart {
             '#a6cee3',
             '#6a3d9a',
             '#b15928',
-            '#fb9a99'
+            '#fb9a99',
+            '#0476e8',
+            '#49C172',
+            '#EA5E57',
+            '#FFF458',
+            '#BFEB54',
         );
 
         if ($this->_render_data['series']) {
@@ -1922,7 +2144,7 @@ class WPDataChart {
                     } else {
                         $seriesEntry = array(
                             'label' => $this->_render_data['series'][$i - 1]['label'],
-                            'orig_header' => $this->_render_data['series'][$i - 1]['label'],
+                            'orig_header' => $this->_render_data['series'][$i - 1]['orig_header'],
                             'backgroundColor' => isset($this->_render_data['options']['series'][$i - 1]) ?
                                 WDTTools::hex2rgba($this->_render_data['options']['series'][$i - 1]['color'], 0.2) : WDTTools::hex2rgba($colors[($i - 1) % 10], 0.2),
                             'borderColor' => isset($this->_render_data['options']['series'][$i - 1]) ?
@@ -1977,11 +2199,7 @@ class WPDataChart {
                 }
             } else if ($this->_type = 'chartjs_bubble_chart') {
                 // Series and Categories
-                for ($i = 0; $i < count($this->_render_data['columns']); $i++) {
-                    $this->_chartjs_render_data['options']['data']['datasets'][$i]['label'] = $this->_render_data['columns'][$i]['label'];
-                    $this->_chartjs_render_data['options']['data']['datasets'][$i]['backgroundColor'] = $colors[$i % 10];
-                    $this->_chartjs_render_data['options']['data']['datasets'][$i]['hoverBackgroundColor'] = $colors[$i % 10];
-
+                for ($i = 0; $i < 2; $i++) {
                     foreach ($this->_render_data['rows'] as $key => $row) {
                         if ($i == 0) {
                             $this->_chartjs_render_data['options']['data']['datasets'][$key]['label'] = $row[$i];
@@ -1990,6 +2208,8 @@ class WPDataChart {
                             $seriesEntry = array(
                                 'data' => array()
                             );
+                            $seriesEntry['backgroundColor'] = $colors[$key  % 10];
+                            $seriesEntry['hoverBackgroundColor'] = $colors[$key % 10];
                             $seriesEntry['data'][0]['x'] = $row[$i];
                             $seriesEntry['data'][0]['y'] = $row[$i + 1];
                             $seriesEntry['data'][0]['r'] = $row[$i + 2];
@@ -2036,13 +2256,13 @@ class WPDataChart {
         $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['scaleLabel']['display'] = true;
         $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] = $this->getMinorAxisLabel();
         if ($this->getVerticalAxisMin()) {
-            $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['min'] = $this->getVerticalAxisMin();
+            $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['min'] = intval($this->getVerticalAxisMin());
         } else {
             $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['beginAtZero'] = true;
             $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['min'] = 0;
         }
         if ($this->getVerticalAxisMax() != 0) {
-            $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['max'] = $this->getVerticalAxisMax();
+            $this->_chartjs_render_data['options']['options']['scales']['yAxes'][0]['ticks']['max'] = intval($this->getVerticalAxisMax());
         }
 
         // Title
@@ -2134,7 +2354,8 @@ class WPDataChart {
             'highcharts_render_data' => $this->_highcharts_render_data,
             'chartjs_render_data' => $this->_chartjs_render_data,
             'show_grid' => $this->_show_grid,
-            'show_title' => $this->_show_title
+            'show_title' => $this->_show_title,
+            'series_type' => $this->getSeriesType()
         );
 
 
@@ -2233,6 +2454,9 @@ class WPDataChart {
         $this->setEngine($chartData->engine);
         $this->setwpDataTableId($chartData->wpdatatable_id);
         $this->setType($chartData->type);
+        if (!empty($renderData['series_type'])){
+            $this->setSeriesType($renderData['series_type']);
+        };
         $this->setSelectedColumns($renderData['selected_columns']);
         $this->setFollowFiltering($renderData['follow_filtering']);
         $this->setRangeType($renderData['range_type']);
@@ -2318,11 +2542,18 @@ class WPDataChart {
             $this->setPlotBorderWidth(isset($renderData['highcharts_render_data']['options']['chart']['plotBorderWidth']) ? $renderData['highcharts_render_data']['options']['chart']['plotBorderWidth'] : 0);
             $this->setPlotBorderColor(isset($renderData['highcharts_render_data']['options']['chart']['plotBorderColor']) ? $renderData['highcharts_render_data']['options']['chart']['plotBorderColor'] : '#C0C0C0');
             // Axes
-            $this->setHighchartsLineDashStyle(isset($renderData['highcharts_render_data']['options']['yAxis']['gridLineDashStyle']) ? $renderData['highcharts_render_data']['options']['yAxis']['gridLineDashStyle'] : 'Solid');
+            if ($this->getSeriesType() != '') {
+                $this->setHighchartsLineDashStyle(isset($renderData['highcharts_render_data']['options']['yAxis'][0]['gridLineDashStyle']) ? $renderData['highcharts_render_data']['options']['yAxis'][0]['gridLineDashStyle'] : 'Solid');
+                $this->setVerticalAxisCrosshair(isset($renderData['highcharts_render_data']['options']['yAxis'][0]['crosshair']) ? $renderData['highcharts_render_data']['options']['yAxis'][0]['crosshair'] : false);
+                $this->setVerticalAxisMin(isset($renderData['highcharts_render_data']['options']['yAxis'][0]['min']) ? $renderData['highcharts_render_data']['options']['yAxis'][0]['min'] : '');
+                $this->setVerticalAxisMax(isset($renderData['highcharts_render_data']['options']['yAxis'][0]['max']) ? $renderData['highcharts_render_data']['options']['yAxis'][0]['max'] : '');
+            } else {
+                $this->setHighchartsLineDashStyle(isset($renderData['highcharts_render_data']['options']['yAxis']['gridLineDashStyle']) ? $renderData['highcharts_render_data']['options']['yAxis']['gridLineDashStyle'] : 'Solid');
+                $this->setVerticalAxisCrosshair(isset($renderData['highcharts_render_data']['options']['yAxis']['crosshair']) ? $renderData['highcharts_render_data']['options']['yAxis']['crosshair'] : false);
+                $this->setVerticalAxisMin(isset($renderData['highcharts_render_data']['options']['yAxis']['min']) ? $renderData['highcharts_render_data']['options']['yAxis']['min'] : '');
+                $this->setVerticalAxisMax(isset($renderData['highcharts_render_data']['options']['yAxis']['max']) ? $renderData['highcharts_render_data']['options']['yAxis']['max'] : '');
+            }
             $this->setHorizontalAxisCrosshair(isset($renderData['highcharts_render_data']['options']['xAxis']['crosshair']) ? $renderData['highcharts_render_data']['options']['xAxis']['crosshair'] : false);
-            $this->setVerticalAxisCrosshair(isset($renderData['highcharts_render_data']['options']['yAxis']['crosshair']) ? $renderData['highcharts_render_data']['options']['yAxis']['crosshair'] : false);
-            $this->setVerticalAxisMin(isset($renderData['highcharts_render_data']['options']['yAxis']['min']) ? $renderData['highcharts_render_data']['options']['yAxis']['min'] : '');
-            $this->setVerticalAxisMax(isset($renderData['highcharts_render_data']['options']['yAxis']['max']) ? $renderData['highcharts_render_data']['options']['yAxis']['max'] : '');
             $this->setInverted(isset($renderData['highcharts_render_data']['options']['chart']['inverted']) ? $renderData['highcharts_render_data']['options']['chart']['inverted'] : false);
             // Title
             $this->setTitleFloating(isset($renderData['highcharts_render_data']['options']['title']['floating']) ? $renderData['highcharts_render_data']['options']['title']['floating'] : false);
@@ -2421,28 +2652,30 @@ class WPDataChart {
         $this->shiftStringColumnUp();
 
         $js_ext = $minified_js ? '.min.js' : '.js';
-        wp_enqueue_script('wpdatatables-render-chart', WDT_JS_PATH . 'wpdatatables/wdt.chartsRender' . $js_ext);
+        wp_enqueue_script('wpdatatables-render-chart', WDT_JS_PATH . 'wpdatatables/wdt.chartsRender' . $js_ext, array(), WDT_CURRENT_VERSION);
 
         if ($this->_engine == 'google') {
             // Google Chart JS
-            wp_enqueue_script('wdt_google_charts', '//www.gstatic.com/charts/loader.js');
-            wp_enqueue_script('wpdatatables-google-chart', WDT_JS_PATH . 'wpdatatables/wdt.googleCharts' . $js_ext);
+            wp_enqueue_script('wdt_google_charts', '//www.gstatic.com/charts/loader.js', array(), WDT_CURRENT_VERSION);
+            wp_enqueue_script('wpdatatables-google-chart', WDT_JS_PATH . 'wpdatatables/wdt.googleCharts' . $js_ext, array(), WDT_CURRENT_VERSION);
             $json_chart_render_data = json_encode($this->_render_data);
         } else if ($this->_engine == 'highcharts') {
             $this->prepareHighchartsRender();
             // Highchart JS
-            wp_enqueue_script('wdt_highcharts', '//code.highcharts.com/highcharts.js');
-            wp_enqueue_script('wdt_highcharts3d', '//code.highcharts.com/highcharts-3d.js');
-            wp_enqueue_script('wdt_exporting', '//code.highcharts.com/modules/exporting.js');
+            wp_enqueue_script('wdt_highcharts', '//code.highcharts.com/highcharts.js', array(), WDT_CURRENT_VERSION);
+            wp_enqueue_script('wdt_highcharts3d', '//code.highcharts.com/highcharts-3d.js', array(), WDT_CURRENT_VERSION);
+            wp_enqueue_script('wdt-heatmap', '//code.highcharts.com/modules/heatmap.js', array(), WDT_CURRENT_VERSION);
+            wp_enqueue_script('wdt-treemap', '//code.highcharts.com/modules/treemap.js', array(), WDT_CURRENT_VERSION);
+            wp_enqueue_script('wdt_exporting', '//code.highcharts.com/modules/exporting.js', array(), WDT_CURRENT_VERSION);
             // Highchart wpDataTable JS library
-            wp_enqueue_script('wpdatatables-highcharts', WDT_JS_PATH . 'wpdatatables/wdt.highcharts' . $js_ext);
+            wp_enqueue_script('wpdatatables-highcharts', WDT_JS_PATH . 'wpdatatables/wdt.highcharts' . $js_ext, array(), WDT_CURRENT_VERSION);
             $json_chart_render_data = json_encode($this->_highcharts_render_data);
         } else if ($this->_engine == 'chartjs') {
             $this->prepareChartJSRender();
             // ChartJS
-            wp_enqueue_script('wdt_chartjs', WDT_JS_PATH . 'chartjs/Chart.js');
+            wp_enqueue_script('wdt_chartjs', WDT_JS_PATH . 'chartjs/Chart.js', array(), WDT_CURRENT_VERSION);
             // ChartJS wpDataTable JS library
-            wp_enqueue_script('wpdatatables-chartjs', WDT_JS_PATH . 'wpdatatables/wdt.chartJS' . $js_ext);
+            wp_enqueue_script('wpdatatables-chartjs', WDT_JS_PATH . 'wpdatatables/wdt.chartJS' . $js_ext, array(), WDT_CURRENT_VERSION);
             $json_chart_render_data = json_encode($this->_chartjs_render_data);
         }
 

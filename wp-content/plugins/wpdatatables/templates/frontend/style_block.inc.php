@@ -235,4 +235,54 @@ div.dt-button-collection a.dt-button.active:not(.disabled):hover {
     font-size:<?php echo $wdtFontColorSettings['wdtFontSize'] ?>px;
 }
  <?php } ?>
+<?php if( !empty($wdtFontColorSettings['wdtPaginationCurrentBackgroundColor'] ) ) { ?>
+/* pagination current page background color */
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.current,
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.current:hover{
+    background-color:<?php echo $wdtFontColorSettings['wdtPaginationCurrentBackgroundColor'] ?> !important;
+}
+<?php } ?>
+<?php if( !empty($wdtFontColorSettings['wdtPaginationCurrentColor'] ) ) { ?>
+/*pagination current page color */
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.current,
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.current:hover{
+    color:<?php echo $wdtFontColorSettings['wdtPaginationCurrentColor'] ?> !important;
+}
+<?php } ?>
+
+<?php if( !empty($wdtFontColorSettings['wdtPaginationHoverBackgroundColor'] ) ) { ?>
+/* pagination other pages hover background color */
+.wpDataTablesWrapper .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current){
+    background-color:<?php echo $wdtFontColorSettings['wdtPaginationHoverBackgroundColor'] ?> !important;
+}
+<?php } ?>
+<?php if( !empty($wdtFontColorSettings['wdtPaginationHoverColor'] ) ) { ?>
+/* pagination other pages hover color */
+.wpDataTablesWrapper .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current),
+.wpDataTablesWrapper .paginate_button.previous:hover:before,
+.wpDataTablesWrapper .paginate_button.first:hover:before,
+.wpDataTablesWrapper .paginate_button.next:hover:before,
+.wpDataTablesWrapper .paginate_button.last:hover:before{
+    color:<?php echo $wdtFontColorSettings['wdtPaginationHoverColor'] ?> !important;
+}
+<?php } ?>
+<?php if( !empty($wdtFontColorSettings['wdtPaginationBackgroundColor'] ) ) { ?>
+/* pagination background color */
+.wpDataTablesWrapper .dataTables_paginate {
+    background-color:<?php echo $wdtFontColorSettings['wdtPaginationBackgroundColor'] ?> !important;
+}
+<?php } ?>
+<?php if( !empty($wdtFontColorSettings['wdtPaginationColor'] ) ) { ?>
+/* pagination color  */
+.wpDataTablesWrapper .dataTables_paginate .paginate_button,
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.disabled:before,
+.wpDataTablesWrapper .dataTables_paginate .paginate_button.disabled:hover:before,
+.wpDataTablesWrapper .dataTables_paginate .ellipsis,
+.wpDataTablesWrapper .paginate_button.previous:before,
+.wpDataTablesWrapper .paginate_button.first:before,
+.wpDataTablesWrapper .paginate_button.next:before,
+.wpDataTablesWrapper .paginate_button.last:before{
+    color:<?php echo $wdtFontColorSettings['wdtPaginationColor'] ?> !important;
+}
+<?php } ?>
 </style>

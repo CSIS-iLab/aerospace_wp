@@ -127,6 +127,7 @@ if (! function_exists('exclude_post_categories')) :
      */
     function exclude_post_categories($excl='', $spacer='')
     {
+        global $post;
         $categories = get_the_category($post->ID);
         if (!empty($categories)) {
             $exclude = $excl;
@@ -300,6 +301,7 @@ if (! function_exists('aerospace_post_format')) :
     {
         $post_type = get_post_type();
         if (in_array($post_type, array( 'post', 'events', 'aerospace101', 'data', 'page' ), true)) {
+            $post_format = false;
             if ('post' === $post_type) {
                 $post_types = get_the_terms($id, 'post_types');
                 if (! empty($post_types) && ! is_wp_error($post_types)) {
@@ -310,12 +312,12 @@ if (! function_exists('aerospace_post_format')) :
                 $post_format = 'Data Repository';
             }
 
-            if (! $post_format) {
+            if (!$post_format) {
                 $obj = get_post_type_object($post_type);
                 $post_format = $obj->labels->name;
             }
             if ($post_format) {
-                printf('<div class="post-format">' . esc_html('%2$s') . esc_html('%1$s') . esc_html('%3$s') . '</div>', $post_format, $is_featured, $is_nextgen); // WPCS: XSS OK.
+                printf('<div class="post-format">' . esc_html('%1$s') . '</div>', $post_format); // WPCS: XSS OK.
             }
         }
     }
@@ -501,6 +503,8 @@ if (! function_exists('aerospace_report_download')) :
                 $report_cover_url = get_post_meta($id, '_post_report_cover_url', true);
                 $download_url = get_post_meta($id, '_post_download_url', true);
                 $view_url = get_post_meta($id, '_post_view_url', true);
+                $view = '';
+                $download = '';
 
                 if ('' !== $download_url) {
                     $download = '<a href="' . esc_url($download_url) . '" download="Aerospace-Report" class="btn btn-gray btn-download"><i class="icon-download"></i>' . esc_html('Download PDF', 'aerospace') . '</a>';
@@ -560,9 +564,9 @@ if (! function_exists('aerospace_event_dates')) :
             }
             $end_date = get_post_meta($id, '_events_end_date', true);
 
-
+            $label = 'Date';
+            $end_date_formatted = '';
             if ($start_only) {
-                $label = 'Date';
                 $end_date_formatted = null;
             } elseif ($end_date && $end_date !== $start_date) {
                 $label = 'Dates';
@@ -638,6 +642,7 @@ if (! function_exists('aerospace_event_location')) :
             if ('events' === get_post_type()) {
                 $location = get_post_meta($id, '_events_location', true);
 
+                $mapHTML = '';
                 if ($map) {
                     $mapHTML = aerospace_event_google_map($id, false);
                 }
@@ -814,7 +819,7 @@ if (! function_exists('aerospace_sort_filter')) :
             $param_prefix = '?';
         }
 
-        if ($wp->query_vars['order'] == 'ASC') {
+        if (isset($wp->query_vars['order']) && $wp->query_vars['order'] == 'ASC') {
             $asc_active = 'active';
             $desc_active = '';
         } else {

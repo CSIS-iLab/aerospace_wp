@@ -25,6 +25,7 @@ function longform_section_header( $atts , $content = null ) {
 		'lf-section-header'
 	);
 
+	$id = '';
 	if ( $atts['id'] ) {
 		$id = ' id="' . $atts['id'] . '"';
 	}
@@ -141,6 +142,7 @@ function longform_section_text_overlay( $atts , $content = null ) {
 		'lf-text-overlay'
 	);
 
+	$id = '';
 	if ( $atts['id'] ) {
 		$id = ' id="' . $atts['id'] . '"';
 	}

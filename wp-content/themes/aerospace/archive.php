@@ -7,6 +7,7 @@
  * @package Aerospace
  */
 
+$archive_query = get_posts($wp_query->query_vars);
 
 if ( get_archive_top_content() ) {
     $description = get_archive_top_content();
@@ -28,9 +29,11 @@ if ( is_author() && function_exists( 'coauthors_posts_links' ) ) {
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
 
+$description_extra = '';
 if ( get_archive_bottom_content() ) {
     $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
 }
+
 
 get_header(); ?>
 
@@ -62,17 +65,15 @@ get_header(); ?>
             </header><!-- .page-header -->
 
     <?php
-    if (have_posts() ) : ?>
-        <?php
+
+    if (have_posts() ) :
         /* Start the Loop */
         while ( have_posts() ) : the_post();
-
             if ( is_author() ) {
                 get_template_part('template-parts/content', 'search');
             } else {
                 get_template_part('template-parts/content', get_post_type());
             }
-
         endwhile;
         ?>
         <footer class="archive-pages-bottom row">
@@ -86,7 +87,6 @@ get_header(); ?>
         </footer>
         <?php
         else :
-
             get_template_part('template-parts/content', 'none');
 
         endif; ?>
