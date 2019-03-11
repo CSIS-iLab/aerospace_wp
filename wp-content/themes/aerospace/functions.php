@@ -7,6 +7,20 @@
  * @package Aerospace
  */
 
+ /**
+  * Amend author archives to include custom post types.
+  *
+  * @param  array $query Query object.
+  */
+ function aerospace_cpt_authors_archive( $query ) {
+     if ( ( $query->is_author() ) && $query->is_main_query() ) {
+         $query->set( 'post_type', array( 'post', 'aerospace101', 'data' ) );
+         $query->set( 'orderby', 'modified' );
+     }
+ }
+ add_action( 'pre_get_posts', 'aerospace_cpt_authors_archive' );
+
+
 if (! function_exists('aerospace_setup') ) :
     /**
      * Sets up theme defaults and registers support for various WordPress features.
@@ -280,4 +294,3 @@ require get_template_directory() . '/inc/custom-tinymce-buttons.php';
  * Remove AddToAny Default CSS
  */
 add_action( 'wp_enqueue_scripts', function() { wp_dequeue_style( 'addtoany' ); }, 21 );
-
