@@ -14,6 +14,20 @@
     }
   }
 
+  .sharing-inline {
+    margin-left: auto;
+    margin-right: auto;
+    @include postBodyMaxWidth();
+
+    &-share {
+      padding-left: 0;
+    }
+
+    &-view {
+      display: none;
+    }
+  }
+
   /*----------  Share  ----------*/
   .footer-top .entry-share {
     order: 1;
@@ -196,19 +210,12 @@
   }
 }
 
-/*----------  Inline Sharing  ----------*/
-.single-data {
-  .sharing-inline {
-    margin-left: auto;
-    margin-right: auto;
-    @include postBodyMaxWidth();
-
-    &-share {
-      padding-left: 0;
-    }
-
-    &-view {
-      display: none;
-    }
+.tag .data .authors-list::after {
+  @include breakpoint("small") {
+    content: "/";
+    font-family: $font__abel;
+    @include fontSize(14px);
+    color: $gray;
+    margin: 0 0.2rem 0 0.4rem;
   }
 }
