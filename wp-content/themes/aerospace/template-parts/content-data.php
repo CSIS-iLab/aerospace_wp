@@ -10,6 +10,11 @@
 
 $classes = 'row card-format';
 $thumbnail_size = 3;
+
+if (is_tag()) {
+	$thumbnail_size = 4;
+}
+
 ?>
 
 <?php if ( is_post_type_archive( 'data' ) ) { ?>
