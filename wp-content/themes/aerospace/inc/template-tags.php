@@ -216,15 +216,21 @@ if (! function_exists('aerospace_authors_list')) :
             if (function_exists('coauthors_posts_links')) {
                 $prefix = $authors = '';
                 foreach (get_coauthors() as $coauthor) :
-                  if ($coauthor->user_login=="csisaerospace"){
-                    return;
-                  }
+                  if ($coauthor->user_login == "csisaerospace"){
+                    $authors .= '';
+                  } else {
                     $authors .= $prefix . '<a href="' . get_author_posts_url($coauthor->ID, $coauthor->user_nicename) . '">' . $coauthor->display_name . '</a>';
+                  }
                 $prefix = ', ';
                 endforeach;
             } else {
                 $authors = the_author_posts_link();
             }
+            
+            if (!$authors) {
+                return;
+            }
+            
             echo '<div class="authors-list"><span class="meta-label">By</span> ' . $authors . '</div>';
         }
     }
@@ -803,11 +809,13 @@ if (! function_exists('aerospace_sort_filter')) :
         if (is_search()) {
             $search = '?s=' . $wp->query_vars['s'];
 
-            if ($wp->query_vars['cat']) {
+            $cat = '';
+            if (isset($wp->query_vars['cat']) && $wp->query_vars['cat']) {
                 $cat = '&cat=' . $wp->query_vars['cat'];
             }
 
-            if ($wp->query_vars['post_type']) {
+            $post_type = '';
+            if (isset($wp->query_vars['post_type']) && $wp->query_vars['post_type']) {
                 $post_type = implode('&post_type[]=', $wp->query_vars['post_type']);
                 $post_type = '&post_type[]=' . $post_type;
             }

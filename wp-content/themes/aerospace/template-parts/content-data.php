@@ -10,6 +10,11 @@
 
 $classes = 'row card-format';
 $thumbnail_size = 3;
+
+if (is_tag()) {
+	$thumbnail_size = 4;
+}
+
 ?>
 
 <?php if ( is_post_type_archive( 'data' ) ) { ?>
@@ -28,7 +33,7 @@ $thumbnail_size = 3;
 	            the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
 	            ?>
 	            <div class="entry-meta">
-									<?php aerospace_authors_list(); ?>
+					<?php aerospace_authors_list(); ?>
 	                <?php aerospace_last_updated(); ?>
 	                <?php aerospace_entry_categories(); ?>
 	                <?php aerospace_entry_tags(); ?>
@@ -57,11 +62,24 @@ $thumbnail_size = 3;
             the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
             ?>
             <div class="entry-meta">
+				<?php aerospace_authors_list(); ?>
                 <?php aerospace_last_updated(); ?>
-                <?php aerospace_entry_categories(); ?>
-                <?php aerospace_entry_tags(); ?>
+				<?php if( !is_tag() ) {
+					aerospace_entry_categories();
+					aerospace_entry_tags();
+				} ?>
             </div><!-- .entry-meta -->
         </header><!-- .entry-header -->
+		<?php if (is_tag()) { ?>
+		<div class="entry-content">
+        <?php the_excerpt(); ?>
+        </div><!-- .entry-content -->
+
+        <footer class="entry-footer">
+            <?php aerospace_post_format( $post->ID ); ?>
+            <?php aerospace_entry_primary_cats(); ?>
+        </footer><!-- .entry-footer -->
+		<?php } ?>
     </div>
 </article>
 <?php }
