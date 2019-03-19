@@ -38,6 +38,7 @@ function aerospace_post_types() {
 		'show_admin_column'          => true,
 		'show_in_nav_menus'          => true,
 		'show_typecloud'              => true,
+		'show_in_rest'							 => true
 	);
 	register_taxonomy( 'post_types', array( 'post' ), $args );
 }
