@@ -79,6 +79,10 @@ h3.about-team {
 	border-bottom: 2px solid $blue-gray;
 }
 
+.about-team + h3.about-team {
+	margin: 2rem 0rem;
+}
+
 .about-team {
 
 	&-img,
