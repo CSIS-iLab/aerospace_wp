@@ -72,11 +72,18 @@ body.page {
 	}
 }
 
-h3.about-team {
+.about-subheading {
 	margin: 5rem 0 3rem 0;
 	padding-bottom: 0.5rem;
 	text-align: center;
 	border-bottom: 2px solid $blue-gray;
+}
+
+.career-container {
+	margin: 2rem 0rem;
+	.about-subheading {
+		margin: 0rem 0rem 2rem 0rem;
+	}
 }
 
 .about-team {
