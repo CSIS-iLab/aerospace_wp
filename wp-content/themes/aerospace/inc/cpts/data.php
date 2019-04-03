@@ -140,7 +140,7 @@ function data_build_meta_box( $post ) {
 
 		<h3><?php esc_html_e( 'Interactive Height', 'aerospace' ); ?></h3>
 		<p>
-			<input type="number" min="0" class="small-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
+			<input type="text" class="small-text" name="height" value="<?php echo esc_attr( $current_height ); ?>" />
 		</p>
 		<p class="howto">If left blank, interactive will be automatically sized to fit its content. You must specify units (%, px, etc.)</p>
 		<p>
