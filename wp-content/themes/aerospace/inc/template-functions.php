@@ -150,7 +150,7 @@ function aerospace_add_logo_to_post_content( $content ) {
     }
     return $content;
 }
-add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
+// add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
 
 /**
  * Fixes empty <p> and <br> tags showing before and after shortcodes in the
