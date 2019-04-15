@@ -19,6 +19,7 @@ $thumbnail_size = 3;
     if ( has_post_thumbnail() ) {
         echo '<div class="col-xs-12 col-md-' . $thumbnail_size . ' entry-thumbnail"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
         the_post_thumbnail( 'medium_large' );
+        echo '<div class="multimedia-post"><i class="icon-ion-ios-play"></i></div>';
         echo '<div class="read-article"><span>' . esc_html__( 'View', 'aerospace' ) . '</span><i class="icon-search"></i></div>';
         echo '</a></div>';
     }
