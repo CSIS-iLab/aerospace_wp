@@ -6,21 +6,14 @@
                 icon: 'editor-code',
                 title: 'Aircraft Shortcode',
                 onClick: function() {
-                    props.onChange( wp.richText.toggleFormat(
+                    props.onChange( wp.richText.insert(
                         props.value,
-                        { type: 'aircraft-shortcode/sample-output' }
+                        valueToInsert = '[aircraft]',
+                        startIndex = props.value.start,
+                        endIndex = props.value.end
                     ));
                 },
-                isActive: props.isActive,
             }
         )
     }
-    wp.richText.registerFormatType(
-        'aircraft-shortcode/sample-output',{
-            title: 'Aircraft Shortcode',
-            tagName: 'img',
-            className: 'img-aircraft',
-            edit: aircraftShortcode
-        }
-    );
 })( window.wp );
