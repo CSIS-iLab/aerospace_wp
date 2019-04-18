@@ -16,4 +16,12 @@
             }
         )
     }
+    wp.richText.registerFormatType(
+        'aircraft-shortcode/sample-output',{
+            title: 'Aircraft Shortcode',
+            tagName: 'samp',
+            className: null,
+            edit: aircraftShortcode
+        }
+    );
 })( window.wp );
