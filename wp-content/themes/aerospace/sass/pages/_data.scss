@@ -174,39 +174,7 @@
 
   /*----------  Pagination  ----------*/
   .dataTables_paginate {
-    position: absolute;
-    left: calc(#{$archive-content-padding} + 0.5rem);
-    bottom: -3.4rem;
-    z-index: 10;
-
-    @include breakpoint("small") {
-      left: unset;
-      right: calc(#{$archive-content-padding} + 0.5rem);
-      bottom: -1.7rem;
-    }
-
-    @include breakpoint("medium") {
-      right: calc(#{$archive-content-padding-md} + 0.5rem);
-      bottom: -3.9rem;
-    }
-
-    .current {
-      padding-top: 3px;
-    }
-
-    span {
-      margin-left: 0;
-      margin-right: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    .next,
-    .previous {
-      margin: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
+    display: none!important;
   }
 }
 
