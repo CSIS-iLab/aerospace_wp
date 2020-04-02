@@ -2,11 +2,11 @@
  * Data Repository: Controls dataTables plugin and other functionality for switching layouts
  */
 
-( function( $ ) {
+(function ($) {
 	var table = $('#dataRepo').DataTable({
 		"info": false,
 		"lengthChange": false,
-		"order": [[ 2, "desc" ]],
+		"order": [[2, "desc"]],
 		"pageLength": 10,
 		"pagingType": "simple_numbers",
 		"language": {
@@ -15,16 +15,16 @@
 				"next": '<i class="icon-arrow-right"></i>'
 			}
 		},
-		"initComplete": function(settings, json) {
-		    $("article, #dataRepo, .archive-pages-bottom .archives-meta-right").toggleClass("is-hidden");
-		  }
+		"initComplete": function (settings, json) {
+			$("article, #dataRepo, .archive-pages-bottom").toggleClass("is-hidden");
+		}
 	});
 
 	// Sort
-	$(".tableSort").click(function() {
+	$(".tableSort").click(function () {
 		var col = $(this).attr("data-sortCol");
 
-		if ( col == 2 ) {
+		if (col == 2) {
 			var direction = 'desc';
 		} else {
 			var direction = 'asc';
@@ -36,31 +36,31 @@
 	});
 
 	// Filter by Category & Tag
-	$(".search-categories").on( 'change', function () {
+	$(".search-categories").on('change', function () {
 		var val = $.fn.dataTable.util.escapeRegex(
 			$(this).val()
 		);
 		table
 			.column(3)
-			.search( val ? val : '', true, false )
+			.search(val ? val : '', true, false)
 			.draw();
-	} );
+	});
 
-	$(".search-tags").on( 'change', function () {
+	$(".search-tags").on('change', function () {
 		var val = $.fn.dataTable.util.escapeRegex(
 			$(this).val()
 		);
 		table
 			.column(4)
-			.search( val ? val : '', true, false )
+			.search(val ? val : '', true, false)
 			.draw();
-	} );
+	});
 
 	// Search
-	$('#dataSearch').on( 'keyup click', function () {
-			table.search(
-				$('#dataSearch').val()
+	$('#dataSearch').on('keyup click', function () {
+		table.search(
+			$('#dataSearch').val()
 		).draw();
-	} );
+	});
 
-} )( jQuery );
+})(jQuery);
