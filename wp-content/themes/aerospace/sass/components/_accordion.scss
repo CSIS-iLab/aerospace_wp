@@ -3,64 +3,63 @@
 =================================*/
 
 .accordion {
-	margin: 2rem 0;
+  margin: 2rem 0;
 
-	.accordion-title {
-		@extend %aerospace101-list;
-		margin: 0;
-		padding: 1rem;
-		border-top: 2px solid $blue-gray;
-		clear: both;
+  .accordion-title {
+    @extend %aerospace101-list;
+    margin: 0;
+    padding: 1rem;
+    border-top: 2px solid $blue-gray;
+    clear: both;
 
-		&:last-of-type {
-			border-bottom: 2px solid $blue-gray;
-		}
+    &:last-of-type {
+      border-bottom: 2px solid $blue-gray;
+    }
 
-		&::before {
-			display: inline-block;
-			content: "\f3d3";
-			font-family: "asp";
-			margin-right: 1rem;
-			@include transition( transform 0.2s ease-in-out);
-		}
+    &::before {
+      display: inline-block;
+      content: "\f3d3";
+      font-family: "asp";
+      margin-right: 1rem;
+      @include transition(transform 0.2s ease-in-out);
+    }
 
-		&:hover,
-		&.open {
-			background-color: $dark-blue;
-			color: $white;
-			font-weight: 600;
-			cursor: pointer;
-		}
+    &:hover,
+    &.open {
+      background-color: $dark-blue;
+      color: $white;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-		&.open {
-			border-bottom: 0;
-		}
+    &.open {
+      border-bottom: 0;
+    }
 
-		&.open::before {
-			transform: rotate(90deg);
-		}
-	}
+    &.open::before {
+      transform: rotate(90deg);
+    }
+  }
 
-	.accordion-content {
-		display: none;
-		padding: 1.5rem;
-		border-top: 2px solid $blue-gray;
+  .accordion-content {
+    display: none;
+    padding: 1.5rem;
+    border-top: 2px solid $blue-gray;
 
-		&:last-of-type {
-			border-bottom: 0;
-		}
+    &:last-of-type {
+      border-bottom: 0;
+    }
 
-		p:last-of-type {
-			margin-bottom: 0;
-		}
+    *:last-child {
+      margin-bottom: 0;
+    }
 
-		/*----------  Image Alignments  ----------*/
-		.alignright.wp-caption {
-			margin-right: 0;
-		}
-		.alignleft.wp-caption {
-			margin-left: 0;
-		}
-	}
+    /*----------  Image Alignments  ----------*/
+    .alignright.wp-caption {
+      margin-right: 0;
+    }
+    .alignleft.wp-caption {
+      margin-left: 0;
+    }
+  }
 }
-
