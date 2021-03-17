@@ -110,8 +110,14 @@ Thumbs.db
 !wp-content/plugins/aerospace-menu-item-custom-fields.php
 !wp-content/plugins/search-filter-pro
 !wp-content/plugins/wpdatatables
-!wp-content/themes/aerospace
 
-wp-content/themes/aerospace/.sass-cache
-**/.DS_Store
-wp-content/themes/aerospace/*.css
+!wp-content/themes/aerospace
+!wp-content/themes/aerospace/.eslintignore
+!wp-content/themes/aerospace/.eslintrc.js
+!wp-content/themes/aerospace/.stylelintrc.json
+
+wp-content/themes/*/**/*.css
+wp-content/themes/aerospace/assets/img
+wp-content/themes/aerospace/assets/js
+
+!.github/

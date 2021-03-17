@@ -1,0 +1,3 @@
+wp-content/themes/csisstarter/style.css
+wp-content/themes/csisstarter/style.min.css
+wp-content/themes/csisstarter/assets
