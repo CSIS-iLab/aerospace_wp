@@ -53,8 +53,6 @@
     "build": "NODE_ENV=production gulp build",
     "sass": "gulp sass",
     "watch": "gulp watch",
-    "stylelint": "gulp stylelint",
-    "stylelint-fix": "gulp stylelint --fix",
     "eslint": "gulp eslint",
     "eslint-fix": "gulp eslint --fix"
   },

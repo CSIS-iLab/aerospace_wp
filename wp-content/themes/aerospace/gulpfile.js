@@ -38,7 +38,8 @@ const watcher = () => {
   watch(
     config.assets + config.sass.src + '/**/*.scss',
     { ignoreInitial: true },
-    series(stylelint, sass, reload)
+    // series(stylelint, sass, reload)
+    series(sass, reload)
   )
   watch(config.assets + config.js.src + '/**/*', series(webpack, reload))
 
@@ -62,7 +63,8 @@ function clean() {
 exports.default = series(
   clean,
   // parallel(images, series(stylelint, sass), webpack),
-	parallel(series(stylelint, sass)),
+  // parallel(series(stylelint, sass)),
+  sass,
   parallel(serve, watcher)
 )
 
@@ -70,7 +72,8 @@ exports.default = series(
 exports.build = series(
   clean,
   // parallel(images, series(stylelint, sass), webpack)
-	parallel(series(stylelint, sass))
+  // parallel(series(stylelint, sass))
+  sass
 )
 
 // This is our watcher task that instructs gulp to watch directories and
@@ -78,6 +81,6 @@ exports.build = series(
 exports.watch = watcher
 
 exports.sass = sass
-exports.stylelint = stylelint
+// exports.stylelint = stylelint
 exports.webpack = webpack
 exports.eslint = eslint
