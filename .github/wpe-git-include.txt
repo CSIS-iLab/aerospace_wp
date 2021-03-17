@@ -1,3 +1,3 @@
-wp-content/themes/csisstarter/style.css
-wp-content/themes/csisstarter/style.min.css
-wp-content/themes/csisstarter/assets
+wp-content/themes/aerospace/*.css
+wp-content/themes/aerospace/*.min.css
+wp-content/themes/aerospace/assets
