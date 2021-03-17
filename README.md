@@ -1,50 +1,63 @@
-[![Build Status](https://travis-ci.org/CSIS-iLab/aerospace_wp.svg?branch=master)](https://travis-ci.org/CSIS-iLab/aerospace_wp)
-
 # aerospace_wp
-WordPress site for [Aerospace Security](https://aerospace.csis.org). Developed from the [_s starter theme](http://underscores.me).
+
+WordPress site for [Aerospace Security](https://aerospace.csis.org). Developed from the [\_s starter theme](http://underscores.me). It uses gulp, Sass, Autoprefixer, PostCSS, imagemin, and Browsersync to speed-up development.
+
+**Note:** This theme was originally created in 2018, and does not reflect the current code standards of the CSIS iLab. While the structure of the project is similar to the [CSIS Starter](https://github.com/CSIS-iLab/csisstarter_wp), they are not identical. Style linting has been disabled on this project.
+
+## Table of Contents
+
+- [Quick-Start Instructions](#quick-start-instructions)
+- [Usage](#usage)
+  - [CI/CD](#build-for-production)
+  - [See More Commands](#see-more-commands)
+- [Contributing](#contributing)
+
+## Quick-start Instructions
+
+To begin development, navigate to `wp_content/themes/aerospace` directory and start npm.
+
+```shell
+$ cd wp-content/themes/aerospace
+$ npm install
+$ npm start
+```
+
+## Usage
+
+### CI/CD
+
+GitHub Actions will automatically build & deploy the theme to either the development, staging, or production environment on WPE depending on the settings specified in the deployment workflow.
+
+- Pull requests into `main` will be deployed to the [WP Engine Development Environment](https://csisaspdev.wpengine.com/). The Development environment should be used to demo new features to programs. Once approved, a pull request should be submitted to `main`.
+
+### See More Commands
+
+This will display all available commands, such as running eslint or imagemin independently.
+
+```shell
+$ npm run
+```
 
 ## Contributing
-1. New features & updates should be created on individual branches. Branch from `master`
-2. When ready, submit pull request back into `master`. Rebase the feature branch first.
-3. TravisCI will automatically deploy changes on `master` to the staging site
-4. After reviewing your work on the staging site, use WPEngine to move from staging to live
 
-## Development
-### Composer
-This project uses [Composer](https://getcomposer.org/) to manage WordPress plugin dependencies.
+### Branching
 
-To install, run `composer install`.
+When modifying the code base, always make a new branch. Unless it's necessary to do otherwise, all branches should be created off of `main`.
 
-To update dependencies, run `composer update`.
+Branches should use the following naming conventions:
 
-#### Required Plugins
-- Accordion Shortcodes
-- Archive Control
-- Add to Any Share
-- Akismet
-- Disable Comments
-- Disable Emojis
-- Easy Footnotes
-- Google Authenticator
-- Guest Authors
-- Jetpack
-- Menu Item Custom Fields
-- Related
-- Search by Aloglia
-- SVG Support
-- TinyMCE Advanced
-- WP DataTables (Premium)
-- Yoast SEO
+| Branch type               | Name                                                      | Example                     |
+| ------------------------- | --------------------------------------------------------- | --------------------------- |
+| New Feature               | `feature/<short description of feature>`                  | `feature/header-navigation` |
+| Bug Fixes                 | `bug/<short description of bug>`                          | `bug/mobile-navigation`     |
+| Documentation             | `docs/<short description of documentation being updated>` | `docs/readme`               |
+| Code clean-up/refactoring | `refactor/<short description>`                            | `refactor/apply-linting`    |
+| Content Updates           | `content/<short description of content>`                  | `content/add-new-posts`     |
 
-### PHP Codesniffer
-This project uses [PHP_CodeSniffer](https://github.com/DealerDirect/phpcodesniffer-composer-installer) that follows the [WordPress Code Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards).
+### Commit Messages
 
-To check files, run `./vendor/bin/phpcs wp-content/themes/aerospace/`.
+Write clear and concise commit messages describing the changes you are making and why. If there are any issues associated with the commit, include the issue # in the commit title.
 
-To fix files, run `./vendor/bin/phpcbf wp-content/themes/aerospace/`.
+## Copyright / License Info
 
-
-## Compass
-This project uses [Compass](http://compass-style.org/) to compile the SASS files. To run the compiler:
-1. Navigate to `wp-content/themes/aerospace` folder
-2. Run `compass watch`
+Copyright © 2021 CSIS iDeas Lab under the [MIT License](https://github.com/CSIS-iLab/csisstarter_wp/blob/main/LICENSE).
