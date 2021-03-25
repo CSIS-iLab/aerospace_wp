@@ -206,3 +206,29 @@
 		}
     }
 }
+
+.archive__featured-posts {
+	@include breakpoint('medium') {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.post {
+		background: $dark-blue;
+
+		@include breakpoint('medium') {
+			display: grid;
+		}
+
+		&:first-child {
+			@include breakpoint('medium') {
+				grid-column: 1 / -1;
+			}
+		}
+	}
+
+	.entry-thumbnail {
+		width: 100%;
+		max-width: 100%;
+	}
+}

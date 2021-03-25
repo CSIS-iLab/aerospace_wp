@@ -53,7 +53,7 @@ function clean() {
   return del([
     config.assets + config.sass.dest,
     config.assets + config.js.dest,
-    config.imagemin.dest,
+    config.assets + config.imagemin.dest,
     config.sass.mainStyleSheetDest + '*.css',
     config.sass.mainStyleSheetDest + '*.css.map',
   ])

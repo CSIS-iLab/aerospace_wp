@@ -9,7 +9,11 @@
 
 $is_featured = get_post_meta( $id, '_post_is_featured', true );
 
-if ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
+// On the Space Threat archive page, we don't want to indicate any posts as featured.
+if ( is_tag( 'space-threats') ) {
+    $classes = 'row card-format';
+    $thumbnail_size = 4;
+} elseif ( isset( $post->isFeaturedMain ) && $post->isFeaturedMain ) {
     $classes = 'row featured card-format';
     $thumbnail_size = 6;
 } elseif ( isset( $post->isFeaturedMain ) && ! $post->isFeaturedMain ) {

@@ -77,6 +77,30 @@ function aerospace_cpt_tags_archive( $query ) {
 add_action( 'pre_get_posts', 'aerospace_cpt_tags_archive' );
 
 /**
+ * Update Space Threat archive to exclude any of the related/featured posts from showing up in the main loop.
+ * 
+ * @param  array $query Query object.
+ */
+
+function aerospace_exclude_related__posts_from_archive( $query ) {
+	
+	if( $query->is_main_query() && ! is_admin() && is_tag( 'space-threats') ) {
+        $featured_posts = get_field( 'related_posts', $term ); 
+
+        if ( $featured_posts ) {
+            $excluded_post_ids = array();
+
+            foreach ($featured_posts as $post) {
+                $excluded_post_ids[] = $post->ID;
+            }
+
+		    $query->set( 'post__not_in', $excluded_post_ids);
+        }
+	}
+}
+add_action( 'pre_get_posts', 'aerospace_exclude_related__posts_from_archive' );
+
+/**
  * Amend author archives to include custom post types.
  *
  * @param  array $query Query object.
