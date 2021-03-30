@@ -24,10 +24,9 @@ get_header(); ?>
                 <div class="title-container">
                   <h1 class="page-title">Space Threat Assessment</h1>
                     <div class="archive-description row">
-                        <?php echo $description_extra; ?>
                         <?php echo $description; ?>
                     </div>
-                    
+
                     <div class="archive-pages-top row">
                         <?php if (have_posts() ) : ?>
                         <div class="col-xs-12 col-sm archives-meta-left">
@@ -45,10 +44,10 @@ get_header(); ?>
                 </div>
             </header><!-- .page-header -->
 
-            
-            <?php 
+
+            <?php
             if (class_exists('ACF')) {
-                $featured_posts = get_field( 'related_posts', $term ); 
+                $featured_posts = get_field( 'related_posts', $term );
 
                 if ( $featured_posts ) :
                     echo '<div class="archive__featured-posts">';
@@ -61,7 +60,7 @@ get_header(); ?>
                 endif;
             }
             ?>
-            
+
     <?php
     if (have_posts() ) :
         /* Start the Loop */
