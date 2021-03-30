@@ -5,301 +5,315 @@
 .archive,
 .blog,
 .search {
+  .site-content {
+    background-color: $off-white;
+  }
 
-	.site-content {
-        background-color: $off-white;
+  .content-padding {
+    @extend .content-padding;
+  }
+
+  .title-container {
+    width: 100%;
+  }
+
+  .page-header {
+    margin-top: 1.5rem;
+    padding: 2rem;
+
+    @include breakpoint('medium') {
+      margin-top: 3rem;
     }
 
-    .content-padding {
-    	@extend .content-padding;
+    .page-title {
+      @extend %page-title;
+      text-align: center;
+      margin: 0 0 2rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid $dark-blue;
+
+      .archive-label {
+        text-transform: uppercase;
+        color: $blue-gray;
+      }
     }
 
-    .title-container {
-    	width: 100%;
+    .archive-description {
+      @extend %page-description;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid $blue-gray;
+
+      @include breakpoint('medium') {
+        width: calc(100% - #{$archive-content-padding-md});
+        margin: 0 auto;
+      }
+
+      &-desc,
+      &-extra {
+        p:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+
+      &-desc {
+        order: 1;
+        margin: 0 auto;
+
+        @include breakpoint('medium') {
+          max-width: calc(100% - (#{$archive-content-padding-md} * 2));
+        }
+      }
+
+      &-extra {
+        order: 2;
+        margin-top: 1rem;
+
+        @include breakpoint('medium') {
+          margin-top: 0;
+          padding-left: 2rem;
+          padding-right: 0;
+        }
+      }
+
+      .archive-description-extra + .archive-description-desc {
+        @include breakpoint('medium') {
+          padding-left: 0;
+          padding-right: 2rem;
+        }
+      }
+    }
+  }
+
+  .archive-pages-top {
+    @include breakpoint('medium') {
+      width: calc(100% - #{$archive-content-padding-md});
+      margin: 0 auto;
     }
 
+    .archives-meta-left,
+    .archives-meta-right {
+      @include breakpoint('medium') {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+
+  .archives-meta-left {
+    margin-bottom: 5px;
+
+    @include breakpoint('small') {
+      margin-bottom: 0;
+    }
+  }
+
+  .archives-meta-right {
+    @include breakpoint('small') {
+      text-align: right;
+    }
+  }
+
+  .sort-filter {
+    @include fontSize(16px);
+    line-height: 2;
+
+    a {
+      color: $black;
+      box-shadow: none;
+
+      &.active,
+      &:hover {
+        color: $orange;
+      }
+    }
+
+    &-divider {
+      color: $blue-gray;
+      margin: 0 0.5rem;
+    }
+  }
+
+  .archive-pages-bottom {
+    position: relative;
+    background-color: $white;
+    padding: $archive-content-padding;
+
+    @include breakpoint('medium') {
+      padding: $archive-content-padding-md;
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: calc((2 * #{$archive-content-padding}) + 4px);
+      width: calc(100% - (#{$archive-content-padding} * 2));
+      height: 2px;
+      background-color: $blue-gray;
+
+      @include breakpoint('small') {
+        top: calc(1.3rem - 1px);
+      }
+
+      @include breakpoint('medium') {
+        top: calc(#{$archive-content-padding-md} - 1px);
+        width: calc(100% - (#{$archive-content-padding-md} * 2));
+      }
+    }
+  }
+
+  .hentry {
+    background-color: $white;
+    padding: calc(#{$archive-content-padding} + 0.5rem) $archive-content-padding
+      calc(#{$archive-content-padding} - 0.5rem) $archive-content-padding;
+
+    @include breakpoint('medium') {
+      padding: $archive-content-padding-md;
+      padding-bottom: 0;
+    }
+  }
+
+  /*-----  Page 2+ Styles or Filtered Results  -------*/
+  &.paged,
+  &.archive-filtered-results {
     .page-header {
-    	margin-top: 1.5rem;
-    	padding: 2rem;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
 
-    	@include breakpoint("medium") {
-    		margin-top: 3rem;
-    	}
+    .page-title {
+      @include fontSize(28px);
+      line-height: 1.71;
+      text-align: left;
+      margin: 0 auto;
+      padding-bottom: 0;
 
-    	.page-title {
-    		@extend %page-title;
-    		text-align: center;
-    		margin: 0 0 2rem 0;
-    		padding-bottom: 1rem;
-    		border-bottom: 3px solid $dark-blue;
+      @include breakpoint('medium') {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
 
-    		.archive-label {
-    			text-transform: uppercase;
-    			color: $blue-gray;
-    		}
-
-    	}
-
-    	.archive-description {
-    		@extend %page-description;
-    		padding-bottom: 2rem;
-    		border-bottom: 2px solid $blue-gray;
-
-    		@include breakpoint("medium") {
-		        width: calc(100% - #{$archive-content-padding-md});
-				margin: 0 auto;
-			}
-
-			&-desc,
-			&-extra {
-				p:last-of-type {
-					margin-bottom: 0;
-				}
-			}
-
-    		&-desc {
-    			order: 1;
-    			margin: 0 auto;
-
-    			@include breakpoint("medium") {
-    				max-width: calc(100% - (#{$archive-content-padding-md} * 2));
-    			}
-    		}
-
-    		&-extra {
-    			order: 2;
-    			margin-top: 1rem;
-
-    			@include breakpoint("medium") {
-    				margin-top: 0;
-    				padding-left: 2rem;
-    				padding-right: 0;
-    			}
-    		}
-
-    		.archive-description-extra + .archive-description-desc {
-    			@include breakpoint("medium") {
-	    			padding-left: 0;
-	    			padding-right: 2rem;
-	    		}
-    		}
-    	}
+    .archive-description {
+      display: none;
     }
 
     .archive-pages-top {
-    	@include breakpoint("medium") {
-	        width: calc(100% - #{$archive-content-padding-md});
-			margin: 0 auto;
-		}
-
-		.archives-meta-left,
-		.archives-meta-right {
-			@include breakpoint("medium") {
-				padding-left: 0;
-				padding-right: 0;
-			}
-		}
-	}
-
-    .archives-meta-left {
-        margin-bottom: 5px;
-
-        @include breakpoint("small") {
-            margin-bottom: 0;
-        }
+      @include breakpoint('medium') {
+        width: calc(100% - #{$archive-content-padding-md});
+        margin: 0 auto;
+      }
     }
-
-	.archives-meta-right {
-		@include breakpoint("small") {
-			text-align: right;
-		}
-	}
-
-	.sort-filter {
-		@include fontSize(16px);
-		line-height: 2.0;
-
-		a {
-			color: $black;
-			box-shadow: none;
-
-            &.active,
-			&:hover {
-				color: $orange;
-			}
-		}
-
-		&-divider {
-			color: $blue-gray;
-			margin: 0 0.5rem;
-		}
-	}
-
-	.archive-pages-bottom {
-		position: relative;
-		background-color: $white;
-		padding: $archive-content-padding;
-
-        @include breakpoint("medium") {
-            padding: $archive-content-padding-md;
-        }
-
-        &::before {
-        	content: "";
-        	display: block;
-        	position: absolute;
-        	top: calc((2 * #{$archive-content-padding}) + 4px);
-        	width: calc(100% - (#{$archive-content-padding} * 2));
-        	height: 2px;
-        	background-color: $blue-gray;
-
-            @include breakpoint("small") {
-                top: calc(1.3rem - 1px);
-            }
-
-        	@include breakpoint("medium") {
-        		top: calc(#{$archive-content-padding-md} - 1px);
-        		width: calc(100% - (#{$archive-content-padding-md} * 2));
-        	}
-        }
-	}
-
-    .hentry {
-    	background-color: $white;
-        padding: calc(#{$archive-content-padding} + 0.5rem) $archive-content-padding calc(#{$archive-content-padding} - 0.5rem) $archive-content-padding;
-
-        @include breakpoint("medium") {
-            padding: $archive-content-padding-md;
-            padding-bottom: 0;
-        }
-    }
-
-    /*-----  Page 2+ Styles or Filtered Results  -------*/
-    &.paged,
-    &.archive-filtered-results {
-    	.page-header {
-    		margin-top: 0;
-            margin-bottom: 0;
-    	}
-
-    	.page-title {
-			@include fontSize(28px);
-			line-height: 1.71;
-			text-align: left;
-			margin: 0 auto;
-			padding-bottom: 0;
-
-			@include breakpoint("medium") {
-				padding-left: 1rem;
-			    padding-right: 1rem;
-			    width: calc(100% - 2rem);
-			}
-		}
-
-		.archive-description { display: none; }
-
-		.archive-pages-top {
-			@include breakpoint("medium") {
-		        width: calc(100% - #{$archive-content-padding-md});
-				margin: 0 auto;
-			}
-		}
-    }
+  }
 }
 
 .archive__featured-posts {
-	margin: -8px;
-	margin-bottom: 50px;
+  margin: -8px;
+  margin-bottom: 50px;
 
-	.hentry {
-		padding: $archive-content-padding-featured
+  .hentry {
+    padding: $archive-content-padding-featured;
+  }
+
+  .entry-title a {
+    color: $white;
+  }
+
+  .card-format .entry-header .entry-title {
+    margin-bottom: $archive-content-title-margin-bottom;
+  }
+
+  .entry-header {
+    margin-top: $archive-content-title-margin-top;
+    margin-bottom: $archive-content-byline-margin-bottom;
+  }
+
+	.card-format .entry-thumbnail{
+		margin-bottom: 0;
 	}
 
-	.entry-title a {
-		color: $white;
-	}
+  .authors-list a,
+  .entry-date,
+  .entry-content p,
+  .cat-links li a {
+    color: $white;
+    opacity: 0.9;
+  }
+	// add orange hover to a tags
 
-	.card-format .entry-header .entry-title {
-		margin-bottom: $archive-content-title-margin-bottom;
-	}
+  .card-format .entry-footer {
+    border-top: 1px solid rgba($color: $white, $alpha: 0.3);
+  }
 
-	.entry-header {
-		margin-top: $archive-content-title-margin-top;
-		margin-bottom: $archive-content-byline-margin-bottom;
-	}
+  .card-format .entry-footer > :not(:first-child):before {
+    background-color: rgba($color: $white, $alpha: 0.3);
+  }
 
-	.authors-list a, .entry-date, .entry-content p, .cat-links li a {
-		color: $white;
-		opacity: 0.9;
-	}
+  .meta-label,
+  .authors-list:after,
+  .post-format {
+    color: $white;
+    opacity: 0.65;
+  }
 
-	.card-format .entry-footer{
-		border-top: 1px solid rgba($color: $white, $alpha: 0.3);
-	}
+  .post-is-featured {
+    display: none;
+  }
 
-	.card-format .entry-footer>:not(:first-child):before {
-		background-color: rgba($color: $white, $alpha: 0.3);
-	}
+  @include breakpoint('medium') {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
-	.meta-label, .authors-list:after, .post-format {
-		color: $white;
-		opacity: 0.65;
-	}
+    .card-format .entry-thumbnail a img {
+      width: 100%;
+    }
 
-	.post-is-featured{
-		display: none;
-	}
+    .entry-thumbnail {
+      width: 100%;
+      max-width: 100%;
+    }
 
-	@include breakpoint('medium') {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+    .content-wrapper {
+      padding: 0 1rem;
+    }
 
-		.featured-posts:first-child .img {
-			max-height: rem(528);
-		}
+    .hentry {
+      padding: $archive-content-padding-featured-md;
+    }
+  }
 
-		.card-format .entry-thumbnail a img{
-			width: 100%;
-		}
-		// :first-child {
-		// 	max-height: rem(528);
-		// 	height:auto;
-		// }
-	
-		.entry-thumbnail{
-			width: 100%;
-			max-width: 100%;
-		}
-	
-		// .entry-thumbnail a {
-		// 	max-height: rem(528);
-		// 	height: auto;
-		// }
+  .post {
+    background: $dark-blue;
 
-		.content-wrapper {
-			padding: 0 1rem;
-		}
+    @include breakpoint('medium') {
+      display: grid;
+    }
 
-		.hentry {
-			padding: $archive-content-padding-featured-md
-		}
-	}
+    &:first-child {
+      @include breakpoint('medium') {
+        grid-column: 1 / -1;
 
-	.post {
-		background: $dark-blue;
+        .entry-thumbnail a {
+          height: rem(528);
+        }
+      }
+    }
 
-		@include breakpoint('medium') {
-			display: grid;
-		}
+    &:nth-child(2),
+    &:nth-child(3) {
+      @include breakpoint('medium') {
+        .entry-thumbnail a {
+          height: rem(332);
+        }
+				.entry-thumbnail img {
+					height: 100%;
+				}
+      }
+    }
 
-		&:first-child {
-			@include breakpoint('medium') {
-				grid-column: 1 / -1;
-			}
-		}
-	}
-
-	@include breakpoint('large') {
-		margin: 0;
-	}
+    @include breakpoint('large') {
+      margin: 0;
+    }
+  }
 }
