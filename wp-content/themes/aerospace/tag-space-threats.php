@@ -9,18 +9,9 @@
 
 $archive_query = get_posts($wp_query->query_vars);
 
-if ( get_archive_top_content() ) {
-    $description = get_archive_top_content();
-} else {
-    $description = get_the_archive_description();
-}
+$description = get_the_archive_description();
 
 $description = '<div class="archive-description-desc col-xs-12 col-sm">' . $description . '</div>';
-
-$description_extra = '';
-if ( get_archive_bottom_content() ) {
-    $description_extra = '<div class="archive-description-extra col-xs-12 col-sm-3">' . get_archive_bottom_content() . '</div>';
-}
 
 $term = get_queried_object();
 
@@ -54,19 +45,23 @@ get_header(); ?>
                 </div>
             </header><!-- .page-header -->
 
+            
             <?php 
-            $featured_posts = get_field( 'related_posts', $term ); 
+            if (class_exists('ACF')) {
+                $featured_posts = get_field( 'related_posts', $term ); 
 
-            if ( $featured_posts ) :
-                echo '<div class="archive__featured-posts">';
-				foreach ( $featured_posts as $post ) :
-					setup_postdata ( $post );
-					get_template_part('template-parts/content', get_post_type());
-				endforeach;
-				wp_reset_postdata();
-                echo '</div>';
-			endif;
-            ?>	
+                if ( $featured_posts ) :
+                    echo '<div class="archive__featured-posts">';
+                    foreach ( $featured_posts as $post ) :
+                        setup_postdata ( $post );
+                        get_template_part('template-parts/content', get_post_type());
+                    endforeach;
+                    wp_reset_postdata();
+                    echo '</div>';
+                endif;
+            }
+            ?>
+            
     <?php
     if (have_posts() ) :
         /* Start the Loop */

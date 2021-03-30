@@ -208,10 +208,18 @@
   }
 }
 
+//Styles for featured posts on Space Threat tag archive
 .archive__featured-posts {
 	background-color: $dark-blue;
   margin: -8px;
   margin-bottom: 50px;
+
+  .entry-thumbnail, .entry-main {
+    @include breakpoint('medium') {
+      padding-right: 0;
+      padding-left: 0;
+    }
+  } 
 
 	@include breakpoint('medium') {
     display: grid;
@@ -222,18 +230,14 @@
 		margin: 0;
 	}
 
-	.col-xs-12 {
-		padding-right: 0;
-		padding-left: 0;
-	}
-
   .hentry {
     padding: $archive-content-padding-featured;
+
 		@include breakpoint('medium') {
 			padding: $archive-content-padding-featured-md;
 		}
 		@include breakpoint('large') {
-			padding: $archive-content-padding-featured-md;
+			padding: $archive-content-padding-featured-lg;
 		}
   }
 
@@ -256,6 +260,7 @@
 
 	.card-format .entry-thumbnail{
 		margin-bottom: 0;
+
 			@include breakpoint('medium') {
 					width: 100%;
 					max-width: 100%;
@@ -280,8 +285,6 @@
     opacity: 0.65;
   }
 
-	// add orange hover to a tags
-
   .card-format .entry-footer {
     border-top: 1px solid rgba($color: $white, $alpha: 0.3);
   }
@@ -296,6 +299,7 @@
 
   .post {
 		background-color: $dark-blue;
+
     @include breakpoint('medium') {
       display: grid;
 			grid-template-rows: max-content auto;
@@ -313,6 +317,7 @@
 		&:nth-child(2) {
 			@include breakpoint('medium') {
 				margin-right: $archive-content-margin-featured-right-md;
+        padding: $archive-content-padding-featured-md;
 				padding-right: 0;
 			}
 		}
@@ -320,6 +325,7 @@
 		&:nth-child(3) {
 			@include breakpoint('medium') {
 				margin-left: $archive-content-margin-featured-left-md;
+        padding: $archive-content-padding-featured-md;
 				padding-left: 0;
 			}
 		}
