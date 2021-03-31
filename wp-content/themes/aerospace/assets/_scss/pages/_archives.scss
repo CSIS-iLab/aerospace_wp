@@ -320,10 +320,10 @@
       @include breakpoint('large') {
         display: grid;
         grid-template-columns: 2fr 1fr;
+        gap: 2.5rem;
         
         .entry-thumbnail a {
-          height: auto;
-          padding-right: 2.5rem;
+          max-height: 350px;
         }
 
         .entry-header {
