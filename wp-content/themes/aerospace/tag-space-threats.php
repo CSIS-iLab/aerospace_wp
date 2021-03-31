@@ -46,7 +46,7 @@ get_header(); ?>
 
 
             <?php
-            if (class_exists('ACF')) {
+            if (class_exists('ACF') && !is_paged()) {
                 $featured_posts = get_field( 'related_posts', $term );
 
                 if ( $featured_posts ) :
