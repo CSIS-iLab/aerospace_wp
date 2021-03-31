@@ -211,8 +211,8 @@
 //Styles for featured posts on Space Threat tag archive
 .archive__featured-posts {
 	background-color: $dark-blue;
-  margin: -8px;
-  margin-bottom: 50px;
+  margin: 0 -8px;
+
 
   .entry-thumbnail, .entry-main {
     @include breakpoint('medium') {
@@ -237,7 +237,7 @@
 			padding: $archive-content-padding-featured-md;
       padding-bottom:0;
 		}
-		@include breakpoint('large') {
+    @include breakpoint('large') {
 			padding: $archive-content-padding-featured-lg;
 		}
   }
@@ -281,8 +281,6 @@
     opacity: 0.9;
   }
 
-
-
 	.meta-label,
   .authors-list:after,
   .post-format {
@@ -313,8 +311,39 @@
     &:first-child {
       @include breakpoint('medium') {
         grid-column: 1 / -1;
+
         .entry-thumbnail a {
-          height: 528px;
+          height: 100%;
+        }
+      }
+
+      @include breakpoint('large') {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        
+        .entry-thumbnail a {
+          height: auto;
+          padding-right: 2.5rem;
+        }
+
+        .entry-header {
+          margin-top: 0;
+        }
+
+        .post-format:after {
+          content: "/";
+        }
+
+        .authors-list:after {
+          display: none;
+        }
+
+        .cat-links:before {
+          display: none;
+        }
+
+        .cat-links {
+          padding-left: 0;
         }
       }
     }
@@ -324,7 +353,14 @@
 				margin-right: $archive-content-margin-featured-right-md;
         padding: $archive-content-padding-featured-md;
 				padding-right: 0;
+        padding-top:0;
 			}
+
+      @include breakpoint('large') {
+        margin-right: $archive-content-margin-featured-right-lg;
+        padding: $archive-content-padding-featured-lg;
+        padding-right:0;
+      }
 		}
 
 		&:nth-child(3) {
@@ -332,12 +368,20 @@
 				margin-left: $archive-content-margin-featured-left-md;
         padding: $archive-content-padding-featured-md;
 				padding-left: 0;
+        padding-top:0;
 			}
+
+      @include breakpoint('large') {
+        margin-left: $archive-content-margin-featured-left-lg;
+        padding: $archive-content-padding-featured-lg;
+        padding-left:0;
+      }
 		}
 
     &:nth-child(2),
     &:nth-child(3) {
       @include breakpoint('medium') {
+        padding-top: $archive-content-padding-featured-top-md;
         padding-bottom: $archive-content-padding-featured-bottom-md;
 
         .entry-thumbnail a {
@@ -347,8 +391,11 @@
 					height: 100%;
 				}
       }
+
       @include breakpoint('large') {
-        padding-bottom: $archive-content-padding-featured-bottom-lg;
+        display: grid;
+			  grid-template-rows: max-content auto;
+        padding-top: $archive-content-padding-featured-top-lg;
       }
     }
   }
