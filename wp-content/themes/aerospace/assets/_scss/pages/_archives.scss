@@ -359,7 +359,8 @@
       @include breakpoint('large') {
         margin-right: $archive-content-margin-featured-right-lg;
         padding: $archive-content-padding-featured-lg;
-        padding-right:0;
+        padding-right: 0;
+        padding-top: 0;
       }
 		}
 
@@ -368,13 +369,14 @@
 				margin-left: $archive-content-margin-featured-left-md;
         padding: $archive-content-padding-featured-md;
 				padding-left: 0;
-        padding-top:0;
+        padding-top: 0;
 			}
 
       @include breakpoint('large') {
         margin-left: $archive-content-margin-featured-left-lg;
         padding: $archive-content-padding-featured-lg;
         padding-left:0;
+        padding-top:0;
       }
 		}
 
@@ -395,7 +397,7 @@
       @include breakpoint('large') {
         display: grid;
 			  grid-template-rows: max-content auto;
-        padding-top: $archive-content-padding-featured-top-lg;
+        padding-top: 0;
       }
     }
   }
