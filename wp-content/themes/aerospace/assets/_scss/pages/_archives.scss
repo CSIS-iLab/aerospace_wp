@@ -330,8 +330,18 @@
           margin-top: 0;
         }
 
+        .post-format {
+          position: relative;
+        }
+
         .post-format:after {
-          content: "/";
+          display: block;
+          position: absolute;
+          left: 59px;
+          top: -4px;
+          width: 1px;
+          height: 100%;
+          background-color: #b5bdc1;
         }
 
         .authors-list:after {
