@@ -210,45 +210,45 @@
 
 //Styles for featured posts on Space Threat tag archive
 .archive__featured-posts {
-	background-color: $dark-blue;
+  background-color: $dark-blue;
   margin: 0 -8px;
 
-
-  .entry-thumbnail, .entry-main {
+  .entry-thumbnail,
+  .entry-main {
     @include breakpoint('medium') {
       padding-right: 0;
       padding-left: 0;
     }
-  } 
+  }
 
-	@include breakpoint('medium') {
+  @include breakpoint('medium') {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
 
-	@include breakpoint('large') {
-		margin: 0;
-	}
+  @include breakpoint('large') {
+    margin: 0;
+  }
 
   .hentry {
     padding: $archive-content-padding-featured;
 
-		@include breakpoint('medium') {
-			padding: $archive-content-padding-featured-md;
-      padding-bottom:0;
-		}
+    @include breakpoint('medium') {
+      padding: $archive-content-padding-featured-md;
+      padding-bottom: 0;
+    }
     @include breakpoint('large') {
-			padding: $archive-content-padding-featured-lg;
-		}
+      padding: $archive-content-padding-featured-lg;
+    }
   }
 
   .entry-title a {
     color: $white;
   }
 
-	a:hover {
-		color: $orange !important;
-	}
+  a:hover {
+    color: $orange !important;
+  }
 
   .card-format .entry-header .entry-title {
     margin-bottom: $archive-content-title-margin-bottom;
@@ -259,17 +259,17 @@
     margin-bottom: $archive-content-byline-margin-bottom;
   }
 
-	.card-format .entry-thumbnail{
-		margin-bottom: 0;
+  .card-format .entry-thumbnail {
+    margin-bottom: 0;
 
-			@include breakpoint('medium') {
-					width: 100%;
-					max-width: 100%;
-					img{
-						width: 100%;
-					}
-			}
-		}
+    @include breakpoint('medium') {
+      width: 100%;
+      max-width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+  }
 
   .authors-list a,
   .entry-date,
@@ -281,7 +281,7 @@
     opacity: 0.9;
   }
 
-	.meta-label,
+  .meta-label,
   .authors-list:after,
   .post-format {
     color: $white;
@@ -301,11 +301,11 @@
   }
 
   .post {
-		background-color: $dark-blue;
+    background-color: $dark-blue;
 
     @include breakpoint('medium') {
       display: grid;
-			grid-template-rows: max-content auto;
+      grid-template-rows: max-content auto;
     }
 
     &:first-child {
@@ -321,7 +321,7 @@
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 2.5rem;
-        
+
         .entry-thumbnail a {
           max-height: 350px;
         }
@@ -332,13 +332,13 @@
       }
     }
 
-		&:nth-child(2) {
-			@include breakpoint('medium') {
-				margin-right: $archive-content-margin-featured-right-md;
+    &:nth-child(2) {
+      @include breakpoint('medium') {
+        margin-right: $archive-content-margin-featured-right-md;
         padding: $archive-content-padding-featured-md;
-				padding-right: 0;
-        padding-top:0;
-			}
+        padding-right: 0;
+        padding-top: 0;
+      }
 
       @include breakpoint('large') {
         margin-right: $archive-content-margin-featured-right-lg;
@@ -346,23 +346,23 @@
         padding-right: 0;
         padding-top: 0;
       }
-		}
+    }
 
-		&:nth-child(3) {
-			@include breakpoint('medium') {
-				margin-left: $archive-content-margin-featured-left-md;
+    &:nth-child(3) {
+      @include breakpoint('medium') {
+        margin-left: $archive-content-margin-featured-left-md;
         padding: $archive-content-padding-featured-md;
-				padding-left: 0;
+        padding-left: 0;
         padding-top: 0;
-			}
+      }
 
       @include breakpoint('large') {
         margin-left: $archive-content-margin-featured-left-lg;
         padding: $archive-content-padding-featured-lg;
-        padding-left:0;
-        padding-top:0;
+        padding-left: 0;
+        padding-top: 0;
       }
-		}
+    }
 
     &:nth-child(2),
     &:nth-child(3) {
@@ -373,14 +373,14 @@
         .entry-thumbnail a {
           height: 332px;
         }
-				.entry-thumbnail img {
-					height: 100%;
-				}
+        .entry-thumbnail img {
+          height: 100%;
+        }
       }
 
       @include breakpoint('large') {
         display: grid;
-			  grid-template-rows: max-content auto;
+        grid-template-rows: max-content auto;
         padding-top: 0;
       }
     }
