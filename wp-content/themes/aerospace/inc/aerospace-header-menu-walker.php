@@ -8,7 +8,8 @@
 class Aerospace_Menu extends Walker_Nav_Menu {
 
     function start_lvl( &$output, $depth = 0, $args = array() ) {
-        if ( !empty ( $args->featured_content ) ) {
+				// Only show the featured content if we have a URL.
+        if ( $args->featured_content['url'] != '' ) {
             $title = $args->featured_content['title'];
             $permalink = $args->featured_content['url'];
             $thumbnail = $args->featured_content['image']['url'];
