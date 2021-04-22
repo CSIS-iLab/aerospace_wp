@@ -8,17 +8,14 @@
 class Aerospace_Menu extends Walker_Nav_Menu {
 
     function start_lvl( &$output, $depth = 0, $args = array() ) {
-        global $menu_featured_post, $menu_featured_post_description;
+				// Only show the featured content if we have a URL.
+        if ( $args->featured_content['url'] != '' ) {
+            $title = $args->featured_content['title'];
+            $permalink = $args->featured_content['url'];
+            $thumbnail = $args->featured_content['image']['url'];
 
-        if ( isset ( $menu_featured_post ) ) {
-
-            $post = $menu_featured_post;
-            $title = get_the_title($post->ID);
-            $permalink = get_the_permalink($post->ID);
-            $thumbnail = get_the_post_thumbnail($post->ID);
-
-            $featured_post_html = '<p class="post-desc">' . $menu_featured_post_description . '</p>
-            <div class="post-thumbnail"><a href="' . esc_url ( $permalink ) . '">' . $thumbnail . '</a></div>
+            $featured_post_html = '<p class="post-desc">' . $args->featured_post_description . '</p>
+            <div class="post-thumbnail"><a href="' . esc_url ( $permalink ) . '"> <img src="' . esc_url ( $thumbnail ) . '"></a></div>
             <a href="' . esc_url ( $permalink ) . '" class="post-title">' . $title . '</a>';
         }
 
@@ -41,17 +38,11 @@ class Aerospace_Menu extends Walker_Nav_Menu {
     }
 
     function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
-        global $menu_featured_post, $menu_featured_post_description;
         $args->parent_title = $item->title;
 
         if ( $depth == 0 ) {
-            $item->menu_post_type = get_post_meta( $item->ID, 'menu-item-menu_post_type', true );
-            $item->menu_featured_post_description = get_post_meta( $item->ID, 'menu-item-menu_featured_post_description', true );
-
-            if ( $item->menu_post_type ) {
-                $menu_featured_post = aerospace_featured_post_for_menu( $item->menu_post_type );
-                $menu_featured_post_description = $item->menu_featured_post_description;
-            }
+            $args->featured_post_description = get_field("featured_post_description", $item->ID);
+            $args->featured_content = get_field("featured_content", $item->ID);
         }
 
         $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
@@ -83,28 +74,4 @@ class Aerospace_Menu extends Walker_Nav_Menu {
     function end_el( &$output, $item, $depth = 0, $args = array() ) {
         $output .= "</li>\n";
     }
-}
-
-/**
- * Gets the featured post for the homepage block based on a specified post type.
- *
- * @param  string $post_type Post type to get post from.
- * @return array            Post object.
- */
-function aerospace_featured_post_for_menu ( $post_type = 'post' ) {
-    $args = array(
-        'post_type'  => array( $post_type ),
-        'posts_per_page' => 1,
-        'cache_results' => true,
-        'update_post_meta_cache' => false,
-        'meta_query' => array(
-            array(
-                'key' => '_post_is_featured',
-                'value' => 1,
-                'compare' => '=',
-            ),
-        ),
-    );
-    $query = new WP_Query( $args );
-    return $query->post;
 }
