@@ -9,7 +9,7 @@ defined('ABSPATH') or die('Access denied.');
 
 // Current version
 //[<-- Full version -->]//
-define('WDT_CURRENT_VERSION', '2.3.2');
+define('WDT_CURRENT_VERSION', '3.4.3');
 //[<--/ Full version -->]//
 //[<-- Full version insertion #15 -->]//
 
@@ -39,6 +39,10 @@ define('WDT_JS_PATH', WDT_ROOT_URL . 'assets/js/'); // path to wpDataTables java
  */
 define('WDT_INCLUDE_DATATABLES_CORE', true); // Whether to include link to jQuery DataTables plugin javascript to the generated page. Set to false if you already have DataTables included in your project (version used in wpDataTables is 1.9.1, newer version will be provided with updates).
 
+/** Store URL */
+define('WDT_STORE_URL', 'https://store.tms-plugins.com/');
+define('WDT_STORE_API_URL', 'https://store.tms-plugins.com/api/');
+
 //[<-- Full version insertion #16 -->]//
 
 /**
@@ -61,11 +65,4 @@ $wdtAllowTypes = array(
     'time'
 );
 
-global $wdtMsSqlDriver;
-$wdtMsSqlDriver = [
-    'sqlsrv' => ['active' => false],
-    'dblib'  => ['active' => true,  'version' => '7.0'],
-    'odbc'   => ['active' => false, 'driver'  => '{ODBC Driver 17 for SQL Server}'],
-];
 
-?>

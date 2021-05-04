@@ -91,14 +91,16 @@
 
         $('#wdt-add-column-modal').find('.wdt-preload-layer').animateFadeIn();
 
+        var tableWpID = typeof $('table.wpDataTable').data('wpdatatable_id') !== 'undefined' ?
+           $('table.wpDataTable').data('wpdatatable_id') : $('.wpExcelTable').data('wpdatatable_id');
+
         $.ajax({
             url: ajaxurl,
             type: 'POST',
             data: {
                 action: 'wpdatatables_add_new_manual_column',
-                table_id: typeof $('table.wpDataTable').data('wpdatatable_id') !== 'undefined' ?
-                    $('table.wpDataTable').data('wpdatatable_id') : $('.wpExcelTable').data('wpdatatable_id'),
-                wdtNonce: $('#wdtNonceFrontendEdit').val(),
+                table_id: tableWpID ,
+                wdtNonce: $('#wdtNonceFrontendEdit_' + tableWpID).val(),
                 column_data: newColumnData
             },
             success: function () {
@@ -126,14 +128,16 @@
 
         $('#wdt-remove-column-modal').find('.wdt-preload-layer').animateFadeIn();
 
+        var tableWpID = typeof $('table.wpDataTable').data('wpdatatable_id') !== 'undefined' ?
+            $('table.wpDataTable').data('wpdatatable_id') : $('.wpExcelTable').data('wpdatatable_id');
+
         $.ajax({
             url: ajaxurl,
             type: 'POST',
             data: {
                 action: 'wpdatatables_delete_manual_column',
-                table_id: typeof $('table.wpDataTable').data('wpdatatable_id') !== 'undefined' ?
-                    $('table.wpDataTable').data('wpdatatable_id') : $('.wpExcelTable').data('wpdatatable_id'),
-                wdtNonce: $('#wdtNonceFrontendEdit').val(),
+                table_id: tableWpID,
+                wdtNonce: $('#wdtNonceFrontendEdit_' + tableWpID).val(),
                 column_name: $('#wdtDeleteColumnSelect').val()
             },
             success: function () {

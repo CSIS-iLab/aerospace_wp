@@ -5,7 +5,11 @@ defined('ABSPATH') or die('Access denied.');
 /**
  * Test the Separate connection settings
  */
-function wdtTestSeparateConnectionSettings() {
+function wdtTestSeparateConnectionSettings()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
 
     $returnArray = array('success' => array(), 'errors' => array());
 
@@ -20,7 +24,8 @@ function wdtTestSeparateConnectionSettings() {
                 $separateConnection['user'],
                 $separateConnection['password'],
                 $separateConnection['port'],
-                $separateConnection['vendor']
+                $separateConnection['vendor'],
+                $separateConnection['driver']
             );
             if ($Sql->isConnected()) {
                 $returnArray['success'][] = __("Successfully connected to the {$separateConnection['vendor']} server.", 'wpdatatables');
@@ -59,7 +64,14 @@ add_action('wp_ajax_wpdatatables_test_separate_connection_settings', 'wdtTestSep
 /**
  * Get connection tables settings
  */
-function wdtGetConnectionTables() {
+function wdtGetConnectionTables()
+{
+    if (!current_user_can('manage_options') ||
+        !(wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')
+            || wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')
+            || wp_verify_nonce($_POST['wdtNonce'], 'wdtNonce'))) {
+        exit();
+    }
     $connection = $_POST['connection'];
 
     $tables = wpDataTableConstructor::listMySQLTables($connection);
@@ -73,7 +85,8 @@ add_action('wp_ajax_wpdatatables_get_connection_tables', 'wdtGetConnectionTables
 /**
  * Method to save the config for the table and columns
  */
-function wdtSaveTableWithColumns() {
+function wdtSaveTableWithColumns()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtEditNonce')) {
         exit();
     }
@@ -93,8 +106,9 @@ add_action('wp_ajax_wpdatatables_save_table_config', 'wdtSaveTableWithColumns');
 /**
  * Save plugin settings
  */
-function wdtSavePluginSettings() {
-    if (!current_user_can('manage_options')) {
+function wdtSavePluginSettings()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
         exit();
     }
 
@@ -105,9 +119,53 @@ function wdtSavePluginSettings() {
 add_action('wp_ajax_wpdatatables_save_plugin_settings', 'wdtSavePluginSettings');
 
 /**
+ * Save Google settings
+ */
+function wdtSaveGoogleSettings()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
+    $result = [];
+    $settings = json_decode(stripslashes_deep($_POST['settings']),true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        WDTSettingsController::saveGoogleSettings($settings);
+        $result['link'] = admin_url('admin.php?page=wpdatatables-settings#google_sheet_settings');
+        echo json_encode($result);
+        exit();
+    } else {
+        $result['error'] = 'Data don\'t have valid JSON format';
+        echo json_encode($result) ;
+        exit();
+    }
+
+}
+
+add_action('wp_ajax_wpdatatables_save_google_settings', 'wdtSaveGoogleSettings');
+
+/**
+ * Delete Google settings
+ */
+function wdtDeleteGoogleSettings()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
+
+    update_option('wdtGoogleSettings', '');
+    update_option('wdtGoogleToken', '');
+
+    echo admin_url('admin.php?page=wpdatatables-settings#google_sheet_settings');
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_delete_google_settings', 'wdtDeleteGoogleSettings');
+
+/**
  * Duplicate the table
  */
-function wdtDuplicateTable() {
+function wdtDuplicateTable()
+{
     global $wpdb;
 
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtDuplicateTableNonce')) {
@@ -126,56 +184,65 @@ function wdtDuplicateTable() {
     $mySqlTableName = $tableData->mysql_table_name;
     $content = $tableData->content;
 
-    // Create duplicate version of input table if checkbox is selected
-    if ($manualDuplicateInput) {
+    if ($tableData->table_type != 'simple') {
 
-        // Generating new input table name
-        $cnt = 1;
-        $newNameGenerated = false;
-        while (!$newNameGenerated) {
-            $newName = $tableData->mysql_table_name . '_' . $cnt;
-            $checkTableQuery = "SHOW TABLES LIKE '{$newName}'";
+        // Create duplicate version of input table if checkbox is selected
+        if ($manualDuplicateInput && $tableData->table_type == 'manual') {
+
+            // Generating new input table name
+            $cnt = 1;
+            $newNameGenerated = false;
+            while (!$newNameGenerated) {
+                $newName = $tableData->mysql_table_name . '_' . $cnt;
+                $checkTableQuery = "SHOW TABLES LIKE '{$newName}'";
+                if (!(Connection::isSeparate($tableData->connection))) {
+                    $res = $wpdb->get_results($checkTableQuery);
+                } else {
+                    $sql = Connection::create($tableData->connection);
+                    $res = $sql->getRow($checkTableQuery);
+                }
+                if (!empty($res)) {
+                    $cnt++;
+                } else {
+                    $newNameGenerated = true;
+                }
+            }
+
+            // Input table queries
+
+            $vendor = Connection::getVendor($tableData->connection);
+            $isMySql = $vendor === Connection::$MYSQL;
+            $isMSSql = $vendor === Connection::$MSSQL;
+            $isPostgreSql = $vendor === Connection::$POSTGRESQL;
+
+            if ($isMySql) {
+                $query1 = "CREATE TABLE {$newName} LIKE {$tableData->mysql_table_name};";
+                $query2 = "INSERT INTO {$newName} SELECT * FROM {$tableData->mysql_table_name};";
+            }
+
+            if ($isMSSql || $isPostgreSql) {
+                $query1 = "SELECT * INTO {$newName} FROM {$tableData->mysql_table_name};";
+            }
+
             if (!(Connection::isSeparate($tableData->connection))) {
-                $res = $wpdb->get_results($checkTableQuery);
+                $wpdb->query($query1);
+                $wpdb->query($query2);
             } else {
-                $sql = Connection::create($tableData->connection);
-                $res = $sql->getRow($checkTableQuery);
+                $sql->doQuery($query1);
+
+                if ($query2) {
+                    $sql->doQuery($query2);
+                }
             }
-            if (!empty($res)) {
-                $cnt++;
+            $mySqlTableName = $newName;
+
+            if ($tableData->table_type != 'gravity') {
+                $content = str_replace($tableData->mysql_table_name, $newName, $tableData->content);
             } else {
-                $newNameGenerated = true;
+                $content = $tableData->content;
             }
+
         }
-
-        // Input table queries
-
-        $vendor = Connection::getVendor($tableData->connection);
-        $isMySql = $vendor === Connection::$MYSQL;
-        $isMSSql = $vendor === Connection::$MSSQL;
-        $isPostgreSql = $vendor === Connection::$POSTGRESQL;
-
-        if ($isMySql) {
-            $query1 = "CREATE TABLE {$newName} LIKE {$tableData->mysql_table_name};";
-            $query2 = "INSERT INTO {$newName} SELECT * FROM {$tableData->mysql_table_name};";
-        }
-
-        if ($isMSSql || $isPostgreSql) {
-            $query1 = "SELECT * INTO {$newName} FROM {$tableData->mysql_table_name};";
-        }
-
-        if (!(Connection::isSeparate($tableData->connection))) {
-            $wpdb->query($query1);
-            $wpdb->query($query2);
-        } else {
-            $sql->doQuery($query1);
-
-            if ($query2) {
-                $sql->doQuery($query2);
-            }
-        }
-        $mySqlTableName = $newName;
-        $content = str_replace($tableData->mysql_table_name, $newName, $tableData->content);
     }
 
     // Creating new table
@@ -217,53 +284,66 @@ function wdtDuplicateTable() {
 
     $newTableId = $wpdb->insert_id;
 
-    // Getting the column data
-    $columns = WDTConfigController::loadColumnsFromDB($tableId);
+    if ($tableData->table_type != 'simple') {
+        // Getting the column data
+        $columns = WDTConfigController::loadColumnsFromDB($tableId);
 
-    // Creating new columns
-    foreach ($columns as $column) {
-        $wpdb->insert(
-            $wpdb->prefix . 'wpdatatables_columns',
-            array(
-                'table_id' => $newTableId,
-                'orig_header' => $column->orig_header,
-                'display_header' => $column->display_header,
-                'filter_type' => $column->filter_type,
-                'column_type' => $column->column_type,
-                'input_type' => $column->input_type,
-                'input_mandatory' => $column->input_mandatory,
-                'id_column' => $column->id_column,
-                'group_column' => $column->group_column,
-                'sort_column' => $column->sort_column,
-                'hide_on_phones' => $column->hide_on_phones,
-                'hide_on_tablets' => $column->hide_on_tablets,
-                'visible' => $column->visible,
-                'sum_column' => $column->sum_column,
-                'skip_thousands_separator' => $column->skip_thousands_separator,
-                'width' => $column->width,
-                'possible_values' => $column->possible_values,
-                'default_value' => $column->default_value,
-                'css_class' => $column->css_class,
-                'text_before' => $column->text_before,
-                'text_after' => $column->text_after,
-                'formatting_rules' => $column->formatting_rules,
-                'calc_formula' => $column->calc_formula,
-                'color' => $column->color,
-                'pos' => $column->pos,
-                'advanced_settings' => $column->advanced_settings
-            )
-        );
+        // Creating new columns
+        foreach ($columns as $column) {
+            $wpdb->insert(
+                $wpdb->prefix . 'wpdatatables_columns',
+                array(
+                    'table_id' => $newTableId,
+                    'orig_header' => $column->orig_header,
+                    'display_header' => $column->display_header,
+                    'filter_type' => $column->filter_type,
+                    'column_type' => $column->column_type,
+                    'input_type' => $column->input_type,
+                    'input_mandatory' => $column->input_mandatory,
+                    'id_column' => $column->id_column,
+                    'group_column' => $column->group_column,
+                    'sort_column' => $column->sort_column,
+                    'hide_on_phones' => $column->hide_on_phones,
+                    'hide_on_tablets' => $column->hide_on_tablets,
+                    'visible' => $column->visible,
+                    'sum_column' => $column->sum_column,
+                    'skip_thousands_separator' => $column->skip_thousands_separator,
+                    'width' => $column->width,
+                    'possible_values' => $column->possible_values,
+                    'default_value' => $column->default_value,
+                    'css_class' => $column->css_class,
+                    'text_before' => $column->text_before,
+                    'text_after' => $column->text_after,
+                    'formatting_rules' => $column->formatting_rules,
+                    'calc_formula' => $column->calc_formula,
+                    'color' => $column->color,
+                    'pos' => $column->pos,
+                    'advanced_settings' => $column->advanced_settings
+                )
+            );
 
-        if ($column->id == $tableData->userid_column_id) {
-            $userIdColumnNewId = $wpdb->insert_id;
+            if ($column->id == $tableData->userid_column_id) {
+                $userIdColumnNewId = $wpdb->insert_id;
 
-            $wpdb->update(
-                $wpdb->prefix . 'wpdatatables',
-                array('userid_column_id' => $userIdColumnNewId),
-                array('id' => $newTableId)
+                $wpdb->update(
+                    $wpdb->prefix . 'wpdatatables',
+                    array('userid_column_id' => $userIdColumnNewId),
+                    array('id' => $newTableId)
+                );
+            }
+
+        }
+    } else {
+        $rows = WDTConfigController::loadRowsDataFromDB($tableId);
+        foreach ($rows as $row) {
+            $wpdb->insert(
+                $wpdb->prefix . "wpdatatables_rows",
+                array(
+                    'table_id' => $newTableId,
+                    'data' => json_encode($row)
+                )
             );
         }
-
     }
 
     exit();
@@ -276,53 +356,231 @@ add_action('wp_ajax_wpdatatables_duplicate_table', 'wdtDuplicateTable');
  * Duplicate the chart
  */
 
-function wdtDuplicateChart () {
-	global $wpdb;
+function wdtDuplicateChart()
+{
+    global $wpdb;
 
-	if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtDuplicateChartNonce')) {
-		exit();
-	}
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtDuplicateChartNonce')) {
+        exit();
+    }
 
-	$chartId = (int)$_POST['chart_id'];
-	if (empty($chartId)) {
-		return false;
-	}
-	$newChartName = sanitize_text_field($_POST['new_chart_name']);
+    $chartId = (int)$_POST['chart_id'];
+    if (empty($chartId)) {
+        return false;
+    }
+    $newChartName = sanitize_text_field($_POST['new_chart_name']);
 
-	$chartQuery = $wpdb->prepare(
-		'SELECT * FROM ' . $wpdb->prefix . 'wpdatacharts WHERE id = %d',
-		$chartId
-	);
+    $chartQuery = $wpdb->prepare(
+        'SELECT * FROM ' . $wpdb->prefix . 'wpdatacharts WHERE id = %d',
+        $chartId
+    );
 
-	$wpDataChart = $wpdb->get_row($chartQuery);
+    $wpDataChart = $wpdb->get_row($chartQuery);
 
-	// Creating new table
-	$wpdb->insert(
-		$wpdb->prefix . "wpdatacharts",
-		array(
-			'wpdatatable_id'    => $wpDataChart->wpdatatable_id,
-			'title'             => $newChartName,
-			'engine'            => $wpDataChart->engine,
-			'type'              => $wpDataChart->type,
-			'json_render_data'  => $wpDataChart->json_render_data
-		)
-	);
+    // Creating new table
+    $wpdb->insert(
+        $wpdb->prefix . "wpdatacharts",
+        array(
+            'wpdatatable_id' => $wpDataChart->wpdatatable_id,
+            'title' => $newChartName,
+            'engine' => $wpDataChart->engine,
+            'type' => $wpDataChart->type,
+            'json_render_data' => $wpDataChart->json_render_data
+        )
+    );
 
-	exit();
+    exit();
 }
 
 add_action('wp_ajax_wpdatatables_duplicate_chart', 'wdtDuplicateChart');
 
+
+function wdtCreateSimpleTable()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
+        exit();
+    }
+    $tableData = apply_filters(
+        'wpdatatables_before_create_simple_table',
+        json_decode(
+            stripslashes_deep(
+                $_POST['tableData']
+            )
+        )
+    );
+
+    $wpDataTableRows = new WPDataTableRows($tableData);
+
+    // Generate new id and save settings in wpdatatables table in DB
+    $newTableId = generateSimpleTableID($wpDataTableRows);
+
+    // Save table with empty data
+    $wpDataTableRows->saveTableWithEmptyData($newTableId);
+
+    // Generate a link for new table
+    echo admin_url('admin.php?page=wpdatatables-constructor&source&simple&table_id=' . $newTableId);
+
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_create_simple_table', 'wdtCreateSimpleTable');
+
+function wdtGetHandsontableData()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtEditNonce')) {
+        exit();
+    }
+
+    $tableID = (int)$_POST['tableID'];
+    $res = new stdClass();
+
+    try {
+        $wpDataTableRows = WPDataTableRows::loadWpDataTableRows($tableID);
+        $res->tableData = $wpDataTableRows->getRowsData();
+        $res->tableMeta = $wpDataTableRows->getTableSettingsData()->content;
+    } catch (Exception $e) {
+        $res->error = ltrim($e->getMessage(), '<br/><br/>');
+    }
+    echo json_encode($res);
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_get_handsontable_data', 'wdtGetHandsontableData');
+
+function generateSimpleTableID($wpDataTableRows)
+{
+    global $wpdb;
+    $tableContent = new stdClass();
+    $tableContent->rowNumber = $wpDataTableRows->getRowNumber();
+    $tableContent->colNumber = $wpDataTableRows->getColNumber();
+    $tableContent->colWidths = $wpDataTableRows->getColWidths();
+    $tableContent->colHeaders = $wpDataTableRows->getColHeaders();
+    $tableContent->reloadCounter = $wpDataTableRows->getReloadCounter();
+    $tableContent->mergedCells = $wpDataTableRows->getMergeCells();
+
+    // Create the wpDataTable metadata
+    $wpdb->insert(
+        $wpdb->prefix . "wpdatatables",
+        array(
+            'title' => sanitize_text_field($wpDataTableRows->getTableName()),
+            'table_type' => $wpDataTableRows->getTableType(),
+            'connection' => '',
+            'content' => json_encode($tableContent),
+            'server_side' => 0,
+            'mysql_table_name' => '',
+            'tabletools_config' => serialize(array(
+                'print' => 1,
+                'copy' => 1,
+                'excel' => 1,
+                'csv' => 1,
+                'pdf' => 0
+            )),
+            'advanced_settings' => json_encode(array(
+                'simpleResponsive' => 0,
+                'simpleHeader' => 0,
+                'stripeTable' => 0,
+                'cellPadding' => 10,
+                'verticalScroll' => 0,
+                'verticalScrollHeight' => 600
+                )
+            )
+        )
+    );
+
+    // Store the new table metadata ID
+    return $wpdb->insert_id;
+}
+
+/**
+ * Save data in database for Simple table
+ */
+function wdtSaveDataSimpleTable()
+{
+    global $wpdb;
+
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtEditNonce')) {
+        exit();
+    }
+    $turnOffSimpleHeader = 0;
+    $rowsData = json_decode(stripslashes_deep($_POST['rowsData']));
+    $tableSettings = json_decode(stripslashes_deep($_POST['tableSettings']));
+    $tableID = intval($tableSettings->id);
+    $scrollable = intval($tableSettings->scrollable);
+    $fixedLayout = intval($tableSettings->fixed_layout);
+    $wordWrap = intval($tableSettings->word_wrap);
+    $showTitle = intval($tableSettings->show_title);
+    $title = sanitize_text_field($tableSettings->title);
+    $result = new stdClass();
+
+    if ($tableSettings->content->mergedCells){
+        $mergedCells = $tableSettings->content->mergedCells;
+        foreach ($mergedCells as $mergedCell){
+            if($mergedCell->row == 0 && $mergedCell->rowspan > 1){
+                $turnOffSimpleHeader = 1;
+            }
+        }
+    }
+
+    $wpdb->update(
+        $wpdb->prefix . "wpdatatables",
+        array(
+            'content' => json_encode($tableSettings->content),
+            'scrollable' => $scrollable,
+            'fixed_layout' => $fixedLayout,
+            'word_wrap' => $wordWrap,
+            'show_title' => $showTitle,
+            'title' => $title,
+            'advanced_settings' => json_encode(
+                array(
+                    'simpleResponsive' => $tableSettings->simpleResponsive,
+                    'simpleHeader' => $turnOffSimpleHeader ? 0 : $tableSettings->simpleHeader,
+                    'stripeTable' => $tableSettings->stripeTable,
+                    'cellPadding' => $tableSettings->cellPadding,
+                    'verticalScroll' => $tableSettings->verticalScroll,
+                    'verticalScrollHeight' => $tableSettings->verticalScrollHeight,
+                )
+            )
+        ),
+        array('id' => $tableID)
+    );
+
+    if ($wpdb->last_error == '') {
+        try {
+            $wpDataTableRows = new WPDataTableRows($tableSettings);
+
+            if ($wpDataTableRows->checkIsExistTableID($tableID)) {
+                $wpDataTableRows->deleteRowsData($tableID);
+            }
+            foreach ($rowsData as $rowData){
+                WDTConfigController::saveRowData($rowData, $tableID);
+            }
+            $wpDataTableRows = WPDataTableRows::loadWpDataTableRows($tableID);
+            $result->reload =  $wpDataTableRows->getTableSettingsData()->content->reloadCounter;
+            $result->tableHTML = $wpDataTableRows->generateTable($tableID);
+        } catch (Exception $e) {
+            $result->error = ltrim($e->getMessage(), '<br/><br/>');
+        }
+    } else {
+        $result->error = $wpdb->last_error;
+    }
+
+    echo json_encode($result);
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_save_simple_table_data', 'wdtSaveDataSimpleTable');
+
 /**
  * Create a manually built table and open in Edit Page
  */
-function wdtCreateManualTable() {
+function wdtCreateManualTable()
+{
 
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
 
-    $tableData = $_POST['tableData'];
+    $tableData = stripslashes_deep($_POST['tableData']);
     $tableData = apply_filters('wpdatatables_before_create_manual_table', $tableData);
 
     // Create a new Constructor object
@@ -342,7 +600,8 @@ add_action('wp_ajax_wpdatatables_create_manual_table', 'wdtCreateManualTable');
 /**
  * Action for generating a WP-based MySQL query
  */
-function wdtGenerateWPBasedQuery() {
+function wdtGenerateWPBasedQuery()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
@@ -366,12 +625,13 @@ add_action('wp_ajax_wpdatatables_generate_wp_based_query', 'wdtGenerateWPBasedQu
 /**
  * Action for refreshing the WP-based query
  */
-function wdtRefreshWPQueryPreview() {
+function wdtRefreshWPQueryPreview()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
 
-    $query = sanitize_text_field($_POST['query']);
+    $query = $_POST['query'];
 
     $constructor = new wpDataTableConstructor($_POST['connection']);
     $constructor->setQuery($query);
@@ -385,7 +645,8 @@ add_action('wp_ajax_wpdatatables_refresh_wp_query_preview', 'wdtRefreshWPQueryPr
 /**
  * Action for generating the table from query/constructed table data
  */
-function wdtConstructorGenerateWDT() {
+function wdtConstructorGenerateWDT()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
@@ -407,14 +668,17 @@ add_action('wp_ajax_wpdatatables_constructor_generate_wdt', 'wdtConstructorGener
 /**
  * Request the column list for the selected tables
  */
-function wdtConstructorGetMySqlTableColumns() {
+function wdtConstructorGetMySqlTableColumns()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
-
-    $tables = array_map('sanitize_text_field', $_POST['tables']);
-    $columns = wpDataTableConstructor::listMySQLColumns($tables, $_POST['connection']);
-
+    if (isset($_POST['tables'])) {
+        $tables = array_map('sanitize_text_field', $_POST['tables']);
+        $columns = wpDataTableConstructor::listMySQLColumns($tables, $_POST['connection']);
+    } else {
+        $columns = array('allColumns' => array(), 'sortedColumns' => array());
+    }
     echo json_encode($columns);
     exit();
 }
@@ -424,7 +688,8 @@ add_action('wp_ajax_wpdatatables_constructor_get_mysql_table_columns', 'wdtConst
 /**
  * Action for generating a WP-based MySQL query
  */
-function wdtGenerateMySqlBasedQuery() {
+function wdtGenerateMySqlBasedQuery()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
@@ -448,7 +713,8 @@ add_action('wp_ajax_wpdatatables_generate_mysql_based_query', 'wdtGenerateMySqlB
 /**
  * Generate a file-based table preview (first 4 rows)
  */
-function wdtConstructorPreviewFileTable() {
+function wdtConstructorPreviewFileTable()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
@@ -468,7 +734,8 @@ add_action('wp_ajax_wpdatatables_preview_file_table', 'wdtConstructorPreviewFile
 /**
  * Read data from file and generate the table
  */
-function wdtConstructorReadFileData() {
+function wdtConstructorReadFileData()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtConstructorNonce')) {
         exit();
     }
@@ -502,8 +769,9 @@ add_action('wp_ajax_wpdatatables_constructor_read_file_data', 'wdtConstructorRea
 /**
  * Add a column to a manually  created table
  */
-function wdtAddNewManualColumn() {
-    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+function wdtAddNewManualColumn()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_POST['table_id'])) {
         exit();
     }
 
@@ -519,8 +787,9 @@ add_action('wp_ajax_wpdatatables_add_new_manual_column', 'wdtAddNewManualColumn'
 /**
  * Delete a column from a manually created table
  */
-function wdtDeleteManualColumn() {
-    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+function wdtDeleteManualColumn()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_POST['table_id'])) {
         exit();
     }
 
@@ -536,7 +805,8 @@ add_action('wp_ajax_wpdatatables_delete_manual_column', 'wdtDeleteManualColumn')
 /**
  * Return all columns for a provided table
  */
-function wdtGetColumnsDataByTableId() {
+function wdtGetColumnsDataByTableId()
+{
     if (!current_user_can('manage_options') ||
         !(wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce') ||
             wp_verify_nonce($_POST['wdtNonce'], 'wdtEditNonce'))
@@ -555,7 +825,8 @@ add_action('wp_ajax_wpdatatables_get_columns_data_by_table_id', 'wdtGetColumnsDa
 /**
  * Returns the complete table for the range picker
  */
-function wdtGetCompleteTableJSONById() {
+function wdtGetCompleteTableJSONById()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce')) {
         exit();
     }
@@ -570,12 +841,13 @@ function wdtGetCompleteTableJSONById() {
 add_action('wp_ajax_wpdatatables_get_complete_table_json_by_id', 'wdtGetCompleteTableJSONById');
 
 
-function wdtShowChartFromData() {
+function wdtShowChartFromData()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce')) {
         exit();
     }
 
-    $chartData = $_POST['chart_data'];
+    $chartData = stripslashes_deep($_POST['chart_data']);
     $wpDataChart = WPDataChart::factory($chartData, false);
 
     echo json_encode($wpDataChart->returnData());
@@ -585,12 +857,13 @@ function wdtShowChartFromData() {
 add_action('wp_ajax_wpdatatable_show_chart_from_data', 'wdtShowChartFromData');
 
 
-function wdtSaveChart() {
+function wdtSaveChart()
+{
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce')) {
         exit();
     }
 
-    $chartData = $_POST['chart_data'];
+    $chartData = stripslashes_deep($_POST['chart_data']);
     $wpDataChart = WPDataChart::factory($chartData, false);
     $wpDataChart->save();
 
@@ -603,7 +876,8 @@ add_action('wp_ajax_wpdatatable_save_chart_get_shortcode', 'wdtSaveChart');
 /**
  * List all tables in JSON
  */
-function wdtListAllTables() {
+function wdtListAllTables()
+{
     if (!current_user_can('manage_options')) {
         exit();
     }
@@ -617,7 +891,8 @@ add_action('wp_ajax_wpdatatable_list_all_tables', 'wdtListAllTables');
 /**
  * List all charts in JSON
  */
-function wdtListAllCharts() {
+function wdtListAllCharts()
+{
     if (!current_user_can('manage_options')) {
         exit();
     }
@@ -636,7 +911,8 @@ add_action('wp_ajax_wpdatatable_list_all_charts', 'wdtListAllCharts');
  * @throws WDTException
  * @throws Exception
  */
-function wdtReadDistinctValuesFromTable() {
+function wdtReadDistinctValuesFromTable()
+{
     $tableId = (int)$_POST['tableId'];
     $columnId = (int)$_POST['columnId'];
 
@@ -646,8 +922,7 @@ function wdtReadDistinctValuesFromTable() {
     $columnData = WDTConfigController::loadSingleColumnFromDB($columnId);
     $column = $wpDataTable->getColumn($columnData['orig_header']);
 
-    $distValues = WDTColumn::getPossibleValuesRead($column, $tableData, false);
-
+    $distValues = WDTColumn::getPossibleValuesRead($column, false, $tableData );
     echo json_encode($distValues);
     exit();
 }
@@ -659,7 +934,8 @@ add_action('wp_ajax_wpdatatable_get_column_distinct_values', 'wdtReadDistinctVal
  *
  * @throws WDTException
  */
-function wdtPreviewFormulaResult() {
+function wdtPreviewFormulaResult()
+{
     $tableId = (int)$_POST['table_id'];
     $formula = sanitize_text_field($_POST['formula']);
 
@@ -670,3 +946,139 @@ function wdtPreviewFormulaResult() {
 }
 
 add_action('wp_ajax_wpdatatables_preview_formula_result', 'wdtPreviewFormulaResult');
+
+/**
+ * Validate purchase code
+ */
+function wdtActivatePlugin()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
+
+    /** @var string $slug */
+    $slug = filter_var($_POST['slug'], FILTER_SANITIZE_STRING);
+
+    /** @var string $purchaseCode */
+    $purchaseCode = filter_var($_POST['purchaseCodeStore'], FILTER_SANITIZE_STRING);
+
+    /** @var string $domain */
+    $domain = filter_var($_POST['domain'], FILTER_SANITIZE_STRING);
+    $domain = WDTTools::getDomain($domain);
+
+    /** @var string $subdomain */
+    $subdomain = filter_var($_POST['subdomain'], FILTER_SANITIZE_STRING);
+    $subdomain = WDTTools::getSubDomain($subdomain);
+
+    $request = wp_remote_get(
+        WDT_STORE_API_URL . 'activation/code?slug=' . $slug . '&purchaseCode=' . $purchaseCode . '&domain=' . $domain . '&subdomain=' . $subdomain
+    );
+
+    /** @var bool $valid */
+    $valid = json_decode($request['body'])->valid;
+
+    /** @var bool $valid */
+    $domainRegistered = json_decode($request['body'])->domainRegistered;
+
+    if ($valid && $domainRegistered) {
+        if ($slug === 'wpdatatables') {
+            update_option('wdtPurchaseCodeStore', $purchaseCode);
+            update_option('wdtActivated', true);
+        } else if ($slug === 'wdt-powerful-filters') {
+            update_option('wdtPurchaseCodeStorePowerful', $purchaseCode);
+            update_option('wdtActivatedPowerful', true);
+        } else if ($slug === 'reportbuilder') {
+            update_option('wdtPurchaseCodeStoreReport', $purchaseCode);
+            update_option('wdtActivatedReport', true);
+        } else if ($slug === 'wdt-gravity-integration') {
+            update_option('wdtPurchaseCodeStoreGravity', $purchaseCode);
+            update_option('wdtActivatedGravity', true);
+        } else if ($slug === 'wdt-formidable-integration') {
+            update_option('wdtPurchaseCodeStoreFormidable', $purchaseCode);
+            update_option('wdtActivatedFormidable', true);
+        } else if ($slug === 'wdt-master-detail') {
+            update_option('wdtPurchaseCodeStoreMasterDetail', $purchaseCode);
+            update_option('wdtActivatedMasterDetail', true);
+        }
+    }
+
+    if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
+        echo $request['body'];
+    }
+
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_activate_plugin', 'wdtActivatePlugin');
+
+/**
+ * Deactivate plugin
+ */
+function wdtDeactivatePlugin()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
+
+    /** @var string $slug */
+    $slug = filter_var($_POST['slug'], FILTER_SANITIZE_STRING);
+
+    /** @var string $purchaseCode */
+    $purchaseCode = filter_var($_POST['purchaseCodeStore'], FILTER_SANITIZE_STRING);
+
+    /** @var string $envatoTokenEmail */
+    $envatoTokenEmail = filter_var($_POST['envatoTokenEmail'], FILTER_SANITIZE_STRING);
+
+    /** @var string $domain */
+    $domain = filter_var($_POST['domain'], FILTER_SANITIZE_STRING);
+    $domain = WDTTools::getDomain($domain);
+
+    /** @var string $subdomain */
+    $subdomain = filter_var($_POST['subdomain'], FILTER_SANITIZE_STRING);
+    $subdomain = WDTTools::getSubDomain($subdomain);
+
+    /** @var string $type */
+    $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+
+    if ($type === 'code') {
+        $request = wp_remote_get(
+            WDT_STORE_API_URL . 'activation/code/deactivate?slug=' . $slug . '&purchaseCode=' . $purchaseCode . '&domain=' . $domain . '&subdomain=' . $subdomain
+        );
+    } else {
+        $request = wp_remote_get(
+            WDT_STORE_API_URL . 'activation/envato/deactivate?slug=' . $slug . '&envatoTokenEmail=' . $envatoTokenEmail . '&domain=' . $domain . '&subdomain=' . $subdomain
+        );
+    }
+
+    /** @var bool $deactivated */
+    $deactivated = json_decode($request['body'])->deactivated;
+
+    if ($deactivated === true) {
+        WDTTools::deactivatePlugin($slug);
+    }
+
+    echo $request['body'];
+
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_deactivate_plugin', 'wdtDeactivatePlugin');
+
+function wdtParseServerName()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
+        exit();
+    }
+    /** @var array $serverName */
+    $serverName['domain'] = filter_var($_POST['domain'], FILTER_SANITIZE_STRING);
+    $serverName['domain'] = WDTTools::getDomain($serverName['domain']);
+    $serverName['subdomain'] = filter_var($_POST['subdomain'], FILTER_SANITIZE_STRING);
+    $serverName['subdomain'] = WDTTools::getSubDomain($serverName['subdomain']);
+
+    echo json_encode($serverName);
+
+    exit();
+
+}
+
+add_action('wp_ajax_wpdatatables_parse_server_name', 'wdtParseServerName');

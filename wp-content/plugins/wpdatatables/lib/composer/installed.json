@@ -1,24 +1,27 @@
 [
     {
         "name": "analog/analog",
-        "version": "1.0.10-stable",
-        "version_normalized": "1.0.10.0",
+        "version": "1.0.13-stable",
+        "version_normalized": "1.0.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/jbroadway/analog.git",
-            "reference": "65dce6b5aff8c77307c783e607c04a35df8259d6"
+            "reference": "718ac1dad4577a15cadadab01b79d1923f5a9c6d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/jbroadway/analog/zipball/65dce6b5aff8c77307c783e607c04a35df8259d6",
-            "reference": "65dce6b5aff8c77307c783e607c04a35df8259d6",
+            "url": "https://api.github.com/repos/jbroadway/analog/zipball/718ac1dad4577a15cadadab01b79d1923f5a9c6d",
+            "reference": "718ac1dad4577a15cadadab01b79d1923f5a9c6d",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.2",
             "psr/log": "1.*"
         },
-        "time": "2017-09-17T02:30:30+00:00",
+        "require-dev": {
+            "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5"
+        },
+        "time": "2019-06-27T16:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -48,6 +51,58 @@
             "logger",
             "logging",
             "syslog"
+        ]
+    },
+    {
+        "name": "firebase/php-jwt",
+        "version": "v5.2.0",
+        "version_normalized": "5.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/firebase/php-jwt.git",
+            "reference": "feb0e820b8436873675fd3aca04f3728eb2185cb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/feb0e820b8436873675fd3aca04f3728eb2185cb",
+            "reference": "feb0e820b8436873675fd3aca04f3728eb2185cb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": ">=4.8 <=9"
+        },
+        "time": "2020-03-25T18:49:23+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Firebase\\JWT\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Neuman Vong",
+                "email": "neuman+pear@twilio.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anant Narayanan",
+                "email": "anant@php.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+        "homepage": "https://github.com/firebase/php-jwt",
+        "keywords": [
+            "jwt",
+            "php"
         ]
     },
     {
@@ -155,17 +210,17 @@
     },
     {
         "name": "markbaker/complex",
-        "version": "1.4.6",
-        "version_normalized": "1.4.6.0",
+        "version": "1.4.7",
+        "version_normalized": "1.4.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/MarkBaker/PHPComplex.git",
-            "reference": "a78d82ae4e682c3809fc3023d1b0ce654f6ab12b"
+            "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/MarkBaker/PHPComplex/zipball/a78d82ae4e682c3809fc3023d1b0ce654f6ab12b",
-            "reference": "a78d82ae4e682c3809fc3023d1b0ce654f6ab12b",
+            "url": "https://api.github.com/repos/MarkBaker/PHPComplex/zipball/1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
+            "reference": "1ea674a8308baf547cbcbd30c5fcd6d301b7c000",
             "shasum": ""
         },
         "require": {
@@ -181,7 +236,7 @@
             "sebastian/phpcpd": "2.*",
             "squizlabs/php_codesniffer": "^3.3.0"
         },
-        "time": "2018-07-31T08:38:40+00:00",
+        "time": "2018-10-13T23:28:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -341,23 +396,23 @@
     },
     {
         "name": "psr/log",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/php-fig/log.git",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2016-10-10T12:19:37+00:00",
+        "time": "2018-11-20T15:27:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

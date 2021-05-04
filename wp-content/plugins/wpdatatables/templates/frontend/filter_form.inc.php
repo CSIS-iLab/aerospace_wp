@@ -11,7 +11,7 @@
 /** @var WDTColumn $dataColumn */
 ?>
 <?php do_action('wpdatatables_before_filtering_form', $this->getWpId()); ?>
-    <div class="wpDataTables wpDataTablesFilter wpDataTablesWrapper <?php echo apply_filters('wdt_add_class_to_filter_in_form_element', $this->getCSSClasses(), $this->getWpId()) ?>"
+    <div class="wpDataTables wpDataTablesFilter wpDataTablesWrapper wdt-skin-<?php echo $this->getTableSkin(); ?> <?php echo apply_filters('wdt_add_class_to_filter_in_form_element', $this->getCSSClasses(), $this->getWpId()) ?>"
          data-wpdatatable_id="<?php echo $this->getWpId(); ?>">
         <div id="filterBox_<?php echo $this->getId() ?>" class="wpDataTableFilterBox">
             <?php foreach ($this->getColumns() as $key => $dataColumn) { ?>
@@ -27,7 +27,7 @@
             <?php }
             if ($this->isClearFilters()) { ?>
                 <div class="wpDataTableFilterSection" id="wdt-clear-filters-button-block">
-                    <button class="button btn wdt-clear-filters-button" data-table_id = <?php echo $this->getId() ?>><?php _e(' Clear filters', 'wpdatatables'); ?></button>
+                    <button class="button btn wdt-clear-filters-button" data-table_id = <?php echo $this->getId() ?>><?php _e('Clear filters', 'wpdatatables'); ?></button>
                 </div>
             <?php } ?>
             <?php

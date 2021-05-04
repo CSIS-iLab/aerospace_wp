@@ -14,10 +14,10 @@ namespace Analog\Handler;
  *     
  *     Analog::log ('Log me');
  */
-class Null {
-	public static function init () {
-		return function ($info) {
-			// do nothing
-		};
-	}
-}
+#class Null {
+#	public static function init () {
+#		return function ($info) {
+#			// do nothing
+#		};
+#	}
+#}

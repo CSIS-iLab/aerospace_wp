@@ -175,6 +175,12 @@ var WDTColumn = function (column, parent_table) {
     this.filtering = 0;
 
     /**
+     * Toggle global search column
+     * @type {int}
+     */
+    this.globalSearchColumn = 1;
+
+    /**
      * Filter type for this column
      * @type {string}
      */
@@ -185,6 +191,12 @@ var WDTColumn = function (column, parent_table) {
      * @type {int}
      */
     this.exactFiltering = 0;
+
+    /**
+      * Toggle range slider
+      *  @type {int}
+      */
+    this.rangeSlider = 0;
 
     /**
      * Filter label
@@ -259,6 +271,11 @@ var WDTColumn = function (column, parent_table) {
     this.linkTargetAttribute = '_self';
 
     /**
+     * Open link as a nofollow link
+     */
+    this.linkNoFollowAttribute = 0;
+
+    /**
      *  Open link column as a button
      */
     this.linkButtonAttribute = 0;
@@ -298,6 +315,7 @@ var WDTColumn = function (column, parent_table) {
         this.filter_type = column.filter_type || 'text';
         this.filterDefaultValue = column.filterDefaultValue || null;
         this.filtering = typeof column.filtering !== 'undefined' ? column.filtering : 1;
+        this.globalSearchColumn = column.globalSearchColumn || 0;
         this.filterLabel = column.filterLabel || null;
         this.foreignKeyRule = column.foreignKeyRule || null;
         this.formula = column.formula || '';
@@ -307,9 +325,11 @@ var WDTColumn = function (column, parent_table) {
         this.id = column.id || null;
         this.id_column = column.id_column || 0;
         this.linkTargetAttribute = column.linkTargetAttribute || '_self';
+        this.linkNoFollowAttribute = column.linkNoFollowAttribute || 0;
         this.linkButtonAttribute = column.linkButtonAttribute || 0;
         this.linkButtonLabel = column.linkButtonLabel || null;
         this.linkButtonClass = column.linkButtonClass || null;
+        this.rangeSlider = column.rangeSlider || 0;
         this.orig_header = column.orig_header || null;
         this.parent_table = column.parent_table || null;
         this.pos = column.pos || 0;
@@ -324,6 +344,10 @@ var WDTColumn = function (column, parent_table) {
         this.valuesList = column.valuesList || null;
         this.visible = typeof column.visible !== 'undefined' ? column.visible : 1;
         this.width = column.width || null;
+
+        if ( typeof callbackExtendColumnObject !== 'undefined' ) {
+            callbackExtendColumnObject(column, this);
+        }
     }
 };
 
@@ -445,6 +469,14 @@ WDTColumn.prototype.getHideOnTablets = function () {
  */
 WDTColumn.prototype.setCssClass = function (css_class) {
     this.css_class = css_class;
+};
+
+WDTColumn.prototype.setAdditionalParam = function (paramName, paramValue) {
+    this[paramName] = paramValue;
+};
+
+WDTColumn.prototype.getAdditionalParam = function (paramName) {
+    return this[paramName];
 };
 
 /**
@@ -763,6 +795,22 @@ WDTColumn.prototype.getFiltering = function () {
 };
 
 /**
+ * Set global search for column
+ * @param {int} globalSearchColumn
+ */
+WDTColumn.prototype.setGlobalSearchColumm = function (globalSearchColumn) {
+    this.globalSearchColumn = globalSearchColumn;
+};
+
+/**
+ * Get global search for column
+ * @return {int} globalSearchColumn
+ */
+WDTColumn.prototype.getGlobalSearchColumn = function () {
+    return this.globalSearchColumn;
+};
+
+/**
  * Set Filter Type
  * @param {string} filterType
  */
@@ -911,10 +959,10 @@ WDTColumn.prototype.renderConditionalFormattingBlock = function (formattingRule)
         e.preventDefault();
         e.stopImmediatePropagation();
         if (['setCellColor', 'setRowColor', 'setColumnColor'].indexOf(jQuery(this).val()) !== -1) {
-            if (!$block.find('div.colorpicker-component').length) {
+            if (!$block.find('div.wdt-color-picker').length) {
                 wdtInputToColorpicker($block.find('input.formatting-rule-set-value'));
             }
-        } else if ($block.find('div.colorpicker-component').length) {
+        } else if ($block.find('div.wdt-color-picker').length) {
             wdtColorPickerToInput($block.find('input.formatting-rule-set-value'));
         }
     }).change();
@@ -980,12 +1028,15 @@ WDTColumn.prototype.fillInputs = function () {
     wpdatatable_config.server_side == 1 ? jQuery('div.wdt-group-column-block').hide() : jQuery('div.wdt-group-column-block').show();
     jQuery('#wdt-group-column').prop('checked', this.groupColumn);
     jQuery('#wdt-column-color').val(this.color).keyup();
+    jQuery('#wdt-column-color').siblings('.wpcolorpicker-icon').find('i').css("background", this.color);
     jQuery('#wdt-column-visible').prop('checked', this.visible);
     jQuery('#wdt-column-width').val(this.width);
     jQuery('#wdt-link-target-attribute').prop('checked', this.linkTargetAttribute === '_self' ? 0 : 1);
+    jQuery('#wdt-link-nofollow-attribute').prop('checked', this.linkNoFollowAttribute).change();
     jQuery('#wdt-link-button-attribute').prop('checked', this.linkButtonAttribute).change();
     jQuery('#wdt-link-button-label').val(this.linkButtonLabel);
     jQuery('#wdt-link-button-class').val(this.linkButtonClass);
+    jQuery('#wdt-column-enable-global-search').prop('checked', this.globalSearchColumn);
 
     jQuery('#wdt-column-decimal-places').val('');
     if (this.type == 'formula') {
@@ -1014,20 +1065,26 @@ WDTColumn.prototype.fillInputs = function () {
         jQuery('#wdt-connected-table-value-column').html(this.foreignKeyRule.storeColumnName);
         jQuery('div.wdt-foreign-rule-display').show();
         jQuery('.wdt-possible-values-ajax-block').hide();
+        jQuery('#wdt-possible-values-foreign-keys').prop('checked', this.foreignKeyRule.allowAllPossibleValuesForeignKey);
+        if(wpdatatable_config.edit_only_own_rows == 1) {
+            jQuery('.wdt-possible-values-foreign-keys-block').show();
+        } else {
+            jQuery('.wdt-possible-values-foreign-keys-block').hide();
+        }
     }
     jQuery('#wdt-column-values-add-empty').prop('checked', this.possibleValuesAddEmpty);
 
     jQuery('#wdt-column-calc-total').prop('checked', this.calculateTotal);
-    jQuery('div.wdt-column-calc-total-block #wdt-column-calc-total-shortcode button')
+    jQuery('div.wdt-column-calc-total-block #wdt-column-calc-total-shortcode span')
         .html('[wpdatatable_sum table_id=' + wpdatatable_config.id + ' col_id=' + wpdatatable_config.currentOpenColumn.id + ']');
     jQuery('#wdt-column-calc-avg').prop('checked', this.calculateAvg);
-    jQuery('div.wdt-column-calc-avg-block #wdt-column-calc-avg-shortcode button')
+    jQuery('div.wdt-column-calc-avg-block #wdt-column-calc-avg-shortcode span')
         .html('[wpdatatable_avg table_id=' + wpdatatable_config.id + ' col_id=' + wpdatatable_config.currentOpenColumn.id + ']');
     jQuery('#wdt-column-calc-min').prop('checked', this.calculateMin);
-    jQuery('div.wdt-column-calc-min-block #wdt-column-calc-min-shortcode button')
+    jQuery('div.wdt-column-calc-min-block #wdt-column-calc-min-shortcode span')
         .html('[wpdatatable_min table_id=' + wpdatatable_config.id + ' col_id=' + wpdatatable_config.currentOpenColumn.id + ']');
     jQuery('#wdt-column-calc-max').prop('checked', this.calculateMax);
-    jQuery('div.wdt-column-calc-max-block #wdt-column-calc-max-shortcode button')
+    jQuery('div.wdt-column-calc-max-block #wdt-column-calc-max-shortcode span')
         .html('[wpdatatable_max table_id=' + wpdatatable_config.id + ' col_id=' + wpdatatable_config.currentOpenColumn.id + ']');
 
     if (jQuery.inArray(this.type, ['int', 'float', 'formula']) !== -1) {
@@ -1040,16 +1097,32 @@ WDTColumn.prototype.fillInputs = function () {
 
     jQuery('#wdt-column-allow-sorting').prop('checked', this.sorting).change();
     jQuery('#wdt-column-default-sort').prop('checked', this.defaultSortingColumn).change();
+
     if (this.defaultSortingColumn) {
         jQuery('#wdt-column-default-sorting-direction')
             .selectpicker('val', this.defaultSortingColumn);
     }
 
-    if (!this.parent_table.filtering || this.type == 'formula') {
+    let filteringOptionEnabled = this.parent_table.filtering;
+    let globalOptionEnabled = this.parent_table.global_search;
+    if (!(filteringOptionEnabled || globalOptionEnabled) || this.type == 'formula') {
         jQuery('li.column-filtering-settings-tab').hide();
     } else {
+        if(!globalOptionEnabled){
+            jQuery('.wdt-global-search-block').addClass('hidden');
+            jQuery('.wdt-column-enable-filter-block, .wdt-filtering-enabled-block').removeClass('hidden');
+        } else if(!filteringOptionEnabled) {
+            jQuery('.wdt-column-enable-filter-block, .wdt-filtering-enabled-block').addClass('hidden');
+            jQuery('.wdt-global-search-block').removeClass('hidden');
+        } else {
+            jQuery('.wdt-column-enable-filter-block, .wdt-filtering-enabled-block, .wdt-global-search-block ').removeClass('hidden');
+        }
+
+        jQuery('#wdt-column-enable-global-search').prop('checked', this.globalSearchColumn).change();
+
         jQuery('li.column-filtering-settings-tab').removeClass('active').show();
         jQuery('#wdt-column-exact-filtering').prop('checked', this.exactFiltering).change();
+        jQuery('#wdt-column-range-slider').prop('checked',this.rangeSlider).change();
         jQuery('#wdt-column-filter-label').val(this.filterLabel);
 
         if (this.filter_type != 'none') {
@@ -1106,9 +1179,23 @@ WDTColumn.prototype.fillInputs = function () {
                 if(typeof this.editingDefaultValue === 'object') {
                     jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue.value);
                 } else {
-                    this.editingDefaultValue = this.editor_type == 'multi-selectbox' && !$.isArray(this.editingDefaultValue) ? this.editingDefaultValue.split('|') : this.editingDefaultValue;
-                    jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue);
+                    if (this.editor_type == 'multi-selectbox'){
+                        this.editingDefaultValue =  this.editingDefaultValue.split('|') ;
+                        jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue);
+                    } else {
+                        jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val', this.editingDefaultValue);
+                    }
+
+                    if (this.editingDefaultValue instanceof Array) {
+                        this.editingDefaultValue = this.editingDefaultValue.join('|');
+                    }
                 }
+            } else if (jQuery.inArray(this.editor_type, ['link']) != -1) {
+                let urlValue = jQuery('#wdt-editing-default-value').val();
+                if (!(/^https?:\/\/.*\..*/.test(urlValue) || urlValue === '')) {
+                    this.editingDefaultValue = "http://" + urlValue;
+                } else this.editingDefaultValue = jQuery('#wdt-editing-default-value').val();
+                jQuery('#wdt-editing-default-value').val(this.editingDefaultValue);
             } else {
                 jQuery('#wdt-editing-default-value').val(this.editingDefaultValue);
             }
@@ -1124,6 +1211,10 @@ WDTColumn.prototype.fillInputs = function () {
         for (var i in this.conditional_formatting) {
             this.renderConditionalFormattingBlock(this.conditional_formatting[i]);
         }
+    }
+
+    if ( typeof callbackFillAdditinalOptionWithData !== 'undefined' ) {
+        callbackFillAdditinalOptionWithData(this);
     }
 
 };
@@ -1159,6 +1250,10 @@ WDTColumn.prototype.show = function () {
             }
         }
     });
+
+    if ( typeof callbackHideColumnOptions !== 'undefined' ) {
+        callbackHideColumnOptions(this);
+    }
 
     this.is_config_open = true;
 };
@@ -1218,6 +1313,7 @@ WDTColumn.prototype.applyChanges = function () {
     this.hide_on_tablets = jQuery('#wdt-hide-column-on-tablets').is(':checked') ? 1 : 0;
     this.css_class = jQuery('#wdt-column-css-class').val();
     this.linkTargetAttribute = jQuery('#wdt-link-target-attribute').is(':checked') ? '_blank' : '_self';
+    this.linkNoFollowAttribute = jQuery('#wdt-link-nofollow-attribute').is(':checked') ? 1 : 0;
     this.linkButtonAttribute = jQuery('#wdt-link-button-attribute').is(':checked') ? 1 : 0;
     this.linkButtonLabel = jQuery('#wdt-link-button-label').val();
     this.linkButtonClass = jQuery('#wdt-link-button-class').val();
@@ -1235,7 +1331,8 @@ WDTColumn.prototype.applyChanges = function () {
 
     this.color = jQuery('#wdt-column-color').val();
     this.visible = jQuery('#wdt-column-visible').is(':checked') ? 1 : 0;
-    this.width = jQuery('#wdt-column-width').val();
+    let tempColumnWidth = jQuery('#wdt-column-width').val();
+    this.width = tempColumnWidth.indexOf('px') != -1 ? tempColumnWidth.replace('px','') : tempColumnWidth
     this.decimalPlaces = ( ( this.type == 'float' || this.type == 'formula' ) && jQuery('#wdt-column-decimal-places').val() != '' ) ?
         jQuery('#wdt-column-decimal-places').val() : -1;
     if (jQuery.inArray(this.type, ['date', 'datetime']) !== -1) {
@@ -1244,6 +1341,9 @@ WDTColumn.prototype.applyChanges = function () {
     this.possibleValuesType = jQuery('#wdt-column-values').val();
     if (this.possibleValuesType == 'list') {
         this.valuesList = jQuery('#wdt-column-values-list').val().replace(/,/g, '|');
+    }
+    if (this.possibleValuesType == 'foreignkey') {
+        this.foreignKeyRule.allowAllPossibleValuesForeignKey = jQuery('#wdt-possible-values-foreign-keys').is(':checked') ? 1 : 0;
     }
     this.possibleValuesAddEmpty = jQuery('#wdt-column-values-add-empty').is(':checked') ? 1 : 0;
     this.possibleValuesAjax = jQuery('#wdt-possible-values-ajax').val();
@@ -1271,6 +1371,7 @@ WDTColumn.prototype.applyChanges = function () {
         'none';
     this.exactFiltering = jQuery('#wdt-column-exact-filtering').is(':checked') ? 1 : 0;
     this.filterLabel = jQuery('#wdt-column-filter-label').val();
+    this.globalSearchColumn = jQuery('#wdt-column-enable-global-search').is(':checked') ? 1 : 0;
 
     if (jQuery.inArray(this.filter_type, ['text', 'number']) != -1) {
         this.filterDefaultValue = jQuery('#wdt-filter-default-value').val();
@@ -1288,11 +1389,22 @@ WDTColumn.prototype.applyChanges = function () {
 
     this.editor_type = this.type === 'formula' ? 'none' : jQuery('#wdt-column-editor-input-type').val();
     this.editingNonEmpty = jQuery('#wdt-column-not-null').is(':checked') ? 1 : 0;
+    this.rangeSlider = jQuery('#wdt-column-range-slider').is(':checked') ? 1 : 0;
+
+    if ( typeof callbackApplyUIChangesForNewColumnOption !== 'undefined' ) {
+        callbackApplyUIChangesForNewColumnOption(this);
+    }
 
     if (jQuery.inArray(this.editor_type, ['selectbox', 'multi-selectbox']) != -1) {
         this.editingDefaultValue = jQuery.isArray(jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val')) ?
             jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val').join('|') :
             jQuery('#wdt-editing-default-value-selectpicker').selectpicker('val');
+    } else if(jQuery.inArray(this.editor_type, ['link']) != -1) {
+        let urlValue = jQuery('#wdt-editing-default-value').val();
+        if (!(/^https?:\/\/.*\..*/.test(urlValue) || urlValue === '')) {
+            this.editingDefaultValue = "http://" + urlValue;
+        } else this.editingDefaultValue = jQuery('#wdt-editing-default-value').val();
+        jQuery('#wdt-editing-default-value').val(this.editingDefaultValue);
     } else {
         this.editingDefaultValue = jQuery('#wdt-editing-default-value').val();
     }
@@ -1303,10 +1415,11 @@ WDTColumn.prototype.applyChanges = function () {
 
 /**
  * Return all settings in an object format
- * @return {} column config
+ * @return allColumnSettings
  */
 WDTColumn.prototype.getJSON = function () {
-    return {
+
+    var allColumnSettings = {
         calculateAvg: this.calculateAvg,
         calculateMax: this.calculateMax,
         calculateMin: this.calculateMin,
@@ -1326,6 +1439,7 @@ WDTColumn.prototype.getJSON = function () {
         filter_type: this.filter_type,
         filterDefaultValue: this.filterDefaultValue,
         filtering: this.filtering,
+        globalSearchColumn: this.globalSearchColumn,
         filterLabel: this.filterLabel,
         foreignKeyRule: this.foreignKeyRule,
         formula: this.formula,
@@ -1335,6 +1449,7 @@ WDTColumn.prototype.getJSON = function () {
         id: this.id,
         id_column: this.id_column,
         linkTargetAttribute: this.linkTargetAttribute,
+        linkNoFollowAttribute: this.linkNoFollowAttribute,
         linkButtonAttribute: this.linkButtonAttribute,
         linkButtonLabel: this.linkButtonLabel,
         linkButtonClass: this.linkButtonClass,
@@ -1343,6 +1458,7 @@ WDTColumn.prototype.getJSON = function () {
         possibleValuesAddEmpty: this.possibleValuesAddEmpty,
         possibleValuesType: this.possibleValuesType,
         possibleValuesAjax: this.type === 'string' ? this.possibleValuesAjax : -1,
+        rangeSlider: this.rangeSlider,
         skip_thousands_separator: this.skip_thousands_separator,
         sorting: this.sorting,
         text_after: this.text_after,
@@ -1351,7 +1467,14 @@ WDTColumn.prototype.getJSON = function () {
         valuesList: this.valuesList,
         visible: this.visible,
         width: this.width
+    };
+
+    if ( typeof callbackExtendOptionInObjectFormat !== 'undefined' ) {
+        callbackExtendOptionInObjectFormat(allColumnSettings, this);
     }
+
+    return allColumnSettings;
+
 };
 
 /**
@@ -1376,21 +1499,15 @@ WDTColumn.prototype.renderSmallColumnBlock = function (columnIndex) {
             column.visible = 1;
             jQuery(this)
                 .removeClass('inactive')
-                .removeClass('zmdi-eye-off')
-                .addClass('zmdi-eye');
         } else {
             column.visible = 0;
             jQuery(this)
                 .addClass('inactive')
-                .addClass('zmdi-eye-off')
-                .removeClass('zmdi-eye');
         }
     });
     if (!column.visible) {
         $columnBlock.find('i.toggle-visibility')
             .addClass('inactive')
-            .addClass('zmdi-eye-off')
-            .removeClass('zmdi-eye');
     }
 
     $columnBlock.find('i.wdt-toggle-show-on-mobile').click(function (e) {
@@ -1399,22 +1516,16 @@ WDTColumn.prototype.renderSmallColumnBlock = function (columnIndex) {
             column.hide_on_mobiles = 0;
             jQuery(this)
                 .removeClass('inactive')
-                .removeClass('zmdi-smartphone-lock')
-                .addClass('zmdi-smartphone');
         } else {
             column.hide_on_mobiles = 1;
             jQuery(this)
                 .addClass('inactive')
-                .addClass('zmdi-smartphone-lock')
-                .removeClass('zmdi-smartphone');
         }
     });
 
     if (column.hide_on_mobiles) {
         $columnBlock.find('i.wdt-toggle-show-on-mobile')
             .addClass('inactive')
-            .addClass('zmdi-smartphone-lock')
-            .removeClass('zmdi-smartphone');
     }
 
     $columnBlock.find('i.wdt-toggle-show-on-tablet').click(function (e) {
@@ -1423,24 +1534,119 @@ WDTColumn.prototype.renderSmallColumnBlock = function (columnIndex) {
             column.hide_on_tablets = 0;
             jQuery(this)
                 .removeClass('inactive')
-                .removeClass('zmdi-smartphone-landscape-lock')
-                .addClass('zmdi-smartphone-landscape');
         } else {
             column.hide_on_tablets = 1;
             jQuery(this)
                 .addClass('inactive')
-                .addClass('zmdi-smartphone-landscape-lock')
-                .removeClass('zmdi-smartphone-landscape');
         }
     });
 
     if (column.hide_on_tablets) {
         $columnBlock.find('i.wdt-toggle-show-on-tablet')
             .addClass('inactive')
-            .addClass('zmdi-smartphone-landscape-lock')
-            .removeClass('zmdi-smartphone-landscape');
     }
 
+    /**
+     *    Show/hide filters in List of the columns in the data source with quickaccess tools.
+     */
+
+    $columnBlock.find('i.wdt-toggle-show-filters').click(function (e) {
+        e.preventDefault();
+        if (column.filter_type == 'none') {
+            column.filter_type = 'text';
+            jQuery(this)
+                .removeClass('inactive');
+            if(!column.globalSearchColumn) {
+                column.globalSearchColumn = 1;
+                $columnBlock.find('i.wdt-toggle-global-search').removeClass('inactive');
+            }
+        } else {
+            column.filter_type = 'none';
+            jQuery(this)
+                .addClass('inactive')
+        }
+    });
+
+    if (column.filter_type == 'none') {
+        $columnBlock.find('i.wdt-toggle-show-filters')
+            .addClass('inactive')
+    }
+
+    /**
+     *   Show/hide sorting in List of the columns in the data source with quickaccess tools.
+     */
+
+    $columnBlock.find('i.wdt-toggle-show-sorting').click(function (e) {
+        e.preventDefault();
+        if (!column.sorting) {
+            column.sorting = 1;
+            jQuery(this)
+                .removeClass('inactive')
+        } else {
+            column.sorting = 0;
+            jQuery(this)
+                .addClass('inactive')
+
+        }
+    });
+
+    if (!column.sorting) {
+        $columnBlock.find('i.wdt-toggle-show-sorting')
+            .addClass('inactive')
+    }
+
+    /**
+     *  Enable/disable editing in List of the columns in the data source with quickaccess tools.
+     */
+
+    $columnBlock.find('i.wdt-toggle-enable-editing').click(function (e) {
+        e.preventDefault();
+        if (column.editor_type == 'none') {
+            column.editor_type = 'text';
+            jQuery(this)
+                .removeClass('inactive')
+        } else {
+            column.editor_type = 'none';
+            jQuery(this)
+                .addClass('inactive')
+        }
+    });
+
+    if (column.editor_type == 'none') {
+        $columnBlock.find('i.wdt-toggle-enable-editing')
+            .addClass('inactive')
+    }
+
+    if ( typeof callbackExtendSmallBlock !== 'undefined' ) {
+        callbackExtendSmallBlock($columnBlock, column);
+    }
+
+    /**
+     * Enable/disable global search for a column
+     */
+    $columnBlock.find('i.wdt-toggle-global-search').click(function (e) {
+        e.preventDefault();
+        if(column.globalSearchColumn) {
+            column.globalSearchColumn = 0;
+            jQuery(this)
+                .addClass('inactive');
+            $columnBlock.find('i.wdt-toggle-show-filters')
+                .addClass('inactive');
+            column.filter_type = "none";
+        } else {
+            column.globalSearchColumn = 1;
+            jQuery(this)
+                .removeClass('inactive');
+            $columnBlock.find('i.wdt-toggle-show-filters')
+                .removeClass('inactive');
+            column.filter_type = "text";
+        }
+    });
+
+    if(!column.globalSearchColumn) {
+        $columnBlock.find('i.wdt-toggle-global-search')
+            .addClass('inactive');
+    }
 
     /**
      * Open column settings on wrench click
@@ -1457,6 +1663,10 @@ WDTColumn.prototype.renderSmallColumnBlock = function (columnIndex) {
         $columnBlock.find('div.fg-line input').replaceWith('<span>' + this.display_header + '</span>');
         $columnBlock.attr('data-orig_header', this.orig_header);
         $columnBlock.find('i.column-control').remove();
+    }
+
+    if (this.type == 'formula') {
+        $columnBlock.find('.formula-remove-option').remove();
     }
 
 };

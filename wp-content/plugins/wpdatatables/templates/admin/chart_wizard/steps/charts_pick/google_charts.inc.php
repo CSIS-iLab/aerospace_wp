@@ -80,6 +80,18 @@
 <div class="row">
 
     <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+        <div class="card" data-type="google_stacked_bar_chart" data-min_columns="2" data-max_columns="0">
+            <div class="card-header">
+                <div class="wdt-chart-wizard-overlay"></div>
+                <img class="img-responsive" src="<?php echo WDT_ASSETS_PATH ?>img/chart-thumbs/google_stacked_bar_chart.jpg">
+            </div>
+            <div class="card-body">
+                <h4 class="f-14"><?php _e('Stacked bar chart', 'wpdatatables'); ?></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
         <div class="card" data-type="google_pie_chart" data-min_columns="2" data-max_columns="2">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -139,5 +151,36 @@
             </div>
         </div>
     </div>
+
+</div>
+
+<div class="row">
+
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+        <div class="card" data-type="google_candlestick_chart" data-min_columns="5" data-max_columns="5">
+            <div class="card-header">
+                <div class="wdt-chart-wizard-overlay"></div>
+                <img class="img-responsive"
+                     src="<?php echo WDT_ASSETS_PATH ?>img/chart-thumbs/google_candlestick_chart.jpg">
+            </div>
+            <div class="card-body">
+                <h4 class="f-14"><?php _e('Candlestick chart', 'wpdatatables'); ?></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+        <div class="card" data-type="google_waterfall_chart" data-min_columns="5" data-max_columns="5">
+            <div class="card-header">
+                <div class="wdt-chart-wizard-overlay"></div>
+                <img class="img-responsive"
+                     src="<?php echo WDT_ASSETS_PATH ?>img/chart-thumbs/google_waterfall_chart.jpg">
+            </div>
+            <div class="card-body">
+                <h4 class="f-14"><?php _e('Waterfall chart', 'wpdatatables'); ?></h4>
+            </div>
+        </div>
+    </div>
+
 
 </div>

@@ -70,7 +70,7 @@
                             break;
                         case 'text':
                         case 'number':
-                            wdtCreateInput(oTable, aoColumn, columnIndex, sColumnLabel, th,  serverSide);
+                            wdtCreateInput(oTable, aoColumn, columnIndex, sColumnLabel, th, serverSide);
                             break;
                         case 'number-range':
                             wdtCreateNumberRangeInput(oTable, aoColumn, columnIndex, sColumnLabel, th, customSearchIndexes, serverSide);
@@ -106,7 +106,15 @@
                     var id = oTable.attr("id");
                     if ((typeof $("#" + id + "_range_from_" + customSearchIndexes[j]).val() === 'undefined')
                         || (typeof $("#" + id + "_range_to_" + customSearchIndexes[j]).val() === 'undefined')) {
-                        return properties.sRangeSeparator;
+                        if (jQuery('#' + id).closest('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').hasClass('wdt-filter-number-range-slider')) {
+                            return jQuery('#' + id).closest('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').find('#wdt-number-range-slider')[0].noUiSlider.get()[0] + properties.sRangeSeparator + jQuery('#' + id).closest('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').find('#wdt-number-range-slider')[0].noUiSlider.get()[1];
+                        }
+                        if(jQuery('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').hasClass('wdt-filter-number-range-slider')){
+                            return jQuery('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').find('#wdt-number-range-slider')[0].noUiSlider.get()[0] + properties.sRangeSeparator + jQuery('.wpdt-c').find('.filter_column[data-index=' + customSearchIndexes[j] + ']').find('#wdt-number-range-slider')[0].noUiSlider.get()[1];
+                        }
+                        else {
+                            return properties.sRangeSeparator;
+                        }
                     }
                     return $("#" + id + "_range_from_" + customSearchIndexes[j]).val() + properties.sRangeSeparator + $("#" + id + "_range_to_" + customSearchIndexes[j]).val();
                 };
@@ -173,9 +181,10 @@ function wdtCreateInput(oTable, aoColumn, columnIndex, sColumnLabel, th, serverS
     else
         th.wrapInner('<span class="filter_column wdt-filter-text" data-filter_type="text" data-index="' + columnIndex + '"/>');
 
-    input.keyup(function (e) {
+    input.on('keyup input',_.debounce(function (e) {
         inputSearch(this.value, e.keyCode);
-    });
+    }, 500)
+    )
 
     function inputSearch(value, keyCode) {
         if (typeof keyCode !== 'undefined' && jQuery.inArray(keyCode, [16, 37, 38, 39, 40]) !== -1) {
@@ -239,8 +248,8 @@ function wdtCreateInput(oTable, aoColumn, columnIndex, sColumnLabel, th, serverS
 function wdtCreateNumberRangeInput(oTable, aoColumn, columnIndex, sColumnLabel, th, customSearchIndexes, serverSide) {
     var tableId = oTable.attr('id');
     var fromDefaultValue = '', toDefaultValue = '', defaultValue = aoColumn.defaultValue;
-    var tableDescription = jQuery.parseJSON(jQuery('#' + oTable.data('described-by')).val());
-    var numberFormat = (typeof tableDescription.numberFormat !== 'undefined') ? parseInt(tableDescription.numberFormat) : 1;
+    var tableDescription = JSON.parse(jQuery('#' + oTable.data('described-by')).val());
+    var numberFormat = (typeof tableDescription.number_format !== 'undefined') ? parseInt(tableDescription.number_format) : 1;
     var replaceFormat = numberFormat === 1 ? /\./g : /,/g;
 
     if (defaultValue !== '') {
@@ -250,88 +259,259 @@ function wdtCreateNumberRangeInput(oTable, aoColumn, columnIndex, sColumnLabel, 
 
     th.html('');
 
-    var sFromId = oTable.attr("id") + '_range_from_' + columnIndex;
-    var from = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sFromId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.from + '" />');
-    th.append(from);
+    if (aoColumn.rangeSlider) {
+        if( (tableDescription.tableType === 'gravity' && serverSide) || tableDescription.cascadeFiltering === 1 ) {
+            var sFromId = oTable.attr("id") + '_range_from_' + columnIndex;
+            var from = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sFromId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.from + '" />');
+            th.append(from);
 
-    var sToId = oTable.attr("id") + '_range_to_' + columnIndex;
-    var to = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sToId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.to + '" />');
-    th.append(to);
+            var sToId = oTable.attr("id") + '_range_to_' + columnIndex;
+            var to = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sToId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.to + '" />');
+            th.append(to);
 
-    th.wrapInner('<span class="filter_column wdt-filter-number-range" data-filter_type="number range" data-index="' + columnIndex + '"/>');
-    customSearchIndexes.push(columnIndex);
+            th.wrapInner('<span class="filter_column wdt-filter-number-range" data-filter_type="number range" data-index="' + columnIndex + '"/>');
+            customSearchIndexes.push(columnIndex);
 
-    oTable.dataTableExt.afnFiltering.push(
-        function (oSettings, aData, iDataIndex) {
-            if (oTable.attr("id") !== oSettings.sTableId)
-                return true;
+            oTable.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+                    if (oTable.attr("id") !== oSettings.sTableId)
+                        return true;
 
-            // Try to handle missing nodes more gracefully
-            if (document.getElementById(sFromId) == null)
-                return true;
+                    // Try to handle missing nodes more gracefully
+                    if (document.getElementById(sFromId) == null)
+                        return true;
 
-            var iMin = document.getElementById(sFromId).value.replace(replaceFormat, '');
-            var iMax = document.getElementById(sToId).value.replace(replaceFormat, '');
-            var iValue = aData[columnIndex] == "-" ? '0' : aData[columnIndex].replace(replaceFormat, '');
+                    var iMin = document.getElementById(sFromId).value.replace(replaceFormat, '');
+                    var iMax = document.getElementById(sToId).value.replace(replaceFormat, '');
+                    var iValue = aData[columnIndex] == "-" ? '0' : aData[columnIndex].replace(replaceFormat, '');
 
-            if (numberFormat === 1) {
-                iMin = iMin.replace(/,/g, '.');
-                iMax = iMax.replace(/,/g, '.');
-                iValue = iValue.replace(/,/g, '.');
-            }
+                    if (numberFormat === 1) {
+                        iMin = iMin.replace(/,/g, '.');
+                        iMax = iMax.replace(/,/g, '.');
+                        iValue = iValue.replace(/,/g, '.');
+                    }
 
-            if (iMin !== '') {
-                iMin = iMin * 1;
-            }
+                    if (iMin !== '') {
+                        iMin = iMin * 1;
+                    }
 
-            if (iMax !== '') {
-                iMax = iMax * 1;
-            }
+                    if (iMax !== '') {
+                        iMax = iMax * 1;
+                    }
 
-            iValue = iValue * 1;
+                    iValue = iValue * 1;
 
-            return (iMin === "" && iMax === "") ||
-                (iMin === "" && iValue <= iMax) ||
-                (iMin <= iValue && "" === iMax) ||
-                (iMin <= iValue && iValue <= iMax);
+                    return (iMin === "" && iMax === "") ||
+                        (iMin === "" && iValue <= iMax) ||
+                        (iMin <= iValue && "" === iMax) ||
+                        (iMin <= iValue && iValue <= iMax);
 
 
-        }
-    );
+                }
+            );
 
-    jQuery('#' + sFromId + ', #' + sToId, th).keyup(function () {
-        numberRangeSearch();
-    });
-
-    if (fromDefaultValue) {
-        jQuery(from).val(fromDefaultValue);
-        if (!serverSide) {
-            jQuery(document).ready(function () {
-                jQuery(from).keyup();
+            jQuery('#' + sFromId + ', #' + sToId, th).keyup(function () {
+                numberRangeSearch();
             });
-        }
-    }
 
-    if (toDefaultValue) {
-        jQuery(to).val(toDefaultValue);
-        if (!serverSide) {
-            jQuery(document).ready(function () {
-                jQuery(to).keyup();
+            if (fromDefaultValue) {
+                jQuery(from).val(fromDefaultValue);
+                if (!serverSide) {
+                    jQuery(document).ready(function () {
+                        jQuery(from).keyup();
+                    });
+                }
+            }
+
+            if (toDefaultValue) {
+                jQuery(to).val(toDefaultValue);
+                if (!serverSide) {
+                    jQuery(document).ready(function () {
+                        jQuery(to).keyup();
+                    });
+                }
+            }
+
+            function numberRangeSearch() {
+                var iMin = document.getElementById(sFromId).value * 1;
+                var iMax = document.getElementById(sToId).value * 1;
+                if (iMin != 0 && iMax != 0 && iMin > iMax)
+                    return;
+
+                if (typeof wpDataTables[tableId].drawTable === 'undefined' || wpDataTables[tableId].drawTable === true) {
+                    oTable.api().draw();
+                }
+
+                fnOnFiltered();
+            }
+
+        } else {
+            th.append('<div id="wdt-number-range-slider"></div>');
+            th.wrapInner('<span class="filter_column wdt-filter-number-range wdt-filter-number-range-slider" data-filter_type="number range" data-index="' + columnIndex + '"/>');
+
+            var slider = th.find('#wdt-number-range-slider')[0];
+            customSearchIndexes.push(columnIndex);
+
+            var numberArray = oTable.api().column(columnIndex).data();
+            var formattedNumber = numberArray.map(function (numberArray) {
+                if (numberFormat === 1) {
+                    return parseFloat(numberArray.replace(/\./g, '').replace(',', '.'));
+                }
+                return parseFloat(numberArray.replace(/,/g, ''))
+            })
+            var minValue = serverSide === false ? Math.min.apply(Math, formattedNumber) : aoColumn.minValue
+            var maxValue = serverSide === false ? Math.max.apply(Math, formattedNumber) : aoColumn.maxValue
+
+            noUiSlider.create(slider, {
+                start: [fromDefaultValue ? fromDefaultValue : minValue, toDefaultValue ? toDefaultValue : maxValue],
+                tooltips: true,
+                connect: true,
+                behaviour: 'drag',
+                range: {
+                    'min': minValue,
+                    'max': maxValue
+                },
+                format: wNumb({
+                    decimals: aoColumn.columnType === 'int' ? 0 : aoColumn.numberOfDecimalPlaces,
+                    thousand: numberFormat === 1 ? aoColumn.columnType === 'float' ? aoColumn.thousandsSeparator : '.' : ',',
+                    mark: numberFormat === 1 ? ',' : '.'
+                })
             });
+
+            slider.noUiSlider.on('end', function () {
+                    slider.value = slider.noUiSlider.get();
+                    numberRangeSliderSearch();
+                }
+            );
+
+            slider.noUiSlider.on('set', function () {
+                    slider.value = slider.noUiSlider.get();
+                    numberRangeSliderSearch();
+                }
+            );
+
+            function numberRangeSliderSearch() {
+                if (typeof wpDataTables[tableId].drawTable === 'undefined' || wpDataTables[tableId].drawTable === true) {
+                    oTable.api().draw();
+                }
+
+                oTable.dataTableExt.afnFiltering.push(
+                    function (oSettings, aData, iDataIndex) {
+                        if (oTable.attr("id") !== oSettings.sTableId)
+                            return true;
+
+                        var iMin = numberFormat === 1 ? parseFloat(slider.value[0].replace(/\./g, '').replace(',', '.')) : parseFloat(slider.value[0].replace(/,/g, ''))
+                        var iMax = numberFormat === 1 ? parseFloat(slider.value[1].replace(/\./g, '').replace(',', '.')) : parseFloat(slider.value[1].replace(/,/g, ''))
+                        var iValue = aData[columnIndex] == "-" ? '0' : aData[columnIndex];
+
+                        iValue = numberFormat === 1 ? parseFloat(iValue.replace(/\./g, '').replace(',', '.')) : parseFloat(aData[columnIndex].replace(/,/g, ''));
+
+                        return iMin <= iValue && iValue <= iMax;
+                    }
+                );
+
+                fnOnFiltered();
+            }
+
+            if (fromDefaultValue) {
+                if (!serverSide) {
+                    slider.value = slider.noUiSlider.get();
+                    numberRangeSliderSearch();
+                }
+            }
+
+            if (toDefaultValue) {
+                if (!serverSide) {
+                    slider.value = slider.noUiSlider.get();
+                    numberRangeSliderSearch();
+                }
+            }
+
         }
-    }
+    } else {
+        var sFromId = oTable.attr("id") + '_range_from_' + columnIndex;
+        var from = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sFromId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.from + '" />');
+        th.append(from);
 
-    function numberRangeSearch() {
-        var iMin = document.getElementById(sFromId).value * 1;
-        var iMax = document.getElementById(sToId).value * 1;
-        if (iMin != 0 && iMax != 0 && iMin > iMax)
-            return;
+        var sToId = oTable.attr("id") + '_range_to_' + columnIndex;
+        var to = jQuery('<input type="number" class="form-control wdt-filter-control number-range-filter" id="' + sToId + '" rel="' + columnIndex + '" placeholder="' + wpdatatables_frontend_strings.to + '" />');
+        th.append(to);
 
-        if (typeof wpDataTables[tableId].drawTable === 'undefined' || wpDataTables[tableId].drawTable === true) {
-            oTable.api().draw();
+        th.wrapInner('<span class="filter_column wdt-filter-number-range" data-filter_type="number range" data-index="' + columnIndex + '"/>');
+        customSearchIndexes.push(columnIndex);
+
+        oTable.dataTableExt.afnFiltering.push(
+            function (oSettings, aData, iDataIndex) {
+                if (oTable.attr("id") !== oSettings.sTableId)
+                    return true;
+
+                // Try to handle missing nodes more gracefully
+                if (document.getElementById(sFromId) == null)
+                    return true;
+
+                var iMin = document.getElementById(sFromId).value.replace(replaceFormat, '');
+                var iMax = document.getElementById(sToId).value.replace(replaceFormat, '');
+                var iValue = aData[columnIndex] == "-" ? '0' : aData[columnIndex].replace(replaceFormat, '');
+
+                if (numberFormat === 1) {
+                    iMin = iMin.replace(/,/g, '.');
+                    iMax = iMax.replace(/,/g, '.');
+                    iValue = iValue.replace(/,/g, '.');
+                }
+
+                if (iMin !== '') {
+                    iMin = iMin * 1;
+                }
+
+                if (iMax !== '') {
+                    iMax = iMax * 1;
+                }
+
+                iValue = iValue * 1;
+
+                return (iMin === "" && iMax === "") ||
+                    (iMin === "" && iValue <= iMax) ||
+                    (iMin <= iValue && "" === iMax) ||
+                    (iMin <= iValue && iValue <= iMax);
+
+
+            }
+        );
+
+        jQuery('#' + sFromId + ', #' + sToId, th).keyup(function () {
+            numberRangeSearch();
+        });
+
+        if (fromDefaultValue) {
+            jQuery(from).val(fromDefaultValue);
+            if (!serverSide) {
+                jQuery(document).ready(function () {
+                    jQuery(from).keyup();
+                });
+            }
         }
 
-        fnOnFiltered();
+        if (toDefaultValue) {
+            jQuery(to).val(toDefaultValue);
+            if (!serverSide) {
+                jQuery(document).ready(function () {
+                    jQuery(to).keyup();
+                });
+            }
+        }
+
+        function numberRangeSearch() {
+            var iMin = document.getElementById(sFromId).value * 1;
+            var iMax = document.getElementById(sToId).value * 1;
+            if (iMin != 0 && iMax != 0 && iMin > iMax)
+                return;
+
+            if (typeof wpDataTables[tableId].drawTable === 'undefined' || wpDataTables[tableId].drawTable === true) {
+                oTable.api().draw();
+            }
+
+            fnOnFiltered();
+        }
     }
 
 }
@@ -497,7 +677,7 @@ function wdtCreateDateTimeRangeInput(oTable, aoColumn, columnIndex, sColumnLabel
 
     jQuery('#' + sFromId + ', #' + sToId, th).on('blur', function (e) {
 
-        if (((typeof wpDataTables[tableId].drawTable === 'undefined') || wpDataTables[tableId].drawTable === true) && e.oldDate !== null ) {
+        if (((typeof wpDataTables[tableId].drawTable === 'undefined') || wpDataTables[tableId].drawTable === true) && e.oldDate !== null) {
             oTable.api().draw();
         }
 
@@ -590,7 +770,7 @@ function wdtCreateTimeRangeInput(oTable, aoColumn, columnIndex, sColumnLabel, th
 
     jQuery('#' + sFromId + ', #' + sToId, th).on('blur', function (e) {
 
-        if (((typeof wpDataTables[tableId].drawTable === 'undefined') || wpDataTables[tableId].drawTable === true) && e.oldDate !== null ) {
+        if (((typeof wpDataTables[tableId].drawTable === 'undefined') || wpDataTables[tableId].drawTable === true) && e.oldDate !== null) {
             oTable.api().draw();
         }
 
@@ -667,7 +847,7 @@ function wdtCreateSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th, ser
         select += '<option value="">' + ' ' + '</option>';
 
         // Length of the possible values
-        var iLen = aoColumn.values ? aoColumn.values.length: 0;
+        var iLen = aoColumn.values ? aoColumn.values.length : 0;
 
         // Create option for each value from possible values
         for (var j = 0; j < iLen; j++) {
@@ -676,6 +856,7 @@ function wdtCreateSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th, ser
             // Add selected attribute if option is predefined value
             if (aoColumn.defaultValue !== '') {
                 if (typeof aoColumn.defaultValue === 'object') {
+
                     if (aoColumn.values[j].value == aoColumn.defaultValue.value) {
                         selected = 'selected="selected" ';
                     }
@@ -735,7 +916,14 @@ function wdtCreateSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th, ser
                 emptyRequest: true,
                 preserveSelectedPosition: 'before',
                 locale: {
-                    statusSearching: wpdatatables_frontend_strings.sLoadingRecords
+                    emptyTitle: wpdatatables_frontend_strings.nothingSelected,
+                    statusSearching: wpdatatables_frontend_strings.sLoadingRecords,
+                    currentlySelected: wpdatatables_frontend_strings.currentlySelected,
+                    errorText: wpdatatables_frontend_strings.errorText,
+                    searchPlaceholder: wpdatatables_frontend_strings.search,
+                    statusInitialized: wpdatatables_frontend_strings.statusInitialized,
+                    statusNoResults: wpdatatables_frontend_strings.statusNoResults,
+                    statusTooShort: wpdatatables_frontend_strings.statusTooShort
                 }
             });
 
@@ -747,7 +935,7 @@ function wdtCreateSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th, ser
     } else {
         select.selectpicker('refresh');
         // Hide search in selectbox if possibleValuesAjax is All
-        jQuery('.bs-searchbox').hide();
+        jQuery(th).find('.bs-searchbox').hide();
 
         // Filter the table if default value is set
         if (aoColumn.defaultValue && !serverSide) {
@@ -815,7 +1003,7 @@ function wdtCreateMultiSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th
                     search += buildSearchStringForMultiFilters(aoColumn.defaultValue[i].value, aoColumn.exactFiltering);
                     oTable.api().column(columnIndex).search(search.substring(0, search.length - 1));
                 } else {
-                    select += '<option selected value="' + aoColumn.defaultValue[i] + '">' + aoColumn.defaultValue[i] + '</option>'
+                    select += '<option selected value="' + aoColumn.defaultValue[i] + '">' + aoColumn.defaultValue[i] + '</option>';
                     search += buildSearchStringForMultiFilters(aoColumn.defaultValue[i], aoColumn.exactFiltering);
                     oTable.api().column(columnIndex).search(search.substring(0, search.length - 1));
                 }
@@ -823,14 +1011,14 @@ function wdtCreateMultiSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th
         }
     } else {
         // Length of the possible values
-        var iLen = aoColumn.values ? aoColumn.values.length: 0;
+        var iLen = aoColumn.values ? aoColumn.values.length : 0;
 
         var search = '';
 
         // Create option for each value from possible values
         for (var j = 0; j < iLen; j++) {
             if (typeof aoColumn.defaultValue[0] === 'object') {
-                $.each(aoColumn.defaultValue, function (index, value) {
+                jQuery.each(aoColumn.defaultValue, function (index, value) {
                     selected = aoColumn.values[j].value.toString() == value.value ? 'selected="selected" ' : '';
                     if (selected !== '')
                         return false;
@@ -883,7 +1071,14 @@ function wdtCreateMultiSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th
             emptyRequest: true,
             preserveSelectedPosition: 'before',
             locale: {
-                statusSearching: wpdatatables_frontend_strings.sLoadingRecords
+                emptyTitle: wpdatatables_frontend_strings.nothingSelected,
+                statusSearching: wpdatatables_frontend_strings.sLoadingRecords,
+                currentlySelected: wpdatatables_frontend_strings.currentlySelected,
+                errorText: wpdatatables_frontend_strings.errorText,
+                searchPlaceholder: wpdatatables_frontend_strings.search,
+                statusInitialized: wpdatatables_frontend_strings.statusInitialized,
+                statusNoResults: wpdatatables_frontend_strings.statusNoResults,
+                statusTooShort: wpdatatables_frontend_strings.statusTooShort
             }
         });
 
@@ -896,15 +1091,13 @@ function wdtCreateMultiSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th
     } else {
         select.selectpicker('refresh');
         // Hide search in multi-selectbox if possibleValuesAjax is All
-        jQuery('.bs-searchbox').hide();
+        jQuery(th).find('.bs-searchbox').hide();
 
         // Filter the table if default value is set
         if (aoColumn.defaultValue[0] && !serverSide) {
             var search = '';
             for (var i = 0; i < aoColumn.defaultValue.length; i++) {
-
                 search += buildSearchStringForMultiFilters(aoColumn.defaultValue[i], aoColumn.exactFiltering);
-
             }
             oTable.fnFilter(search.substring(0, search.length - 1), columnIndex, true, false);
             fnOnFiltered();
@@ -914,7 +1107,7 @@ function wdtCreateMultiSelectbox(oTable, aoColumn, columnIndex, sColumnLabel, th
     function multiSelectboxSearch() {
         // Not possible because when you uncheck all predefined values it will not reload the table
         // if (jQuery(this).val() !== null) {
-        var tableDescription = jQuery.parseJSON(jQuery('#' + oTable.data('described-by')).val());
+        var tableDescription = JSON.parse(jQuery('#' + oTable.data('described-by')).val());
         var columnType = tableDescription.dataTableParams.columnDefs[columnIndex].wdtType;
         var search = '', selectedOptions;
         selectedOptions = jQuery(this).selectpicker('val');
@@ -957,7 +1150,7 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
     if (aoColumn.values === null)
         aoColumn.values = getColumnDistinctValues(tableId, columnIndex, false);
 
-    var r = '', j, iLen = aoColumn.values ? aoColumn.values.length: 0, dialogRender = true;
+    var r = '', j, iLen = aoColumn.values ? aoColumn.values.length : 0, dialogRender = true;
 
     if (typeof aoColumn.sSelector !== 'undefined') {
         dialogRender = aoColumn.checkboxesInModal;
@@ -981,7 +1174,7 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
             var label = typeof aoColumn.values[j] !== 'object' ? aoColumn.values[j] : aoColumn.values[j].label;
             if (jQuery.isArray(aoColumn.defaultValue)) {
                 jQuery.each(aoColumn.defaultValue, function (index, value) {
-                    if (aoColumn.possibleValuesType === "foreignkey"){
+                    if (aoColumn.possibleValuesType === "foreignkey") {
                         checked = aoColumn.values[j].value.toString() == value.value ? 'checked="checked" ' : '';
                     } else {
                         checked = aoColumn.values[j].value.toString() == value ? 'checked="checked" ' : '';
@@ -997,7 +1190,7 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
             r += '<div class="wdt_checkbox_option checkbox">' +
                 '<label>' +
                 '<input type="checkbox" class="wdt-checkbox-filter wdt-filter-control" value="' + encodeURI(value) + '" ' + checked + '>' +
-                '<i class="input-helper"></i>' + label +
+                 '<span class="wdt-checkbox-label">' + label + '</span>' +
                 '</label>' +
                 '</div>';
         }
@@ -1026,10 +1219,12 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
     if (dialogRender) {
         var dlg = jQuery('#' + checkboxesDivId).wrap('<div class="wdt-checkbox-modal-wrap ' + checkboxesDivId + '" />').hide();
         var $modal = jQuery('#wdt-frontend-modal');
+        var tableDesc =  JSON.parse(jQuery('#' + oTable.data('described-by')).val());
 
         $modal.on('click', 'button.close', function (e) {
             $modal.fadeOut(300, function () {
                 jQuery(this).find('#' + checkboxesDivId).remove();
+                $modal.removeClass('wdt-skin-' + tableDesc.tableSkin);
             });
         });
 
@@ -1037,17 +1232,19 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
             if (e.keyCode === 27) {
                 $modal.fadeOut(300, function () {
                     jQuery(this).find('#' + checkboxesDivId).remove();
+                    $modal.removeClass('wdt-skin-' + tableDesc.tableSkin);
                 });
             }
         });
 
         jQuery('#' + buttonId).on('click', function (e) {
             e.preventDefault();
+
             jQuery('#wdt-frontend-modal .modal-title').html(labelBtn);
             jQuery('#wdt-frontend-modal .modal-body').append(dlg.show());
-            jQuery('#wdt-frontend-modal .modal-footer').html('<button class="btn btn-danger btn-icon-text waves-effect" id="wdt-checkbox-filter-reset" href="#">Reset</button><button class="btn btn-success btn-icon-text waves-effect" id="wdt-checkbox-filter-close" href="#"><i class="zmdi zmdi-check"></i>OK</button>');
+            jQuery('#wdt-frontend-modal .modal-footer').html('<button class="btn btn-danger btn-icon-text" id="wdt-checkbox-filter-reset" href="#">Reset</button><button class="btn btn-success btn-icon-text" id="wdt-checkbox-filter-close" href="#"><i class="wpdt-icon-check-full"></i>OK</button>');
 
-            jQuery('input.wdt-checkbox-filter').off('change').on('change', function () {
+            jQuery('#wdt-frontend-modal input.wdt-checkbox-filter').off('change').on('change', function () {
                 checkboxSearch.call(jQuery(this), columnIndex, checkboxesDivId);
             });
 
@@ -1057,6 +1254,7 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
                 }
             }
             $modal.attr('data-current-checkbox-dialog', dlg.attr('id'));
+            $modal.addClass('wdt-skin-' + tableDesc.tableSkin);
             $modal.modal('show');
         });
 
@@ -1087,16 +1285,16 @@ function wdtCreateCheckbox(oTable, aoColumn, columnIndex, sColumnLabel, th, serv
     }
 
     function checkboxSearch(columnIndex, checkboxesDivId) {
-      var tableDescription = jQuery.parseJSON(jQuery('#' + oTable.data('described-by')).val());
-      var columnType = tableDescription.dataTableParams.columnDefs[columnIndex].wdtType;
-      var search = '', checkedInputs;
+        var tableDescription = JSON.parse(jQuery('#' + oTable.data('described-by')).val());
+        var columnType = tableDescription.dataTableParams.columnDefs[columnIndex].wdtType;
+        var search = '', checkedInputs;
         checkedInputs = jQuery(this).closest('#' + checkboxesDivId).find('input:checkbox:checked');
 
         jQuery.each(checkedInputs, function () {
             if (columnType === 'email' && serverSide === false) {
                 var startIndex = jQuery(this).val().indexOf('mailto:') + 7;
                 var endIndex = jQuery(this).val().lastIndexOf("%22");
-                var  value = jQuery(this).val().substr(startIndex, endIndex - startIndex)
+                var value = jQuery(this).val().substr(startIndex, endIndex - startIndex)
             } else {
                 value = jQuery(this).val()
             }
@@ -1173,8 +1371,12 @@ function wdtClearFilters() {
         var button = jQuery(e.target);
         if (button.is('.wdt-clear-filters-widget-button')) {
             jQuery('.filter_column input:not([type="checkbox"])').val('');
+            jQuery('.filter_column select').val('').trigger('change');
             jQuery('.filter_column select').selectpicker('val', '');
             jQuery('.filter_column input:checkbox').removeAttr('checked');
+            jQuery('.noUi-target').each(function(columnIndex){
+                jQuery('.noUi-target')[columnIndex].noUiSlider.reset();
+            });
 
             for (var i in wpDataTables) {
                 wpDataTables[i].api().columns().search('').draw();
@@ -1185,8 +1387,13 @@ function wdtClearFilters() {
             var wpDataTableSelecter = jQuery(this).closest('.wpDataTables');
 
             wpDataTableSelecter.find('.filter_column input:not([type="checkbox"])').val('');
+            wpDataTableSelecter.find('.filter_column select').val('').trigger('change');
             wpDataTableSelecter.find('.filter_column select').selectpicker('val', '');
             wpDataTableSelecter.find('.filter_column input:checkbox').removeAttr('checked');
+
+            wpDataTableSelecter.find('.noUi-target').each(function(columnIndex){
+                wpDataTableSelecter.find('.noUi-target')[columnIndex].noUiSlider.reset();
+            });
 
             var tableId = '';
             if (jQuery(this).parent().is('#wdt-clear-filters-button-block')) {
@@ -1197,7 +1404,7 @@ function wdtClearFilters() {
 
             wpDataTables[tableId].api().columns().search('').draw();
 
-           wpDataTableSelecter.find('.wdt-filter-control').eq(0).change();
+            wpDataTableSelecter.find('.wdt-filter-control').eq(0).change();
         }
     });
 }

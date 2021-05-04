@@ -8,7 +8,7 @@ defined('ABSPATH') or die('Access denied.');
 function wdtGetAjaxData() {
     global $wdtVar1, $wdtVar2, $wdtVar3;
 
-    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_GET['table_id'])) {
         exit();
     }
 
@@ -28,9 +28,11 @@ function wdtGetAjaxData() {
     $columnTypes = array();
     $decimalPlaces = array();
     $exactFiltering = array();
+    $globalSearchColumn = array();
     $foreignKeyRule = array();
     $idColumn = '';
     $linkTargetAttribute = array();
+    $linkNoFollowAttribute = array();
     $linkButtonAttribute = array();
     $linkButtonLabel = array();
     $linkButtonClass = array();
@@ -41,6 +43,7 @@ function wdtGetAjaxData() {
     $sumColumns = array();
     $userIdColumnHeader = '';
     $filterDefaultValue = array();
+    $rangeSlider = array();
 
     $wdtVar1 = isset($_GET['wdt_var1']) ? wdtSanitizeQuery($_GET['wdt_var1']) : $tableData->var1;
     $wdtVar2 = isset($_GET['wdt_var2']) ? wdtSanitizeQuery($_GET['wdt_var2']) : $tableData->var2;
@@ -103,16 +106,22 @@ function wdtGetAjaxData() {
                     }
                 }
             }
-            $filterDefaultValue[] = $column->default_value;
+            $filterDefaultValue[] = apply_filters('wpdt_filter_filtering_default_value', $column->default_value , $column->orig_header, $column->table_id);
+        }
+        if (isset($advancedSettings->rangeSlider) && $advancedSettings->rangeSlider == 1 ) {
+            $rangeSlider[] = $column->orig_header;
         }
 
         $decimalPlaces[$column->orig_header] = isset($advancedSettings->decimalPlaces) ? $advancedSettings->decimalPlaces : null;
         $exactFiltering[$column->orig_header] = isset($advancedSettings->exactFiltering) ? $advancedSettings->exactFiltering : null;
+        $globalSearchColumn[$column->orig_header] = isset($advancedSettings->globalSearchColumn) ? $advancedSettings->globalSearchColumn : null;
         $linkTargetAttribute[$column->orig_header] = isset($advancedSettings->linkTargetAttribute) ? $advancedSettings->linkTargetAttribute : null;
+        $linkNoFollowAttribute[$column->orig_header] = isset($advancedSettings->linkNoFollowAttribute) ? $advancedSettings->linkNoFollowAttribute : null;
         $linkButtonAttribute[$column->orig_header] = isset($advancedSettings->linkButtonAttribute) ? $advancedSettings->linkButtonAttribute : null;
         $linkButtonLabel[$column->orig_header] = isset($advancedSettings->linkButtonLabel) ? $advancedSettings->linkButtonLabel : null;
         $linkButtonClass[$column->orig_header] = isset($advancedSettings->linkButtonClass) ? $advancedSettings->linkButtonClass : null;
         $possibleValuesAddEmpty[$column->orig_header] = isset($advancedSettings->possibleValuesAddEmpty) ? $advancedSettings->possibleValuesAddEmpty : null;
+        $rangeSlider[$column->orig_header] = isset($advancedSettings->rangeSlider) ? $advancedSettings->rangeSlider : null;
         $foreignKeyRule[$column->orig_header] = isset($advancedSettings->foreignKeyRule) ? $advancedSettings->foreignKeyRule : null;
 
     }
@@ -159,7 +168,6 @@ function wdtGetAjaxData() {
             }
         }
     }
-
     $tbl->setWpId($id);
     $tbl->setTableType($tableData->table_type);
     $tbl->setTableContent($tableData->content);
@@ -167,6 +175,7 @@ function wdtGetAjaxData() {
     if ($tableData->edit_only_own_rows) {
         $tbl->setOnlyOwnRows(true);
         $tbl->setUserIdColumn($userIdColumnHeader);
+        $tbl->setShowAllRows($tableData->showAllRows);
     }
     $tbl->setSumColumns($sumColumns);
     $tbl->setAvgColumns($avgColumns);
@@ -174,28 +183,35 @@ function wdtGetAjaxData() {
     $tbl->setMaxColumns($maxColumns);
     $tbl->setAjaxReturn(true);
 
+    $columnOptions = array(
+        'columnFormulas'      => $columnFormulas,
+        'columnOrder'         => $columnOrder,
+        'columnTitles'        => $columnTitles,
+        'data_types'          => $columnTypes,
+        'decimalPlaces'       => $decimalPlaces,
+        'exactFiltering'      => $exactFiltering,
+        'globalSearchColumn'  => $globalSearchColumn,
+        'filterTypes'         => $columnFilterTypes,
+        'foreignKeyRule'      => $foreignKeyRule,
+        'idColumn'            => $idColumn,
+        'input_types'         => $columnEditorTypes,
+        'linkTargetAttribute' => $linkTargetAttribute,
+        'linkNoFollowAttribute' => $linkNoFollowAttribute,
+        'linkButtonAttribute' => $linkButtonAttribute,
+        'linkButtonLabel'     => $linkButtonLabel,
+        'linkButtonClass'     => $linkButtonClass,
+        'skip_thousands'      => $skipThousands,
+        'rangeSlider'         => $rangeSlider,
+        'filterDefaultValue'  => $filterDefaultValue
+    );
+
+    $columnOptions = apply_filters('wpdt_filter_column_options', $columnOptions, $columnData, $tbl);
+
     if ( in_array($tbl->getTableType(), ['mysql', 'manual'], true)) {
         $json = $tbl->queryBasedConstruct(
             $tbl->getTableContent(),
             array(),
-            array(
-                'columnFormulas'      => $columnFormulas,
-                'columnOrder'         => $columnOrder,
-                'columnTitles'        => $columnTitles,
-                'data_types'          => $columnTypes,
-                'decimalPlaces'       => $decimalPlaces,
-                'exactFiltering'      => $exactFiltering,
-                'filterTypes'         => $columnFilterTypes,
-                'foreignKeyRule'      => $foreignKeyRule,
-                'idColumn'            => $idColumn,
-                'input_types'         => $columnEditorTypes,
-                'linkTargetAttribute' => $linkTargetAttribute,
-                'linkButtonAttribute' => $linkButtonAttribute,
-                'linkButtonLabel'     => $linkButtonLabel,
-                'linkButtonClass'     => $linkButtonClass,
-                'skip_thousands'      => $skipThousands,
-                'filterDefaultValue'  => $filterDefaultValue
-            )
+            $columnOptions
         );
         $json = apply_filters('wpdatatables_filter_server_side_data', $json, $id, $_GET);
 
@@ -207,24 +223,7 @@ function wdtGetAjaxData() {
                 'wpdatatables_generate_' . $tableData->table_type,
                 $tbl,
                 $tbl->getTableContent(),
-                array(
-                    'columnFormulas'      => $columnFormulas,
-                    'columnOrder'         => $columnOrder,
-                    'columnTitles'        => $columnTitles,
-                    'data_types'          => $columnTypes,
-                    'decimalPlaces'       => $decimalPlaces,
-                    'exactFiltering'      => $exactFiltering,
-                    'filterTypes'         => $columnFilterTypes,
-                    'foreignKeyRule'      => $foreignKeyRule,
-                    'idColumn'            => $idColumn,
-                    'input_types'         => $columnEditorTypes,
-                    'linkTargetAttribute' => $linkTargetAttribute,
-                    'linkButtonAttribute' => $linkButtonAttribute,
-                    'linkButtonLabel'     => $linkButtonLabel,
-                    'linkButtonClass'     => $linkButtonClass,
-                    'skip_thousands'      => $skipThousands,
-                    'filterDefaultValue'  => $filterDefaultValue
-                )
+                $columnOptions
             );
         } else {
             throw new WDTException(__('You are trying to load a table of an unknown type. Probably you did not activate the addon which is required to use this table type.', 'wpdatatables'));
@@ -242,13 +241,16 @@ function wdtSaveTableFrontend() {
     global $wpdb, $wp_version;
     $formData = $_POST['formdata'];
 
-    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$formData['table_id'])) {
         exit();
     }
 
     $returnResult = array('success' => '', 'error' => '', 'is_new' => false);
 
     $tableId = (int)$formData['table_id'];
+
+    do_action('wpdatatables_before_frontend_edit_row', $formData, $returnResult, $tableId);
+
     unset($formData['table_id'], $formData['nonce']);
 
     $formData = apply_filters('wpdatatables_filter_frontend_formdata', $formData, $tableId);
@@ -267,6 +269,12 @@ function wdtSaveTableFrontend() {
 
     if ($wp_version < 4.4) {
         $nullValue = (!$tableData->connection) ? WDTTools::wrapQuotes('NULL', $tableData->connection) : "NULL";
+    }
+
+    if ($tableData->edit_only_own_rows) {
+        $action = 'save';
+        // Check if current user can update own rows not others
+        WDTTools::checkCurrentUsersActionsPermissions($tableData, $mySqlTableName, $columnsData, $formData, $action);
     }
 
     foreach ($columnsData as $column) {
@@ -298,7 +306,7 @@ function wdtSaveTableFrontend() {
                 // Sanitize data
                 $formData[$column->orig_header] = strip_tags(
                     $formData[$column->orig_header],
-                    '<br/><br><b><strong><h1><h2><h3><a><i><em><ol><ul><li><img><blockquote><div><hr><p><span><select><option><sup><sub>'
+                    '<br/><br><b><strong><h1><h2><h3><a><i><em><ol><ul><li><img><blockquote><div><hr><p><span><select><option><sup><sub><iframe><pre><button>'
                 );
 
                 // Formatting for DB based on column type
@@ -341,16 +349,18 @@ function wdtSaveTableFrontend() {
                         } else {
                             $formData[$column->orig_header] = str_replace(',', '', $formData[$column->orig_header]);
                         }
-                        $formData[$column->orig_header] = WDTTools::wrapQuotes((float)$formData[$column->orig_header], $tableData->connection);
-                        if ($formData[$column->orig_header] == '') {
-                            $formData[$column->orig_header] = NULL;
+                        $value = WDTTools::wrapQuotes((float)$formData[$column->orig_header], $tableData->connection);
+                        if ($formData[$column->orig_header] === '') {
+                            $value = $nullValue;
                         }
+                        $formData[$column->orig_header] = $value;
                         break;
                     case 'int':
-                        $formData[$column->orig_header] = WDTTools::wrapQuotes((int)$formData[$column->orig_header], $tableData->connection);
-                        if ($formData[$column->orig_header] == '') {
-                            $formData[$column->orig_header] = NULL;
+                        $value = WDTTools::wrapQuotes((int)$formData[$column->orig_header], $tableData->connection);
+                        if ($formData[$column->orig_header] === '') {
+                            $value = $nullValue;
                         }
+                        $formData[$column->orig_header] = $value;
                         break;
                     case 'email':
                         $formData[$column->orig_header] = WDTTools::prepareStringCell($formData[$column->orig_header], $tableData->connection);
@@ -359,7 +369,12 @@ function wdtSaveTableFrontend() {
                         if ($column->input_type === 'textarea') {
                             $formData[$column->orig_header] = str_replace("\n", '<br/>', $formData[$column->orig_header]);
                         }
-                        $formData[$column->orig_header] = WDTTools::prepareStringCell($formData[$column->orig_header], $tableData->connection);
+                        if ($formData[$column->orig_header] === '') {
+                            $value = $nullValue;
+                        }else{
+                            $value = WDTTools::prepareStringCell($formData[$column->orig_header], $tableData->connection);
+                        }
+                        $formData[$column->orig_header] = $value;
                         break;
                     case 'link':
                         $formData[$column->orig_header] = WDTTools::prepareStringCell($formData[$column->orig_header], $tableData->connection);
@@ -503,7 +518,7 @@ function wdtSaveTableCellsFrontend() {
     global $wpdb;
 
     // Permissions check
-    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_POST['table_id'])) {
         exit();
     }
 
@@ -571,10 +586,10 @@ function wdtSaveTableCellsFrontend() {
                     if (in_array($allColumnsTypes[$columnName], array('string', 'email', 'link', 'image'))) {
                         $cellData[$columnName] = strip_tags(
                             $cellData[$columnName],
-                            '<br/><br><b><strong><h1><h2><h3><a><i><em><ol><ul><li><img><blockquote><div><hr><p><span><select><option><sup><sub>'
+                            '<br/><br><b><strong><h1><h2><h3><a><i><em><ol><ul><li><img><blockquote><div><hr><p><span><select><option><sup><sub><iframe><pre><button>'
                         );
-                        $cellData[$columnName] = WDTTools::prepareStringCell($cellData[$columnName], $tableData->connection);
                     }
+                    $cellData[$columnName] = WDTTools::prepareStringCell($cellData[$columnName], $tableData->connection);
                 }
 
                 if (empty($cellIdValue)) {
@@ -609,22 +624,23 @@ function wdtSaveTableCellsFrontend() {
                         $insert_column_names = array_keys($cellData);
                         $qColumnNames = $leftSysIdentifier . implode('`,`', $insert_column_names) . $rightSysIdentifier;
                         $qValues = array_values($cellData);
-                        $qValues = implode("', '", $qValues);
+                        $qValues = implode(",", $qValues);
 
                         $query = "INSERT INTO $mySqlTableName ($qColumnNames) VALUES ($qValues)";
                     } else {
                         $qSet = '';
                         foreach ($cellData as $cell_column_key => $cell_value) {
                             $qSet .= (!empty($qSet)) ? ', ' : '';
+                            $cell_value = $cell_value == "''" ? "NULL" : $cell_value;
                             $qSet .= $leftSysIdentifier
-                                        . $cell_column_key
-                                        . $rightSysIdentifier
-                                        . "= '$cell_value'";
+                                . $cell_column_key
+                                . $rightSysIdentifier
+                                . "= $cell_value";
                         }
                         $qWhere = $leftSysIdentifier
-                                    . $idColumnKey
-                                    . $rightSysIdentifier
-                                    . "= $cellIdValue";
+                            . $idColumnKey
+                            . $rightSysIdentifier
+                            . "= $cellIdValue";
 
                         $query = "UPDATE $mySqlTableName SET $qSet WHERE $qWhere";
                     }
@@ -745,7 +761,7 @@ add_action('wp_ajax_nopriv_wdt_save_table_cells_frontend', 'wdtSaveTableCellsFro
 function wdtDeleteTableRow() {
     global $wpdb;
 
-    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_POST['table_id'])) {
         exit();
     }
 
@@ -753,24 +769,48 @@ function wdtDeleteTableRow() {
     $idKey = sanitize_text_field($_POST['id_key']);
     $idVal = (int)$_POST['id_val'];
 
+    $returnResult = array('success' => '', 'error' => '');
+
     $tableData = WDTConfigController::loadTableFromDB($tableId);
-    $mySqlTableName = $tableData->mysql_table_name;
+    $mySqlTableName = WDTTools::applyPlaceholders($tableData->mysql_table_name);
+    $columnsData = WDTConfigController::loadColumnsFromDB($tableId);
 
     // If current user cannot edit - do nothing
     if (!wdtCurrentUserCanEdit($tableData->editor_roles, $tableId)) {
         exit();
     }
 
+    if ($tableData->edit_only_own_rows) {
+        $action = 'delete';
+        // Check if current user can  delete own rows
+        WDTTools::checkCurrentUsersActionsPermissions($tableData, $mySqlTableName, $columnsData, $idVal, $action);
+    }
+
     do_action('wpdatatables_before_delete_row', $idVal, $tableId, $idKey);
 
     // If the plugin is using WP DB
     if (!(Connection::isSeparate($tableData->connection))) {
-        $wpdb->delete($mySqlTableName, array($idKey => $idVal));
+        $res = $wpdb->delete($mySqlTableName, array($idKey => $idVal));
+        if (!$res){
+            if (!empty($wpdb->last_error)) {
+                $returnResult['error'] = __('There was an error trying to delete the row! Error: ', 'wpdatatables') . $wpdb->last_error;
+            } else {
+                $returnResult['error'] = __('There was an error in your database when you are trying to delete the row! ', 'wpdatatables') ;
+            }
+        } else {
+            $returnResult['success'] = true;
+        }
     } else {
         $sql = Connection::create($tableData->connection);
-        $query = "DELETE FROM " . $mySqlTableName . " WHERE `" . $idKey . "`='" . $idVal . "'";
+        $query = "DELETE FROM " . $mySqlTableName . " WHERE " . $idKey . "='" . $idVal . "'";
         $sql->doQuery($query);
+        if ($sql->getLastError() !== '') {
+            $returnResult['error'] = __('There was an error trying to delete the row! Error: ', 'wpdatatables') . $sql->getLastError();
+        } else {
+            $returnResult['success'] = true;
+        }
     }
+    echo json_encode($returnResult);
 
     exit();
 }
@@ -784,7 +824,7 @@ add_action('wp_ajax_nopriv_wdt_delete_table_row', 'wdtDeleteTableRow');
 function wdtDeleteTableRows() {
     global $wpdb;
 
-    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce')) {
+    if (!wp_verify_nonce($_POST['wdtNonce'], 'wdtFrontendEditTableNonce' . (int)$_POST['table_id'])) {
         exit();
     }
 
@@ -896,6 +936,7 @@ function wdtDeleteTableRows() {
 
     echo json_encode($returnResult);
     exit();
+
 }
 
 add_action('wp_ajax_wdt_delete_table_rows', 'wdtDeleteTableRows');

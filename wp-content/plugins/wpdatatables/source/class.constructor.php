@@ -258,9 +258,11 @@ class wpDataTableConstructor
         $columnProperties['advanced_settings'] = array(
             'sorting' => 1,
             'exactFiltering' => 0,
+            'rangeSlider' => 0,
             'filterLabel' => '',
-            'editingDefaultValue' => $column['type'] === 'multiselect' ? sanitize_text_field(implode('|', $column['default_value'])) : sanitize_text_field($column['default_value']),
+            'editingDefaultValue' => $column['type'] === 'multiselect' ? isset($column['default_value']) ? sanitize_text_field(implode('|', $column['default_value'])) : '': sanitize_text_field($column['default_value']),
             'possibleValuesAjax' => $columnProperties['column_type'] === 'string' ? 10 : -1,
+            'globalSearchColumn' => 1,
         );
 
         $columnProperties['create_block'] = $columnProperties['create_block'] . ' ' . $nullable;
@@ -1345,7 +1347,7 @@ class wpDataTableConstructor
             $ret_val = ob_get_contents();
             ob_end_clean();
         } else {
-            $ret_val = __('<div class="alert alert-danger m-15">No results found. Please check if this query is correct! Table Constructor needs a query that returns data to build a wpDataTable.', 'wpdatatables');
+            $ret_val = __('<div class="alert alert-danger"><i class="wpdt-icon-exclamation-triangle"></i>No results found. Please check if this query is correct! Table Constructor needs a query that returns data to build a wpDataTable.', 'wpdatatables');
             if (!(Connection::isSeparate($connection)) && !empty($wpdb->last_error)) {
                 $ret_val .= '<br>Error: ' . $wpdb->last_error . '</div>';
             }
@@ -1373,7 +1375,7 @@ class wpDataTableConstructor
         $tableData['query'] = wdtSanitizeQuery(($tableData['query']));
 
         $table_array = array(
-            'title' => '',
+            'title' =>  sanitize_text_field($tableData['name']),
             'table_type' => 'mysql',
             'connection' => $tableData['connection'],
             'content' => '',
@@ -1543,6 +1545,7 @@ class wpDataTableConstructor
      *
      * @param $tableData
      * @return array
+     * @throws WDTException
      */
     public function previewFileTable($tableData)
     {
@@ -1561,7 +1564,14 @@ class wpDataTableConstructor
 
         if (strpos(strtolower($xls_url), 'https://docs.google.com/spreadsheets') !== false) {
             // Preview from Google Spreadsheet
-            $namedDataArray = WDTTools::extractGoogleSpreadsheetArray($xls_url);
+            $credentials = get_option('wdtGoogleSettings');
+            $token = get_option('wdtGoogleToken');
+            if ($credentials) {
+                $googleSheet = new WPDataTable_Google_Sheet();
+                $namedDataArray = $googleSheet->getData($xls_url, $credentials, $token);
+            } else {
+                $namedDataArray = WDTTools::extractGoogleSpreadsheetArray($xls_url);
+            }
             if (!empty($namedDataArray)) {
                 $headingsArray = array_keys($namedDataArray[0]);
                 $namedDataArray = array_slice($namedDataArray, 0, 4);
@@ -1636,6 +1646,8 @@ class wpDataTableConstructor
      *
      * @param $tableData
      * @return mixed|string
+     * @throws WDTException
+     * @throws Exception
      */
     public function readFileData($tableData)
     {
@@ -1667,7 +1679,14 @@ class wpDataTableConstructor
 
         if (strpos(strtolower($xls_url), 'https://docs.google.com/spreadsheets') !== false) {
             $table_type = 'google';
-            $namedDataArray = WDTTools::extractGoogleSpreadsheetArray($xls_url);
+            $credentials = get_option('wdtGoogleSettings');
+            $token = get_option('wdtGoogleToken');
+            if ($credentials) {
+                $googleSheet = new WPDataTable_Google_Sheet();
+                $namedDataArray = $googleSheet->getData($xls_url, $credentials, $token);
+            } else {
+                $namedDataArray = WDTTools::extractGoogleSpreadsheetArray($xls_url);
+            }
             $headingsArray = array_keys($namedDataArray[0]);
             $highestRow = count($namedDataArray) - 1;
         } else {

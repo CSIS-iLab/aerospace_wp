@@ -90,7 +90,7 @@
         //if table definition is provided in certain html dom element, load it from there.
         var description_element_id = $(this.hot.rootElement).data('described-by');
         if( description_element_id && ($descriptionElement = $('#' + description_element_id)) ) {
-            tableDescription = $.parseJSON($descriptionElement.val());
+            tableDescription = JSON.parse($descriptionElement.val());
             this.tableSettings = tableDescription.dataTableParams;
             delete tableDescription.dataTableParams;
         }
@@ -126,7 +126,7 @@
             this.addHook('init', this.onInit.bind(this));
             this.addHook('afterValidate', this.onAfterValidate.bind(this));
         } else {
-            this.tableSettings.data = $.parseJSON( $(tableDescription.selector + '_data').val() );
+            this.tableSettings.data = JSON.parse( $(tableDescription.selector + '_data').val() );
             this.addHook('init', this.onInit.bind(this));
         }
 
@@ -342,7 +342,7 @@
             columns: columns,
             start: 0,
             length: -1,
-            wdtNonce: $('#wdtNonceFrontendEdit').val()
+            wdtNonce: $('#wdtNonceFrontendEdit_' + excelPlugin.tableWpId).val()
             //search: search_param
         };
 
@@ -550,7 +550,7 @@
         if ( changed_cells.length > 0 ) {
             var ajax_data = {
                 action: 'wdt_save_table_cells_frontend',
-                wdtNonce: $('#wdtNonceFrontendEdit').val(),
+                wdtNonce: $('#wdtNonceFrontendEdit_' + wpdatatable_id).val(),
                 table_id: wpdatatable_id,
                 cells: changed_cells,
                 rows: changed_rows
@@ -793,7 +793,7 @@
                 action: 'wdt_delete_table_rows',
                 table_id: wpdatatable_id,
                 rows: deleteRows,
-                wdtNonce: $('#wdtNonceFrontendEdit').val()
+                wdtNonce: $('#wdtNonceFrontendEdit_' + wpdatatable_id).val()
             };
 
             $.ajax({

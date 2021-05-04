@@ -137,6 +137,18 @@ var wpDataTablesHighchart = function(){
             for( var property in options ){
                 this.options[property] = options[property];
             }
+            Highcharts.setOptions({
+                lang: {
+                    decimalPoint: this.getNumberFormat() === '1' ?  ',' : '.',
+                    thousandsSep: this.getNumberFormat() === '1' ?  '.' : ','
+                }
+            });
+        },
+        setNumberFormat: function( numberFormat ){
+            this.numberFormat = numberFormat;
+        },
+        getNumberFormat:function(){
+            return this.numberFormat;
         },
         getOptions: function(){
             return this.options;
@@ -232,7 +244,7 @@ var wpDataTablesHighchart = function(){
                 case 'highcharts_pie_with_gradient_chart':
                     this.options.chart.type = 'pie';
                     // Radialize the colors
-                    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                    Highcharts.getOptions().colors = Highcharts.getOptions().colors.map( function (color) {
                         return {
                             radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
                             stops: [
@@ -314,6 +326,19 @@ var wpDataTablesHighchart = function(){
                     break;
                 case 'highcharts_treemap_level_chart_':
                     this.options.chart.type = 'treemap';
+                    break;
+                case 'highcharts_polar_chart':
+                    this.options.chart.polar = true;
+                    break;
+                case 'highcharts_spiderweb_chart':
+                    this.options.chart.type = 'line';
+                    this.options.chart.polar = true;
+                    this.options.yAxis =  {
+                        gridLineInterpolation: 'polygon',
+                        lineWidth: 0,
+                        minorTickLength: 0,
+                        tickLength: 0,
+                    };
                     break;
                 case 'highcharts_spline_chart':
                     this.options.chart.type = 'spline';
@@ -463,6 +488,14 @@ var wpDataTablesHighchart = function(){
                     this.options.yAxis.tickLength = 0;
                 }
             }
+
+            if ( chartConfig.chart_type == 'highcharts_spiderweb_chart' ) {
+                this.options.xAxis.tickmarkPlacement = 'on';
+                this.options.xAxis.lineWidth = 0;
+                this.options.yAxis.gridLineInterpolation = 'polygon';
+                this.options.yAxis.lineWidth = 0;
+                this.options.yAxis.min = 0;
+            }
             if (Array.isArray(this.options.yAxis)) {
                 chartConfig.highcharts_line_dash_style ? this.options.yAxis[0].gridLineDashStyle = chartConfig.highcharts_line_dash_style : null;
                 chartConfig.vertical_axis_crosshair == 1 ? this.options.yAxis[0].crosshair = true : this.options.yAxis[0].crosshair = false;
@@ -543,7 +576,7 @@ var wpDataTablesHighchart = function(){
             } else {
                 this.options.plotOptions.series = {animation: false};
             }
-            this.numberFormat = jQuery.parseJSON( jQuery( '#'+this.connectedWPDataTable.data('described-by') ).val() ).number_format;
+            this.numberFormat = JSON.parse( jQuery( '#'+this.connectedWPDataTable.data('described-by') ).val() ).number_format;
             this.connectedWPDataTable.fnSettings().aoDrawCallback.push({
                 sName: 'chart_filter_follow',
                 fn: function( oSettings ){
@@ -648,6 +681,12 @@ var wpDataTablesHighchart = function(){
                         obj.renderCallback( obj );
                     }
                     obj.chart = new Highcharts.Chart( obj.options );
+                    Highcharts.setOptions({
+                        lang: {
+                            decimalPoint: obj.getNumberFormat() === 1 ?  ',' : '.',
+                            thousandsSep: obj.getNumberFormat() === 1 ?  '.' : ','
+                        }
+                    });
                 }
             });
         }
