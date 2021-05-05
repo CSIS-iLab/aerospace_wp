@@ -1,23 +1,24 @@
 <?php
 /**
  * @package wpDataTables
- * @version 2.3.2
+ * @version 3.4.3
  */
 /*
 Plugin Name: wpDataTables
-Plugin URI: http://tms-plugins.com
+Plugin URI: https://wpdatatables.com/
 Description: Add interactive tables easily from any input source
 //[<-- Full version -->]//
-Version: 2.3.2
+Version: 3.4.3
 //[<--/ Full version -->]//
 //[<-- Full version insertion #27 -->]//
 Author: TMS-Plugins
-Author URI: http://tms-plugins.com
+Author URI: https://tms-outsource.com/
 Text Domain: wpdatatables
 Domain Path: /languages
 */
 ?>
 <?php
+
 
 defined('ABSPATH') or die('Access denied');
 
@@ -32,7 +33,7 @@ if (!defined('WDT_BASENAME')) {
 }
 
 // Config file
-require_once(WDT_ROOT_PATH . '/config/config.inc.php');
+require_once(WDT_ROOT_PATH . 'config/config.inc.php');
 
 //[<-- Full version -->]//
 // AJAX actions handlers
@@ -42,10 +43,12 @@ require_once(WDT_ROOT_PATH . 'controllers/wdt_ajax_actions.php');
 // Plugin functions
 require_once(WDT_ROOT_PATH . 'controllers/wdt_functions.php');
 
+if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50600) {
+    require_once WDT_ROOT_PATH . 'lib/autoload.php';
+}
 
-require_once WDT_ROOT_PATH . '/lib/autoload.php';
-
-function wpdatatables_load() {
+function wpdatatables_load()
+{
     if (is_admin()) {
         // Admin panel controller
         require_once(WDT_ROOT_PATH . 'controllers/wdt_admin.php');
@@ -65,6 +68,8 @@ function wpdatatables_load() {
     require_once(WDT_ROOT_PATH . 'source/class.sql.pdo.php');
     require_once(WDT_ROOT_PATH . 'source/class.wpdatatable.php');
     require_once(WDT_ROOT_PATH . 'source/class.wpdatacolumn.php');
+    require_once(WDT_ROOT_PATH . 'source/class.wpdatatablerows.php');
+    require_once(WDT_ROOT_PATH . 'source/class.wdtgooglesheets.php');
     //[<-- Full version -->]//
     require_once(WDT_ROOT_PATH . 'source/class.wpexceldatatable.php');
     require_once(WDT_ROOT_PATH . 'source/class.wpexcelcolumn.php');
@@ -73,6 +78,10 @@ function wpdatatables_load() {
     //[<--/ Full version -->]//
     require_once(WDT_ROOT_PATH . 'source/class.wdtbrowsetable.php');
     require_once(WDT_ROOT_PATH . 'source/class.wdtbrowsechartstable.php');
+    require_once(WDT_ROOT_PATH . 'source/GutenbergBlock.php');
+    require_once(WDT_ROOT_PATH . 'source/WpDataTablesGutenbergBlock.php');
+    require_once(WDT_ROOT_PATH . 'source/WpDataChartsGutenbergBlock.php');
+    require_once(WDT_ROOT_PATH . 'source/class.wdtelementorblock.php');
 
     add_action('plugins_loaded', 'wdtLoadTextdomain');
 
@@ -102,7 +111,8 @@ $wdtVar3 = '';
 /*******************
  * Filtering widget *
  *******************/
-function wdt_register_widget() {
+function wdt_register_widget()
+{
     register_widget('wdtFilterWidget');
 }
 

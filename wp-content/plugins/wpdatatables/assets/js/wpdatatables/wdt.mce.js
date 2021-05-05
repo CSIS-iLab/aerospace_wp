@@ -121,9 +121,9 @@
             return {
                 longname : 'wpdatatables',
                 author : 'touchmesoft',
-                authorurl : 'http://touchmesoft.net',
-                infourl : 'http://wpdatatables.com',
-                version : "1.6.2"
+                authorurl : 'https://touchmesoft.net',
+                infourl : 'https://wpdatatables.com',
+                version : "2.5.1"
             };
         }
     });

@@ -70,6 +70,13 @@ class WDTExcelColumn {
                 $colJsDefinition->source = WDTColumn::getPossibleValuesRead($this->wdtColumn, false, false);
             } elseif ($this->wdtColumn->getPossibleValuesType() === 'list') {
                 $colJsDefinition->source = $this->wdtColumn->getPossibleValuesList();
+            } elseif ($this->wdtColumn->getPossibleValuesType()=== 'foreignkey') {
+                $values = [];
+                $foreignKeyData = $this->wdtColumn->getParentTable()->joinWithForeignWpDataTable($this->wdtColumn->getOriginalHeader(), $this->wdtColumn->getForeignKeyRule(), $this->wdtColumn->getParentTable()->getDataRows());
+                foreach ($foreignKeyData['distinctValues'] as $row) {
+                    $values[] = $row;
+                }
+                $colJsDefinition->source = array_unique($values);
             }
         }
 
@@ -79,7 +86,7 @@ class WDTExcelColumn {
         }
 
         if( ($cell_editor_type == 'wdt.date' || $cell_editor_type == 'date')
-                && !empty( $colJsDefinition->defaultValue )) {
+            && !empty( $colJsDefinition->defaultValue )) {
             //TODO: check if default value is a valid date
             $colJsDefinition->defaultDate = $colJsDefinition->defaultValue;
         }

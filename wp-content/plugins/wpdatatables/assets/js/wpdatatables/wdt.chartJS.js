@@ -47,7 +47,7 @@ var wpDataTablesChartJS = function(){
                           display: true
                         },
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: false
                         }
                     }]
                 },
@@ -229,7 +229,7 @@ var wpDataTablesChartJS = function(){
         },
         enableFollowFiltering: function(){
             if( this.connectedWPDataTable == null ){ return; }
-            this.numberFormat = jQuery.parseJSON( jQuery( '#'+this.connectedWPDataTable.data('described-by') ).val() ).number_format;
+            this.numberFormat = JSON.parse( jQuery( '#'+this.connectedWPDataTable.data('described-by') ).val() ).number_format;
             this.connectedWPDataTable.fnSettings().aoDrawCallback.push({
                 sName: 'chart_filter_follow',
                 fn: function( oSettings ){

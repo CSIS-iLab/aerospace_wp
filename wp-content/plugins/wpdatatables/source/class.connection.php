@@ -7,7 +7,7 @@ class Connection {
     public static $MSSQL = 'mssql';
     public static $POSTGRESQL = 'postgresql';
 
-    public static function create($id = null, $host = null, $database = null, $user = null, $password = null, $port = null, $vendor = null) {
+    public static function create($id = null, $host = null, $database = null, $user = null, $password = null, $port = null, $vendor = null, $driver = null) {
         if ($id) {
             foreach (self::getAll() as $connection) {
                 if ($connection['id'] === $id) {
@@ -17,19 +17,19 @@ class Connection {
                     $password = $connection['password'];
                     $port = $connection['port'];
                     $vendor = $connection['vendor'];
+                    $driver = $connection['driver'];
                 }
             }
         }
 
         switch ($vendor) {
             case (self::$MSSQL):
-                global $wdtMsSqlDriver;
-                if ($wdtMsSqlDriver['sqlsrv']['active']) {
-                    return new PDOSql($vendor, "sqlsrv:Server=$host,$port;Database=$database", $user, $password);
-                } elseif ($wdtMsSqlDriver['dblib']['active']) {
-                    return new PDOSql($vendor, "dblib:version=" . $wdtMsSqlDriver['dblib']['version'] . ";charset=UTF-8;host=$host:$port;dbname=$database", $user, $password);
-                } elseif ($wdtMsSqlDriver['odbc']['active']) {
-                    return new PDOSql($vendor, "odbc:DRIVER=" . $wdtMsSqlDriver['odbc']['driver'] . ";Server=$host;Database=$database", $user, $password);
+                if (isset($driver) && $driver == 'sqlsrv') {
+                    return new PDOSql($vendor, "$driver:Server=$host,$port;Database=$database", $user, $password);
+                } elseif (isset($driver) && $driver == 'dblib') {
+                    return new PDOSql($vendor, "$driver:version=7.0;charset=UTF-8;host=$host:$port;dbname=$database", $user, $password);
+                } elseif (isset($driver) && $driver == 'odbc') {
+                    return new PDOSql($vendor, "$driver:DRIVER={ODBC Driver 17 for SQL Server};Server=$host;Database=$database", $user, $password);
                 }
 
             case (self::$POSTGRESQL):

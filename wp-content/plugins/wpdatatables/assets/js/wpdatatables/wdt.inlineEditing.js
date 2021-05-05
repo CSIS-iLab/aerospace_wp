@@ -175,7 +175,7 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
                 obj.params.currentCell.removeClass('editing');
                 var $this = obj.params.currentCell;
                 var $value = obj.params.currentCell.html();
-                obj.params.currentCell.empty().html('You can\'t edit this field');
+                obj.params.currentCell.empty().html(wpdatatables_frontend_strings.cannot_be_edit);
 
                 $(document).click(function () {
                     $this.html($value);
@@ -259,6 +259,8 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
                     selector: obj.params.editSelector,
                     auto_focus: obj.params.editInputId,
                     menubar: false,
+                    plugins: 'link image media lists hr colorpicker fullscreen textcolor code',
+                    toolbar: 'undo redo formatselect bold italic underline strikethrough subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | hr fullscreen | link unlink image | forecolor backcolor removeformat | code',
                     init_instance_callback: function (editor) {
                         editor.on('blur', function (e) {
                             tinymce.triggerSave();
@@ -308,11 +310,14 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
                 // Set focus to inserted input
                 $(obj.params.editSelector).focus();
 
-                // Saving event
+                // Saving event and fix for double ajax call
+                var hasFired = false;
                 $(obj.params.editSelector).blur(function () {
-                    obj.params.value = $(this).val();
-
-                    obj.validateAndSave($(this));
+                    if(!hasFired){
+                        hasFired = true;
+                        obj.params.value = $(this).val();
+                        obj.validateAndSave($(this));
+                    }
                 })
             },
             timeCell: function () {
@@ -396,7 +401,13 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
                         preserveSelectedPosition: 'before',
                         locale: {
                             emptyTitle: wpdatatables_frontend_strings.nothingSelected,
-                            statusSearching: wpdatatables_frontend_strings.sLoadingRecords
+                            statusSearching: wpdatatables_frontend_strings.sLoadingRecords,
+                            currentlySelected: wpdatatables_frontend_strings.currentlySelected,
+                            errorText: wpdatatables_frontend_strings.errorText,
+                            searchPlaceholder: wpdatatables_frontend_strings.search,
+                            statusInitialized: wpdatatables_frontend_strings.statusInitialized,
+                            statusNoResults: wpdatatables_frontend_strings.statusNoResults,
+                            statusTooShort: wpdatatables_frontend_strings.statusTooShort
                         }
                     });
 
@@ -477,12 +488,12 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
 
                 // Create a control buttons and a file information block
                 obj.params.code =
-                    '<span class="btn btn-primary m-r-10 waves-effect fileupload_row_edit_' + tableDescription.tableId + '" ' +
+                    '<span class="btn btn-primary m-r-10 fileupload_row_edit_' + tableDescription.tableId + '" ' +
                     'id="row_edit_' + tableDescription.tableId + '_sets_button" ' +
                     'data-column_type="icon" ' +
                     'data-rel_input="row_edit_' + tableDescription.tableId + '_sets">' +
-                    '<span class="fileinput-new">Select file</span>' +
-                    '<span class="fileinput-exists">Change</span>' +
+                    '<span class="fileinput-new">' + wpdatatables_frontend_strings.selectFileAttachment + '</span>' +
+                    '<span class="fileinput-exists">' + wpdatatables_frontend_strings.changeFileAttachment + '</span>' +
                     '<input type="hidden" ' +
                     'id="row_edit_' + tableDescription.tableId + '_sets" ' +
                     'data-key="sets" ' +
@@ -491,8 +502,8 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
                     'class="editDialogInput" ' +
                     '/>' +
                     '</span>' +
-                    '<button class="btn btn-primary waves-effect fileinput-save m-r-10">Save</button>' +
-                    '<button class="btn btn-danger fileinput-exists wdt-detach-attachment-file-inline m-r-10" data-dismiss="fileinput">Remove</button>' +
+                    '<button class="btn btn-primary fileinput-save m-r-10">' + wpdatatables_frontend_strings.saveFileAttachment + '</button>' +
+                    '<button class="btn btn-danger fileinput-exists wdt-detach-attachment-file-inline m-r-10" data-dismiss="fileinput">' + wpdatatables_frontend_strings.removeFileAttachment + '</button>' +
                     '<span class="fileinput-filename"></span>';
 
                 // Append a created container to a current cell
@@ -601,6 +612,8 @@ var inlineEditClass = function (tableDescription, dataTableOptions, $) {
         // Cell editing on double click event
         bindClickEvent: function () {
             $(tableDescription.selector + ' tbody').on('dblclick', 'td', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
 
                 // Prevent click event if current element is input, has invalid value or already is edited
                 var target = e.target || e.srcElement;
