@@ -164,17 +164,17 @@ add_filter('img_caption_shortcode', 'aerospace_img_caption_shortcode_filter',10,
  * @param  string $content The post content.
  * @return string          The modified post content.
  */
-function aerospace_add_logo_to_post_content( $content ) {
-    global $post;
-    if ( $post->post_type == 'post' ) {
-        $disable_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
-        if ( ! $disable_icon ) {
-            $content .= do_shortcode('[aircraft]');
-        }
-    }
-    return $content;
-}
-add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
+// function aerospace_add_logo_to_post_content( $content ) {
+//     global $post;
+//     if ( $post->post_type == 'post' ) {
+//         $disable_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
+//         if ( ! $disable_icon ) {
+//             $content .= do_shortcode('[aircraft]');
+//         }
+//     }
+//     return $content;
+// }
+// add_filter('the_content', 'aerospace_add_logo_to_post_content', 0);
 
 /**
  * Fixes empty <p> and <br> tags showing before and after shortcodes in the

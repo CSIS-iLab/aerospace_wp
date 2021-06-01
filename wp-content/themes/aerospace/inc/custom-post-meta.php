@@ -36,7 +36,6 @@ function post_build_meta_box( $post ) {
 	$current_disable_highlights = get_post_meta( $post->ID, '_post_disable_highlights', true );
 	$current_disable_feature_img = get_post_meta( $post->ID, '_post_disable_feature_img', true );
 	$current_report_cover_url = get_post_meta( $post->ID, '_post_report_cover_url', true );
-	$current_disable_post_bottom_icon = get_post_meta( $post->ID, '_post_disable_post_bottom_icon', true );
 	$current_disable_post_authors = get_post_meta( $post->ID, '_post_disable_post_authors', true );
 	$current_disable_post_categories = get_post_meta( $post->ID, '_post_disable_post_categories', true );
 	$current_custom_css = get_post_meta( $post->ID, '_post_custom_css', true );
@@ -206,12 +205,6 @@ function post_save_meta_box_data( $post_id ) {
 		update_post_meta( $post_id, '_post_disable_feature_img', sanitize_text_field( $_POST['disable_feature_img'] ) );
 	} else {
 		update_post_meta( $post_id, '_post_disable_feature_img', '' );
-	}
-	// Disable Icon at Bottom of posts.
-	if ( isset( $_REQUEST['disable_post_bottom_icon'] ) ) {
-		update_post_meta( $post_id, '_post_disable_post_bottom_icon', sanitize_text_field( $_POST['disable_post_bottom_icon'] ) );
-	} else {
-		update_post_meta( $post_id, '_post_disable_post_bottom_icon', '' );
 	}
 	// Disable Authors at Bottom of the post.
 	if ( isset( $_REQUEST['disable_post_authors'] ) ) {
