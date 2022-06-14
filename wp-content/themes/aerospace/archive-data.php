@@ -41,7 +41,6 @@ get_header(); ?>
 			<div class="archive-pages-top row">
 				<?php if ( have_posts() ) : ?>
 					<div class="col-xs-12 col-sm archives-meta-left">
-						<?php aerospace_post_num(); ?>
 					</div>
 					<div class="col-xs-12 col-sm-6 archives-meta-right">
 						<div class="sort-filter">
@@ -89,10 +88,7 @@ get_header(); ?>
 		</section>
 		<?php if (have_posts() ) : ?>
 		<footer class="archive-pages-bottom row">
-            <div class="col-xs-12 col-sm archives-meta-left"><?php aerospace_post_num(); ?></div>
-            <div class="col-xs-12 col-sm-6 archives-meta-right">
                
-    		</div>
     	</footer>
     <?php endif; ?>
 	</main><!-- #main -->
