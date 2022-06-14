@@ -7,7 +7,6 @@
 		"info": false,
 		"lengthChange": false,
 		"order": [[ 2, "desc" ]],
-		"paging": true,
 		"pageLength": 10,
 		"pagingType": "simple_numbers",
 		"language": {
