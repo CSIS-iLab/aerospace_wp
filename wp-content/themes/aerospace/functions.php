@@ -290,30 +290,3 @@ if( class_exists('CoAuthors_Plus' ) ) {
   array( $coauthors_plus, 'filter_author_archive_title' ), 
   10 );
 }
-
-// Added this to fix the shortcode issue not working on the front-page.php
-function custom_the_excerpt($post_id = null) {
-    global $post;
-    if ( is_admin() ) {
-      return $length;
-    }
-    if ($post_id) {
-        $post = get_post($post_id);
-    }
-
-    // Get the excerpt
-    $excerpt = $post->post_excerpt;
-
-    // If no excerpt is set, generate one
-    if (empty($excerpt)) {
-        $excerpt = wp_trim_words($post->post_content, 55, '...');
-    }
-
-    // Apply shortcodes and filters
-    $excerpt = do_shortcode($excerpt);
-    $excerpt = apply_filters('the_excerpt', $excerpt);
-
-    // Return the custom excerpt
-    return $excerpt;
-}
-
