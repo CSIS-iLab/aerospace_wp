@@ -290,4 +290,3 @@ if( class_exists('CoAuthors_Plus' ) ) {
   array( $coauthors_plus, 'filter_author_archive_title' ), 
   10 );
 }
-

@@ -53,7 +53,7 @@ if ( is_tag( 'space-threats') ) {
         </header><!-- .entry-header -->
 
         <div class="entry-content">
-        <?php the_excerpt(); ?>
+          <?php echo aerospace_the_excerpt(); ?>
         </div><!-- .entry-content -->
 
         <footer class="entry-footer">
