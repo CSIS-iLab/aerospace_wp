@@ -33,7 +33,7 @@ jobs:
       - name: Push to WP Engine
         uses: epogeedesign/github-action-wpengine-git-deploy@master
         env:
-          WPE_ENVIRONMENT_NAME: ${{ secrets.WPE_DEV_ENV_NAME }}
+          WPE_ENVIRONMENT_NAME: ${{ secrets.WPE_PROD_ENV_NAME }}
           WPE_SSH_KEY_PRIVATE: ${{ secrets.WPE_SSH_KEY_PRIVATE }}
           WPE_SSH_KEY_PUBLIC: ${{ secrets.WPE_SSH_KEY_PUBLIC }}
           WPE_ENVIRONMENT: "production"
