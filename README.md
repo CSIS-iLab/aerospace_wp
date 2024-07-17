@@ -14,9 +14,10 @@ WordPress site for [Aerospace Security](https://aerospace.csis.org). Developed f
 
 ## Quick-start Instructions
 
-To begin development, navigate to `wp_content/themes/aerospace` directory and start npm.
+To begin development, navigate to `wp_content/themes/aerospace` directory and start npm. This repo runs with node v12
 
 ```shell
+$ nvm use 12 
 $ cd wp-content/themes/aerospace
 $ npm install
 $ npm start
